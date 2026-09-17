@@ -1,0 +1,22 @@
+:root {
+  color-scheme: light dark;
+  font: 15px/1.5 system-ui, sans-serif;
+}
+body { margin: 0; }
+main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+nav button { padding: 8px 14px; cursor: pointer; }
+nav button[aria-current="true"] { font-weight: 600; }
+form { display: grid; gap: 12px; max-width: 480px; }
+label { display: grid; gap: 4px; }
+input, select { padding: 8px; font: inherit; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #8884; vertical-align: top; }
+code { font-size: 13px; }
+.status { font-weight: 600; }
+.status-failed { color: #c33; }
+.status-done { color: #2a2; }
+.gallery { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.gallery video { width: 100%; background: #000; aspect-ratio: 9 / 16; }
+.error { color: #c33; }
+.muted { opacity: 0.65; }
