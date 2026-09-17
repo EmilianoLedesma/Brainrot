@@ -58,6 +58,10 @@ def upload(path: str, data: bytes, content_type: str) -> str:
     return path
 
 
+def download(path: str) -> bytes:
+    return client().storage.from_(MEDIA_BUCKET).download(path)
+
+
 def signed_url(path: str, expires_in: int = 3600) -> str:
     res = client().storage.from_(MEDIA_BUCKET).create_signed_url(path, expires_in)
     return res["signedURL"]
