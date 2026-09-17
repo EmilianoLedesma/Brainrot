@@ -1,169 +1,113 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
+import { go, useRoute } from "./router.js";
+import { LangProvider, useLang } from "./i18n.jsx";
+import Home from "./pages/Home.jsx";
+import Docs from "./pages/Docs.jsx";
+import Faq from "./pages/Faq.jsx";
+import Workspace from "./pages/Workspace.jsx";
 
-const API = import.meta.env.VITE_API_URL;
-const KEY = import.meta.env.VITE_API_KEY;
+const PAGES = {
+  home: Home,
+  docs: Docs,
+  faq: Faq,
+  console: Workspace,
+};
 
-async function api(path, options = {}) {
-  const res = await fetch(API + path, {
-    ...options,
-    headers: { "Content-Type": "application/json", "X-API-Key": KEY, ...options.headers },
-  });
-  if (!res.ok) throw new Error((await res.text()) || res.statusText);
-  return res.json();
-}
+const STACK = ["FastAPI", "Supabase", "ffmpeg", "Claude", "edge-tts", "OpenCV"];
 
-/** Re-fetch on an interval. Supabase Realtime would need SELECT policies for `anon`,
- *  and the anon key is public, so the job list polls through the API instead. */
-function usePoll(path, intervalMs) {
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-
-  const refresh = useCallback(() => {
-    api(path).then(
-      (d) => {
-        setData(d);
-        setError(null);
-      },
-      (e) => setError(e.message),
-    );
-  }, [path]);
-
-  useEffect(() => {
-    refresh();
-    if (!intervalMs) return;
-    const id = setInterval(refresh, intervalMs);
-    return () => clearInterval(id);
-  }, [refresh, intervalMs]);
-
-  return { data, error, refresh };
-}
-
-function Trigger() {
-  const [kind, setKind] = useState("brainrot");
-  const [value, setValue] = useState("");
-  const [result, setResult] = useState(null);
-  const [busy, setBusy] = useState(false);
-
-  async function submit(event) {
-    event.preventDefault();
-    setBusy(true);
-    setResult(null);
-    const body = kind === "brainrot" ? { kind, topic: value } : { kind, youtube_url: value };
-    try {
-      const { id } = await api("/jobs", { method: "POST", body: JSON.stringify(body) });
-      setResult({ ok: true, text: `queued job ${id}` });
-      setValue("");
-    } catch (e) {
-      setResult({ ok: false, text: e.message });
-    } finally {
-      setBusy(false);
-    }
-  }
-
+function LangToggle() {
+  const { t, toggle } = useLang();
   return (
-    <form onSubmit={submit}>
-      <label>
-        Kind
-        <select value={kind} onChange={(e) => setKind(e.target.value)}>
-          <option value="brainrot">brainrot — from a topic</option>
-          <option value="repurpose">repurpose — from a YouTube link</option>
-        </select>
-      </label>
-      <label>
-        {kind === "brainrot" ? "Topic" : "YouTube URL"}
-        <input
-          required
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          type={kind === "brainrot" ? "text" : "url"}
-          placeholder={kind === "brainrot" ? "roman empire facts" : "https://youtube.com/watch?v=..."}
-        />
-      </label>
-      <button disabled={busy}>{busy ? "submitting..." : "Create job"}</button>
-      {result && <p className={result.ok ? "muted" : "error"}>{result.text}</p>}
-    </form>
+    <button className="btn lang-btn" onClick={toggle} title={t.langTitle}>
+      <span aria-hidden="true">{t.langFlag}</span>
+      {t.langButton}
+    </button>
   );
 }
 
-function label(job) {
-  return job.params?.topic || job.params?.youtube_url || "—";
-}
-
-function Jobs() {
-  const { data, error } = usePoll("/jobs", 2000);
-
-  if (error) return <p className="error">{error}</p>;
-  if (!data.length) return <p className="muted">No jobs yet.</p>;
-
+function Footer() {
+  const { t } = useLang();
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Kind</th>
-          <th>Input</th>
-          <th>Status</th>
-          <th>Created</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((job) => (
-          <tr key={job.id}>
-            <td>{job.kind}</td>
-            <td>
-              {label(job)}
-              {job.error && <div className="error">{job.error}</div>}
-            </td>
-            <td className={`status status-${job.status}`}>{job.status}</td>
-            <td className="muted">{new Date(job.created_at).toLocaleString()}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <footer className="site-footer">
+      <div className="footer-inner">
+        <div className="footer-brand">
+          <span className="wordmark wordmark-static">Brainrot</span>
+          <p>{t.footer.blurb}</p>
+        </div>
+
+        <nav className="footer-col">
+          <h4>{t.footer.product}</h4>
+          <button onClick={() => go("home")}>{t.footer.overview}</button>
+          <button onClick={() => go("console")}>{t.footer.workspace}</button>
+        </nav>
+
+        <nav className="footer-col">
+          <h4>{t.footer.resources}</h4>
+          <button onClick={() => go("docs")}>{t.footer.docs}</button>
+          <button onClick={() => go("faq")}>{t.footer.faq}</button>
+        </nav>
+
+        <div className="footer-col">
+          <h4>{t.footer.builtWith}</h4>
+          <ul className="stack-list">
+            {STACK.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="footer-bar">
+        <span>© {new Date().getFullYear()} Brainrot</span>
+        <span>{t.footer.note}</span>
+      </div>
+    </footer>
   );
 }
 
-function Gallery() {
-  // Signed URLs expire in an hour, so refresh well inside that window.
-  const { data, error } = usePoll("/gallery", 15 * 60 * 1000);
-
-  if (error) return <p className="error">{error}</p>;
-  if (!data.length) return <p className="muted">Nothing rendered yet.</p>;
+function Shell() {
+  const route = useRoute();
+  const { t } = useLang();
+  const Page = PAGES[route] ?? Home;
 
   return (
-    <div className="gallery">
-      {data.map((item) => (
-        <figure key={`${item.source}-${item.id}`} style={{ margin: 0 }}>
-          <video src={item.url} controls preload="metadata" />
-          <figcaption>
-            {item.title} <span className="muted">({item.source})</span>
-          </figcaption>
-        </figure>
-      ))}
+    <div className="shell">
+      <header className="topbar">
+        <button className="wordmark" onClick={() => go("home")}>
+          Brainrot
+        </button>
+
+        <nav className="tabs">
+          <button aria-current={route === "home"} onClick={() => go("home")}>
+            {t.nav.home}
+          </button>
+          <button aria-current={route === "docs"} onClick={() => go("docs")}>
+            {t.nav.docs}
+          </button>
+          <button aria-current={route === "faq"} onClick={() => go("faq")}>
+            {t.nav.faq}
+          </button>
+          <LangToggle />
+          <button
+            className="btn btn-primary nav-cta"
+            aria-current={route === "console"}
+            onClick={() => go("console")}
+          >
+            {t.nav.workspace}
+          </button>
+        </nav>
+      </header>
+
+      <Page />
+      <Footer />
     </div>
   );
 }
 
-const TABS = {
-  trigger: ["New job", Trigger],
-  jobs: ["Jobs", Jobs],
-  gallery: ["Gallery", Gallery],
-};
-
 export default function App() {
-  const [tab, setTab] = useState("trigger");
-  const Screen = TABS[tab][1];
-
   return (
-    <main>
-      <h1>brainrot</h1>
-      <nav>
-        {Object.entries(TABS).map(([id, [title]]) => (
-          <button key={id} aria-current={id === tab} onClick={() => setTab(id)}>
-            {title}
-          </button>
-        ))}
-      </nav>
-      <Screen />
-    </main>
+    <LangProvider>
+      <Shell />
+    </LangProvider>
   );
 }
