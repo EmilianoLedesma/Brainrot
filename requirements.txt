@@ -1,2 +1,12 @@
 supabase>=2.15
 python-dotenv>=1.0
+fastapi>=0.115
+uvicorn[standard]>=0.32
+anthropic>=1.6
+edge-tts>=7.2
+praw>=8.0
+yt-dlp>=2026.8
+opencv-python-headless>=5.0
+faster-whisper>=1.1
+numpy>=2.0
+requests>=2.32
