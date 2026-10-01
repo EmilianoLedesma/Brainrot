@@ -270,56 +270,86 @@ def cut_and_reframe(source: str, moment: Moment, transcript: list[dict], directo
     return os.path.join(directory, "vertical.mp4")
 
 
+def _source_for(job_id: str, url: str, source: str, info: dict, directory: str) -> dict:
+    """The job's source_videos row, transcribing only if no earlier attempt did."""
+    existing = db.client().table("source_videos").select("*").eq("job_id", job_id).execute().data
+    if existing:
+        return existing[0]
+    return (
+        db.client()
+        .table("source_videos")
+        .insert(
+            {
+                "job_id": job_id,
+                "youtube_url": url,
+                "youtube_id": info.get("id"),
+                "title": info.get("title"),
+                "duration_seconds": info.get("duration"),
+                "transcript": transcribe(source, directory),
+            }
+        )
+        .execute()
+        .data[0]
+    )
+
+
+def _clips_for(job_id: str, source_row: dict, max_clips: int) -> list[dict]:
+    """The job's clip rows. Claude picks the moments only on the first attempt.
+
+    Every chosen moment is recorded before any rendering starts, so a retry
+    after a failed cut re-renders that clip instead of asking for new moments.
+    """
+    existing = (
+        db.client().table("clips").select("*").eq("job_id", job_id)
+        .order("score", desc=True).execute().data
+    )
+    if existing:
+        return existing
+    rows = [
+        {
+            "job_id": job_id,
+            "source_video_id": source_row["id"],
+            "start_seconds": moment.start_seconds,
+            "end_seconds": moment.end_seconds,
+            "title": moment.title,
+            "reason": moment.reason,
+            "score": moment.score,
+            "status": "pending",
+        }
+        for moment in select_moments(source_row["transcript"])[:max_clips]
+    ]
+    return db.client().table("clips").insert(rows).execute().data if rows else []
+
+
 def run_repurpose(job: dict, max_clips: int = 3) -> str:
-    """Worker handler for H1. Returns the source_video id."""
+    """Worker handler for H1. Returns the source_video id.
+
+    Safe to re-run: the transcript, the moment selection and any clip already
+    rendered are reused from the earlier attempt.
+    """
     url = job["params"]["youtube_url"]
     with tempfile.TemporaryDirectory() as directory:
         source, info = download(url, directory)
-        transcript = transcribe(source, directory)
+        source_row = _source_for(job["id"], url, source, info, directory)
+        transcript = source_row["transcript"]
 
-        source_id = (
-            db.client()
-            .table("source_videos")
-            .insert(
-                {
-                    "job_id": job["id"],
-                    "youtube_url": url,
-                    "youtube_id": info.get("id"),
-                    "title": info.get("title"),
-                    "duration_seconds": info.get("duration"),
-                    "transcript": transcript,
-                }
-            )
-            .execute()
-            .data[0]["id"]
-        )
-
-        for moment in select_moments(transcript)[:max_clips]:
-            clip_id = (
-                db.client()
-                .table("clips")
-                .insert(
-                    {
-                        "job_id": job["id"],
-                        "source_video_id": source_id,
-                        "start_seconds": moment.start_seconds,
-                        "end_seconds": moment.end_seconds,
-                        "title": moment.title,
-                        "reason": moment.reason,
-                        "score": moment.score,
-                        "status": "rendering",
-                    }
+        for clip in _clips_for(job["id"], source_row, max_clips):
+            if clip["status"] != "ready":
+                db.client().table("clips").update({"status": "rendering"}).eq("id", clip["id"]).execute()
+                moment = Moment(
+                    start_seconds=float(clip["start_seconds"]),
+                    end_seconds=float(clip["end_seconds"]),
+                    title=clip["title"] or "",
+                    reason=clip["reason"] or "",
+                    score=float(clip["score"] or 0),
                 )
-                .execute()
-                .data[0]["id"]
-            )
-            with tempfile.TemporaryDirectory() as clip_dir:
-                vertical = cut_and_reframe(source, moment, transcript, clip_dir)
-                with open(vertical, "rb") as handle:
-                    path = db.upload(f"clips/{clip_id}.mp4", handle.read(), "video/mp4")
-            db.client().table("clips").update(
-                {"storage_path": path, "status": "ready"}
-            ).eq("id", clip_id).execute()
-            scheduler.plan_clip(clip_id)
+                with tempfile.TemporaryDirectory() as clip_dir:
+                    vertical = cut_and_reframe(source, moment, transcript, clip_dir)
+                    with open(vertical, "rb") as handle:
+                        path = db.upload(f"clips/{clip['id']}.mp4", handle.read(), "video/mp4")
+                db.client().table("clips").update(
+                    {"storage_path": path, "status": "ready"}
+                ).eq("id", clip["id"]).execute()
+            scheduler.plan_clip(clip["id"])
 
-    return source_id
+    return source_row["id"]

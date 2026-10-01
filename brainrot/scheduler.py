@@ -37,12 +37,22 @@ def _parse(stamp: str) -> datetime:
 
 
 def queue(target: str, target_id: str, when: datetime) -> list[dict]:
-    """Schedule one clip or chapter on every platform at `when`."""
+    """Schedule one clip or chapter on every platform at `when`.
+
+    A platform that already has a publication for this target keeps it, so
+    planning the same clip or chapter twice (a retried job) never double-posts.
+    """
     rows = [
         {"platform": platform, target: target_id, "scheduled_at": when.isoformat()}
         for platform in PLATFORMS
     ]
-    return db.client().table("publications").insert(rows).execute().data
+    return (
+        db.client()
+        .table("publications")
+        .upsert(rows, on_conflict=f"{target},platform", ignore_duplicates=True)
+        .execute()
+        .data
+    )
 
 
 def retention(chapter_id: str) -> float | None:
