@@ -1,8 +1,7 @@
 """HTTP API for the dashboard.
 
-Creates jobs and exposes read-only views of jobs and finished media. The pipeline
-workers that consume those jobs are not built yet, so a created job stays `pending`
-until a worker exists to pick it up.
+Creates jobs and exposes read-only views of jobs and finished media. A created
+job stays `pending` until a worker (python -m brainrot.worker) leases it.
 
 Reads go through here rather than straight from the browser to Supabase: every table
 has RLS on with no policies, and opening them to `anon` would expose them to anyone
