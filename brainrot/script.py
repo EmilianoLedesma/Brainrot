@@ -7,6 +7,8 @@ H2 turns a topic into a narration script. H2b feeds a Reddit post through
 import anthropic
 from pydantic import BaseModel
 
+from .domain.jobs import PermanentError
+
 MODEL = "claude-opus-5"
 
 # Roughly 150 spoken words per minute at the default TTS rate, so ~140 words
@@ -54,7 +56,8 @@ def _generate(system: str, user: str) -> Story:
         output_format=Story,
     )
     if response.stop_reason == "refusal":
-        raise RuntimeError(f"Claude declined: {response.stop_details}")
+        # Asking again gets the same answer, so this is not worth a retry.
+        raise PermanentError(f"Claude declined: {response.stop_details}")
     return response.parsed_output
 
 

@@ -16,6 +16,7 @@ import yt_dlp
 from pydantic import BaseModel
 
 from . import db, render, scheduler, script
+from .domain.jobs import PermanentError
 
 FACE_MODEL_PATH = "models/face_detection_yunet_2023mar.onnx"
 
@@ -134,7 +135,7 @@ def select_moments(transcript: list[dict]) -> list[Moment]:
         output_format=Moments,
     )
     if response.stop_reason == "refusal":
-        raise RuntimeError(f"Claude declined: {response.stop_details}")
+        raise PermanentError(f"Claude declined: {response.stop_details}")
     return sorted(response.parsed_output.moments, key=lambda m: m.score, reverse=True)
 
 

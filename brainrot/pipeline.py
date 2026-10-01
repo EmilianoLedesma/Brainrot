@@ -9,6 +9,7 @@ import re
 from typing import Callable
 
 from . import db, render, scheduler, script, tts
+from .domain.jobs import PermanentError
 
 # Roughly one minute of narration. Anything longer gets split so each chapter
 # stands alone in a feed.
@@ -38,7 +39,7 @@ def split_chapters(text: str) -> list[str]:
 def pick_background() -> bytes:
     rows = db.client().table("background_clips").select("storage_path").eq("active", True).execute().data
     if not rows:
-        raise RuntimeError(
+        raise PermanentError(
             "no active background_clips - add one with: python -m brainrot.cli add-background <file>"
         )
     return db.download(random.choice(rows)["storage_path"])
