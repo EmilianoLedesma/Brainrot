@@ -123,6 +123,10 @@ def recover_expired_jobs() -> list[dict]:
     return client().rpc("recover_expired_jobs", {}).execute().data or []
 
 
+def operational_metrics() -> dict:
+    return client().rpc("operational_metrics", {}).execute().data
+
+
 # --- stage execution (migrations/003_stage_execution.sql) ------------------------
 
 

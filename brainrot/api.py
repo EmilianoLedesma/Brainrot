@@ -14,14 +14,17 @@ from typing import Literal
 
 from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from pydantic import BaseModel, model_validator
 
 from . import db
+from .observability.metrics import APIMetricsMiddleware, render
 
 API_KEY = os.getenv("DASHBOARD_API_KEY", "")
 ALLOWED_ORIGINS = os.getenv("DASHBOARD_ORIGINS", "http://localhost:5173").split(",")
 
 app = FastAPI(title="brainrot dashboard")
+app.add_middleware(APIMetricsMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
@@ -34,6 +37,11 @@ def require_key(x_api_key: str = Header("")) -> None:
     """Shared-secret gate. With DASHBOARD_API_KEY unset, every request is rejected."""
     if not API_KEY or not secrets.compare_digest(x_api_key, API_KEY):
         raise HTTPException(status_code=401, detail="bad or missing X-API-Key")
+
+
+@app.get("/metrics", dependencies=[Depends(require_key)], include_in_schema=False)
+def metrics() -> Response:
+    return Response(render(db.operational_metrics()), media_type="text/plain; version=0.0.4; charset=utf-8")
 
 
 class JobIn(BaseModel):
