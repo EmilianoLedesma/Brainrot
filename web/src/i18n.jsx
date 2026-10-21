@@ -124,7 +124,7 @@ export const COPY = {
               ["`SUPABASE_URL`", "Project URL."],
               ["`SUPABASE_SERVICE_KEY`", "Service role key. Bypasses RLS — server side only, never in a browser."],
               ["`MEDIA_BUCKET`", "Storage bucket for every generated and downloaded file."],
-              ["`BRAINROT_LLM_PROVIDER`", "claude-code (default) or codex uses your local CLI subscription login. Restart the worker after changing it."],
+              ["`BRAINROT_LLM_PROVIDER`", "Default integration for jobs without a Model choice: claude-code or codex. Restart the worker after changing this default."],
               ["`ANTHROPIC_API_KEY`", "Only required for the explicitly selected anthropic API provider."],
               ["`DATABASE_URL`", "Postgres via the session pooler. Used only to apply migrations."],
               ["`DASHBOARD_API_KEY`", "Shared secret for this UI. The API rejects everything while it is unset."],
@@ -240,6 +240,7 @@ export const COPY = {
       headings: { new: "Start a job", queue: "Live queue", output: "Finished output" },
       tabs: { new: "New job", queue: "Queue", output: "Output" },
       steps: ["Pipeline", "Input", "Review"],
+      model: { label: "Model", hint: "Uses this integration’s configured model and your local sign-in.", workerDefault: "Worker default" },
       pipelines: {
         brainrot: { name: "Generate", tagline: "From a topic", blurb: "Your selected model writes a script, narrated over a background clip.", field: "Topic", hint: "One subject. The script finds the single most interesting thing about it." },
         repurpose: { name: "Repurpose", tagline: "From a YouTube link", blurb: "Transcribed, cut into standalone moments, reframed to follow the speaker.", field: "Source URL", hint: "Long-form works best. Up to three clips come out of one video." },
@@ -400,7 +401,7 @@ export const COPY = {
               ["`SUPABASE_URL`", "URL del proyecto."],
               ["`SUPABASE_SERVICE_KEY`", "Llave service_role. Pasa por encima de RLS — solo del lado del servidor, nunca en un navegador."],
               ["`MEDIA_BUCKET`", "Bucket para cada archivo generado y descargado."],
-              ["`BRAINROT_LLM_PROVIDER`", "claude-code (predeterminado) o codex usa la sesión local de tu CLI. Reinicia el worker si lo cambias."],
+              ["`BRAINROT_LLM_PROVIDER`", "Integración para trabajos sin elección de Modelo: claude-code o codex. Reinicia el worker si cambias este valor."],
               ["`ANTHROPIC_API_KEY`", "Solo se necesita si eliges explícitamente el proveedor API anthropic."],
               ["`DATABASE_URL`", "Postgres vía el session pooler. Solo para aplicar migraciones."],
               ["`DASHBOARD_API_KEY`", "Secreto compartido de esta interfaz. La API rechaza todo mientras esté vacío."],
@@ -516,6 +517,7 @@ export const COPY = {
       headings: { new: "Lanzar un job", queue: "Cola en vivo", output: "Resultados" },
       tabs: { new: "Nuevo job", queue: "Cola", output: "Resultados" },
       steps: ["Pipeline", "Entrada", "Revisión"],
+      model: { label: "Modelo", hint: "Usa el modelo configurado en esta integración y tu sesión local.", workerDefault: "Predeterminado del worker" },
       pipelines: {
         brainrot: { name: "Generar", tagline: "Desde un tema", blurb: "El modelo elegido escribe el guion y se narra sobre un clip de fondo.", field: "Tema", hint: "Un solo asunto. El guion encuentra lo más interesante que tiene." },
         repurpose: { name: "Reutilizar", tagline: "Desde un link de YouTube", blurb: "Transcrito, cortado en momentos que se sostienen solos, reencuadrado siguiendo a quien habla.", field: "URL de origen", hint: "Funciona mejor con formato largo. De un video salen hasta tres clips." },

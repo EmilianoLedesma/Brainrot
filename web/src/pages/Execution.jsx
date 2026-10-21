@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../api.js";
 import { useCopy } from "../i18n.jsx";
+import { GENERATION_PROVIDERS } from "../generation.js";
 
 export function duration(value) {
   if (value == null) return "—";
@@ -8,7 +9,8 @@ export function duration(value) {
 }
 
 export default function Execution({ jobId }) {
-  const t = useCopy().work.execution;
+  const work = useCopy().work;
+  const t = work.execution;
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   useEffect(() => {
@@ -39,6 +41,7 @@ export default function Execution({ jobId }) {
           <code>{job.id}</code>
           <span className={"status status-" + job.status}>{job.status}</span>
         </div>
+        <p className="muted">{work.model.label}: <b>{GENERATION_PROVIDERS[job.params?.llm_provider] || work.model.workerDefault}</b></p>
         <dl className="execution-facts">
           <div><dt>{t.attempt}</dt><dd>{job.attempts ?? 0} / {job.max_attempts ?? 3}</dd></div>
           <div><dt>{t.started}</dt><dd>{stamp(job.started_at)}</dd></div>

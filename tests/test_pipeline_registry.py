@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from brainrot import pipeline, reddit, repurpose, worker
+from brainrot import llm, pipeline, reddit, repurpose, script, worker
 from brainrot.application.registry import PipelineRegistry, UnknownPipeline
 from brainrot.domain.jobs import LeaseLost, PermanentError
 from brainrot.domain.pipelines import Pipeline, PipelineContext, PipelineResult
@@ -37,6 +37,28 @@ def test_unknown_pipeline_is_a_clear_permanent_error():
     with pytest.raises(UnknownPipeline, match="unknown pipeline: missing") as exc:
         create_registry().get("missing")
     assert isinstance(exc.value, PermanentError)
+
+
+@pytest.mark.parametrize("kind,module,handler", [
+    ("brainrot", pipeline, "run_brainrot"),
+    ("repurpose", repurpose, "run_repurpose"),
+    ("reddit", reddit, "run_reddit"),
+])
+def test_each_pipeline_applies_the_persisted_provider_on_every_attempt(monkeypatch, kind, module, handler):
+    selected = []
+    monkeypatch.setenv("BRAINROT_LLM_PROVIDER", "claude-code")
+    monkeypatch.setattr(llm, "_local", lambda provider, *args: selected.append(provider) or script.Story(title="T", script="S"))
+
+    def run(job):
+        script.write_story("topic")
+        return "record-1"
+
+    monkeypatch.setattr(module, handler, run)
+    adapter = create_registry().get(kind)
+    for attempt in (1, 2):
+        adapter.execute(PipelineContext("job-1", kind, {"llm_provider": "codex"}, attempt, "worker-a"))
+    script.write_story("outside the job")
+    assert selected == ["codex", "codex", "claude-code"]
 
 
 @dataclass

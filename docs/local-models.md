@@ -7,7 +7,18 @@ the existing Story or Moments contract. There is no new pipeline or database mig
 
 ## Select a provider
 
-Set one value in the worker's local `.env`, then restart the worker:
+For a new dashboard job, choose **Claude Code** or **Codex** in the **Model**
+selector below the topic or source URL. Review shows the choice before submission;
+Queue and Inspect show the saved integration afterward. It applies to all model
+steps and subsequent attempts of that job. Model versions stay configured in
+each integration.
+
+Deploy the updated API and worker with the dashboard, restarting local processes
+if they are already running. The selection uses existing job params; no SQL
+migration is required.
+
+For jobs without a saved selection, set the default in the worker's local `.env`,
+then restart the worker:
 
 | Value of `BRAINROT_LLM_PROVIDER` | Authentication |
 |---|---|
@@ -47,9 +58,14 @@ not upload or publish anything. Omit `--provider` to use the environment setting
 It performs a real model request using the selected provider's allowance.
 
 For the full H2 flow, start the API/worker normally, then choose Generate in
-Workspace and type a topic. No Reddit credentials are used for that path.
-All jobs on that worker use its configured provider. Existing saved scripts and
-selected moments are reused on retry, even if the worker's provider setting changes.
+Workspace, type a topic and choose its Model integration. No Reddit credentials
+are used for that path. The API accepts an optional `llm_provider` of `claude-code`
+or `codex` and stores it in the job params. Jobs that omit it retain the worker
+default. The API does not accept the paid `anthropic` provider as a per-job choice.
+
+Existing saved scripts and selected moments are reused on retry. If generation
+needs to run again, the saved job choice takes precedence over the worker default.
+CLI previews can still explicitly override their provider with `--provider`.
 
 ## Configuration
 

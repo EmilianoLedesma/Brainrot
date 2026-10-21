@@ -69,8 +69,14 @@ python -m brainrot.cli generate-script "Why octopuses can open jars" --provider 
 python -m brainrot.cli generate-script "Why octopuses can open jars" --provider codex
 ```
 
-The worker uses the provider in `.env` for topic scripts, Reddit rewrites and H1
-moment selection. Restart it after changing providers. There is no automatic
+Workspace's Model selector chooses Claude Code or Codex for each new topic or
+repurpose job. The choice appears in Review and is saved with the job for every
+attempt. Each integration uses its configured model; the selector does not pick
+individual model versions.
+
+Jobs without a saved selection use the provider in `.env` for topic scripts,
+Reddit rewrites and H1 moment selection. Restart the worker after changing that
+default. There is no automatic
 fallback to another provider or paid API. Subscription limits still apply, and
 account-level extra usage settings can incur charges. Local adapters are intended
 for your own private worker, running as the signed-in OS user.

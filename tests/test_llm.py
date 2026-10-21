@@ -63,6 +63,23 @@ def test_codex_is_selectable_in_worker_environment(local_cli, monkeypatch):
     assert local_cli[-1][0][0] == "codex"
 
 
+def test_job_selection_overrides_worker_default_and_is_restored_after_failure(local_cli, monkeypatch):
+    monkeypatch.setenv("BRAINROT_LLM_PROVIDER", "claude-code")
+    with pytest.raises(RuntimeError):
+        with llm.using_provider("codex"):
+            script.write_story("topic")
+            assert local_cli[-1][0][0] == "codex"
+            raise RuntimeError("job failed")
+    script.write_story("next topic")
+    assert local_cli[-1][0][0] == "claude-code"
+
+
+def test_explicit_preview_selection_overrides_job_scope(local_cli):
+    with llm.using_provider("codex"):
+        script.write_story("topic", provider="claude-code")
+    assert local_cli[-1][0][0] == "claude-code"
+
+
 def test_codex_schema_is_closed_at_nested_moment_objects(local_cli, monkeypatch):
     original_run = llm._run
 

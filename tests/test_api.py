@@ -12,17 +12,40 @@ def http(monkeypatch):
     return TestClient(api.app, headers={"X-API-Key": "dashboard-test-key"})
 
 
+@pytest.mark.parametrize("provider", ["claude-code", "codex"])
+@pytest.mark.parametrize("payload", [
+    {"kind": "brainrot", "topic": "octopuses"},
+    {"kind": "repurpose", "youtube_url": "https://youtube.com/watch?v=example"},
+])
+def test_new_job_persists_the_selected_local_provider(http, fake_db, provider, payload):
+    response = http.post("/jobs", json={**payload, "llm_provider": provider})
+    assert response.status_code == 200
+    assert db.get_job(response.json()["id"])["params"]["llm_provider"] == provider
+
+
+@pytest.mark.parametrize("provider", ["anthropic", "unknown", "codex --unsafe", {"value": "codex"}])
+def test_frontend_cannot_select_api_billing_or_arbitrary_commands(http, provider):
+    assert http.post("/jobs", json={"kind": "brainrot", "topic": "octopuses", "llm_provider": provider}).status_code == 422
+
+
+def test_legacy_enqueue_keeps_worker_default_behavior(http, fake_db):
+    response = http.post("/jobs", json={"kind": "brainrot", "topic": "octopuses"})
+    assert response.status_code == 200
+    assert "llm_provider" not in db.get_job(response.json()["id"])["params"]
+
+
 def test_operational_job_list_uses_bounded_parameters_and_explicit_fields(http, monkeypatch):
     seen = []
     monkeypatch.setattr(db, "list_job_executions", lambda limit: seen.append(limit) or [{
         "id": "job-1", "kind": "brainrot", "status": "pending", "attempts": 1,
-        "params": {"topic": "story", "access_token": "private-provider-token"},
+        "params": {"topic": "story", "llm_provider": "codex", "access_token": "private-provider-token"},
         "service_role_key": "private-service-key", "lease_owner": "private-worker",
     }])
     response = http.get("/jobs?limit=20")
     assert response.status_code == 200 and seen == [20]
     assert "private" not in response.text
     assert response.json()[0]["attempts"] == 1
+    assert response.json()[0]["params"]["llm_provider"] == "codex"
     assert http.get("/jobs?limit=-1").status_code == 422
     assert http.get("/jobs?limit=201").status_code == 422
 

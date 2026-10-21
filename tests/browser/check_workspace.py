@@ -21,7 +21,7 @@ def main():
     stamp = "2026-10-21T17:00:00+00:00"
     job = {
         "id": job_id, "kind": "brainrot", "status": "running", "attempts": 2, "max_attempts": 3,
-        "params": {"topic": "The octopus escape"}, "created_at": stamp, "started_at": stamp,
+        "params": {"topic": "The octopus escape", "llm_provider": "codex"}, "created_at": stamp, "started_at": stamp,
         "finished_at": None, "run_after": stamp, "duration_seconds": 12.5,
         "current_stage": {"stage": "render"}, "error_summary": None,
     }
@@ -38,6 +38,7 @@ def main():
               "params": {"topic": "A failed story"}, "error": "Missing background", "current_stage": None}
     completed = {**job, "id": "00000000-0000-0000-0000-000000000003", "status": "done", "params": {"topic": "A finished story"}, "current_stage": None}
     unavailable = False
+    submitted = []
     screenshots = Path(tempfile.mkdtemp(prefix="brainrot-ui-"))
     with sync_playwright() as playwright:
         options = {"headless": True}
@@ -50,7 +51,10 @@ def main():
         page.on("pageerror", lambda error: errors.append(str(error)))
 
         def respond(route):
-            if unavailable:
+            if route.request.method == "POST":
+                submitted.append(route.request.post_data_json)
+                route.fulfill(status=200, content_type="application/json", body=json.dumps({"id": job_id}))
+            elif unavailable:
                 route.fulfill(status=503, body="Temporary outage")
             else:
                 body = detail if route.request.url.split("?")[0].endswith("/" + job_id) else [job, failed, completed]
@@ -60,12 +64,47 @@ def main():
         page.route("**/jobs/**", respond)
         page.goto(args.url)
         page.get_by_role("button", name="Workspace", exact=True).first.click()
-        page.get_by_role("button", name="Queue", exact=True).click()
-        expect(page.get_by_role("cell", name="The octopus escape Inspect", exact=True)).to_be_visible()
+        page.locator(".choice").filter(has_text="From a topic").click()
+        model = page.get_by_role("combobox", name="Model", exact=True)
+        expect(model).to_have_value("claude-code")
+        model.select_option("codex")
+        model.focus()
+        model.press("ArrowUp")
+        expect(model).to_have_value("claude-code")
+        model.press("ArrowDown")
+        expect(model).to_have_value("codex")
+        page.get_by_label("Topic", exact=True).fill("The octopus escape")
+        page.screenshot(path=str(screenshots / "model-desktop.png"), full_page=True)
+        page.set_viewport_size({"width": 390, "height": 844})
+        page.get_by_role("button", name="Hablar español", exact=False).click()
+        expect(page.get_by_role("combobox", name="Modelo", exact=True)).to_have_value("codex")
+        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), "model form overflows on mobile"
+        page.screenshot(path=str(screenshots / "model-mobile.png"), full_page=True)
+        page.get_by_role("button", name="Hablar gringo", exact=False).click()
+        page.set_viewport_size({"width": 1440, "height": 1000})
+        page.get_by_role("button", name="Review →", exact=True).click()
+        expect(page.locator(".review").get_by_text("Codex", exact=True)).to_be_visible()
+        page.get_by_role("button", name="← Edit", exact=True).click()
+        expect(page.get_by_role("combobox", name="Model", exact=True)).to_have_value("codex")
+        page.get_by_role("button", name="Review →", exact=True).click()
+        page.get_by_role("button", name="Queue it", exact=True).click()
+        expect(page.get_by_role("heading", name="Live queue", exact=True)).to_be_visible()
+        assert submitted == [{"kind": "brainrot", "topic": "The octopus escape", "llm_provider": "codex"}]
+        page.get_by_role("button", name="New job", exact=True).click()
+        page.locator(".choice").filter(has_text="From a YouTube link").click()
+        page.get_by_label("Source URL", exact=True).fill("https://youtube.com/watch?v=example")
+        expect(page.get_by_role("combobox", name="Model", exact=True)).to_have_value("claude-code")
+        page.get_by_role("button", name="Review →", exact=True).click()
+        expect(page.locator(".review").get_by_text("Claude Code", exact=True)).to_be_visible()
+        page.get_by_role("button", name="Queue it", exact=True).click()
+        expect(page.get_by_role("heading", name="Live queue", exact=True)).to_be_visible()
+        assert submitted[1] == {"kind": "repurpose", "youtube_url": "https://youtube.com/watch?v=example", "llm_provider": "claude-code"}
+        expect(page.get_by_role("row").filter(has_text="The octopus escape")).to_be_visible()
         page.get_by_role("button", name="Inspect", exact=True).first.click()
         region = page.locator("#execution-" + job_id)
         expect(region.get_by_role("heading", name="Stage history")).to_be_visible()
         expect(region.get_by_role("heading", name="Publication queue")).to_be_visible()
+        expect(region.get_by_text("Codex", exact=True)).to_be_visible()
         expect(region.get_by_text("TimeoutError: renderer interrupted")).to_be_visible()
         page.screenshot(path=str(screenshots / "desktop.png"), full_page=True)
         job["status"] = "done"
@@ -83,7 +122,7 @@ def main():
         expect(region.get_by_role("heading", name="Stage history")).to_be_visible()
         assert not errors, errors
         browser.close()
-    print("Desktop/mobile execution inspector, polling and stale-data checks passed")
+    print("Desktop/mobile model selection, submission, execution inspector, polling and stale-data checks passed")
     print("Screenshots:", screenshots)
 
 

@@ -52,6 +52,7 @@ class JobIn(BaseModel):
     kind: Literal["repurpose", "brainrot"]
     youtube_url: str | None = Field(default=None, max_length=2048)
     topic: str | None = Field(default=None, max_length=1000)
+    llm_provider: Literal["claude-code", "codex"] | None = None
 
     @model_validator(mode="after")
     def check_payload(self) -> "JobIn":
@@ -101,7 +102,7 @@ def _job_view(row: dict) -> dict:
         "id", "kind", "status", "attempts", "max_attempts", "run_after", "error_kind",
         "created_at", "started_at", "finished_at", "duration_seconds",
     ))
-    result["params"] = _safe_row(row.get("params") or {}, ("topic", "youtube_url", "title", "subreddit"))
+    result["params"] = _safe_row(row.get("params") or {}, ("topic", "youtube_url", "title", "subreddit", "llm_provider"))
     result["error"] = result["error_summary"] = _error_summary(row.get("error"))
     current = row.get("current_stage")
     result["current_stage"] = _safe_row(current, ("stage", "scope", "started_at")) if current else None

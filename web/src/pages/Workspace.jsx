@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { api } from "../api.js";
 import { useCopy } from "../i18n.jsx";
+import { GENERATION_PROVIDERS } from "../generation.js";
 import Execution, { duration } from "./Execution.jsx";
 
 /* The work surface. Submitting a job is a three-step flow rather than one form,
@@ -77,6 +78,7 @@ function NewJob({ onQueued }) {
   const [step, setStep] = useState(1);
   const [kind, setKind] = useState(null);
   const [value, setValue] = useState("");
+  const [provider, setProvider] = useState("claude-code");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [queued, setQueued] = useState(null);
@@ -102,7 +104,7 @@ function NewJob({ onQueued }) {
     try {
       const { id } = await api("/jobs", {
         method: "POST",
-        body: JSON.stringify({ kind, [field.key]: value.trim() }),
+        body: JSON.stringify({ kind, [field.key]: value.trim(), llm_provider: provider }),
       });
       setQueued(id);
       setStep(4);
@@ -181,6 +183,18 @@ function NewJob({ onQueued }) {
             <p className="muted" style={{ margin: 0, fontSize: 13 }}>
               {copy.hint}
             </p>
+            <label htmlFor="generation-provider">
+              <span id="generation-provider-label" className="label">{t.model.label}</span>
+              <select id="generation-provider" value={provider}
+                aria-labelledby="generation-provider-label"
+                aria-describedby="generation-provider-hint"
+                onChange={(event) => setProvider(event.target.value)}>
+                {Object.entries(GENERATION_PROVIDERS).map(([id, name]) => (
+                  <option key={id} value={id}>{name}</option>
+                ))}
+              </select>
+              <small id="generation-provider-hint" className="muted">{t.model.hint}</small>
+            </label>
             <div className="hero-actions">
               <button type="button" className="btn" onClick={() => setStep(1)}>
                 {t.back}
@@ -204,6 +218,10 @@ function NewJob({ onQueued }) {
               <div>
                 <dt className="label">{copy.field}</dt>
                 <dd className="review-value">{value}</dd>
+              </div>
+              <div>
+                <dt className="label">{t.model.label}</dt>
+                <dd>{GENERATION_PROVIDERS[provider]}</dd>
               </div>
             </dl>
             <p className="muted" style={{ fontSize: 13 }}>
@@ -279,6 +297,9 @@ function Queue() {
                     </td>
                     <td>
                       {inputOf(job)}
+                      {GENERATION_PROVIDERS[job.params?.llm_provider] && (
+                        <small className="execution-scope">{GENERATION_PROVIDERS[job.params.llm_provider]}</small>
+                      )}
                       {job.error && <pre className="trace">{job.error}</pre>}
                       <button className="btn inspect-job" aria-expanded={selected === job.id}
                         aria-controls={selected === job.id ? "execution-" + job.id : undefined}
