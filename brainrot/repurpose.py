@@ -67,6 +67,7 @@ def download(url: str, directory: str) -> tuple[str, dict]:
         "subtitleslangs": ["en"],
         "subtitlesformat": "vtt",
         "quiet": True,
+        "noplaylist": True,
         "no_warnings": True,
     }
     with yt_dlp.YoutubeDL(options) as ydl:

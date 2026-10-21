@@ -12,11 +12,12 @@ import os
 import secrets
 from typing import Literal
 from uuid import UUID
+from urllib.parse import parse_qs, urlsplit
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from . import db
 from .observability.metrics import APIMetricsMiddleware, render
@@ -47,16 +48,31 @@ def metrics() -> Response:
 
 
 class JobIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     kind: Literal["repurpose", "brainrot"]
-    youtube_url: str | None = None
-    topic: str | None = None
+    youtube_url: str | None = Field(default=None, max_length=2048)
+    topic: str | None = Field(default=None, max_length=1000)
 
     @model_validator(mode="after")
     def check_payload(self) -> "JobIn":
+        if self.topic is not None:
+            self.topic = self.topic.strip()
+        if self.youtube_url is not None:
+            self.youtube_url = self.youtube_url.strip()
         if self.kind == "repurpose" and not self.youtube_url:
             raise ValueError("repurpose needs youtube_url")
         if self.kind == "brainrot" and not self.topic:
             raise ValueError("brainrot needs topic")
+        if self.kind == "repurpose":
+            parsed = urlsplit(self.youtube_url)
+            hosts = {"youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com", "youtu.be", "www.youtu.be"}
+            video_path = (parsed.hostname in {"youtu.be", "www.youtu.be"} and bool(parsed.path.strip("/"))) or (
+                parsed.path == "/watch" and bool(parse_qs(parsed.query).get("v"))
+            ) or any(parsed.path.startswith(prefix) and parsed.path[len(prefix):] for prefix in ("/shorts/", "/live/", "/embed/"))
+            if (parsed.scheme not in {"https", "http"} or parsed.hostname not in hosts
+                or parsed.username is not None or parsed.password is not None
+                or parsed.port not in {None, 443 if parsed.scheme == "https" else 80} or not video_path):
+                raise ValueError("repurpose needs a YouTube video URL")
         return self
 
 
@@ -72,7 +88,8 @@ def list_jobs(limit: int = Query(50, ge=1, le=200)) -> list[dict]:
 
 
 def _safe_row(row: dict, fields: tuple) -> dict:
-    return {key: safe_text(row[key]) if isinstance(row.get(key), str) else row.get(key) for key in fields}
+    return {key: safe_text(row[key]) if isinstance(row.get(key), str)
+            else row.get(key) if isinstance(row.get(key), (int, float, bool, type(None))) else None for key in fields}
 
 
 def _error_summary(value) -> str | None:

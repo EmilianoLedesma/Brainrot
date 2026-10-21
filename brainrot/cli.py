@@ -6,6 +6,7 @@ import subprocess
 import sys
 
 from . import db, publish, reddit, scheduler
+from .observability.logging import configure
 
 
 def duration_seconds(path: pathlib.Path) -> float | None:
@@ -59,6 +60,7 @@ def publish_due(args: argparse.Namespace) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    configure()
     parser = argparse.ArgumentParser(prog="brainrot")
     sub = parser.add_subparsers(dest="command", required=True)
 
