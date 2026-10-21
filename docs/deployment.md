@@ -73,5 +73,13 @@ outage can stop the worker loop; persisted leases make interrupted attempts
 recoverable after expiry when the process restarts. Keep FFmpeg/ffprobe and the
 Python requirements on that host. No generation or media work runs inside Vercel.
 
+Generation defaults to the local Claude Code adapter. The worker host needs the
+selected CLI installed and signed in as the same OS user that runs the worker.
+Set `BRAINROT_LLM_PROVIDER=codex` to use the saved Codex/ChatGPT login instead.
+These adapters target a private worker on your own computer; deploying the Vite
+dashboard does not transfer your local CLI installation or login to a server.
+For an API-based worker, explicitly select `anthropic` and configure its API key.
+See [local model setup](local-models.md).
+
 See [operations](operations.md) for migration precautions, authenticated metrics,
 recovery, publication reconciliation and the remaining provider validation.

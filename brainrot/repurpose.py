@@ -1,6 +1,6 @@
 """H1: turn a long YouTube video into vertical clips.
 
-Downloads the source, gets a transcript, asks Claude which moments stand alone,
+Downloads the source, gets a transcript, asks the configured model which moments stand alone,
 then cuts each one and reframes it to 9:16 following the speaker's face.
 """
 
@@ -9,13 +9,12 @@ import re
 import subprocess
 import tempfile
 
-import anthropic
 import cv2
 import numpy as np
 import yt_dlp
 from pydantic import BaseModel
 
-from . import db, render, scheduler, script
+from . import db, llm, render, scheduler, script
 from .application.stages import stage
 from .domain.jobs import PermanentError
 from .models import FACE_MODEL_PATH
@@ -127,17 +126,11 @@ def transcribe(video_path: str, directory: str) -> list[dict]:
 
 def select_moments(transcript: list[dict]) -> list[Moment]:
     lines = "\n".join(f"[{c['start']:.1f}] {c['text']}" for c in transcript)
-    client = anthropic.Anthropic()
-    response = client.messages.parse(
-        model=script.MODEL,
-        max_tokens=8000,
-        system=SELECT_SYSTEM,
-        messages=[{"role": "user", "content": f"Transcript:\n{lines}"}],
-        output_format=Moments,
+    response = llm.generate(
+        SELECT_SYSTEM, f"Transcript:\n{lines}", Moments,
+        max_tokens=8000, api_model=script.MODEL,
     )
-    if response.stop_reason == "refusal":
-        raise PermanentError(f"Claude declined: {response.stop_details}")
-    return sorted(response.parsed_output.moments, key=lambda m: m.score, reverse=True)
+    return sorted(response.moments, key=lambda m: m.score, reverse=True)
 
 
 def face_model_path() -> str:

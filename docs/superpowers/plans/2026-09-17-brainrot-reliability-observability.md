@@ -26,6 +26,12 @@ PR #1 was merged before further implementation; subsequent changes are on
 `feat/stage-execution` with no new PR. See [operations](../../operations.md)
 for validation boundaries and the runbook.
 
+**Local generation follow-up (2026-10-21):** Generation now supports the installed
+Claude Code and Codex subscription CLIs; topic script previews pass through both.
+An Anthropic API key is no longer required for local H1/H2 model steps.
+Full-pipeline acceptance and Reddit approval remain separate checks. See
+[local model setup](../../local-models.md).
+
 **Spec path:**
 `docs/superpowers/specs/2026-09-17-brainrot-reliability-observability.md`
 

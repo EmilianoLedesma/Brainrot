@@ -19,7 +19,8 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
     brainrot/application/  retry policy, pipeline registry, stage tracking and pacing policy
     brainrot/observability/ structured execution logs and Prometheus metrics
     brainrot/pipelines.py  H1/H2/H2b adapters and default pipeline registration
-    brainrot/script.py     Claude: topic -> story, Reddit post -> retold story
+    brainrot/llm.py        typed generation via Claude Code, Codex or explicit Anthropic API
+    brainrot/script.py     topic -> story, Reddit post -> retold story
     brainrot/tts.py        edge-tts narration with per-word timings
     brainrot/render.py     ffmpeg: looping background + narration + karaoke captions
     brainrot/pipeline.py   H2/H2b: script -> chapters -> rendered video
@@ -51,12 +52,32 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
    (Project Settings -> API). The service_role key bypasses RLS — server-side only.
 4. `pip install -r requirements.txt`
 5. `python test_db.py` -> `phase 0 ok`
-6. Install FFmpeg/ffprobe on the worker host and set `ANTHROPIC_API_KEY`.
+6. Install FFmpeg/ffprobe on the worker host. For local generation, sign in to
+   Claude Code with `claude auth login` or Codex with `codex login` on that host.
+   Set `BRAINROT_LLM_PROVIDER=claude-code` (the default) or `codex` in `.env`.
+   Local modes use the saved subscription login and require no API key.
    H2/H2b need an active background: `python -m brainrot.cli add-background background.mp4`.
    H1 needs `python -m brainrot.cli setup-face-model`, which downloads pinned,
    checksum-verified OpenCV YuNet weights and uploads them to the private bucket.
    H2b additionally needs approved Reddit API access and the Reddit variables in
    `.env.example`. Platform publishing credentials are configured separately.
+
+Preview a topic without creating a job or publishing:
+
+```sh
+python -m brainrot.cli generate-script "Why octopuses can open jars" --provider claude-code
+python -m brainrot.cli generate-script "Why octopuses can open jars" --provider codex
+```
+
+The worker uses the provider in `.env` for topic scripts, Reddit rewrites and H1
+moment selection. Restart it after changing providers. There is no automatic
+fallback to another provider or paid API. Subscription limits still apply, and
+account-level extra usage settings can incur charges. Local adapters are intended
+for your own private worker, running as the signed-in OS user.
+
+The existing API remains available only with `BRAINROT_LLM_PROVIDER=anthropic`
+and `ANTHROPIC_API_KEY`. See [local model setup](docs/local-models.md) for login,
+Windows executable discovery, timeouts and deployment boundaries.
 
 ## Phases
 
@@ -114,7 +135,7 @@ every minute while the pipeline runs. If the worker dies, the lease lapses and t
 next worker iteration puts the job back in the queue. Network errors, timeouts,
 rate limits and 5xx responses are retried after 30s, 60s, 120s... (capped at 30
 minutes) up to `jobs.max_attempts` (3); anything else fails the job, since retrying
-a bug only pays for the same Claude call again. A retried job resumes: it reuses
+a bug repeats the same model work. A retried job resumes: it reuses
 the story, transcript and moment selection its earlier attempt saved and only
 renders what is missing.
 

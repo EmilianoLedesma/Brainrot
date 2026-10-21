@@ -55,7 +55,9 @@ an unexpired lease. Recovery closes unfinished stages as `abandoned`.
 Network/transport errors, timeouts, rate limits, HTTP 408/425 and 5xx responses
 retry with `min(30s * 2^(attempt-1), 30min)` backoff. The default maximum is
 three total attempts, so normally there are two waiting intervals: 30s and 60s.
-Unrecognized errors, missing required assets and Claude refusals fail immediately.
+Unrecognized errors, missing required assets and model refusals fail immediately.
+Local CLI login, quota/exit and invalid-output errors are terminal setup/result
+errors; local CLI timeouts follow the bounded retry policy.
 An expired lease returns the job to pending, or fails it if attempts are exhausted.
 
 Retries reuse the saved story, transcript, selected moments and finished outputs.
@@ -179,10 +181,13 @@ polling and retained data after a connection failure. It uses installed Edge on
 Windows; elsewhere install Playwright Chromium with `python -m playwright install chromium`.
 
 As of 2026-10-21, live migrations, Storage, lease/stage/metrics/read-model smoke
-checks and OpenCV detector loading pass. Real H1/H2/H2b end-to-end checks remain
-pending `ANTHROPIC_API_KEY`, plus approved Reddit credentials for H2b. The code
-currently uses Claude; an OpenAI API provider is not implemented. A ChatGPT Plus
-subscription does not provide ordinary backend API credits.
+checks and OpenCV detector loading pass. Generation now supports the local
+Claude Code and Codex CLIs using their subscription sign-ins; an Anthropic API
+key is needed only when explicitly selecting the `anthropic` provider.
+See [local models](local-models.md) for setup and provider validation.
+Real H1/H2/H2b full-pipeline acceptance remains separate from successful script
+generation. H2b still requires approved Reddit credentials; typing an H2 topic
+requires no Reddit access.
 
 Publishing OAuth onboarding and actual platform uploads remain unvalidated.
 Platform analytics fetching is deferred. The scheduler consumes normalized stored
