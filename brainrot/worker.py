@@ -145,10 +145,19 @@ def main() -> None:
     event("worker_started", worker_id=WORKER_ID)
     last_housekeeping = 0.0
     while True:
-        found = run_once()
-        if not found or time.monotonic() - last_housekeeping > HOUSEKEEPING_EVERY_SECONDS:
-            housekeeping()
-            last_housekeeping = time.monotonic()
+        try:
+            found = run_once()
+            if not found or time.monotonic() - last_housekeeping > HOUSEKEEPING_EVERY_SECONDS:
+                housekeeping()
+                last_housekeeping = time.monotonic()
+        except Exception as exc:
+            if retry.classify(exc) != "transient":
+                raise
+            # Includes claim/recovery/housekeeping outages, before any job is held.
+            # If an outcome write failed, its lease still prevents duplicate work.
+            event("worker_connection_interrupted", error_type=type(exc).__name__)
+            time.sleep(POLL_SECONDS)
+            continue
         if not found:
             time.sleep(POLL_SECONDS)
 

@@ -92,3 +92,45 @@ def test_operational_endpoints_reject_unset_or_wrong_keys(monkeypatch, path):
 def test_job_inspection_rpc_is_server_only(pg, fn):
     for role in ("anon", "authenticated"):
         assert pg.execute("select bool_or(has_function_privilege(%s,p.oid,'execute')) from pg_proc p where proname=%s", (role, fn)).fetchone()["bool_or"] is False
+
+
+@pytest.mark.parametrize("result,status", [("deleted", 204), ("missing", 404), ("uploading", 409)])
+def test_delete_job_returns_atomic_database_outcome(http, monkeypatch, result, status):
+    monkeypatch.setattr(db, "delete_job", lambda job_id: result)
+    response = http.delete("/jobs/00000000-0000-0000-0000-000000000001")
+    assert response.status_code == status
+    if status == 204:
+        assert not response.content
+
+
+def test_delete_requires_auth_and_valid_uuid(http, monkeypatch):
+    monkeypatch.setattr(db, "delete_job", lambda job_id: pytest.fail("unexpected deletion"))
+    assert TestClient(api.app).delete("/jobs/00000000-0000-0000-0000-000000000001").status_code == 401
+    assert http.delete("/jobs/not-a-uuid").status_code == 422
+
+
+def test_connection_reset_returns_recoverable_error_without_secrets(http, monkeypatch):
+    import httpx
+    def disconnected(limit):
+        raise httpx.ReadError("private-connection-detail")
+    monkeypatch.setattr(db, "list_job_executions", disconnected)
+    response = http.get("/jobs")
+    assert response.status_code == 503
+    assert response.headers["Retry-After"] == "2"
+    assert "private-connection-detail" not in response.text
+
+
+@pytest.mark.parametrize("outcome,status", [("queued", 200), ("already_pending", 200), ("missing", 404), ("not_failed", 409)])
+def test_retry_returns_same_job_and_database_outcome(http, monkeypatch, outcome, status):
+    monkeypatch.setattr(db, "retry_job", lambda job_id: outcome)
+    job_id = "00000000-0000-0000-0000-000000000001"
+    response = http.post(f"/jobs/{job_id}/retry")
+    assert response.status_code == status
+    if status == 200:
+        assert response.json() == {"id": job_id, "status": "pending"}
+
+
+def test_retry_requires_auth_and_valid_uuid(http, monkeypatch):
+    monkeypatch.setattr(db, "retry_job", lambda job_id: pytest.fail("unexpected retry"))
+    assert TestClient(api.app).post("/jobs/00000000-0000-0000-0000-000000000001/retry").status_code == 401
+    assert http.post("/jobs/not-a-uuid/retry").status_code == 422

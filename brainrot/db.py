@@ -10,6 +10,7 @@ from functools import lru_cache
 
 from dotenv import load_dotenv
 from supabase import Client, create_client
+from supabase.lib.client_options import SyncClientOptions
 
 from .domain.pipelines import PipelineContext
 
@@ -24,6 +25,7 @@ def client() -> Client:
     return create_client(
         os.environ["SUPABASE_URL"],
         os.environ["SUPABASE_SERVICE_KEY"],
+        options=SyncClientOptions(postgrest_client_timeout=8),
     )
 
 
@@ -133,6 +135,16 @@ def list_job_executions(limit: int = 50) -> list[dict]:
 
 def job_execution(job_id: str) -> dict | None:
     return client().rpc("job_execution", {"p_job": str(job_id)}).execute().data
+
+
+def delete_job(job_id: str) -> str:
+    """Revoke any running lease and remove work atomically with claims/uploads."""
+    return client().rpc("delete_job", {"p_job": str(job_id)}).execute().data
+
+
+def retry_job(job_id: str) -> str:
+    """Requeue failed work without discarding saved results or attempt history."""
+    return client().rpc("retry_job", {"p_job": str(job_id)}).execute().data
 
 
 # --- stage execution (migrations/003_stage_execution.sql) ------------------------

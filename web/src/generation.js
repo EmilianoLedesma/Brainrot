@@ -1,4 +1,4 @@
 export const GENERATION_PROVIDERS = {
-  "claude-code": "Claude Code",
-  codex: "Codex",
+  "claude-code": "Claude",
+  codex: "Chat GPT",
 };

@@ -1,6 +1,6 @@
 """HTTP API for the dashboard.
 
-Creates jobs and exposes read-only views of jobs and finished media. A created
+Creates/deletes jobs and exposes views of jobs and finished media. A created
 job stays `pending` until a worker (python -m brainrot.worker) leases it.
 
 Reads go through here rather than straight from the browser to Supabase: every table
@@ -14,9 +14,10 @@ from typing import Literal
 from uuid import UUID
 from urllib.parse import parse_qs, urlsplit
 
+import httpx
 from fastapi import Depends, FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from . import db
@@ -31,9 +32,15 @@ app.add_middleware(APIMetricsMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(httpx.TransportError)
+async def database_unreachable(request, exc):
+    return JSONResponse(status_code=503, content={"detail": "Database connection interrupted. Retrying shortly."},
+                        headers={"Retry-After": "2"})
 
 
 def require_key(x_api_key: str = Header("")) -> None:
@@ -125,6 +132,30 @@ def inspect_job(job_id: UUID) -> dict:
         publication["error"] = _error_summary(row.get("error"))
         publications.append(publication)
     return {"job": _job_view(detail["job"]), "stages": stages, "publications": publications}
+
+
+@app.delete("/jobs/{job_id}", dependencies=[Depends(require_key)], status_code=204)
+def delete_job(job_id: UUID) -> Response:
+    result = db.delete_job(str(job_id))
+    if result == "missing":
+        raise HTTPException(status_code=404, detail="job not found")
+    if result == "uploading":
+        raise HTTPException(status_code=409, detail="A video is being published. Wait until the upload finishes before deleting.")
+    if result != "deleted":
+        raise HTTPException(status_code=503, detail="Could not delete job. Refresh the queue and try again.")
+    return Response(status_code=204)
+
+
+@app.post("/jobs/{job_id}/retry", dependencies=[Depends(require_key)])
+def retry_job(job_id: UUID) -> dict:
+    result = db.retry_job(str(job_id))
+    if result == "missing":
+        raise HTTPException(status_code=404, detail="job not found")
+    if result == "not_failed":
+        raise HTTPException(status_code=409, detail="Only failed jobs can be retried")
+    if result not in {"queued", "already_pending"}:
+        raise HTTPException(status_code=503, detail="Could not retry job")
+    return {"id": str(job_id), "status": "pending"}
 
 
 @app.get("/gallery", dependencies=[Depends(require_key)])

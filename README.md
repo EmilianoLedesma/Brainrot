@@ -47,7 +47,9 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
    worker needs it. `003_stage_execution.sql` adds stage records, lease-guarded
    stage functions and automatic closure of abandoned stages. `004_operational_metrics.sql`
    adds durable metric observations; `005_execution_read_models.sql` adds the dashboard
-   read models. Apply all five before starting this version.
+   read models. `006_delete_jobs.sql` adds guarded queue deletion and
+   `007_retry_jobs.sql` adds explicit retries that preserve saved progress.
+   Apply all seven before starting this version.
 3. `cp .env.example .env` and fill in `SUPABASE_URL` and `SUPABASE_SERVICE_KEY`
    (Project Settings -> API). The service_role key bypasses RLS — server-side only.
 4. `pip install -r requirements.txt`
@@ -69,7 +71,7 @@ python -m brainrot.cli generate-script "Why octopuses can open jars" --provider 
 python -m brainrot.cli generate-script "Why octopuses can open jars" --provider codex
 ```
 
-Workspace's Model selector chooses Claude Code or Codex for each new topic or
+Workspace's Model selector chooses Claude or Chat GPT for each new topic or
 repurpose job. The choice appears in Review and is saved with the job for every
 attempt. Each integration uses its configured model; the selector does not pick
 individual model versions.
@@ -144,6 +146,20 @@ minutes) up to `jobs.max_attempts` (3); anything else fails the job, since retry
 a bug repeats the same model work. A retried job resumes: it reuses
 the story, transcript and moment selection its earlier attempt saved and only
 renders what is missing.
+
+The queue's Delete action opens a confirmation dialog, then removes the job and
+its related database rows. Deleting a running job revokes its lease; its current
+operation may finish, but it cannot record completion or start another stage.
+Active platform uploads must finish before deletion. These checks are atomic with
+worker claims. Stored files and posted videos are retained. Database network
+operations have an eight-second timeout. Queue reads have a 15-second deadline;
+Output allows 45 seconds for media-link signing and promptly retries failed reads;
+the queue retries failed reads and keeps the last successful update visible.
+
+Failed jobs have a Retry action alongside Inspect and Delete. Retry requeues the
+same job, keeping its saved script, completed chapters/clips, and attempt history.
+Each explicit retry grants up to three further attempts. Finished jobs and running
+jobs cannot be retried, and repeated clicks cannot create a second job.
 
 Publishing is not retried. A failed upload stays `failed`, because an upload that
 timed out after the platform accepted it would otherwise post twice. A publication

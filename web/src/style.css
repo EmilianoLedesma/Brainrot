@@ -74,8 +74,16 @@ body {
 .execution-subhead { font-size: 24px; margin: 32px 0 16px; }
 .execution-scope { display: block; color: var(--ink-soft); font-size: 11px; overflow-wrap: anywhere; }
 .execution-error { border-left: var(--rule); padding: 12px 16px; background: var(--paper-2); overflow-wrap: anywhere; }
+.job-error { margin: 8px 0; max-width: 38ch; color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
 .numeric { font-variant-numeric: tabular-nums; white-space: nowrap; }
-.inspect-job { display: block; margin-top: 12px; min-height: 44px; padding: 8px 16px; font-size: 12px; }
+.job-actions { display: flex; align-items: center; flex-wrap: nowrap; gap: 10px; margin-top: 12px; width: max-content; }
+.job-actions .btn { min-height: 44px; padding: 8px 16px; font-size: 12px; white-space: nowrap; }
+.queue-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.delete-dialog { width: min(480px, calc(100% - 32px)); max-height: calc(100% - 32px); box-sizing: border-box; padding: 28px; border: 2px solid var(--ink, #171717); background: var(--paper, #f5f1e8); color: inherit; }
+.delete-dialog::backdrop { background: rgb(0 0 0 / 45%); }
+.delete-dialog h2 { margin-top: 0; font-size: 24px; }
+.delete-dialog p { line-height: 1.5; }
+.delete-input { font-weight: 600; overflow-wrap: anywhere; }
 .status-abandoned, .status-uploading { color: var(--orange); background: var(--paper-2); }
 .status-scheduled { color: var(--ink-soft); background: var(--paper-2); }
 .status-published { color: var(--green); }
@@ -400,21 +408,6 @@ tbody tr:hover {
 .kind-brainrot { background: var(--lime); }
 .kind-repurpose { background: #bcd0ff; }
 .kind-reddit { background: #ffd2a8; }
-
-.trace {
-  margin: 10px 0 0;
-  padding: 11px 13px;
-  font-family: ui-monospace, Menlo, monospace;
-  font-size: 11.5px;
-  line-height: 1.5;
-  color: var(--ink);
-  background: #ffe9f3;
-  border: var(--rule-thin);
-  border-radius: 8px;
-  white-space: pre-wrap;
-  max-height: 170px;
-  overflow: auto;
-}
 
 /* ---------- Gallery ---------- */
 

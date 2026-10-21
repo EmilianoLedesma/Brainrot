@@ -29,6 +29,8 @@ _ALLOWED: dict[JobState, frozenset[JobState]] = {
     # Back to pending covers both a scheduled retry and recovery of a lease
     # whose worker disappeared.
     JobState.RUNNING: frozenset({JobState.DONE, JobState.FAILED, JobState.PENDING}),
+    # A failed attempt ends automatic execution; an explicit user retry resumes it.
+    JobState.FAILED: frozenset({JobState.PENDING}),
 }
 
 

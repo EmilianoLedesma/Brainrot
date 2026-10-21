@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../api.js";
 import { useCopy } from "../i18n.jsx";
 import { GENERATION_PROVIDERS } from "../generation.js";
+import { userError } from "../errors.js";
 import Execution, { duration } from "./Execution.jsx";
 
 /* The work surface. Submitting a job is a three-step flow rather than one form,
@@ -16,7 +17,7 @@ const FIELDS = {
   repurpose: { code: "H1", key: "youtube_url", type: "url", placeholder: "https://youtube.com/watch?v=..." },
 };
 
-function usePoll(path, intervalMs) {
+function usePoll(path, intervalMs, timeoutMs = 15000) {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
@@ -28,21 +29,24 @@ function usePoll(path, intervalMs) {
     let active = true, timer;
     const controller = new AbortController();
     async function poll() {
+      let nextPollMs = intervalMs;
       try {
-        const next = await api(path, { signal: controller.signal });
+        const next = await api(path, { signal: controller.signal, timeoutMs });
         if (active) { setData(next); setError(null); }
       } catch (e) {
-        if (active && e.name !== "AbortError") setError(e.message);
+        if (active && e.name !== "AbortError") setError(e);
+        // Refreshing media links is infrequent; recovering a failed read isn't.
+        nextPollMs = Math.min(intervalMs, 2000);
       } finally {
         if (active) {
           setLoaded(true);
-          if (intervalMs) timer = setTimeout(poll, intervalMs);
+          if (intervalMs) timer = setTimeout(poll, nextPollMs);
         }
       }
     }
     poll();
     return () => { active = false; controller.abort(); clearTimeout(timer); };
-  }, [path, intervalMs, revision]);
+  }, [path, intervalMs, timeoutMs, revision]);
 
   return { data, error, loaded, refresh };
 }
@@ -78,7 +82,7 @@ function NewJob({ onQueued }) {
   const [step, setStep] = useState(1);
   const [kind, setKind] = useState(null);
   const [value, setValue] = useState("");
-  const [provider, setProvider] = useState("claude-code");
+  const [provider, setProvider] = useState("codex");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [queued, setQueued] = useState(null);
@@ -110,7 +114,7 @@ function NewJob({ onQueued }) {
       setStep(4);
       onQueued?.();
     } catch (e) {
-      setError(e.message);
+      setError(e);
       // Back to the input: a rejected payload is almost always the input.
       setStep(2);
     } finally {
@@ -151,7 +155,7 @@ function NewJob({ onQueued }) {
       <div className="panel-body">
         <Stepper step={step} labels={t.steps} />
 
-        {error && <p className="alarm-text form-error">{error}</p>}
+        {error && <p className="alarm-text form-error">{userError(error, t.errors)}</p>}
 
         {step === 1 && (
           <div className="choice-grid">
@@ -246,12 +250,73 @@ function inputOf(job) {
   return job.params?.topic || job.params?.youtube_url || job.params?.title || "—";
 }
 
+function DeleteDialog({ job, busy, error, onConfirm, onCancel }) {
+  const work = useCopy().work;
+  const t = work.remove;
+  const dialog = useRef(null);
+  useEffect(() => { dialog.current.showModal(); }, []);
+  return (
+    <dialog ref={dialog} className="delete-dialog" aria-labelledby="delete-title"
+      onCancel={(event) => { event.preventDefault(); if (!busy) onCancel(); }}>
+      <h2 id="delete-title">{job.status === "running" ? t.runningTitle : t.title}</h2>
+      <p className="delete-input">{inputOf(job)}</p>
+      <p>{t.confirm}</p>
+      {job.status === "running" && <p>{t.running}</p>}
+      {error && <p role="alert" className="alarm-text">{userError(error, work.errors)}</p>}
+      <div className="queue-actions">
+        <button className="btn" disabled={busy} onClick={onCancel} autoFocus>{t.cancel}</button>
+        <button className="btn btn-primary" disabled={busy} onClick={onConfirm}>{busy ? t.busy : t.confirmButton}</button>
+      </div>
+    </dialog>
+  );
+}
+
 function Queue() {
   const t = useCopy().work;
-  const { data, error, loaded } = usePoll("/jobs", 2000);
+  const { data, error, loaded, refresh } = usePoll("/jobs", 2000);
   const [selected, setSelected] = useState(null);
+  const [confirming, setConfirming] = useState(null);
+  const [deleting, setDeleting] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
+  const [retrying, setRetrying] = useState(null);
+  const [retryError, setRetryError] = useState(null);
+  const [retried, setRetried] = useState(null);
+  const [inspectionVersion, setInspectionVersion] = useState(0);
 
-  if (error && !data.length) return <State title={t.unreachable}>{error}</State>;
+  async function retry(jobId) {
+    setRetrying(jobId);
+    setRetryError(null);
+    setRetried(null);
+    try {
+      await api("/jobs/" + jobId + "/retry", { method: "POST" });
+      setRetried(jobId);
+      if (selected === jobId) setInspectionVersion((value) => value + 1);
+      refresh();
+    } catch (e) {
+      setRetryError(e);
+      refresh();
+    } finally {
+      setRetrying(null);
+    }
+  }
+
+  async function remove(jobId) {
+    setDeleting(jobId);
+    setDeleteError(null);
+    try {
+      await api("/jobs/" + jobId, { method: "DELETE" });
+      if (selected === jobId) setSelected(null);
+      setConfirming(null);
+      refresh();
+    } catch (e) {
+      setDeleteError(e);
+      refresh();
+    } finally {
+      setDeleting(null);
+    }
+  }
+
+  if (error && !data.length) return <State title={t.unreachable}>{userError(error, t.errors)}</State>;
   if (!loaded) return <State title={t.reading}>{t.readingQueue}</State>;
   if (!data.length) return <State title={t.emptyQueue}>{t.emptyQueueBody}</State>;
 
@@ -262,7 +327,10 @@ function Queue() {
 
   return (
     <>
-      {error && <p role="status" className="alarm-text">{t.execution.stale} {error}</p>}
+      {error && <p role="status" className="alarm-text">{t.execution.stale} {userError(error, t.errors)}</p>}
+      {retryError && <p role="alert" className="alarm-text">{userError(retryError, t.errors, "retry")}</p>}
+      {retried && data.some((job) => job.id === retried && ["pending", "running"].includes(job.status)) &&
+        <p role="status" className="muted">{t.retry.queued}</p>}
       <div className="count-row">
         {Object.entries(counts).map(([status, n]) => (
           <span className={`status status-${status}`} key={status}>
@@ -300,12 +368,18 @@ function Queue() {
                       {GENERATION_PROVIDERS[job.params?.llm_provider] && (
                         <small className="execution-scope">{GENERATION_PROVIDERS[job.params.llm_provider]}</small>
                       )}
-                      {job.error && <pre className="trace">{job.error}</pre>}
-                      <button className="btn inspect-job" aria-expanded={selected === job.id}
-                        aria-controls={selected === job.id ? "execution-" + job.id : undefined}
-                        onClick={() => setSelected(selected === job.id ? null : job.id)}>
-                        {selected === job.id ? t.execution.close : t.execution.inspect}
-                      </button>
+                      {(job.error || job.error_summary) && <p className="job-error">{userError(job.error || job.error_summary, t.errors)}</p>}
+                      <div className="job-actions" role="group" aria-label={t.actions}>
+                        <button className="btn" aria-expanded={selected === job.id}
+                          aria-controls={selected === job.id ? "execution-" + job.id : undefined}
+                          onClick={() => setSelected(selected === job.id ? null : job.id)}>
+                          {selected === job.id ? t.execution.close : t.execution.inspect}
+                        </button>
+                        {job.status === "failed" && <button className="btn" disabled={!!deleting || !!retrying}
+                          onClick={() => retry(job.id)}>{retrying === job.id ? t.retry.busy : t.retry.label}</button>}
+                        <button className="btn" disabled={!!deleting || !!retrying}
+                          onClick={() => { setConfirming(job); setDeleteError(null); }}>{t.remove.label}</button>
+                      </div>
                     </td>
                     <td>
                       <span className={`status status-${job.status}`}>{job.status}</span>
@@ -323,7 +397,9 @@ function Queue() {
           </div>
         </div>
       </div>
-      {selected && <Execution key={selected} jobId={selected} />}
+      {selected && <Execution key={selected + ":" + inspectionVersion} jobId={selected} />}
+      {confirming && <DeleteDialog job={confirming} busy={!!deleting} error={deleteError}
+        onConfirm={() => remove(confirming.id)} onCancel={() => setConfirming(null)} />}
     </>
   );
 }
@@ -331,13 +407,16 @@ function Queue() {
 function Output() {
   const t = useCopy().work;
   // Signed URLs expire in an hour, so refresh well inside that window.
-  const { data, error, loaded } = usePoll("/gallery", 15 * 60 * 1000);
+  // Media-link signing can take longer than queue reads on a cold connection.
+  const { data, error, loaded } = usePoll("/gallery", 15 * 60 * 1000, 45000);
 
-  if (error) return <State title={t.unreachable}>{error}</State>;
+  if (error && !data.length) return <State title={t.unreachable}>{userError(error, t.errors)}</State>;
   if (!loaded) return <State title={t.reading}>{t.readingOutput}</State>;
   if (!data.length) return <State title={t.emptyOutput}>{t.emptyOutputBody}</State>;
 
   return (
+    <>
+    {error && <p role="status" className="alarm-text">{t.execution.stale} {userError(error, t.errors)}</p>}
     <div className="gallery">
       {data.map((item) => (
         <figure key={`${item.source}-${item.id}`}>
@@ -350,6 +429,7 @@ function Output() {
         </figure>
       ))}
     </div>
+    </>
   );
 }
 

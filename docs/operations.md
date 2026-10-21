@@ -25,17 +25,49 @@ The worker polls every five seconds. Chapter pacing and publishing run when idle
 and between jobs at least once every five minutes while busy. A single long job
 can delay housekeeping until it finishes.
 
-Workspace -> Queue shows status, current stage, attempt, duration and error.
-Inspect opens stage history and publication states. A completed generation job
-can still have scheduled publications; it does not imply an upload succeeded.
+Workspace -> Queue shows status, current stage, attempt, duration and a short
+plain-language error message. Queue, Inspect, and forms never render upstream
+error strings. Redacted diagnostics remain in API responses (browser developer
+tools -> Network); full stored tracebacks remain in worker/database diagnostics.
+Inspect shows only the current attempt's stages and publication states. Retry
+clears the displayed stages immediately; they stay empty until the next attempt
+starts. Earlier attempt records remain available in API responses for diagnostics.
+A completed generation job can still have scheduled publications; it does not
+imply an upload succeeded.
 The view retains its last successful response during a connection failure.
+Queue requests have a 15-second deadline. Output allows 45 seconds for media-link
+signing on cold connections. Failed reads retry after two seconds; successful
+Output reads refresh every 15 minutes, and existing media remains visible on errors.
+Database network operations have an eight-second timeout. The worker logs
+transient connection failures and resumes its loop instead of exiting.
 
-Authenticated read endpoints:
+Repeated `GET /jobs/{uuid}` requests returning HTTP 200 are normal inspector
+polling; the job's status and stage history describe pipeline failures.
+Narration requires `edge-tts>=7.3.1`: older releases can receive HTTP 403 from
+Microsoft following the October 2026 speech-protocol change. Upgrade with
+`python -m pip install -r requirements.txt` and restart the worker before Retry.
+
+Delete opens a confirmation dialog for any job, including running work. Confirming
+revokes its lease and removes its related database rows. The current operation
+may finish, but cannot record completion or start a later stage. An active platform
+upload blocks deletion with HTTP 409. Stored media and existing platform posts
+are retained. Requires migration `006_delete_jobs.sql`.
+
+Inspect, Retry, and Delete are arranged in one row. Retry appears for failed jobs
+and requeues the same job using its saved progress. Scripts, finished chapters/clips,
+publications, and stage history remain intact; attempt numbers keep increasing.
+Each explicit retry permits up to three more attempts. Duplicate requests while
+already pending are harmless, and running/completed jobs reject retries. Failed
+publication uploads are not retried by this action. Requires `007_retry_jobs.sql`.
+
+Authenticated endpoints:
 
 | Endpoint | Result |
 |---|---|
 | `GET /jobs?limit=50` | Newest jobs; limit 1–200 |
 | `GET /jobs/{uuid}` | Job, stage history and publication states |
+| `POST /jobs/{uuid}/retry` | Requeue failed work; 404 if absent, 409 if running/completed/cancelled |
+| `DELETE /jobs/{uuid}` | Confirmed deletion; 204 on success, 404 if absent, 409 during an upload |
 | `GET /metrics` | Prometheus text format 0.0.4 |
 
 All require `X-API-Key: <DASHBOARD_API_KEY>`. Response fields are allowlisted;

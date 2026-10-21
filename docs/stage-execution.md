@@ -32,7 +32,9 @@ Postgres from the recorded timestamps.
 - `abandoned`: the job attempt ended before the stage outcome was saved.
 
 A retry creates new records with the new job attempt. Earlier records remain
-available. Operations skipped because their outputs already exist do not create
+available for diagnostics in the API and database. Inspect displays only the current
+attempt, clearing the visible stages while a retry is queued, so repeated retries
+do not add rows to the user's stage table. Operations skipped because their outputs already exist do not create
 new stage records. Chaptering still runs because it calculates the deterministic
 chapter list for every story attempt; H1 downloads the source again because
 workers have no persistent local files.

@@ -55,11 +55,14 @@ the API, separated by commas. Preview origins need to be allowed explicitly.
 Apply migrations in order before starting the matching worker version.
 `002_job_execution.sql` is required for leased execution, and
 `003_stage_execution.sql` is required for stage tracking,
-`004_operational_metrics.sql` for metrics, and `005_execution_read_models.sql` for
-dashboard execution views. Migrations 001–005 are applied to the configured
+`004_operational_metrics.sql` for metrics, `005_execution_read_models.sql` for
+dashboard execution views, `006_delete_jobs.sql` for queue deletion, and
+`007_retry_jobs.sql` for explicit retries that preserve saved progress.
+Migrations 001–007 are applied to the configured
 Supabase project as of 2026-10-21. Lease/stage/metrics/read-model checks passed,
 including a live worker retry with synthetic operations inside a rolled-back
-transaction. The existing pending job was left unchanged.
+transaction. Running-job deletion and lease revocation were verified through
+the live dashboard using a temporary synthetic job.
 
 H2/H2b require an active background clip. H1 requires the YuNet face model at
 `models/face_detection_yunet_2023mar.onnx` in the media bucket. Run

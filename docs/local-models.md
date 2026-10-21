@@ -7,11 +7,16 @@ the existing Story or Moments contract. There is no new pipeline or database mig
 
 ## Select a provider
 
-For a new dashboard job, choose **Claude Code** or **Codex** in the **Model**
+For a new dashboard job, choose **Claude** or **Chat GPT** in the **Model**
 selector below the topic or source URL. Review shows the choice before submission;
 Queue and Inspect show the saved integration afterward. It applies to all model
 steps and subsequent attempts of that job. Model versions stay configured in
 each integration.
+
+Claude uses the local Claude Code integration; Chat GPT uses the local Codex
+integration. The labels are shared by the selector, review, queue and inspection.
+New dashboard jobs default to Chat GPT. Live test submissions use Codex;
+automated provider-contract tests use mocks and consume no Claude allowance.
 
 Deploy the updated API and worker with the dashboard, restarting local processes
 if they are already running. The selection uses existing job params; no SQL

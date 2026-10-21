@@ -5,6 +5,7 @@ from brainrot import api, db, worker
 from brainrot.application import stages
 from brainrot.application.registry import PipelineRegistry
 from brainrot.domain.pipelines import PipelineContext, PipelineResult
+from brainrot.domain.jobs import PermanentError
 from tests.pgclient import PgRpcClient
 from tests.test_job_execution import add_job, job
 
@@ -59,3 +60,19 @@ def test_worker_disappearance_closes_stage_and_recovers_on_next_iteration(pg, li
     worker.run_once(worker_id="replacement")
     assert job(pg, job_id)["status"] == "done" and job(pg, job_id)["attempts"] == 2
     assert pg.execute("select status from stage_executions where stage='render'").fetchone()["status"] == "abandoned"
+
+
+def test_manual_retry_api_resumes_worker_and_preserves_attempt_history(pg, lifecycle):
+    # Isolated Postgres and the fixture's synthetic pipeline: no external calls.
+    job_id = add_job(pg)
+    lifecycle.append(PermanentError("service unavailable until setup is fixed"))
+    worker.run_once(worker_id="first")
+    assert job(pg, job_id)["status"] == "failed"
+    http = TestClient(api.app, headers={"X-API-Key": "integration-key"})
+    assert http.post(f"/jobs/{job_id}/retry").json() == {"id": job_id, "status": "pending"}
+    assert http.post(f"/jobs/{job_id}/retry").status_code == 200
+    worker.run_once(worker_id="second")
+    detail = http.get(f"/jobs/{job_id}").json()
+    assert detail["job"]["id"] == job_id and detail["job"]["status"] == "done"
+    assert [(s["attempt"], s["status"]) for s in detail["stages"]] == [(1, "failed"), (2, "done")]
+    assert pg.execute("select count(*) from jobs").fetchone()["count"] == 1

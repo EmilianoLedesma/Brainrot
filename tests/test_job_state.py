@@ -22,6 +22,10 @@ def test_pending_can_be_cancelled():
     assert transition(JobState.PENDING, JobState.CANCELLED) == JobState.CANCELLED
 
 
+def test_failed_job_can_be_explicitly_retried():
+    assert transition(JobState.FAILED, JobState.PENDING) == JobState.PENDING
+
+
 @pytest.mark.parametrize(
     "current,target",
     [
@@ -29,7 +33,7 @@ def test_pending_can_be_cancelled():
         (JobState.PENDING, JobState.FAILED),
         (JobState.RUNNING, JobState.RUNNING),
         (JobState.DONE, JobState.RUNNING),
-        (JobState.FAILED, JobState.PENDING),
+        (JobState.FAILED, JobState.RUNNING),
         (JobState.CANCELLED, JobState.RUNNING),
     ],
 )
@@ -38,10 +42,12 @@ def test_invalid_transitions_are_rejected(current, target):
         transition(current, target)
 
 
-def test_terminal_states_have_no_way_out():
+def test_terminal_states_only_allow_explicit_retry_from_failed():
     assert TERMINAL == {JobState.DONE, JobState.FAILED, JobState.CANCELLED}
     for state in TERMINAL:
         for target in JobState:
+            if state == JobState.FAILED and target == JobState.PENDING:
+                continue
             with pytest.raises(InvalidTransition):
                 transition(state, target)
 

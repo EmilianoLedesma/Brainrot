@@ -153,3 +153,19 @@ def test_a_worker_whose_lease_was_taken_does_not_record_the_outcome(pg, run):
     assert taken.is_set()
     row = job(pg, job_id)
     assert row["status"] == "running" and row["lease_owner"] == "worker-b"
+
+
+def test_main_retries_connection_failure_without_exiting(monkeypatch):
+    import httpx
+    calls = []
+    def once():
+        calls.append(1)
+        if len(calls) == 1:
+            raise httpx.ReadError("connection reset")
+        raise KeyboardInterrupt
+    sleeps = []
+    monkeypatch.setattr(worker, "run_once", once)
+    monkeypatch.setattr(worker.time, "sleep", sleeps.append)
+    with pytest.raises(KeyboardInterrupt):
+        worker.main()
+    assert len(calls) == 2 and sleeps == [worker.POLL_SECONDS]

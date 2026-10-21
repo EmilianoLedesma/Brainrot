@@ -10,7 +10,7 @@ import os
 from pathlib import Path
 import tempfile
 
-from playwright.sync_api import expect, sync_playwright
+from playwright.sync_api import Error, expect, sync_playwright
 
 
 def main():
@@ -23,7 +23,7 @@ def main():
         "id": job_id, "kind": "brainrot", "status": "running", "attempts": 2, "max_attempts": 3,
         "params": {"topic": "The octopus escape", "llm_provider": "codex"}, "created_at": stamp, "started_at": stamp,
         "finished_at": None, "run_after": stamp, "duration_seconds": 12.5,
-        "current_stage": {"stage": "render"}, "error_summary": None,
+        "current_stage": {"stage": "render"}, "error_summary": "RuntimeError: raw-job-diagnostic",
     }
     detail = {"job": job, "stages": [
         {"id": "stage-1", "stage": "render", "scope": "chapter:1", "attempt": 1, "status": "failed",
@@ -32,13 +32,22 @@ def main():
          "started_at": stamp, "completed_at": None, "duration_seconds": None, "error": None},
     ], "publications": [
         {"id": "pub-1", "platform": "youtube", "status": "published", "scheduled_at": stamp, "published_at": stamp},
-        {"id": "pub-2", "platform": "instagram", "status": "scheduled", "scheduled_at": stamp, "published_at": None},
+        {"id": "pub-2", "platform": "instagram", "status": "failed", "scheduled_at": stamp, "published_at": None,
+         "error": "RuntimeError: raw-publication-diagnostic"},
     ]}
     failed = {**job, "id": "00000000-0000-0000-0000-000000000002", "status": "failed",
-              "params": {"topic": "A failed story"}, "error": "Missing background", "current_stage": None}
+              "params": {"topic": "A failed story"}, "error": "aiohttp.WSServerHandshakeError: 403 url=wss://speech.platform.bing.com/private-diagnostic", "current_stage": None}
     completed = {**job, "id": "00000000-0000-0000-0000-000000000003", "status": "done", "params": {"topic": "A finished story"}, "current_stage": None}
     unavailable = False
     submitted = []
+    deleted = set()
+    delete_conflict = {"enabled": False}
+    hanging = {"enabled": False}
+    held_requests = []
+    retried = []
+    retry_conflict = {"enabled": False}
+    failed_error = failed["error"]
+    gallery_unavailable = {"enabled": True}
     screenshots = Path(tempfile.mkdtemp(prefix="brainrot-ui-"))
     with sync_playwright() as playwright:
         options = {"headless": True}
@@ -51,23 +60,46 @@ def main():
         page.on("pageerror", lambda error: errors.append(str(error)))
 
         def respond(route):
-            if route.request.method == "POST":
+            if route.request.url.split("?")[0].endswith("/gallery"):
+                if gallery_unavailable["enabled"]:
+                    route.fulfill(status=503, body="raw-storage-error")
+                else:
+                    route.fulfill(status=200, content_type="application/json", body="[]")
+                return
+            if hanging["enabled"]:
+                held_requests.append(route)
+                return  # Hold the request until the browser deadline aborts it.
+            if route.request.method == "DELETE":
+                if delete_conflict["enabled"]:
+                    route.fulfill(status=409, content_type="application/json", body=json.dumps({"detail": "A video is being published."}))
+                else:
+                    deleted.add(route.request.url.rsplit("/", 1)[-1])
+                    route.fulfill(status=204)
+            elif route.request.method == "POST" and route.request.url.endswith("/retry"):
+                if retry_conflict["enabled"]:
+                    route.fulfill(status=409, content_type="application/json", body=json.dumps({"detail": "raw-retry-conflict"}))
+                else:
+                    target = job if route.request.url.endswith("/" + job_id + "/retry") else failed
+                    retried.append(target["id"])
+                    target.update(status="pending", error=None, error_summary=None)
+                    route.fulfill(status=200, content_type="application/json", body=json.dumps({"id": target["id"], "status": "pending"}))
+            elif route.request.method == "POST":
                 submitted.append(route.request.post_data_json)
                 route.fulfill(status=200, content_type="application/json", body=json.dumps({"id": job_id}))
             elif unavailable:
                 route.fulfill(status=503, body="Temporary outage")
             else:
-                body = detail if route.request.url.split("?")[0].endswith("/" + job_id) else [job, failed, completed]
+                body = detail if route.request.url.split("?")[0].endswith("/" + job_id) else [row for row in [job, failed, completed] if row["id"] not in deleted]
                 route.fulfill(status=200, content_type="application/json", body=json.dumps(body))
 
         page.route("**/jobs*", respond)
         page.route("**/jobs/**", respond)
+        page.route("**/gallery*", respond)
         page.goto(args.url)
         page.get_by_role("button", name="Workspace", exact=True).first.click()
         page.locator(".choice").filter(has_text="From a topic").click()
         model = page.get_by_role("combobox", name="Model", exact=True)
-        expect(model).to_have_value("claude-code")
-        model.select_option("codex")
+        expect(model).to_have_value("codex")
         model.focus()
         model.press("ArrowUp")
         expect(model).to_have_value("claude-code")
@@ -83,7 +115,7 @@ def main():
         page.get_by_role("button", name="Hablar gringo", exact=False).click()
         page.set_viewport_size({"width": 1440, "height": 1000})
         page.get_by_role("button", name="Review →", exact=True).click()
-        expect(page.locator(".review").get_by_text("Codex", exact=True)).to_be_visible()
+        expect(page.locator(".review").get_by_text("Chat GPT", exact=True)).to_be_visible()
         page.get_by_role("button", name="← Edit", exact=True).click()
         expect(page.get_by_role("combobox", name="Model", exact=True)).to_have_value("codex")
         page.get_by_role("button", name="Review →", exact=True).click()
@@ -93,36 +125,121 @@ def main():
         page.get_by_role("button", name="New job", exact=True).click()
         page.locator(".choice").filter(has_text="From a YouTube link").click()
         page.get_by_label("Source URL", exact=True).fill("https://youtube.com/watch?v=example")
-        expect(page.get_by_role("combobox", name="Model", exact=True)).to_have_value("claude-code")
+        expect(page.get_by_role("combobox", name="Model", exact=True)).to_have_value("codex")
         page.get_by_role("button", name="Review →", exact=True).click()
-        expect(page.locator(".review").get_by_text("Claude Code", exact=True)).to_be_visible()
+        expect(page.locator(".review").get_by_text("Chat GPT", exact=True)).to_be_visible()
         page.get_by_role("button", name="Queue it", exact=True).click()
         expect(page.get_by_role("heading", name="Live queue", exact=True)).to_be_visible()
-        assert submitted[1] == {"kind": "repurpose", "youtube_url": "https://youtube.com/watch?v=example", "llm_provider": "claude-code"}
+        assert submitted[1] == {"kind": "repurpose", "youtube_url": "https://youtube.com/watch?v=example", "llm_provider": "codex"}
         expect(page.get_by_role("row").filter(has_text="The octopus escape")).to_be_visible()
+        running_row = page.get_by_role("row").filter(has_text="The octopus escape")
+        running_row.get_by_role("button", name="Delete", exact=True).click()
+        dialog = page.get_by_role("dialog")
+        expect(dialog.get_by_role("heading", name="Delete running job?", exact=True)).to_be_visible()
+        dialog.press("Escape")
+        expect(dialog).not_to_be_visible()
+        assert not deleted, "cancel must not delete the job"
+        failed_row = page.get_by_role("row").filter(has_text="A failed story")
+        expect(failed_row.get_by_text("Narration couldn’t be generated. Please try again later.", exact=True)).to_be_visible()
+        assert "WSServerHandshakeError" not in page.locator("body").inner_text()
+        assert "speech.platform.bing.com" not in page.locator("body").inner_text()
+        tops = failed_row.locator(".job-actions button").evaluate_all("buttons => buttons.map(b => b.getBoundingClientRect().top)")
+        assert len(tops) == 3 and max(tops) - min(tops) < 1, "queue actions must share one row"
+        assert running_row.get_by_role("button", name="Retry", exact=True).count() == 0
+        retry_conflict["enabled"] = True
+        failed_row.get_by_role("button", name="Retry", exact=True).click()
+        expect(page.get_by_role("alert")).to_have_text("This job can’t be retried right now. Check its latest status.")
+        assert "raw-retry-conflict" not in page.locator("body").inner_text()
+        retry_conflict["enabled"] = False
+        page.set_viewport_size({"width": 390, "height": 844})
+        page.get_by_role("button", name="Hablar español", exact=False).click()
+        tops = failed_row.locator(".job-actions button").evaluate_all("buttons => buttons.map(b => b.getBoundingClientRect().top)")
+        assert max(tops) - min(tops) < 1, "mobile actions must stay side by side"
+        failed_row.get_by_role("button", name="Reintentar", exact=True).click()
+        expect(failed_row.locator(".status")).to_have_text("pending", timeout=10000)
+        expect(page.get_by_text("Encolado de nuevo. Se reutilizará el progreso guardado.", exact=True)).to_be_visible()
+        assert retried == [failed["id"]] and len(submitted) == 2, "retry must reuse the job rather than submit another"
+        assert failed_row.get_by_role("button", name="Reintentar", exact=True).count() == 0
+        failed.update(status="failed", error=failed_error)
+        page.get_by_role("button", name="Hablar gringo", exact=False).click()
+        page.set_viewport_size({"width": 1440, "height": 1000})
+        expect(failed_row.get_by_role("button", name="Retry", exact=True)).to_be_visible(timeout=10000)
+        failed_row.get_by_role("button", name="Delete", exact=True).click()
+        dialog.get_by_role("button", name="Confirm delete", exact=True).click()
+        expect(failed_row).not_to_be_visible()
+        delete_conflict["enabled"] = True
+        page.get_by_role("row").filter(has_text="A finished story").get_by_role("button", name="Delete", exact=True).click()
+        dialog.get_by_role("button", name="Confirm delete", exact=True).click()
+        expect(dialog.get_by_role("alert")).to_have_text("This video is still being published. Please wait before deleting it.")
+        dialog.get_by_role("button", name="Cancel", exact=True).click()
+        delete_conflict["enabled"] = False
         page.get_by_role("button", name="Inspect", exact=True).first.click()
         region = page.locator("#execution-" + job_id)
-        expect(region.get_by_role("heading", name="Stage history")).to_be_visible()
+        expect(region.get_by_role("heading", name="Current stages")).to_be_visible()
+        stage_table = region.get_by_role("table", name="Current stages", exact=True)
+        expect(stage_table.locator("tbody tr")).to_have_count(1)
+        expect(stage_table.locator("tbody tr td").nth(1)).to_have_text("2")
         expect(region.get_by_role("heading", name="Publication queue")).to_be_visible()
-        expect(region.get_by_text("Codex", exact=True)).to_be_visible()
-        expect(region.get_by_text("TimeoutError: renderer interrupted")).to_be_visible()
+        expect(region.get_by_text("Chat GPT", exact=True)).to_be_visible()
+        expect(region.get_by_text("This took longer than expected. Please try again.", exact=True)).not_to_be_visible()
+        expect(region.get_by_text("The video couldn’t be published. Check the connected account before trying again.", exact=True)).to_be_visible()
+        visible = page.locator("body").inner_text()
+        for diagnostic in ("TimeoutError", "renderer interrupted", "raw-job-diagnostic", "raw-publication-diagnostic"):
+            assert diagnostic not in visible, f"technical diagnostic leaked into UI: {diagnostic}"
         page.screenshot(path=str(screenshots / "desktop.png"), full_page=True)
+        job["status"] = "failed"
+        expect(running_row.get_by_role("button", name="Retry", exact=True)).to_be_visible(timeout=10000)
+        running_row.get_by_role("button", name="Retry", exact=True).click()
+        expect(region.get_by_text("Stages will appear when this attempt starts.", exact=True)).to_be_visible(timeout=10000)
+        expect(stage_table).not_to_be_visible()
+        assert len(detail["stages"]) == 2, "prior diagnostics must be retained"
+        job.update(status="running", attempts=3)
+        active_stage = {"id": "stage-3", "stage": "render", "scope": "chapter:1", "attempt": 3, "status": "running",
+                        "started_at": stamp, "completed_at": None, "duration_seconds": None, "error": None}
+        detail["stages"].append(active_stage)
+        expect(stage_table.locator("tbody tr")).to_have_count(1, timeout=10000)
+        expect(stage_table.locator("tbody tr td").nth(1)).to_have_text("3")
         job["status"] = "done"
         job.update(current_stage=None, finished_at=stamp)
-        detail["stages"][1].update(status="done", duration_seconds=12.5, completed_at=stamp)
+        active_stage.update(status="done", duration_seconds=12.5, completed_at=stamp)
         expect(region.locator(".execution-heading .status")).to_have_text("done", timeout=10000)
         page.set_viewport_size({"width": 390, "height": 844})
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), "page overflows on mobile"
         page.get_by_role("button", name="Hablar español", exact=False).click()
-        expect(region.get_by_role("heading", name="Historial de etapas")).to_be_visible()
+        expect(region.get_by_role("heading", name="Etapas actuales")).to_be_visible()
+        expect(region.get_by_role("table", name="Etapas actuales", exact=True).locator("tbody tr")).to_have_count(1)
+        expect(region.get_by_text("Esto tardó más de lo esperado. Inténtalo de nuevo.", exact=True)).not_to_be_visible()
+        running_row.get_by_role("button", name="Eliminar", exact=True).click()
+        expect(dialog.get_by_role("button", name="Confirmar eliminación", exact=True)).to_be_visible()
+        assert page.evaluate("document.querySelector('dialog').getBoundingClientRect().width <= innerWidth"), "dialog overflows on mobile"
+        dialog.get_by_role("button", name="Cancelar", exact=True).click()
         page.screenshot(path=str(screenshots / "mobile.png"), full_page=True)
         page.get_by_role("button", name="Hablar gringo", exact=False).click()
         unavailable = True
         expect(region.get_by_text("Showing the last update; connection interrupted.", exact=False)).to_be_visible(timeout=10000)
-        expect(region.get_by_role("heading", name="Stage history")).to_be_visible()
+        expect(region.get_by_role("heading", name="Current stages")).to_be_visible()
+        assert "Temporary outage" not in page.locator("body").inner_text()
+        unavailable = False
+        expect(region.get_by_text("Showing the last update; connection interrupted.", exact=False)).not_to_be_visible(timeout=10000)
+        hanging["enabled"] = True
+        expect(region.get_by_text("Showing the last update; connection interrupted.", exact=False)).to_be_visible(timeout=22000)
+        expect(region.get_by_role("heading", name="Current stages")).to_be_visible()
+        hanging["enabled"] = False
+        for route in held_requests:
+            try:
+                route.abort()
+            except Error:
+                pass  # The browser may have already discarded an aborted request.
+        held_requests.clear()
+        expect(region.get_by_text("Showing the last update; connection interrupted.", exact=False)).not_to_be_visible(timeout=10000)
+        page.get_by_role("button", name="Output", exact=True).click()
+        expect(page.get_by_text("Connection interrupted", exact=True)).to_be_visible()
+        assert "raw-storage-error" not in page.locator("body").inner_text()
+        gallery_unavailable["enabled"] = False
+        expect(page.get_by_text("Nothing rendered", exact=True)).to_be_visible(timeout=10000)
         assert not errors, errors
         browser.close()
-    print("Desktop/mobile model selection, submission, execution inspector, polling and stale-data checks passed")
+    print("Desktop/mobile model selection, deletion dialogs/cancellation/conflicts, execution inspector, polling and stale-data checks passed")
     print("Screenshots:", screenshots)
 
 
