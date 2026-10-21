@@ -25,7 +25,11 @@ def fake_db(monkeypatch):
 # the binaries are missing.
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-PG_BIN = pathlib.Path(os.getenv("PG_BIN", "/usr/lib/postgresql/16/bin"))
+_pg_ctl = shutil.which("pg_ctl")
+PG_BIN = pathlib.Path(os.getenv(
+    "PG_BIN", str(pathlib.Path(_pg_ctl).parent) if _pg_ctl else "/usr/lib/postgresql/16/bin"
+))
+PG_EXE = ".exe" if os.name == "nt" else ""
 MIGRATIONS = sorted((ROOT / "migrations").glob("*.sql"))
 
 
@@ -38,11 +42,11 @@ def _free_port() -> int:
 @pytest.fixture(scope="session")
 def pg_server():
     psycopg = pytest.importorskip("psycopg")
-    if not (PG_BIN / "initdb").exists():
+    if not (PG_BIN / f"initdb{PG_EXE}").exists():
         pytest.skip(f"no Postgres binaries in {PG_BIN}")
 
     # Postgres refuses to run as root, so under root it runs as `postgres`.
-    as_user = ["runuser", "-u", "postgres", "--"] if os.geteuid() == 0 else []
+    as_user = ["runuser", "-u", "postgres", "--"] if os.name != "nt" and os.geteuid() == 0 else []
     root = pathlib.Path(tempfile.mkdtemp(prefix="brainrot-pg-"))
     root.chmod(0o755)
     if as_user:
@@ -50,12 +54,24 @@ def pg_server():
     data, port = root / "data", _free_port()
 
     def run(*args):
-        subprocess.run([*as_user, *args], check=True, capture_output=True)
+        # A daemon on Windows can inherit a PIPE and keep communicate() waiting
+        # after pg_ctl exits. A file captures diagnostics without waiting on it.
+        with tempfile.TemporaryFile() as output:
+            result = subprocess.run(
+                [*as_user, *args], stdin=subprocess.DEVNULL,
+                stdout=output, stderr=subprocess.STDOUT,
+            )
+            if result.returncode:
+                output.seek(0)
+                raise RuntimeError(f"Postgres command failed: {output.read().decode(errors='replace')}")
 
-    run(str(PG_BIN / "initdb"), "-D", str(data), "-U", "postgres", "--auth=trust", "-E", "UTF8")
-    run(str(PG_BIN / "pg_ctl"), "-D", str(data), "-l", str(root / "log"), "-w",
-        "-o", f"-p {port} -k {root} -c listen_addresses=''", "start")
-    dsn = f"host={root} port={port} user=postgres"
+    run(str(PG_BIN / f"initdb{PG_EXE}"), "-D", str(data), "-U", "postgres", "--auth=trust", "-E", "UTF8", "--no-locale")
+    # Windows uses loopback TCP; Unix keeps the private socket directory.
+    options = f"-p {port} -h 127.0.0.1" if os.name == "nt" else f"-p {port} -k {root} -c listen_addresses=''"
+    host = "127.0.0.1" if os.name == "nt" else str(root)
+    run(str(PG_BIN / f"pg_ctl{PG_EXE}"), "-D", str(data), "-l", str(root / "log"), "-w",
+        "-o", options, "start")
+    dsn = f"host={host} port={port} user=postgres"
     try:
         with psycopg.connect(f"{dsn} dbname=postgres", autocommit=True) as conn:
             conn.execute("create database template_brainrot")
@@ -65,7 +81,9 @@ def pg_server():
                 conn.execute(migration.read_text())
         yield dsn
     finally:
-        run(str(PG_BIN / "pg_ctl"), "-D", str(data), "-m", "immediate", "stop")
+        run(str(PG_BIN / f"pg_ctl{PG_EXE}"), "-D", str(data), "-m", "immediate", "stop")
+        assert root.resolve().parent == pathlib.Path(tempfile.gettempdir()).resolve()
+        assert root.name.startswith("brainrot-pg-")
         shutil.rmtree(root, ignore_errors=True)
 
 

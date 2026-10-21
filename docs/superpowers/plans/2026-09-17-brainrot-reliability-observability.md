@@ -254,6 +254,11 @@ git commit -m "feat: add retry and abandoned job recovery"
 
 ## Task 5: Make H1, H2 and H2b execute through a pipeline registry
 
+**Status (2026-10-21):** Implemented in `brainrot/application/registry.py` and
+`brainrot/pipelines.py`, with worker integration and registry regression tests.
+The adapters preserve the existing entry points and database job-kind names.
+Task 6 (stage execution tracking) is next.
+
 **Files:** - Modify: `brainrot/pipeline.py` - Modify:
 `brainrot/repurpose.py` - Modify: `brainrot/script.py` - Modify:
 `brainrot/reddit.py` - Modify: `brainrot/worker.py` - Create:

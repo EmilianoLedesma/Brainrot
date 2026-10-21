@@ -8,7 +8,9 @@ import pytest
 
 from brainrot import db, worker
 from brainrot.application.retry import RetryPolicy
+from brainrot.application.registry import PipelineRegistry
 from brainrot.domain.jobs import PermanentError
+from brainrot.domain.pipelines import PipelineResult
 from tests.pgclient import PgRpcClient
 from tests.test_job_execution import add_job, job
 
@@ -20,7 +22,14 @@ def run(pg, monkeypatch):
     monkeypatch.setattr(worker, "POLICY", RetryPolicy(base=timedelta(seconds=30)))
 
     def go(handler, worker_id="worker-a", **kwargs):
-        monkeypatch.setitem(worker.HANDLERS, "brainrot", handler)
+        class TestPipeline:
+            name = "brainrot"
+
+            def execute(self, context):
+                handler(context)
+                return PipelineResult()
+
+        monkeypatch.setattr(worker, "REGISTRY", PipelineRegistry([TestPipeline()]))
         return worker.run_once(worker_id=worker_id, **kwargs)
 
     return go
@@ -65,7 +74,7 @@ def test_a_retried_job_completes_on_its_next_attempt(pg, run):
     pg.execute("update jobs set run_after = now() where id = %s", (job_id,))  # skip the wait
 
     seen = []
-    run(lambda job: seen.append(job["attempts"]))
+    run(lambda context: seen.append(context.attempt))
 
     assert seen == [2]
     assert job(pg, job_id)["status"] == "done"
@@ -89,12 +98,11 @@ def test_the_last_attempt_fails_for_good(pg, run):
     assert job(pg, job_id)["status"] == "failed"
 
 
-def test_an_unknown_kind_fails_permanently(pg, run, monkeypatch):
+def test_an_unknown_kind_fails_permanently(pg, run):
     job_id = add_job(pg, kind="reddit")
-    monkeypatch.delitem(worker.HANDLERS, "reddit")
     run(ok)
     row = job(pg, job_id)
-    assert row["status"] == "failed" and "no handler" in row["error"]
+    assert row["status"] == "failed" and "unknown pipeline: reddit" in row["error"]
 
 
 def test_the_worker_recovers_an_abandoned_job_before_claiming(pg, run):

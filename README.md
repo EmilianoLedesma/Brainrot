@@ -16,7 +16,8 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
     brainrot/api.py        FastAPI: job creation plus read-only views for the dashboard
     brainrot/worker.py     leases pending jobs, runs the matching pipeline, retries/recovers
     brainrot/domain/       job states and the pipeline contract (no I/O)
-    brainrot/application/  retry policy (no I/O)
+    brainrot/application/  retry policy and pipeline registry (no I/O)
+    brainrot/pipelines.py  H1/H2/H2b adapters and default pipeline registration
     brainrot/script.py     Claude: topic -> story, Reddit post -> retold story
     brainrot/tts.py        edge-tts narration with per-word timings
     brainrot/render.py     ffmpeg: looping background + narration + karaoke captions
@@ -117,8 +118,19 @@ resetting it to `scheduled`.
     pytest                    # unit tests plus SQL tests against a local Postgres
     python test_pipeline.py   # ffmpeg end-to-end checks
 
-The SQL tests start a throwaway Postgres from `PG_BIN` (default
-`/usr/lib/postgresql/16/bin`) and skip if it is not installed.
+The SQL tests start a throwaway Postgres using `PG_BIN`, or find its binaries
+through `pg_ctl` on `PATH` (falling back to `/usr/lib/postgresql/16/bin`). They
+support Windows and Unix and skip if Postgres is not installed. They never use
+`DATABASE_URL` or your Supabase project.
+
+### Pipeline registration
+
+`brainrot/pipelines.py` registers `repurpose` (H1), `brainrot` (H2), and `reddit`
+(H2b). Each adapter accepts a `PipelineContext` and returns a `PipelineResult`
+containing the story or source video id. The worker resolves the job's `kind`
+through the registry, without branching on pipeline names. Unknown kinds fail
+permanently. Register implementations in `create_registry()` to extend dispatch;
+new database job kinds still require a migration of the `job_kind` enum.
 
 ### Chapter pacing
 
@@ -152,8 +164,8 @@ Two processes. The API holds the service_role key; the browser never sees it.
     uvicorn brainrot.api:app --reload --port 8000
     cd web && npm install && npm run dev
 
-Open http://localhost:5173. Three tabs: create a job, watch the job list, play
-finished videos.
+Open http://localhost:5173. Home, Docs and FAQ describe the product; Workspace
+contains job creation, the job list and finished videos.
 
 `DASHBOARD_API_KEY` is a shared secret sent as the `X-API-Key` header; the API
 rejects every request while it is unset. `web/.env` carries the same value as
@@ -164,4 +176,16 @@ The job list polls every 2s rather than using Supabase Realtime. Realtime from t
 browser would need `SELECT` policies for `anon` on `jobs`, and the anon key ships in
 the JS bundle, so that would make the table readable by anyone with the project URL.
 Reading through the API keeps RLS closed.
+
+### Vercel deployment
+
+Vercel hosts the Vite dashboard. Keep its Root Directory at the repository root;
+`vercel.json` selects Vite, installs with `npm ci --prefix web`, builds with
+`npm run build --prefix web`, and serves `web/dist`. This overrides automatic
+FastAPI detection at the Python repository root.
+
+The API and media worker run separately. Configure `VITE_API_URL` and
+`VITE_API_KEY` in Vercel before building, and allow the dashboard origin in the
+API's `DASHBOARD_ORIGINS`. See [deployment details](docs/deployment.md) and the
+[documentation index](docs/index.md).
 

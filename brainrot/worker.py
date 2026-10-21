@@ -17,14 +17,12 @@ import traceback
 import uuid
 from datetime import datetime, timezone
 
-from . import db, pipeline, publish, reddit, repurpose, scheduler
+from . import db, publish, scheduler
 from .application import retry
+from .domain.pipelines import PipelineContext
+from .pipelines import create_registry
 
-HANDLERS = {
-    "brainrot": pipeline.run_brainrot,
-    "reddit": reddit.run_reddit,
-    "repurpose": repurpose.run_repurpose,
-}
+REGISTRY = create_registry()
 
 POLL_SECONDS = 5
 # Long enough that a renewal missed to a network blip does not lose the job,
@@ -71,15 +69,15 @@ def execute(
 ) -> str:
     """Run a claimed job and record its outcome. Returns the job's new status,
     or "lease_lost" if another worker owns it by now."""
-    handler = HANDLERS.get(job["kind"])
-    if handler is None:
-        status = db.fail_job(job["id"], worker_id, f"no handler for kind {job['kind']}", "permanent")
-        return status or "lease_lost"
-
     keeper = LeaseKeeper(job["id"], worker_id, lease_seconds, renew_every)
     keeper.start()
     try:
-        handler(job)
+        pipeline = REGISTRY.get(job["kind"])
+        context = PipelineContext(
+            job_id=job["id"], kind=job["kind"], params=job["params"],
+            attempt=job["attempts"], worker_id=worker_id,
+        )
+        pipeline.execute(context)
     except Exception as exc:
         keeper.stop()
         decision = retry.decide(
