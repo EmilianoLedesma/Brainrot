@@ -11,21 +11,10 @@ The posting itself is Phase 5 and needs the developer apps registered first.
 from datetime import datetime, timedelta, timezone
 
 from . import db
+from .application.analytics import ABANDON_BELOW_PCT, METRICS_GRACE, PACING, gap_for, next_chapter
 
 PLATFORMS = ("youtube", "tiktok", "instagram")
 
-# Retention of the previous chapter -> how long to wait before the next one.
-# A story people finish earns a faster cadence; one they drop gets slowed down.
-PACING = (
-    (60.0, timedelta(hours=12)),
-    (40.0, timedelta(hours=24)),
-    (0.0, timedelta(hours=48)),
-)
-# Below this, publishing further chapters is not worth the slot.
-ABANDON_BELOW_PCT = 20.0
-# How long to wait for the platforms to report numbers before giving up on
-# pacing and falling back to the slowest cadence.
-METRICS_GRACE = timedelta(hours=24)
 
 
 def _now() -> datetime:
@@ -68,13 +57,6 @@ def retention(chapter_id: str) -> float | None:
     )
     values = [float(r["retention_pct"]) for r in rows]
     return max(values) if values else None
-
-
-def gap_for(retention_pct: float) -> timedelta:
-    for threshold, gap in PACING:
-        if retention_pct >= threshold:
-            return gap
-    return PACING[-1][1]
 
 
 def plan_story(story_id: str) -> None:
@@ -151,19 +133,10 @@ def tick() -> list[str]:
             if went_out is None:
                 break  # previous chapter is queued but has not gone out yet
 
-            score = retention(previous["id"])
-            if score is None:
-                # No numbers yet. Give the platforms a grace period, then pace at
-                # the slowest cadence rather than stalling the story forever.
-                if _now() - went_out < METRICS_GRACE:
-                    break
-                gap = PACING[-1][1]
-            elif score < ABANDON_BELOW_PCT:
-                break  # nobody is watching; stop spending slots on this story
-            else:
-                gap = gap_for(score)
-
-            queue("chapter_id", nxt["id"], went_out + gap)
+            decision = next_chapter(retention(previous["id"]), went_out, _now())
+            if decision.action != "schedule":
+                break
+            queue("chapter_id", nxt["id"], decision.when)
             queued.append(nxt["id"])
             break  # one chapter per story per tick
 

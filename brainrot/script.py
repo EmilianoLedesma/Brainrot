@@ -1,15 +1,14 @@
-"""Story generation with Claude.
+"""Story generation through the configured local CLI or explicit API provider.
 
 H2 turns a topic into a narration script. H2b feeds a Reddit post through
 `rewrite_post` instead, which keeps the events but fixes the telling.
 """
 
-import anthropic
 from pydantic import BaseModel
 
-from .domain.jobs import PermanentError
+from . import llm
 
-MODEL = "claude-opus-5"
+MODEL = llm.API_MODEL
 
 # Roughly 150 spoken words per minute at the default TTS rate, so ~140 words
 # lands near the 55s ceiling that all three platforms treat as short-form.
@@ -46,24 +45,15 @@ class Story(BaseModel):
     script: str
 
 
-def _generate(system: str, user: str) -> Story:
-    client = anthropic.Anthropic()
-    response = client.messages.parse(
-        model=MODEL,
-        max_tokens=4000,
-        system=system,
-        messages=[{"role": "user", "content": user}],
-        output_format=Story,
+def _generate(system: str, user: str, provider: str | None = None) -> Story:
+    return llm.generate(
+        system, user, Story, max_tokens=4000, provider=provider, api_model=MODEL,
     )
-    if response.stop_reason == "refusal":
-        # Asking again gets the same answer, so this is not worth a retry.
-        raise PermanentError(f"Claude declined: {response.stop_details}")
-    return response.parsed_output
 
 
-def write_story(topic: str) -> Story:
-    return _generate(STORY_SYSTEM, f"Topic: {topic}")
+def write_story(topic: str, *, provider: str | None = None) -> Story:
+    return _generate(STORY_SYSTEM, f"Topic: {topic}", provider)
 
 
-def rewrite_post(title: str, body: str) -> Story:
-    return _generate(REWRITE_SYSTEM, f"Title: {title}\n\n{body}")
+def rewrite_post(title: str, body: str, *, provider: str | None = None) -> Story:
+    return _generate(REWRITE_SYSTEM, f"Title: {title}\n\n{body}", provider)

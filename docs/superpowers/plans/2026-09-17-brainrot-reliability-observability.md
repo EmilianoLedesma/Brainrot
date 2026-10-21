@@ -18,6 +18,20 @@ registration become explicit infrastructure.
 React/Vite, FFmpeg, existing Brainrot integrations, pytest-compatible
 test tooling, Prometheus-compatible metrics.
 
+**Progress (2026-10-21):** Tasks 1–12 are implemented. Task 13's automated,
+browser, live database/Storage and synthetic worker checks pass; real provider
+pipeline checks remain pending credentials. Task 14's architecture review passes
+for the tested boundaries, with H1/H2/H2b live acceptance still open.
+PR #1 was merged before further implementation; subsequent changes are on
+`feat/stage-execution` with no new PR. See [operations](../../operations.md)
+for validation boundaries and the runbook.
+
+**Local generation follow-up (2026-10-21):** Generation now supports the installed
+Claude Code and Codex subscription CLIs; topic script previews pass through both.
+An Anthropic API key is no longer required for local H1/H2 model steps.
+Full-pipeline acceptance and Reddit approval remain separate checks. See
+[local model setup](../../local-models.md).
+
 **Spec path:**
 `docs/superpowers/specs/2026-09-17-brainrot-reliability-observability.md`
 
@@ -257,7 +271,7 @@ git commit -m "feat: add retry and abandoned job recovery"
 **Status (2026-10-21):** Implemented in `brainrot/application/registry.py` and
 `brainrot/pipelines.py`, with worker integration and registry regression tests.
 The adapters preserve the existing entry points and database job-kind names.
-Task 6 (stage execution tracking) is next.
+Stage execution and subsequent infrastructure tasks are also implemented.
 
 **Files:** - Modify: `brainrot/pipeline.py` - Modify:
 `brainrot/repurpose.py` - Modify: `brainrot/script.py` - Modify:
@@ -322,6 +336,10 @@ git commit -m "refactor: register content pipelines explicitly"
 
 ## Task 6: Add stage execution tracking
 
+**Status (2026-10-21):** Implemented with migration 003, scoped stage tracking
+for H1/H2/H2b, lease guards, abandoned-stage cleanup and regression tests.
+Structured logging and subsequent infrastructure tasks are also implemented.
+
 **Files:** - Create: additive migration under `migrations/` - Create:
 `brainrot/application/stages.py` - Modify: pipeline execution paths -
 Create: `tests/test_stage_execution.py`
@@ -375,6 +393,9 @@ git commit -m "feat: track pipeline stage executions"
 
 ## Task 7: Add structured logging
 
+**Status (2026-10-21):** Implemented with JSON execution events, context binding,
+secret redaction and logging regression coverage.
+
 **Files:** - Create: `brainrot/observability/logging.py` - Modify:
 `brainrot/worker.py` - Modify: relevant pipeline execution boundaries -
 Create: `tests/test_logging.py`
@@ -425,6 +446,9 @@ git commit -m "feat: add structured execution logging"
 ------------------------------------------------------------------------
 
 ## Task 8: Add metrics instrumentation
+
+**Status (2026-10-21):** Implemented with migration 004's durable observations,
+authenticated Prometheus output, bounded labels and per-process API latency.
 
 **Files:** - Create: `brainrot/observability/metrics.py` - Modify:
 `brainrot/api.py` - Modify: `brainrot/worker.py` - Create:
@@ -480,6 +504,10 @@ git commit -m "feat: instrument brainrot operational metrics"
 
 ## Task 9: Add operational execution details to the dashboard
 
+**Status (2026-10-21):** Implemented with migration 005's read models,
+authenticated inspection endpoints and the EN/ES execution inspector.
+Desktop/mobile browser checks cover polling and connection failures.
+
 **Files:** - Modify: `brainrot/api.py` - Modify: `web/src/api.js` -
 Modify: relevant pages under `web/src/pages/` - Modify:
 `web/src/App.jsx` - Modify: `web/src/style.css` - Create: frontend/API
@@ -530,6 +558,9 @@ git commit -m "feat: add operational job execution dashboard"
 ------------------------------------------------------------------------
 
 ## Task 10: Separate analytics ingestion from scheduling policy
+
+**Status (2026-10-21):** Implemented with a normalized Performance contract,
+pure pacing decisions and boundary tests. Provider analytics fetching is deferred.
 
 **Files:** - Create: `brainrot/application/analytics.py` - Modify:
 `brainrot/scheduler.py` - Create: `tests/test_analytics_policy.py`
@@ -592,6 +623,10 @@ git commit -m "refactor: separate analytics from scheduling policy"
 ------------------------------------------------------------------------
 
 ## Task 11: Add integration tests for the complete job lifecycle
+
+**Status (2026-10-21):** Implemented against local PostgreSQL for completion,
+retry, recovery, stages, API, metrics and publication claiming. An ambiguous
+accepted upload is never automatically uploaded again.
 
 **Files:** - Create: `tests/integration/test_job_lifecycle.py` - Create:
 `tests/integration/test_publish_idempotency.py` - Modify: test fixtures
@@ -659,6 +694,9 @@ git commit -m "test: cover end to end job lifecycle"
 
 ## Task 12: Harden security and failure boundaries
 
+**Status (2026-10-21):** Implemented with authenticated operations, strict
+input validation, bounded allowlisted output and credential-redaction coverage.
+
 **Files:** - Modify: `brainrot/api.py` - Modify: `brainrot/publish.py` -
 Modify: `brainrot/observability/logging.py` - Create:
 `tests/test_security_boundaries.py`
@@ -703,6 +741,14 @@ git commit -m "fix: harden operational security boundaries"
 ------------------------------------------------------------------------
 
 ## Task 13: Full regression and operational validation
+
+**Status (2026-10-21):** 187 pytest tests pass with local PostgreSQL; offline
+FFmpeg checks, production Vite build and desktop/mobile browser checks pass.
+Live Supabase row/Storage checks and rollback-only worker retry/stage/log/API/
+metrics checks pass. H1's official model is provisioned and loads in OpenCV.
+README, deployment and operations documentation are updated.
+Real H1/H2/H2b runs await `ANTHROPIC_API_KEY` and approved Reddit credentials
+for H2b. No existing user job was consumed and no real publishing was attempted.
 
 **Files:** - Modify: `README.md` - Create: operational
 documentation/runbook if useful.
@@ -764,28 +810,34 @@ git commit -m "docs: document brainrot reliability architecture"
 
 ## Task 14: Final architecture review
 
+**Status (2026-10-21):** Reviewed worker/domain/registry/stage ownership,
+publication claims, read models, security, metrics and migration boundaries.
+Automated criteria pass; real provider compatibility remains unverified until
+credentials are configured. Additive migration precautions and operational
+rollback are documented in [operations](../../operations.md).
+
 **Files:** - Review all changed files.
 
 ### Step 1: Verify acceptance criteria
 
 Confirm:
 
--   [ ] only one worker can own a live job lease;
--   [ ] abandoned jobs recover;
--   [ ] retries use bounded backoff;
--   [ ] permanent failures become terminal;
--   [ ] retries are idempotent;
--   [ ] stages are traceable;
--   [ ] structured logs include execution context;
--   [ ] metrics are available;
--   [ ] dashboard exposes execution state;
--   [ ] H1 works;
--   [ ] H2 works;
--   [ ] H2b works;
--   [ ] scheduler behavior remains correct;
--   [ ] new pipelines can be registered without modifying worker core;
--   [ ] no secrets appear in logs/API responses;
--   [ ] existing tests remain green.
+-   [x] only one worker can own a live job lease;
+-   [x] abandoned jobs recover;
+-   [x] retries use bounded backoff;
+-   [x] permanent failures become terminal;
+-   [x] retries reuse persisted outputs and publication claims prevent duplicate uploads;
+-   [x] stages are traceable;
+-   [x] structured logs include execution context;
+-   [x] metrics are available;
+-   [x] dashboard exposes execution state;
+-   [ ] H1 works end to end with real providers (offline coverage and model loading pass);
+-   [ ] H2 works end to end with real providers (offline coverage passes);
+-   [ ] H2b works end to end with real providers (offline coverage passes);
+-   [x] scheduler behavior remains correct;
+-   [x] new pipelines can be registered without modifying worker core;
+-   [x] configured secrets are redacted from application logs and operational API responses;
+-   [x] existing tests remain green.
 
 ### Step 2: Run final test suite
 

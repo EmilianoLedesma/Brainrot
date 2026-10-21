@@ -12,13 +12,15 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
 
 ## Layout
 
-    brainrot/db.py         Supabase client, leased job helpers, media upload
+    brainrot/db.py         Supabase client, leased job/stage helpers, media upload
     brainrot/api.py        FastAPI: job creation plus read-only views for the dashboard
     brainrot/worker.py     leases pending jobs, runs the matching pipeline, retries/recovers
     brainrot/domain/       job states and the pipeline contract (no I/O)
-    brainrot/application/  retry policy and pipeline registry (no I/O)
+    brainrot/application/  retry policy, pipeline registry, stage tracking and pacing policy
+    brainrot/observability/ structured execution logs and Prometheus metrics
     brainrot/pipelines.py  H1/H2/H2b adapters and default pipeline registration
-    brainrot/script.py     Claude: topic -> story, Reddit post -> retold story
+    brainrot/llm.py        typed generation via Claude Code, Codex or explicit Anthropic API
+    brainrot/script.py     topic -> story, Reddit post -> retold story
     brainrot/tts.py        edge-tts narration with per-word timings
     brainrot/render.py     ffmpeg: looping background + narration + karaoke captions
     brainrot/pipeline.py   H2/H2b: script -> chapters -> rendered video
@@ -31,6 +33,7 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
     migrations/            SQL applied by hand in the Supabase SQL editor, in order
     tests/                 pytest suite; SQL tests run against a throwaway local Postgres
     test_db.py             Supabase round-trip check (needs credentials)
+    test_live.py           rollback-only live worker/API smoke with synthetic operations
     test_pipeline.py       offline self-checks for captions, chaptering, reframing
     docs/                  reliability baseline, spec and plan
 
@@ -41,11 +44,46 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
    `for f in migrations/*.sql; do psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "$f"; done`.
    `001_init.sql` creates the enums, ten tables, indexes, RLS, and the private `media`
    bucket. `002_job_execution.sql` adds job leases, retries and idempotency keys; the
-   worker needs it, so apply it before running a worker from this version.
+   worker needs it. `003_stage_execution.sql` adds stage records, lease-guarded
+   stage functions and automatic closure of abandoned stages. `004_operational_metrics.sql`
+   adds durable metric observations; `005_execution_read_models.sql` adds the dashboard
+   read models. Apply all five before starting this version.
 3. `cp .env.example .env` and fill in `SUPABASE_URL` and `SUPABASE_SERVICE_KEY`
    (Project Settings -> API). The service_role key bypasses RLS — server-side only.
 4. `pip install -r requirements.txt`
 5. `python test_db.py` -> `phase 0 ok`
+6. Install FFmpeg/ffprobe on the worker host. For local generation, sign in to
+   Claude Code with `claude auth login` or Codex with `codex login` on that host.
+   Set `BRAINROT_LLM_PROVIDER=claude-code` (the default) or `codex` in `.env`.
+   Local modes use the saved subscription login and require no API key.
+   H2/H2b need an active background: `python -m brainrot.cli add-background background.mp4`.
+   H1 needs `python -m brainrot.cli setup-face-model`, which downloads pinned,
+   checksum-verified OpenCV YuNet weights and uploads them to the private bucket.
+   H2b additionally needs approved Reddit API access and the Reddit variables in
+   `.env.example`. Platform publishing credentials are configured separately.
+
+Preview a topic without creating a job or publishing:
+
+```sh
+python -m brainrot.cli generate-script "Why octopuses can open jars" --provider claude-code
+python -m brainrot.cli generate-script "Why octopuses can open jars" --provider codex
+```
+
+Workspace's Model selector chooses Claude Code or Codex for each new topic or
+repurpose job. The choice appears in Review and is saved with the job for every
+attempt. Each integration uses its configured model; the selector does not pick
+individual model versions.
+
+Jobs without a saved selection use the provider in `.env` for topic scripts,
+Reddit rewrites and H1 moment selection. Restart the worker after changing that
+default. There is no automatic
+fallback to another provider or paid API. Subscription limits still apply, and
+account-level extra usage settings can incur charges. Local adapters are intended
+for your own private worker, running as the signed-in OS user.
+
+The existing API remains available only with `BRAINROT_LLM_PROVIDER=anthropic`
+and `ANTHROPIC_API_KEY`. See [local model setup](docs/local-models.md) for login,
+Windows executable discovery, timeouts and deployment boundaries.
 
 ## Phases
 
@@ -103,7 +141,7 @@ every minute while the pipeline runs. If the worker dies, the lease lapses and t
 next worker iteration puts the job back in the queue. Network errors, timeouts,
 rate limits and 5xx responses are retried after 30s, 60s, 120s... (capped at 30
 minutes) up to `jobs.max_attempts` (3); anything else fails the job, since retrying
-a bug only pays for the same Claude call again. A retried job resumes: it reuses
+a bug repeats the same model work. A retried job resumes: it reuses
 the story, transcript and moment selection its earlier attempt saved and only
 renders what is missing.
 
@@ -117,11 +155,19 @@ resetting it to `scheduled`.
     pip install -r requirements-dev.txt
     pytest                    # unit tests plus SQL tests against a local Postgres
     python test_pipeline.py   # ffmpeg end-to-end checks
+    python test_db.py         # real Supabase row/Storage smoke; removes its own objects
+    python test_live.py       # real DB worker/API retry smoke; rolls its transaction back
 
 The SQL tests start a throwaway Postgres using `PG_BIN`, or find its binaries
 through `pg_ctl` on `PATH` (falling back to `/usr/lib/postgresql/16/bin`). They
 support Windows and Unix and skip if Postgres is not installed. They never use
 `DATABASE_URL` or your Supabase project.
+
+The two live scripts are explicit operator checks, outside pytest. `test_db.py`
+leaves compact metric observations of its temporary job; `test_live.py` requires
+`DATABASE_URL` and rolls back its synthetic work, including metric observations.
+Neither calls a generation or publishing provider. See the
+[operations guide](docs/operations.md) for browser checks and troubleshooting.
 
 ### Pipeline registration
 
@@ -132,6 +178,32 @@ through the registry, without branching on pipeline names. Unknown kinds fail
 permanently. Register implementations in `create_registry()` to extend dispatch;
 new database job kinds still require a migration of the `job_kind` enum.
 
+### Stage execution
+
+Worker-dispatched pipelines record major operations in `stage_executions`.
+Each record includes the job, stage, chapter/clip scope, job attempt, worker,
+status, timestamps, database-calculated duration and error. Retries keep earlier
+attempts; reused scripts, transcripts and finished renders are not reported as
+newly executed work. When an attempt ends, unfinished stages become `abandoned`.
+
+Stages require a live lease. A worker that loses it stops at the next stage
+boundary and leaves the job outcome to recovery. Legacy direct pipeline calls
+have no leased context and do not create stage records. See
+[stage execution details](docs/stage-execution.md).
+
+### Logs, metrics and inspection
+
+The worker emits JSON lifecycle events with job, pipeline, attempt, worker and
+stage context. Saved errors and operational responses redact configured secrets;
+logs omit prompts and provider payloads. Workspace -> Queue -> Inspect shows
+attempts, current stage, duration, stage history and publication states.
+
+`GET /metrics` requires the same `X-API-Key` as the other operational endpoints.
+Job, retry, recovery, publication and duration metrics come from durable database
+observations shared across worker/API processes, beginning with migration 004.
+Queue gauges describe current rows; API latency is per API process and resets on
+restart. [Metric names, scrape setup and limitations](docs/operations.md).
+
 ### Chapter pacing
 
 Chapter one publishes immediately. Each later chapter waits on the previous one's
@@ -139,6 +211,10 @@ best reported retention: at or above 60% it follows after 12h, 40-60% after 24h,
 below that 48h, and under 20% the story is dropped rather than given more slots.
 If the platforms report nothing within 24h of a chapter going out, pacing falls
 back to the slowest cadence instead of stalling the story forever.
+
+The normalized analytics contract and pure pacing policy live in
+`brainrot/application/analytics.py`. Platform analytics fetching remains deferred;
+without ingested retention, the existing 48h fallback applies.
 
 ### Transcription
 
@@ -154,7 +230,7 @@ pooler, which is IPv4:
     postgresql://postgres.<ref>:<password>@aws-0-us-west-2.pooler.supabase.com:5432/postgres
 
 Note the user is `postgres.<ref>`, not `postgres`, and the password must be
-percent-encoded. This connection is used only for migrations; the application code
+percent-encoded. This connection is used for migrations and explicit live SQL checks; the application code
 in `brainrot/db.py` goes through the REST API with the service_role key.
 
 ## Dashboard
@@ -166,6 +242,9 @@ Two processes. The API holds the service_role key; the browser never sees it.
 
 Open http://localhost:5173. Home, Docs and FAQ describe the product; Workspace
 contains job creation, the job list and finished videos.
+
+Queue includes per-job execution inspection. Requests poll sequentially every 2s,
+keep the last successful response on connection failure and stop when the view closes.
 
 `DASHBOARD_API_KEY` is a shared secret sent as the `X-API-Key` header; the API
 rejects every request while it is unset. `web/.env` carries the same value as

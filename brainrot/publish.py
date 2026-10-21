@@ -21,6 +21,7 @@ from datetime import datetime, timedelta, timezone
 import requests
 
 from . import db
+from .observability.logging import event, safe_text
 
 TIMEOUT = 120
 # Signed URLs handed to Instagram have to outlive its transcoding queue.
@@ -283,6 +284,7 @@ def publish_one(publication: dict) -> bool:
     platform = publication["platform"]
     creds = credentials(platform)
     if not _take(publication["id"]):
+        event("publication_already_taken", publication_id=publication["id"], platform=platform)
         return False
 
     client = db.client()
@@ -317,9 +319,11 @@ def publish_one(publication: dict) -> bool:
         # an upload that timed out after the platform accepted it would otherwise
         # post the same video twice.
         client.table("publications").update(
-            {"status": "failed", "error": f"{type(exc).__name__}: {exc}"[:2000]}
+            {"status": "failed", "error": safe_text(f"{type(exc).__name__}: {exc}")[:2000]}
         ).eq("id", publication["id"]).execute()
+        event("publication_failed", publication_id=publication["id"], platform=platform, error_type=type(exc).__name__)
         raise
+    event("publication_completed", publication_id=publication["id"], platform=platform)
     return True
 
 
@@ -332,9 +336,8 @@ def run_due(limit: int = 5) -> list[str]:
         try:
             if publish_one(publication):
                 published.append(publication["id"])
-                print(f"published {publication['platform']} {publication['id']}")
         except MissingCredentials as exc:
-            print(f"skipping {publication['platform']}: {exc}")
+            event("publication_skipped", publication_id=publication["id"], platform=publication["platform"], error_type=type(exc).__name__)
         except Exception as exc:
-            print(f"failed {publication['platform']} {publication['id']}: {exc}")
+            event("publication_attempt_error", publication_id=publication["id"], platform=publication["platform"], error_type=type(exc).__name__)
     return published

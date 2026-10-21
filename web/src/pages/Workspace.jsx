@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { api } from "../api.js";
 import { useCopy } from "../i18n.jsx";
+import { GENERATION_PROVIDERS } from "../generation.js";
+import Execution, { duration } from "./Execution.jsx";
 
 /* The work surface. Submitting a job is a three-step flow rather than one form,
    because picking a pipeline and describing the input are different decisions and
@@ -19,26 +21,28 @@ function usePoll(path, intervalMs) {
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
-  const refresh = useCallback(() => {
-    api(path).then(
-      (d) => {
-        setData(d);
-        setError(null);
-        setLoaded(true);
-      },
-      (e) => {
-        setError(e.message);
-        setLoaded(true);
-      },
-    );
-  }, [path]);
+  const [revision, setRevision] = useState(0);
+  const refresh = useCallback(() => setRevision((value) => value + 1), []);
 
   useEffect(() => {
-    refresh();
-    if (!intervalMs) return;
-    const id = setInterval(refresh, intervalMs);
-    return () => clearInterval(id);
-  }, [refresh, intervalMs]);
+    let active = true, timer;
+    const controller = new AbortController();
+    async function poll() {
+      try {
+        const next = await api(path, { signal: controller.signal });
+        if (active) { setData(next); setError(null); }
+      } catch (e) {
+        if (active && e.name !== "AbortError") setError(e.message);
+      } finally {
+        if (active) {
+          setLoaded(true);
+          if (intervalMs) timer = setTimeout(poll, intervalMs);
+        }
+      }
+    }
+    poll();
+    return () => { active = false; controller.abort(); clearTimeout(timer); };
+  }, [path, intervalMs, revision]);
 
   return { data, error, loaded, refresh };
 }
@@ -74,6 +78,7 @@ function NewJob({ onQueued }) {
   const [step, setStep] = useState(1);
   const [kind, setKind] = useState(null);
   const [value, setValue] = useState("");
+  const [provider, setProvider] = useState("claude-code");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [queued, setQueued] = useState(null);
@@ -99,7 +104,7 @@ function NewJob({ onQueued }) {
     try {
       const { id } = await api("/jobs", {
         method: "POST",
-        body: JSON.stringify({ kind, [field.key]: value.trim() }),
+        body: JSON.stringify({ kind, [field.key]: value.trim(), llm_provider: provider }),
       });
       setQueued(id);
       setStep(4);
@@ -178,6 +183,18 @@ function NewJob({ onQueued }) {
             <p className="muted" style={{ margin: 0, fontSize: 13 }}>
               {copy.hint}
             </p>
+            <label htmlFor="generation-provider">
+              <span id="generation-provider-label" className="label">{t.model.label}</span>
+              <select id="generation-provider" value={provider}
+                aria-labelledby="generation-provider-label"
+                aria-describedby="generation-provider-hint"
+                onChange={(event) => setProvider(event.target.value)}>
+                {Object.entries(GENERATION_PROVIDERS).map(([id, name]) => (
+                  <option key={id} value={id}>{name}</option>
+                ))}
+              </select>
+              <small id="generation-provider-hint" className="muted">{t.model.hint}</small>
+            </label>
             <div className="hero-actions">
               <button type="button" className="btn" onClick={() => setStep(1)}>
                 {t.back}
@@ -202,6 +219,10 @@ function NewJob({ onQueued }) {
                 <dt className="label">{copy.field}</dt>
                 <dd className="review-value">{value}</dd>
               </div>
+              <div>
+                <dt className="label">{t.model.label}</dt>
+                <dd>{GENERATION_PROVIDERS[provider]}</dd>
+              </div>
             </dl>
             <p className="muted" style={{ fontSize: 13 }}>
               {t.reviewWarn}
@@ -222,14 +243,15 @@ function NewJob({ onQueued }) {
 }
 
 function inputOf(job) {
-  return job.params?.topic || job.params?.youtube_url || "—";
+  return job.params?.topic || job.params?.youtube_url || job.params?.title || "—";
 }
 
 function Queue() {
   const t = useCopy().work;
   const { data, error, loaded } = usePoll("/jobs", 2000);
+  const [selected, setSelected] = useState(null);
 
-  if (error) return <State title={t.unreachable}>{error}</State>;
+  if (error && !data.length) return <State title={t.unreachable}>{error}</State>;
   if (!loaded) return <State title={t.reading}>{t.readingQueue}</State>;
   if (!data.length) return <State title={t.emptyQueue}>{t.emptyQueueBody}</State>;
 
@@ -240,6 +262,7 @@ function Queue() {
 
   return (
     <>
+      {error && <p role="status" className="alarm-text">{t.execution.stale} {error}</p>}
       <div className="count-row">
         {Object.entries(counts).map(([status, n]) => (
           <span className={`status status-${status}`} key={status}>
@@ -260,6 +283,9 @@ function Queue() {
                   <th>{t.colPipeline}</th>
                   <th>{t.colInput}</th>
                   <th>{t.colStatus}</th>
+                  <th>{t.execution.stage}</th>
+                  <th>{t.execution.attempt}</th>
+                  <th>{t.execution.elapsed}</th>
                   <th>{t.colQueued}</th>
                 </tr>
               </thead>
@@ -271,11 +297,22 @@ function Queue() {
                     </td>
                     <td>
                       {inputOf(job)}
+                      {GENERATION_PROVIDERS[job.params?.llm_provider] && (
+                        <small className="execution-scope">{GENERATION_PROVIDERS[job.params.llm_provider]}</small>
+                      )}
                       {job.error && <pre className="trace">{job.error}</pre>}
+                      <button className="btn inspect-job" aria-expanded={selected === job.id}
+                        aria-controls={selected === job.id ? "execution-" + job.id : undefined}
+                        onClick={() => setSelected(selected === job.id ? null : job.id)}>
+                        {selected === job.id ? t.execution.close : t.execution.inspect}
+                      </button>
                     </td>
                     <td>
                       <span className={`status status-${job.status}`}>{job.status}</span>
                     </td>
+                    <td>{job.current_stage ? (t.execution.names[job.current_stage.stage] || job.current_stage.stage) : "—"}</td>
+                    <td className="numeric">{job.attempts ?? 0} / {job.max_attempts ?? 3}</td>
+                    <td className="numeric">{duration(job.duration_seconds)}</td>
                     <td className="muted" style={{ fontSize: 13 }}>
                       {new Date(job.created_at).toLocaleString()}
                     </td>
@@ -286,6 +323,7 @@ function Queue() {
           </div>
         </div>
       </div>
+      {selected && <Execution key={selected} jobId={selected} />}
     </>
   );
 }

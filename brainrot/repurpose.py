@@ -1,6 +1,6 @@
 """H1: turn a long YouTube video into vertical clips.
 
-Downloads the source, gets a transcript, asks Claude which moments stand alone,
+Downloads the source, gets a transcript, asks the configured model which moments stand alone,
 then cuts each one and reframes it to 9:16 following the speaker's face.
 """
 
@@ -9,16 +9,15 @@ import re
 import subprocess
 import tempfile
 
-import anthropic
 import cv2
 import numpy as np
 import yt_dlp
 from pydantic import BaseModel
 
-from . import db, render, scheduler, script
+from . import db, llm, render, scheduler, script
+from .application.stages import stage
 from .domain.jobs import PermanentError
-
-FACE_MODEL_PATH = "models/face_detection_yunet_2023mar.onnx"
+from .models import FACE_MODEL_PATH
 
 # Face positions are sampled this often and the crop is keyframed at the same rate.
 # Faster sampling tracks better but makes the ffmpeg crop expression longer.
@@ -66,6 +65,7 @@ def download(url: str, directory: str) -> tuple[str, dict]:
         "subtitleslangs": ["en"],
         "subtitlesformat": "vtt",
         "quiet": True,
+        "noplaylist": True,
         "no_warnings": True,
     }
     with yt_dlp.YoutubeDL(options) as ydl:
@@ -126,25 +126,29 @@ def transcribe(video_path: str, directory: str) -> list[dict]:
 
 def select_moments(transcript: list[dict]) -> list[Moment]:
     lines = "\n".join(f"[{c['start']:.1f}] {c['text']}" for c in transcript)
-    client = anthropic.Anthropic()
-    response = client.messages.parse(
-        model=script.MODEL,
-        max_tokens=8000,
-        system=SELECT_SYSTEM,
-        messages=[{"role": "user", "content": f"Transcript:\n{lines}"}],
-        output_format=Moments,
+    response = llm.generate(
+        SELECT_SYSTEM, f"Transcript:\n{lines}", Moments,
+        max_tokens=8000, api_model=script.MODEL,
     )
-    if response.stop_reason == "refusal":
-        raise PermanentError(f"Claude declined: {response.stop_details}")
-    return sorted(response.parsed_output.moments, key=lambda m: m.score, reverse=True)
+    return sorted(response.moments, key=lambda m: m.score, reverse=True)
 
 
 def face_model_path() -> str:
     """Cache the detector weights locally; the copy of record lives in Storage."""
     local = os.path.join(tempfile.gettempdir(), "yunet.onnx")
-    if not os.path.exists(local):
-        with open(local, "wb") as handle:
-            handle.write(db.download(FACE_MODEL_PATH))
+    if not os.path.exists(local) or os.path.getsize(local) == 0:
+        data = db.download(FACE_MODEL_PATH)
+        if not data:
+            raise PermanentError("face model is empty; run: python -m brainrot.cli setup-face-model")
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(dir=tempfile.gettempdir(), prefix="yunet-", suffix=".onnx", delete=False) as handle:
+                temporary = handle.name
+                handle.write(data)
+            os.replace(temporary, local)
+        finally:
+            if temporary and os.path.exists(temporary):
+                os.unlink(temporary)
     return local
 
 
@@ -276,22 +280,23 @@ def _source_for(job_id: str, url: str, source: str, info: dict, directory: str) 
     existing = db.client().table("source_videos").select("*").eq("job_id", job_id).execute().data
     if existing:
         return existing[0]
-    return (
-        db.client()
-        .table("source_videos")
-        .insert(
-            {
-                "job_id": job_id,
-                "youtube_url": url,
-                "youtube_id": info.get("id"),
-                "title": info.get("title"),
-                "duration_seconds": info.get("duration"),
-                "transcript": transcribe(source, directory),
-            }
+    with stage("transcribe"):
+        return (
+            db.client()
+            .table("source_videos")
+            .insert(
+                {
+                    "job_id": job_id,
+                    "youtube_url": url,
+                    "youtube_id": info.get("id"),
+                    "title": info.get("title"),
+                    "duration_seconds": info.get("duration"),
+                    "transcript": transcribe(source, directory),
+                }
+            )
+            .execute()
+            .data[0]
         )
-        .execute()
-        .data[0]
-    )
 
 
 def _clips_for(job_id: str, source_row: dict, max_clips: int) -> list[dict]:
@@ -306,20 +311,21 @@ def _clips_for(job_id: str, source_row: dict, max_clips: int) -> list[dict]:
     )
     if existing:
         return existing
-    rows = [
-        {
-            "job_id": job_id,
-            "source_video_id": source_row["id"],
-            "start_seconds": moment.start_seconds,
-            "end_seconds": moment.end_seconds,
-            "title": moment.title,
-            "reason": moment.reason,
-            "score": moment.score,
-            "status": "pending",
-        }
-        for moment in select_moments(source_row["transcript"])[:max_clips]
-    ]
-    return db.client().table("clips").insert(rows).execute().data if rows else []
+    with stage("selection"):
+        rows = [
+            {
+                "job_id": job_id,
+                "source_video_id": source_row["id"],
+                "start_seconds": moment.start_seconds,
+                "end_seconds": moment.end_seconds,
+                "title": moment.title,
+                "reason": moment.reason,
+                "score": moment.score,
+                "status": "pending",
+            }
+            for moment in select_moments(source_row["transcript"])[:max_clips]
+        ]
+        return db.client().table("clips").insert(rows).execute().data if rows else []
 
 
 def run_repurpose(job: dict, max_clips: int = 3) -> str:
@@ -330,7 +336,8 @@ def run_repurpose(job: dict, max_clips: int = 3) -> str:
     """
     url = job["params"]["youtube_url"]
     with tempfile.TemporaryDirectory() as directory:
-        source, info = download(url, directory)
+        with stage("download"):
+            source, info = download(url, directory)
         source_row = _source_for(job["id"], url, source, info, directory)
         transcript = source_row["transcript"]
 
@@ -345,12 +352,15 @@ def run_repurpose(job: dict, max_clips: int = 3) -> str:
                     score=float(clip["score"] or 0),
                 )
                 with tempfile.TemporaryDirectory() as clip_dir:
-                    vertical = cut_and_reframe(source, moment, transcript, clip_dir)
-                    with open(vertical, "rb") as handle:
-                        path = db.upload(f"clips/{clip['id']}.mp4", handle.read(), "video/mp4")
-                db.client().table("clips").update(
-                    {"storage_path": path, "status": "ready"}
-                ).eq("id", clip["id"]).execute()
-            scheduler.plan_clip(clip["id"])
+                    with stage("render", clip["id"]):
+                        vertical = cut_and_reframe(source, moment, transcript, clip_dir)
+                    with stage("upload", clip["id"]):
+                        with open(vertical, "rb") as handle:
+                            path = db.upload(f"clips/{clip['id']}.mp4", handle.read(), "video/mp4")
+                        db.client().table("clips").update(
+                            {"storage_path": path, "status": "ready"}
+                        ).eq("id", clip["id"]).execute()
+            with stage("schedule", clip["id"]):
+                scheduler.plan_clip(clip["id"])
 
     return source_row["id"]

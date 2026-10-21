@@ -9,6 +9,7 @@ import re
 from typing import Callable
 
 from . import db, render, scheduler, script, tts
+from .application.stages import stage
 from .domain.jobs import PermanentError
 
 # Roughly one minute of narration. Anything longer gets split so each chapter
@@ -54,9 +55,10 @@ def _story_for(job_id: str, write: Callable[[], script.Story], fields: dict) -> 
     existing = db.client().table("stories").select("*").eq("job_id", job_id).execute().data
     if existing:
         return existing[0]
-    story = write()
-    row = {"job_id": job_id, "title": story.title, "script": story.script, **fields}
-    return db.client().table("stories").insert(row).execute().data[0]
+    with stage("script"):
+        story = write()
+        row = {"job_id": job_id, "title": story.title, "script": story.script, **fields}
+        return db.client().table("stories").insert(row).execute().data[0]
 
 
 def produce(job_id: str, write: Callable[[], script.Story], **story_fields) -> str:
@@ -74,7 +76,9 @@ def produce(job_id: str, write: Callable[[], script.Story], **story_fields) -> s
 
     background = None
     # split_chapters is deterministic, so the same script yields the same chapters.
-    for index, text in enumerate(split_chapters(story["script"]), start=1):
+    with stage("chaptering"):
+        texts = split_chapters(story["script"])
+    for index, text in enumerate(texts, start=1):
         chapter = done.get(index)
         if chapter and chapter["status"] == "ready":
             continue
@@ -91,17 +95,23 @@ def produce(job_id: str, write: Callable[[], script.Story], **story_fields) -> s
             db.client().table("story_chapters").update({"status": "rendering"}).eq("id", chapter_id).execute()
 
         if background is None:
-            background = pick_background()
-        audio, words = tts.narrate(text)
-        video = render.render(background, audio, words)
-        audio_path = db.upload(f"stories/{story_id}/{index:02d}.mp3", audio, "audio/mpeg")
-        video_path = db.upload(f"stories/{story_id}/{index:02d}.mp4", video, "video/mp4")
-        db.client().table("story_chapters").update(
-            {"audio_path": audio_path, "video_path": video_path, "status": "ready"}
-        ).eq("id", chapter_id).execute()
+            with stage("background"):
+                background = pick_background()
+        scope = f"chapter:{index}"
+        with stage("tts", scope):
+            audio, words = tts.narrate(text)
+        with stage("render", scope):
+            video = render.render(background, audio, words)
+        with stage("upload", scope):
+            audio_path = db.upload(f"stories/{story_id}/{index:02d}.mp3", audio, "audio/mpeg")
+            video_path = db.upload(f"stories/{story_id}/{index:02d}.mp4", video, "video/mp4")
+            db.client().table("story_chapters").update(
+                {"audio_path": audio_path, "video_path": video_path, "status": "ready"}
+            ).eq("id", chapter_id).execute()
 
     db.client().table("stories").update({"status": "ready"}).eq("id", story_id).execute()
-    scheduler.plan_story(story_id)
+    with stage("schedule"):
+        scheduler.plan_story(story_id)
     return story_id
 
 
