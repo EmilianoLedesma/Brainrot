@@ -232,4 +232,24 @@ SCHEMA_DEFAULTS = {
 
 
 def fake_supabase() -> FakeSupabase:
-    return FakeSupabase(unique=SCHEMA_UNIQUE, defaults=SCHEMA_DEFAULTS)
+    fake = FakeSupabase(unique=SCHEMA_UNIQUE, defaults=SCHEMA_DEFAULTS)
+
+    # Minimal RPC behavior for pipeline unit tests; rotation/concurrency itself
+    # is verified against the real migration in test_background_rotation.py.
+    def assign_background(p_story):
+        story = next((s for s in fake.rows("stories") if s["id"] == p_story), None)
+        if story is None:
+            return None
+        clips = fake.rows("background_clips")
+        if story.get("background_clip_id"):
+            return next(c["storage_path"] for c in clips if c["id"] == story["background_clip_id"])
+        active = [c for c in clips if c.get("active", True)]
+        if not active:
+            return None
+        chosen = min(active, key=lambda c: (c.get("last_used_order", 0), c.get("rotation_order", 0), c["created_at"], c["id"]))
+        chosen["last_used_order"] = max((c.get("last_used_order", 0) for c in clips), default=0) + 1
+        story["background_clip_id"] = chosen["id"]
+        return chosen["storage_path"]
+
+    fake.functions["assign_story_background"] = assign_background
+    return fake

@@ -3,12 +3,14 @@ export const GENERATION_PROVIDERS = {
   codex: "Chat GPT",
 };
 
-export const DEFAULT_BRAINROT_LEVEL = 35;
+// Persist the existing API values, but expose five discrete choices in the UI.
+export const BRAINROT_LEVELS = [0, 25, 50, 75, 100];
+export const DEFAULT_BRAINROT_LEVEL = BRAINROT_LEVELS[1];
 
 export function brainrotBand(level) {
-  return Math.min(4, Math.floor(level / 20));
+  return Math.max(0, Math.min(4, Math.floor(level / 20)));
 }
 
 export function brainrotSummary(level, copy) {
-  return `${level}/100 · ${copy.levels[brainrotBand(level)].name}`;
+  return copy.levels[brainrotBand(level)].name;
 }

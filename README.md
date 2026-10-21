@@ -49,7 +49,9 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
    adds durable metric observations; `005_execution_read_models.sql` adds the dashboard
    read models. `006_delete_jobs.sql` adds guarded queue deletion and
    `007_retry_jobs.sql` adds explicit retries that preserve saved progress.
-   Apply all seven before starting this version.
+   `008_delete_job_media.sql` adds durable removal of deleted jobs' media.
+   `009_background_rotation.sql` adds persistent per-story background rotation.
+   Apply all nine before starting this version.
 3. `cp .env.example .env` and fill in `SUPABASE_URL` and `SUPABASE_SERVICE_KEY`
    (Project Settings -> API). The service_role key bypasses RLS — server-side only.
 4. `pip install -r requirements.txt`
@@ -76,9 +78,13 @@ repurpose job. The choice appears in Review and is saved with the job for every
 attempt. Each integration uses its configured model; the selector does not pick
 individual model versions.
 
-For topic generation, **Brainrot level** runs from 0 (grounded) to 100 (maximum
-comic absurdity), starting at 35. It changes the script's tone, slang, pacing,
-exaggeration and metaphors. Review, Queue and Inspect show the saved setting.
+For topic generation, **Brainrot level** snaps between five named steps:
+Grounded, Playful (the default), Chaotic, Unhinged and Max brainrot.
+It changes the script's tone, slang, pacing,
+exaggeration and story developments. Ordinary real-world topics stay factual;
+clearly invented premises are developed as fiction. Higher levels increase comic
+delivery for factual subjects and can escalate events inside fictional stories.
+Review, Queue and Inspect show the saved setting.
 Retries reuse an existing saved script; choose a new job to generate a different
 intensity. Repurposing keeps the source video's spoken content.
 
@@ -137,6 +143,12 @@ a vertical video under three minutes simply becomes one.
     python -m brainrot.cli publish                    # upload everything that is due
     python test_pipeline.py                           # offline checks, no credentials
 
+Generated stories rotate through active backgrounds in order of least recent
+use, starting with `background_clips.rotation_order`. Each story saves its choice,
+so all its chapters and retries use the same gameplay. Concurrent workers share
+the same rotation in Supabase. Adding or deactivating a clip changes the pool
+for new assignments; existing stories keep their assigned background.
+
 ### Job lifecycle
 
     pending --claim--> running --> done
@@ -157,7 +169,12 @@ The queue's Delete action opens a confirmation dialog, then removes the job and
 its related database rows. Deleting a running job revokes its lease; its current
 operation may finish, but it cannot record completion or start another stage.
 Active platform uploads must finish before deletion. These checks are atomic with
-worker claims. Stored files and posted videos are retained. Database network
+worker claims. Audio, videos and saved source files are removed from Supabase
+Storage as well. Apply `008_delete_job_media.sql` before deploying this behavior.
+A durable cleanup queue retries Storage failures and rechecks any in-flight
+upload after its old lease expires; the worker also removes late uploads when
+their owner has been deleted. Shared background clips stay in the library.
+Posts already published on external platforms are not removed. Database network
 operations have an eight-second timeout. Queue reads have a 15-second deadline;
 Output allows 45 seconds for media-link signing and promptly retries failed reads;
 the queue retries failed reads and keeps the last successful update visible.

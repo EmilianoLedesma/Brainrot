@@ -66,7 +66,7 @@ export const COPY = {
         },
         {
           idx: "H2", kind: "brainrot", title: "Generate",
-          blurb: "Give it a subject. It finds the one genuinely interesting thing about it, narrates that over a looping background, and captions it a word at a time.",
+          blurb: "Give it a topic or a wild premise. It builds a story around your idea, narrates it over a looping background, and captions it a word at a time.",
           points: [
             "Caption timing straight from the synthesizer, not guessed",
             "Backgrounds pulled from your own clip library",
@@ -206,7 +206,7 @@ export const COPY = {
           title: "Output",
           items: [
             { q: "Why is the gallery empty?", a: "Nothing has rendered yet. Clips and chapters appear the moment a worker finishes one. If jobs are completing but nothing shows, check that a background clip exists — H2 and H2b cannot render without one." },
-            { q: "Where do backgrounds come from?", a: "You supply them. Upload looping, copyright-free clips with python -m brainrot.cli add-background FILE, and one is picked at random per story." },
+            { q: "Where do backgrounds come from?", a: "You supply them. Upload looping, copyright-free clips with python -m brainrot.cli add-background FILE. New stories take turns through the active backgrounds; chapters and retries keep the same choice." },
             { q: "How are the captions timed?", a: "For generated stories, the speech synthesizer reports a timing event per spoken word, so the captions are exact rather than estimated. For repurposed video the timings come from the source captions, or from Whisper when the video has none." },
             { q: "Why 1080 × 1920 for everything?", a: "It is the shape all three platforms want. The renderer scales and crops to it rather than letterboxing, so nothing ships with bars." },
           ],
@@ -242,17 +242,17 @@ export const COPY = {
       steps: ["Pipeline", "Input", "Review"],
       model: { label: "Model", hint: "Uses this integration’s configured model and your local sign-in.", workerDefault: "Worker default" },
       brainrot: {
-        label: "Brainrot level", low: "Grounded", high: "Ridiculous",
+        label: "Brainrot level", low: "Grounded", high: "Max brainrot",
         levels: [
-          { name: "Grounded", description: "Just the facts, clearly told. No meme overload." },
-          { name: "Playful", description: "A little wit, a little weirdness. Still easy to follow." },
-          { name: "Chaotic", description: "Fast jokes, meme energy and dramatic comparisons." },
-          { name: "Unhinged", description: "Big exaggerations, surreal images and ridiculous metaphors." },
-          { name: "Max brainrot", description: "Full nonsense energy. Every line goes comically over the top." },
+          { name: "Grounded", description: "No internet slang. Clear, straightforward storytelling." },
+          { name: "Playful", description: "Light internet slang, a few jokes and a little weirdness." },
+          { name: "Chaotic", description: "Regular internet slang, fast jokes and dramatic comparisons." },
+          { name: "Unhinged", description: "Heavy internet slang, surreal imagery and ridiculous metaphors." },
+          { name: "Max brainrot", description: "Internet slang throughout. Real topics stay factual; invented premises get wildly absurd." },
         ],
       },
       pipelines: {
-        brainrot: { name: "Generate", tagline: "From a topic", blurb: "Your selected model writes a script, narrated over a background clip.", field: "Topic", hint: "One subject. The script finds the single most interesting thing about it." },
+        brainrot: { name: "Generate", tagline: "From a topic", blurb: "Your selected model writes a script, narrated over a background clip.", field: "Topic", hint: "Real topics stay factual; invented premises become fiction. Brainrot level sets how wild the delivery gets." },
         repurpose: { name: "Repurpose", tagline: "From a YouTube link", blurb: "Transcribed, cut into standalone moments, reframed to follow the speaker.", field: "Source URL", hint: "Long-form works best. Up to three clips come out of one video." },
       },
       note: "H2b runs on its own schedule from reddit_sources_config and is not triggered here.",
@@ -290,9 +290,9 @@ export const COPY = {
       },
       remove: {
         label: "Delete", confirmButton: "Confirm delete", cancel: "Cancel", busy: "Deleting…",
-        confirm: "Delete this job and its saved results? Stored files and posted videos are kept.",
+        confirm: "Permanently delete this job, its history and all output files? This cannot be undone.",
         title: "Delete job?", runningTitle: "Delete running job?",
-        running: "This revokes the worker’s lease. The current operation may finish, but later stages will stop.",
+        running: "Further work will stop. Any output still being saved will also be removed.",
       },
       execution: {
         title: "Execution", loading: "Reading stage history…", inspect: "Inspect", close: "Close",
@@ -377,7 +377,7 @@ export const COPY = {
         },
         {
           idx: "H2", kind: "brainrot", title: "Generar",
-          blurb: "Dale un tema. Encuentra lo único realmente interesante que tiene, lo narra sobre un fondo en loop y lo subtitula palabra por palabra.",
+          blurb: "Dale un tema o una premisa disparatada. Crea una historia a partir de tu idea, la narra sobre un fondo en loop y la subtitula palabra por palabra.",
           points: [
             "Tiempos de subtítulo del sintetizador, no estimados",
             "Fondos sacados de tu propia librería de clips",
@@ -517,7 +517,7 @@ export const COPY = {
           title: "Resultados",
           items: [
             { q: "¿Por qué está vacía la galería?", a: "Todavía no se ha renderizado nada. Los clips y capítulos aparecen en cuanto un worker termina uno. Si los jobs se completan pero no ves nada, revisa que exista un clip de fondo — H2 y H2b no pueden renderizar sin uno." },
-            { q: "¿De dónde salen los fondos?", a: "Los pones tú. Sube clips en loop libres de copyright con python -m brainrot.cli add-background FILE, y se elige uno al azar por historia." },
+            { q: "¿De dónde salen los fondos?", a: "Los pones tú. Sube clips en loop libres de copyright con python -m brainrot.cli add-background FILE. Las historias nuevas alternan entre los fondos activos; los capítulos y reintentos conservan el mismo fondo." },
             { q: "¿Cómo se sincronizan los subtítulos?", a: "En las historias generadas, el sintetizador de voz reporta una marca de tiempo por palabra hablada, así que los subtítulos son exactos y no estimados. En el video reutilizado los tiempos vienen de los subtítulos originales, o de Whisper cuando el video no trae." },
             { q: "¿Por qué 1080 × 1920 para todo?", a: "Es la forma que quieren las tres plataformas. El renderizador escala y recorta a esa medida en vez de poner barras, así que nada sale con marco." },
           ],
@@ -553,17 +553,17 @@ export const COPY = {
       steps: ["Pipeline", "Entrada", "Revisión"],
       model: { label: "Modelo", hint: "Usa el modelo configurado en esta integración y tu sesión local.", workerDefault: "Predeterminado del worker" },
       brainrot: {
-        label: "Nivel de brainrot", low: "Tranquilo", high: "Ridículo",
+        label: "Nivel de brainrot", low: "Tranquilo", high: "Brainrot máximo",
         levels: [
-          { name: "Tranquilo", description: "Los hechos, contados con claridad. Sin exceso de memes." },
-          { name: "Juguetón", description: "Un poco de humor y rareza. Fácil de seguir." },
-          { name: "Caótico", description: "Chistes rápidos, energía de meme y comparaciones dramáticas." },
-          { name: "Desquiciado", description: "Exageraciones enormes, imágenes surrealistas y metáforas ridículas." },
-          { name: "Brainrot máximo", description: "Absurdo a todo volumen. Cada frase se pasa de ridícula." },
+          { name: "Tranquilo", description: "Sin jerga de internet. Narración clara y directa." },
+          { name: "Juguetón", description: "Un poco de jerga de internet, humor y rareza." },
+          { name: "Caótico", description: "Jerga de internet frecuente, chistes rápidos y comparaciones dramáticas." },
+          { name: "Desquiciado", description: "Mucha jerga de internet, imágenes surrealistas y metáforas ridículas." },
+          { name: "Brainrot máximo", description: "Jerga de internet por todos lados. Los temas reales conservan los hechos; las premisas inventadas se vuelven absurdas." },
         ],
       },
       pipelines: {
-        brainrot: { name: "Generar", tagline: "Desde un tema", blurb: "El modelo elegido escribe el guion y se narra sobre un clip de fondo.", field: "Tema", hint: "Un solo asunto. El guion encuentra lo más interesante que tiene." },
+        brainrot: { name: "Generar", tagline: "Desde un tema", blurb: "El modelo elegido escribe el guion y se narra sobre un clip de fondo.", field: "Tema", hint: "Los temas reales conservan los hechos; las premisas inventadas se vuelven ficción. El nivel de brainrot controla lo disparatado de la narración." },
         repurpose: { name: "Reutilizar", tagline: "Desde un link de YouTube", blurb: "Transcrito, cortado en momentos que se sostienen solos, reencuadrado siguiendo a quien habla.", field: "URL de origen", hint: "Funciona mejor con formato largo. De un video salen hasta tres clips." },
       },
       note: "H2b corre en su propio horario desde reddit_sources_config y no se lanza desde aquí.",
@@ -601,9 +601,9 @@ export const COPY = {
       },
       remove: {
         label: "Eliminar", confirmButton: "Confirmar eliminación", cancel: "Cancelar", busy: "Eliminando…",
-        confirm: "¿Eliminar este job y sus resultados guardados? Se conservan los archivos y videos publicados.",
+        confirm: "¿Eliminar permanentemente este job, su historial y todos sus archivos de salida? No se puede deshacer.",
         title: "¿Eliminar job?", runningTitle: "¿Eliminar job en ejecución?",
-        running: "Se revoca el permiso del worker. La operación actual puede terminar, pero las siguientes etapas se detendrán.",
+        running: "Se detendrá el trabajo pendiente. También se eliminará cualquier resultado que se esté guardando.",
       },
       execution: {
         title: "Ejecución", loading: "Cargando historial de etapas…", inspect: "Inspeccionar", close: "Cerrar",

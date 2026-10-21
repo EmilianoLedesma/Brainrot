@@ -146,6 +146,7 @@ def delete_job(job_id: UUID) -> Response:
         raise HTTPException(status_code=409, detail="A video is being published. Wait until the upload finishes before deleting.")
     if result != "deleted":
         raise HTTPException(status_code=503, detail="Could not delete job. Refresh the queue and try again.")
+    db.cleanup_media(str(job_id))
     return Response(status_code=204)
 
 

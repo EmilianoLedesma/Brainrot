@@ -72,17 +72,40 @@ Existing saved scripts and selected moments are reused on retry. If generation
 needs to run again, the saved job choice takes precedence over the worker default.
 CLI previews can still explicitly override their provider with `--provider`.
 
+## Narration pacing
+
+Generated topic and Reddit videos begin with the story's spoken title, followed
+by a three-quarter-second pause before the body. The voice uses its normal speed
+instead of the previous fifteen-percent speedup. Punctuation guides delivery
+within a thought; longer passages get a brief breathing pause at sentence
+boundaries. Captions follow the assembled audio and clear during longer pauses.
+The title is recorded separately, so it is not duplicated in the saved chapter
+text. This applies to newly rendered chapters, including unfinished chapters
+resumed on retry; videos already marked ready keep their existing recordings.
+
 ## Brainrot intensity
 
-Topic jobs have a **Brainrot level** slider: 0–19 Grounded, 20–39 Playful,
-40–59 Chaotic, 60–79 Unhinged, and 80–100 Max brainrot. New dashboard jobs
-start at 35. Higher values request more slang, comic exaggeration, surreal
-comparisons and absurd delivery while retaining the topic's factual core.
+Topic jobs have a **Brainrot level** slider with five named steps: Grounded,
+Playful (the default), Chaotic, Unhinged and Max brainrot. The control snaps to
+these choices; Review, Queue and Inspect display names rather than numbers.
+Generation first infers intent from the topic. Ordinary real-world
+and historical topics, such as Rome's silver coins, stay factual at every level;
+the slider changes humor, slang and figurative comparisons. Clearly invented or
+ludicrous premises, such as scientists delaying GTA to contain intelligent NPCs,
+are developed as fiction without debunking them. Higher levels can escalate
+events within those fictional worlds. Ambiguous topics default to factual
+storytelling. The model does not announce this internal choice in the script.
+The same scale explicitly controls internet-slang density: none at Grounded,
+one or two phrases at Playful, three to five at Chaotic, six to nine at Unhinged,
+and ten to fourteen at Max brainrot. Prompts include contextual examples and
+request natural spoken delivery rather than forcing the same catchphrases.
 
 The API accepts optional `brainrot_level`, a strict integer from 0 to 100, for
 `brainrot` jobs. It is saved in `jobs.params` and included in the system prompt
-for either Claude or Chat GPT; no migration or new credentials are needed.
-Jobs and callers without a level retain their original script prompt. Saved
+for either Claude or Chat GPT. The dashboard maps its five steps to 0, 25, 50,
+75 and 100 internally; existing saved values still display their corresponding
+named band. This UI change needs no migration or new credentials.
+Jobs and callers without a level use the same premise-following base prompt. Saved
 scripts are reused on retry, so changing intensity requires a new job. H1
 repurposing and scheduled Reddit rewrites keep their existing behavior.
 

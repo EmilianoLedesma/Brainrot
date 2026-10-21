@@ -28,7 +28,7 @@ def story_dependencies(fake_db, monkeypatch):
     fake_db.files["bg.mp4"] = b"background"
     monkeypatch.setattr(script, "write_story", lambda topic: script.Story(title="Story", script="A short story."))
     monkeypatch.setattr(script, "rewrite_post", lambda title, body: script.Story(title=title, script="A short story."))
-    monkeypatch.setattr(tts, "narrate", lambda text: (b"audio", []))
+    monkeypatch.setattr(tts, "narrate", lambda text, **kwargs: (b"audio", []))
     monkeypatch.setattr(render, "render", lambda *args: b"video")
 
 

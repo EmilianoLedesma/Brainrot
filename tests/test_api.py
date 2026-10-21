@@ -115,10 +115,13 @@ def test_job_inspection_rpc_is_server_only(pg, fn):
 @pytest.mark.parametrize("result,status", [("deleted", 204), ("missing", 404), ("uploading", 409)])
 def test_delete_job_returns_atomic_database_outcome(http, monkeypatch, result, status):
     monkeypatch.setattr(db, "delete_job", lambda job_id: result)
+    cleaned = []
+    monkeypatch.setattr(db, "cleanup_media", lambda job_id: cleaned.append(job_id))
     response = http.delete("/jobs/00000000-0000-0000-0000-000000000001")
     assert response.status_code == status
     if status == 204:
         assert not response.content
+    assert cleaned == (["00000000-0000-0000-0000-000000000001"] if status == 204 else [])
 
 
 def test_delete_requires_auth_and_valid_uuid(http, monkeypatch):

@@ -13,6 +13,8 @@ from supabase import Client, create_client
 from supabase.lib.client_options import SyncClientOptions
 
 from .domain.pipelines import PipelineContext
+from .domain.jobs import LeaseLost
+from .observability.logging import event
 
 load_dotenv()
 
@@ -61,6 +63,11 @@ def create_job(kind: str, idempotency_key: str | None = None, **params) -> str:
 
 def get_job(job_id: str) -> dict:
     return client().table("jobs").select("*").eq("id", job_id).single().execute().data
+
+
+def assign_story_background(story_id: str) -> str | None:
+    """Reserve the next background once; retries reuse the stored assignment."""
+    return client().rpc("assign_story_background", {"p_story": str(story_id)}).execute().data
 
 
 def set_job_status(job_id: str, status: str, error: str | None = None) -> None:
@@ -138,8 +145,33 @@ def job_execution(job_id: str) -> dict | None:
 
 
 def delete_job(job_id: str) -> str:
-    """Revoke any running lease and remove work atomically with claims/uploads."""
+    """Remove work atomically and durably enqueue its Storage cleanup."""
     return client().rpc("delete_job", {"p_job": str(job_id)}).execute().data
+
+
+def cleanup_media(job_id: str | None = None) -> bool:
+    """Remove deleted jobs' objects. Failed requests remain queued for the worker."""
+    rows = []
+    try:
+        rows = client().rpc("pending_media_cleanup", {"p_job": job_id}).execute().data or []
+        paths = [row["storage_path"] for row in rows if not row["is_referenced"]]
+        if paths:
+            client().storage.from_(MEDIA_BUCKET).remove(paths)
+        if rows:
+            client().rpc("finish_media_cleanup", {
+                "p_ids": [row["id"] for row in rows], "p_success": True,
+            }).execute()
+        return True
+    except Exception as exc:
+        event("media_cleanup_deferred", error_type=type(exc).__name__)
+        if rows:
+            try:
+                client().rpc("finish_media_cleanup", {
+                    "p_ids": [row["id"] for row in rows], "p_success": False,
+                }).execute()
+            except Exception:
+                pass  # The durable rows already exist and remain eligible.
+        return False
 
 
 def retry_job(job_id: str) -> str:
@@ -172,6 +204,26 @@ def upload(path: str, data: bytes, content_type: str) -> str:
         path, data, {"content-type": content_type, "upsert": "true"}
     )
     return path
+
+
+def upload_job_media(job_id: str, table: str, asset_id: str, path: str, data: bytes, content_type: str) -> str:
+    """Fence Storage uploads against deletion of their owning chapter or clip."""
+    if table not in {"story_chapters", "clips", "source_videos"}:
+        raise ValueError("invalid job media owner")
+
+    def owner_exists():
+        return bool(client().table(table).select("id").eq("id", asset_id).execute().data)
+
+    if not owner_exists():
+        raise LeaseLost("media owner was deleted")
+    uploaded = upload(path, data, content_type)
+    if not owner_exists():
+        # The delete transaction captured this destination already. Re-enqueue
+        # as well so even a cleanup that ran during this HTTP upload is repeated.
+        client().rpc("queue_media_cleanup", {"p_job": job_id, "p_paths": [path]}).execute()
+        cleanup_media(job_id)
+        raise LeaseLost("media owner was deleted during upload")
+    return uploaded
 
 
 def download(path: str) -> bytes:

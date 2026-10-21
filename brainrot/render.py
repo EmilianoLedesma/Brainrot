@@ -34,8 +34,7 @@ def _timestamp(seconds: float) -> str:
 
 
 def build_captions(words: list[dict]) -> str:
-    """One Dialogue line per word. Each word holds until the next one starts, so
-    there is never a caption-free gap mid-sentence."""
+    """Hold words across short gaps, clearing captions during narration pauses."""
     lines = [_ASS_HEADER]
     for i, word in enumerate(words):
         text = word["text"].strip()
@@ -43,7 +42,7 @@ def build_captions(words: list[dict]) -> str:
             continue
         # Braces open an ASS override block, so they cannot reach the renderer raw.
         text = text.replace("\\", "").replace("{", "(").replace("}", ")")
-        end = words[i + 1]["start"] if i + 1 < len(words) else word["end"]
+        end = min(words[i + 1]["start"], word["end"] + 0.10) if i + 1 < len(words) else word["end"]
         end = max(end, word["end"])
         lines.append(
             f"Dialogue: 0,{_timestamp(word['start'])},{_timestamp(end)},Pop,,0,0,0,,{text.upper()}"

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../api.js";
 import { useCopy } from "../i18n.jsx";
-import { GENERATION_PROVIDERS, DEFAULT_BRAINROT_LEVEL, brainrotBand, brainrotSummary } from "../generation.js";
+import { GENERATION_PROVIDERS, BRAINROT_LEVELS, DEFAULT_BRAINROT_LEVEL, brainrotBand, brainrotSummary } from "../generation.js";
 import { userError } from "../errors.js";
 import Execution, { duration } from "./Execution.jsx";
 
@@ -86,10 +86,14 @@ function BrainrotSlider({ value, onChange }) {
         <label className="label" htmlFor="brainrot-level">{t.label}</label>
         <output htmlFor="brainrot-level">{brainrotSummary(value, t)}</output>
       </div>
-      <input id="brainrot-level" className="brainrot-slider" type="range" min="0" max="100" step="1"
-        value={value} onChange={(event) => onChange(Number(event.target.value))}
+      <input id="brainrot-level" className="brainrot-slider" type="range" min="0" max="4" step="1"
+        value={band} onChange={(event) => onChange(BRAINROT_LEVELS[Number(event.target.value)])}
         aria-valuetext={brainrotSummary(value, t)} aria-describedby="brainrot-description"
-        style={{ "--brainrot-fill": `${value}%` }} />
+        style={{ "--brainrot-fill": `${band * 25}%` }} />
+      <div className="brainrot-stops" aria-hidden="true">
+        {t.levels.map((level, index) => <span key={level.name} title={level.name}
+          className={index === band ? "brainrot-stop is-selected" : "brainrot-stop"} />)}
+      </div>
       <div className="brainrot-ends" aria-hidden="true"><span>{t.low}</span><span>{t.high}</span></div>
       <p id="brainrot-description">{t.levels[band].description}</p>
     </div>
@@ -330,7 +334,7 @@ function Queue() {
     setDeleting(jobId);
     setDeleteError(null);
     try {
-      await api("/jobs/" + jobId, { method: "DELETE" });
+      await api("/jobs/" + jobId, { method: "DELETE", timeoutMs: 45000 });
       if (selected === jobId) setSelected(null);
       setConfirming(null);
       refresh();

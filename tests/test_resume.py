@@ -22,7 +22,14 @@ def background(fake_db):
 
 @pytest.fixture
 def narration(monkeypatch):
-    monkeypatch.setattr(tts, "narrate", lambda text: (b"mp3", [{"text": "w", "start": 0, "end": 1}]))
+    calls = []
+
+    def narrate(text, *, title):
+        calls.append((title, text))
+        return b"mp3", [{"text": "w", "start": 0, "end": 1}]
+
+    monkeypatch.setattr(tts, "narrate", narrate)
+    return calls
 
 
 class FlakyRender:
@@ -55,6 +62,7 @@ def test_h2_retry_reuses_the_script_and_finished_chapters(fake_db, background, n
 
     assert writes == ["octopuses"], "Claude is called once across both attempts"
     assert renders.calls == 4, "chapter 1 once, chapter 2 twice, chapter 3 once"
+    assert [title for title, text in narration] == ["T"] * 4
     assert len(fake_db.rows("stories")) == 1
     chapters = fake_db.rows("story_chapters")
     assert sorted(c["chapter_index"] for c in chapters) == [1, 2, 3]
@@ -64,6 +72,30 @@ def test_h2_retry_reuses_the_script_and_finished_chapters(fake_db, background, n
     pubs = fake_db.rows("publications")
     assert len(pubs) == 3 and all(p["chapter_id"] for p in pubs)
     assert story_id == fake_db.rows("stories")[0]["id"]
+
+
+def test_chapters_and_retry_keep_their_background_when_another_job_takes_a_turn(fake_db, background, narration, monkeypatch):
+    fake_db.table("background_clips").insert(
+        {"storage_path": "backgrounds/second.mp4", "active": True, "rotation_order": 2}
+    ).execute()
+    fake_db.files["backgrounds/second.mp4"] = b"second gameplay"
+    monkeypatch.setattr(script, "write_story", lambda topic: script.Story(title="T", script=LONG_SCRIPT))
+    used = []
+
+    def render_chapter(background, audio, words):
+        used.append(background)
+        if len(used) == 2:
+            raise TimeoutError("render interrupted")
+        return b"video"
+
+    monkeypatch.setattr(render, "render", render_chapter)
+    job = {"id": "job-first", "params": {"topic": "History"}}
+    with pytest.raises(TimeoutError):
+        pipeline.run_brainrot(job)
+    other = fake_db.table("stories").insert({"job_id": "job-other"}).execute().data[0]
+    assert pipeline.pick_background(other["id"]) == b"second gameplay"
+    pipeline.run_brainrot(job)
+    assert used == [b"bg"] * 4
 
 
 @pytest.mark.parametrize("level", [0, 35, 100])
@@ -107,6 +139,7 @@ def test_h2b_retry_does_not_hit_the_unique_post_id(fake_db, background, narratio
 
     stories = fake_db.rows("stories")
     assert len(stories) == 1 and stories[0]["reddit_post_id"] == "abc"
+    assert all(title == "TIFU" for title, text in narration)
 
 
 def test_reddit_scan_queues_a_post_only_once(fake_db, monkeypatch):

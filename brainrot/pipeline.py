@@ -4,7 +4,6 @@ A topic or a Reddit post becomes a script, the script becomes narration, and the
 narration becomes one or more rendered chapters sitting in Supabase Storage.
 """
 
-import random
 import re
 from typing import Callable
 
@@ -37,13 +36,13 @@ def split_chapters(text: str) -> list[str]:
     return [" ".join(c) for c in chapters] or [text]
 
 
-def pick_background() -> bytes:
-    rows = db.client().table("background_clips").select("storage_path").eq("active", True).execute().data
-    if not rows:
+def pick_background(story_id: str) -> bytes:
+    path = db.assign_story_background(story_id)
+    if path is None:
         raise PermanentError(
             "no active background_clips - add one with: python -m brainrot.cli add-background <file>"
         )
-    return db.download(random.choice(rows)["storage_path"])
+    return db.download(path)
 
 
 def _story_for(job_id: str, write: Callable[[], script.Story], fields: dict) -> dict:
@@ -96,15 +95,17 @@ def produce(job_id: str, write: Callable[[], script.Story], **story_fields) -> s
 
         if background is None:
             with stage("background"):
-                background = pick_background()
+                background = pick_background(story_id)
         scope = f"chapter:{index}"
         with stage("tts", scope):
-            audio, words = tts.narrate(text)
+            audio, words = tts.narrate(text, title=story.get("title") or story.get("topic") or "The story")
         with stage("render", scope):
             video = render.render(background, audio, words)
         with stage("upload", scope):
-            audio_path = db.upload(f"stories/{story_id}/{index:02d}.mp3", audio, "audio/mpeg")
-            video_path = db.upload(f"stories/{story_id}/{index:02d}.mp4", video, "video/mp4")
+            audio_path = db.upload_job_media(job_id, "story_chapters", chapter_id,
+                                             f"stories/{story_id}/{index:02d}.mp3", audio, "audio/mpeg")
+            video_path = db.upload_job_media(job_id, "story_chapters", chapter_id,
+                                             f"stories/{story_id}/{index:02d}.mp4", video, "video/mp4")
             db.client().table("story_chapters").update(
                 {"audio_path": audio_path, "video_path": video_path, "status": "ready"}
             ).eq("id", chapter_id).execute()

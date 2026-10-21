@@ -356,7 +356,8 @@ def run_repurpose(job: dict, max_clips: int = 3) -> str:
                         vertical = cut_and_reframe(source, moment, transcript, clip_dir)
                     with stage("upload", clip["id"]):
                         with open(vertical, "rb") as handle:
-                            path = db.upload(f"clips/{clip['id']}.mp4", handle.read(), "video/mp4")
+                            path = db.upload_job_media(job["id"], "clips", clip["id"],
+                                                       f"clips/{clip['id']}.mp4", handle.read(), "video/mp4")
                         db.client().table("clips").update(
                             {"storage_path": path, "status": "ready"}
                         ).eq("id", clip["id"]).execute()

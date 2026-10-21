@@ -135,6 +135,7 @@ def run_once(
 
 def housekeeping() -> None:
     """Advance chapter pacing and upload whatever is due."""
+    db.cleanup_media()
     for chapter_id in scheduler.tick():
         event("chapter_scheduled", chapter_id=chapter_id)
     publish.run_due()
