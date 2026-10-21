@@ -29,10 +29,30 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def create_job(kind: str, **params) -> str:
-    """Enqueue a job. `kind` is one of the job_kind enum values."""
-    rows = client().table("jobs").insert({"kind": kind, "params": params}).execute().data
-    return rows[0]["id"]
+def create_job(kind: str, idempotency_key: str | None = None, **params) -> str:
+    """Enqueue a job. `kind` is one of the job_kind enum values.
+
+    With an idempotency_key, enqueueing the same work twice returns the job that
+    already exists instead of creating a second one.
+    """
+    row = {"kind": kind, "params": params}
+    if idempotency_key is None:
+        return client().table("jobs").insert(row).execute().data[0]["id"]
+
+    row["idempotency_key"] = idempotency_key
+    inserted = (
+        client()
+        .table("jobs")
+        .upsert(row, on_conflict="idempotency_key", ignore_duplicates=True)
+        .execute()
+        .data
+    )
+    if inserted:
+        return inserted[0]["id"]
+    return (
+        client().table("jobs").select("id").eq("idempotency_key", idempotency_key)
+        .single().execute().data["id"]
+    )
 
 
 def get_job(job_id: str) -> dict:
@@ -48,6 +68,57 @@ def set_job_status(job_id: str, status: str, error: str | None = None) -> None:
     if error is not None:
         patch["error"] = error
     client().table("jobs").update(patch).eq("id", job_id).execute()
+
+
+# --- leased execution (migrations/002_job_execution.sql) -------------------------
+# Every worker-side state change goes through these. Each one is conditioned in
+# SQL on the caller still holding the lease, so a worker whose lease expired and
+# was recovered cannot overwrite the new owner's outcome.
+
+
+def claim_job(worker_id: str, lease_seconds: int = 600) -> dict | None:
+    """Lease the oldest claimable job to `worker_id`, or return None."""
+    rows = client().rpc(
+        "claim_job", {"p_worker": worker_id, "p_lease_seconds": lease_seconds}
+    ).execute().data
+    return rows[0] if rows else None
+
+
+def renew_lease(job_id: str, worker_id: str, lease_seconds: int = 600) -> bool:
+    return bool(client().rpc(
+        "renew_lease", {"p_job": job_id, "p_worker": worker_id, "p_lease_seconds": lease_seconds}
+    ).execute().data)
+
+
+def complete_job(job_id: str, worker_id: str) -> bool:
+    return bool(client().rpc(
+        "complete_job", {"p_job": job_id, "p_worker": worker_id}
+    ).execute().data)
+
+
+def fail_job(
+    job_id: str,
+    worker_id: str,
+    error: str,
+    error_kind: str,
+    retry_at: datetime | None = None,
+) -> str | None:
+    """Record a failed attempt. Returns the new status, or None if the lease was lost."""
+    return client().rpc(
+        "fail_job",
+        {
+            "p_job": job_id,
+            "p_worker": worker_id,
+            "p_error": error,
+            "p_error_kind": error_kind,
+            "p_retry_at": retry_at.isoformat() if retry_at else None,
+        },
+    ).execute().data
+
+
+def recover_expired_jobs() -> list[dict]:
+    """Requeue (or fail) jobs whose worker stopped renewing. Returns [{id, status}]."""
+    return client().rpc("recover_expired_jobs", {}).execute().data or []
 
 
 def upload(path: str, data: bytes, content_type: str) -> str:

@@ -12,9 +12,12 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
 
 ## Layout
 
-    brainrot/db.py         Supabase client, job helpers, media upload
+    brainrot/db.py         Supabase client, leased job helpers, media upload
     brainrot/api.py        FastAPI: job creation plus read-only views for the dashboard
-    brainrot/worker.py     claims pending jobs and runs the matching pipeline
+    brainrot/worker.py     leases pending jobs, runs the matching pipeline, retries/recovers
+    brainrot/domain/       job states and the pipeline contract (no I/O)
+    brainrot/application/  retry policy and pipeline registry (no I/O)
+    brainrot/pipelines.py  H1/H2/H2b adapters and default pipeline registration
     brainrot/script.py     Claude: topic -> story, Reddit post -> retold story
     brainrot/tts.py        edge-tts narration with per-word timings
     brainrot/render.py     ffmpeg: looping background + narration + karaoke captions
@@ -25,20 +28,20 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
     brainrot/publish.py    uploads due publications to the three platforms
     brainrot/cli.py        operator commands
     web/                   Vite + React dashboard (new job, job list, gallery)
-    migrations/            SQL applied by hand in the Supabase SQL editor
+    migrations/            SQL applied by hand in the Supabase SQL editor, in order
+    tests/                 pytest suite; SQL tests run against a throwaway local Postgres
     test_db.py             Supabase round-trip check (needs credentials)
     test_pipeline.py       offline self-checks for captions, chaptering, reframing
-
-Pipeline modules (`story.py`, `render.py`, `reddit.py`, `repurpose.py`) arrive with
-their phase. FastAPI and a job queue arrive when something other than a local CLI
-needs to trigger a run.
+    docs/                  reliability baseline, spec and plan
 
 ## Setup
 
 1. Create a Supabase project.
-2. Apply `migrations/001_init.sql` — paste it into the SQL editor, or run
-   `psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f migrations/001_init.sql`. It creates the
-   enums, ten tables, indexes, RLS, and the private `media` bucket.
+2. Apply every file in `migrations/` in order — paste each into the SQL editor, or run
+   `for f in migrations/*.sql; do psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "$f"; done`.
+   `001_init.sql` creates the enums, ten tables, indexes, RLS, and the private `media`
+   bucket. `002_job_execution.sql` adds job leases, retries and idempotency keys; the
+   worker needs it, so apply it before running a worker from this version.
 3. `cp .env.example .env` and fill in `SUPABASE_URL` and `SUPABASE_SERVICE_KEY`
    (Project Settings -> API). The service_role key bypasses RLS — server-side only.
 4. `pip install -r requirements.txt`
@@ -68,6 +71,9 @@ Once an app exists, insert its row:
                  "client_id": "...", "client_secret": "..."},
     }, on_conflict="platform").execute()
 
+A platform with no row is skipped: its publications stay `scheduled` and go out
+once the row exists.
+
 Per platform: YouTube wants `access_token` plus `refresh_token`/`client_id`/
 `client_secret` (it refreshes itself, since Google tokens last an hour); TikTok
 wants `access_token`; Instagram wants `access_token` and `ig_user_id`.
@@ -84,6 +90,47 @@ a vertical video under three minutes simply becomes one.
     python -m brainrot.cli tick                       # pacing pass, list what is due
     python -m brainrot.cli publish                    # upload everything that is due
     python test_pipeline.py                           # offline checks, no credentials
+
+### Job lifecycle
+
+    pending --claim--> running --> done
+                          |------> failed                 (permanent error, or out of attempts)
+                          '------> pending (run_after)    (transient error: retry later)
+    running, lease expired --recover--> pending | failed
+
+A claim leases the job to one worker for ten minutes, and the worker renews it
+every minute while the pipeline runs. If the worker dies, the lease lapses and the
+next worker iteration puts the job back in the queue. Network errors, timeouts,
+rate limits and 5xx responses are retried after 30s, 60s, 120s... (capped at 30
+minutes) up to `jobs.max_attempts` (3); anything else fails the job, since retrying
+a bug only pays for the same Claude call again. A retried job resumes: it reuses
+the story, transcript and moment selection its earlier attempt saved and only
+renders what is missing.
+
+Publishing is not retried. A failed upload stays `failed`, because an upload that
+timed out after the platform accepted it would otherwise post twice. A publication
+stuck in `uploading` means the worker died mid-upload: check the platform before
+resetting it to `scheduled`.
+
+## Tests
+
+    pip install -r requirements-dev.txt
+    pytest                    # unit tests plus SQL tests against a local Postgres
+    python test_pipeline.py   # ffmpeg end-to-end checks
+
+The SQL tests start a throwaway Postgres using `PG_BIN`, or find its binaries
+through `pg_ctl` on `PATH` (falling back to `/usr/lib/postgresql/16/bin`). They
+support Windows and Unix and skip if Postgres is not installed. They never use
+`DATABASE_URL` or your Supabase project.
+
+### Pipeline registration
+
+`brainrot/pipelines.py` registers `repurpose` (H1), `brainrot` (H2), and `reddit`
+(H2b). Each adapter accepts a `PipelineContext` and returns a `PipelineResult`
+containing the story or source video id. The worker resolves the job's `kind`
+through the registry, without branching on pipeline names. Unknown kinds fail
+permanently. Register implementations in `create_registry()` to extend dispatch;
+new database job kinds still require a migration of the `job_kind` enum.
 
 ### Chapter pacing
 
@@ -117,8 +164,8 @@ Two processes. The API holds the service_role key; the browser never sees it.
     uvicorn brainrot.api:app --reload --port 8000
     cd web && npm install && npm run dev
 
-Open http://localhost:5173. Three tabs: create a job, watch the job list, play
-finished videos.
+Open http://localhost:5173. Home, Docs and FAQ describe the product; Workspace
+contains job creation, the job list and finished videos.
 
 `DASHBOARD_API_KEY` is a shared secret sent as the `X-API-Key` header; the API
 rejects every request while it is unset. `web/.env` carries the same value as
@@ -130,5 +177,15 @@ browser would need `SELECT` policies for `anon` on `jobs`, and the anon key ship
 the JS bundle, so that would make the table readable by anyone with the project URL.
 Reading through the API keeps RLS closed.
 
-Until the Phase 1-3 pipelines exist, a created job stays `pending` (nothing consumes
-it) and the gallery stays empty (nothing renders into `clips` or `story_chapters`).
+### Vercel deployment
+
+Vercel hosts the Vite dashboard. Keep its Root Directory at the repository root;
+`vercel.json` selects Vite, installs with `npm ci --prefix web`, builds with
+`npm run build --prefix web`, and serves `web/dist`. This overrides automatic
+FastAPI detection at the Python repository root.
+
+The API and media worker run separately. Configure `VITE_API_URL` and
+`VITE_API_KEY` in Vercel before building, and allow the dashboard origin in the
+API's `DASHBOARD_ORIGINS`. See [deployment details](docs/deployment.md) and the
+[documentation index](docs/index.md).
+

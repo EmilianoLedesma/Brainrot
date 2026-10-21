@@ -3,7 +3,8 @@
 There is deliberately no OAuth authorization flow here. Registering the developer
 apps and granting consent is a manual, browser-bound step; this module only reads
 whatever tokens ended up in `platform_credentials` and uses them. Until a row
-exists for a platform, its uploads fail with a clear message and nothing else.
+exists for a platform, its publications stay `scheduled` and are skipped, so they
+go out once the app is registered.
 
 Populate a platform like this, once its app exists:
 
@@ -87,13 +88,12 @@ def youtube_token(data: dict) -> str:
     return data["access_token"]
 
 
-def post_youtube(video: bytes, title: str, description: str) -> tuple[str, str]:
+def post_youtube(data: dict, video: bytes, title: str, description: str) -> tuple[str, str]:
     """Resumable upload. Returns (video id, watch URL).
 
     A vertical video under three minutes is treated as a Short by YouTube itself -
     there is no API field that declares one.
     """
-    data = credentials("youtube")
     token = youtube_token(data)
     metadata = {
         "snippet": {
@@ -133,13 +133,12 @@ def post_youtube(video: bytes, title: str, description: str) -> tuple[str, str]:
     return video_id, f"https://youtube.com/shorts/{video_id}"
 
 
-def post_tiktok(video: bytes, title: str) -> tuple[str, str]:
+def post_tiktok(data: dict, video: bytes, title: str) -> tuple[str, str]:
     """Direct post via FILE_UPLOAD in a single chunk.
 
     PULL_FROM_URL would need TikTok to have verified the bucket's domain, which a
     Supabase signed URL cannot satisfy.
     """
-    data = credentials("tiktok")
     headers = {
         "Authorization": f"Bearer {data['access_token']}",
         "Content-Type": "application/json; charset=UTF-8",
@@ -184,9 +183,8 @@ def post_tiktok(video: bytes, title: str) -> tuple[str, str]:
     return payload["publish_id"], ""
 
 
-def post_instagram(video_url: str, caption: str) -> tuple[str, str]:
+def post_instagram(data: dict, video_url: str, caption: str) -> tuple[str, str]:
     """Container, poll, publish. Instagram pulls the file from `video_url` itself."""
-    data = credentials("instagram")
     base = f"https://graph.instagram.com/v25.0/{data['ig_user_id']}"
     headers = {"Authorization": f"Bearer {data['access_token']}"}
 
@@ -258,26 +256,48 @@ def target(publication: dict) -> dict:
     }
 
 
-def publish_one(publication: dict) -> None:
-    """Upload one publication and record what happened to it."""
-    client = db.client()
-    client.table("publications").update({"status": "uploading"}).eq(
-        "id", publication["id"]
-    ).execute()
+def _take(publication_id: str) -> bool:
+    """Move a publication from scheduled to uploading. Only one caller can win.
 
+    The worker loop and `cli publish` can read the same due row; without this
+    compare-and-set both would upload it.
+    """
+    taken = (
+        db.client()
+        .table("publications")
+        .update({"status": "uploading"})
+        .eq("id", publication_id)
+        .eq("status", "scheduled")
+        .execute()
+        .data
+    )
+    return bool(taken)
+
+
+def publish_one(publication: dict) -> bool:
+    """Upload one publication and record what happened to it.
+
+    Returns False if another caller already took it. Raises MissingCredentials
+    before touching the row, so an unregistered platform stays scheduled.
+    """
+    platform = publication["platform"]
+    creds = credentials(platform)
+    if not _take(publication["id"]):
+        return False
+
+    client = db.client()
     try:
         item = target(publication)
         if not item["path"]:
             raise RuntimeError("nothing rendered for this publication yet")
-        platform = publication["platform"]
 
         if platform == "youtube":
-            post_id, url = post_youtube(db.download(item["path"]), item["title"], item["title"])
+            post_id, url = post_youtube(creds, db.download(item["path"]), item["title"], item["title"])
         elif platform == "tiktok":
-            post_id, url = post_tiktok(db.download(item["path"]), item["title"])
+            post_id, url = post_tiktok(creds, db.download(item["path"]), item["title"])
         elif platform == "instagram":
             post_id, url = post_instagram(
-                db.signed_url(item["path"], SIGNED_URL_TTL), item["title"]
+                creds, db.signed_url(item["path"], SIGNED_URL_TTL), item["title"]
             )
         else:
             raise RuntimeError(f"unknown platform {platform}")
@@ -300,6 +320,7 @@ def publish_one(publication: dict) -> None:
             {"status": "failed", "error": f"{type(exc).__name__}: {exc}"[:2000]}
         ).eq("id", publication["id"]).execute()
         raise
+    return True
 
 
 def run_due(limit: int = 5) -> list[str]:
@@ -309,9 +330,9 @@ def run_due(limit: int = 5) -> list[str]:
     published = []
     for publication in scheduler.due(limit):
         try:
-            publish_one(publication)
-            published.append(publication["id"])
-            print(f"published {publication['platform']} {publication['id']}")
+            if publish_one(publication):
+                published.append(publication["id"])
+                print(f"published {publication['platform']} {publication['id']}")
         except MissingCredentials as exc:
             print(f"skipping {publication['platform']}: {exc}")
         except Exception as exc:

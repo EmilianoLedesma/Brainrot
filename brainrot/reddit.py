@@ -1,8 +1,8 @@
 """H2b: scan configured subreddits and turn qualifying posts into jobs.
 
 Reads `reddit_sources_config` for which subreddits to watch and the bar a post has
-to clear. `stories.reddit_post_id` is unique, so a post already narrated can never
-be picked up twice.
+to clear. A post gets at most one job (jobs.idempotency_key) and one story
+(stories.reddit_post_id is unique), so it can never be narrated twice.
 """
 
 import os
@@ -26,11 +26,26 @@ def client() -> praw.Reddit:
     )
 
 
+def job_key(post_id: str) -> str:
+    return f"reddit:{post_id}"
+
+
 def already_used(post_ids: list[str]) -> set[str]:
+    """Posts that already have a story, or a job queued, running or failed for them."""
     if not post_ids:
         return set()
-    rows = db.client().table("stories").select("reddit_post_id").in_("reddit_post_id", post_ids).execute().data
-    return {r["reddit_post_id"] for r in rows}
+    stories = db.client().table("stories").select("reddit_post_id").in_("reddit_post_id", post_ids).execute().data
+    jobs = (
+        db.client()
+        .table("jobs")
+        .select("idempotency_key")
+        .in_("idempotency_key", [job_key(p) for p in post_ids])
+        .execute()
+        .data
+    )
+    return {r["reddit_post_id"] for r in stories} | {
+        r["idempotency_key"].removeprefix("reddit:") for r in jobs
+    }
 
 
 def find_posts(limit_per_sub: int = 25) -> list[dict]:
@@ -75,8 +90,9 @@ def find_posts(limit_per_sub: int = 25) -> list[dict]:
 
 def scan(max_jobs: int = 3) -> list[str]:
     """Queue jobs for the best unused posts. Returns the job ids created."""
+    # The key makes a second scan of the same post return the existing job.
     return [
-        db.create_job("reddit", **post)
+        db.create_job("reddit", idempotency_key=job_key(post["reddit_post_id"]), **post)
         for post in find_posts()[:max_jobs]
     ]
 
@@ -84,10 +100,9 @@ def scan(max_jobs: int = 3) -> list[str]:
 def run_reddit(job: dict) -> str:
     """Worker handler: rewrite the post, then render it like any other story."""
     params = job["params"]
-    story = script.rewrite_post(params["title"], params["body"])
     return pipeline.produce(
         job["id"],
-        story,
+        lambda: script.rewrite_post(params["title"], params["body"]),
         reddit_post_id=params["reddit_post_id"],
         subreddit=params["subreddit"],
         permalink=params["permalink"],

@@ -8,6 +8,8 @@ import asyncio
 
 import edge_tts
 
+from .domain.jobs import TransientError
+
 VOICE = "en-US-AndrewNeural"
 RATE = "+15%"
 
@@ -32,7 +34,8 @@ async def _synthesize(text: str, voice: str, rate: str) -> tuple[bytes, list[dic
                 }
             )
     if not audio:
-        raise RuntimeError("edge-tts returned no audio")
+        # The service occasionally drops a stream; the same text succeeds on retry.
+        raise TransientError("edge-tts returned no audio")
     return bytes(audio), words
 
 
