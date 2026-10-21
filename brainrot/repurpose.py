@@ -18,8 +18,7 @@ from pydantic import BaseModel
 from . import db, render, scheduler, script
 from .application.stages import stage
 from .domain.jobs import PermanentError
-
-FACE_MODEL_PATH = "models/face_detection_yunet_2023mar.onnx"
+from .models import FACE_MODEL_PATH
 
 # Face positions are sampled this often and the crop is keyframed at the same rate.
 # Faster sampling tracks better but makes the ffmpeg crop expression longer.
@@ -144,9 +143,19 @@ def select_moments(transcript: list[dict]) -> list[Moment]:
 def face_model_path() -> str:
     """Cache the detector weights locally; the copy of record lives in Storage."""
     local = os.path.join(tempfile.gettempdir(), "yunet.onnx")
-    if not os.path.exists(local):
-        with open(local, "wb") as handle:
-            handle.write(db.download(FACE_MODEL_PATH))
+    if not os.path.exists(local) or os.path.getsize(local) == 0:
+        data = db.download(FACE_MODEL_PATH)
+        if not data:
+            raise PermanentError("face model is empty; run: python -m brainrot.cli setup-face-model")
+        temporary = None
+        try:
+            with tempfile.NamedTemporaryFile(dir=tempfile.gettempdir(), prefix="yunet-", suffix=".onnx", delete=False) as handle:
+                temporary = handle.name
+                handle.write(data)
+            os.replace(temporary, local)
+        finally:
+            if temporary and os.path.exists(temporary):
+                os.unlink(temporary)
     return local
 
 

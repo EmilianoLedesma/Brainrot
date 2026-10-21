@@ -5,7 +5,7 @@ import pathlib
 import subprocess
 import sys
 
-from . import db, publish, reddit, scheduler
+from . import db, models, publish, reddit, scheduler
 from .observability.logging import configure
 
 
@@ -35,6 +35,12 @@ def add_background(args: argparse.Namespace) -> None:
         }
     ).execute()
     print(f"added background {label} at {storage_path}")
+
+
+def setup_face_model(args: argparse.Namespace) -> None:
+    data = models.fetch_face_model()
+    db.upload(models.FACE_MODEL_PATH, data, "application/octet-stream")
+    print(f"uploaded verified face model to {models.FACE_MODEL_PATH}")
 
 
 def scan_reddit(args: argparse.Namespace) -> None:
@@ -69,6 +75,9 @@ def main(argv: list[str] | None = None) -> int:
     background.add_argument("--label")
     background.add_argument("--tags", help="comma separated")
     background.set_defaults(func=add_background)
+
+    face_model = sub.add_parser("setup-face-model", help="upload the verified OpenCV YuNet model required by H1")
+    face_model.set_defaults(func=setup_face_model)
 
     scan = sub.add_parser("scan-reddit", help="queue jobs for qualifying subreddit posts")
     scan.add_argument("--max", type=int, default=3)
