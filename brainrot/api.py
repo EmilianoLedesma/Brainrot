@@ -11,14 +11,16 @@ holding the anon key, which ships in the JS bundle.
 import os
 import secrets
 from typing import Literal
+from uuid import UUID
 
-from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel, model_validator
 
 from . import db
 from .observability.metrics import APIMetricsMiddleware, render
+from .observability.logging import safe_text
 
 API_KEY = os.getenv("DASHBOARD_API_KEY", "")
 ALLOWED_ORIGINS = os.getenv("DASHBOARD_ORIGINS", "http://localhost:5173").split(",")
@@ -35,7 +37,7 @@ app.add_middleware(
 
 def require_key(x_api_key: str = Header("")) -> None:
     """Shared-secret gate. With DASHBOARD_API_KEY unset, every request is rejected."""
-    if not API_KEY or not secrets.compare_digest(x_api_key, API_KEY):
+    if not API_KEY or not secrets.compare_digest(x_api_key.encode("utf-8"), API_KEY.encode("utf-8")):
         raise HTTPException(status_code=401, detail="bad or missing X-API-Key")
 
 
@@ -65,20 +67,50 @@ def create_job(job: JobIn) -> dict:
 
 
 @app.get("/jobs", dependencies=[Depends(require_key)])
-def list_jobs(limit: int = 50) -> list[dict]:
-    return (
-        db.client()
-        .table("jobs")
-        .select("id,kind,status,params,error,created_at,started_at,finished_at")
-        .order("created_at", desc=True)
-        .limit(min(limit, 200))
-        .execute()
-        .data
-    )
+def list_jobs(limit: int = Query(50, ge=1, le=200)) -> list[dict]:
+    return [_job_view(row) for row in db.list_job_executions(limit)]
+
+
+def _safe_row(row: dict, fields: tuple) -> dict:
+    return {key: safe_text(row[key]) if isinstance(row.get(key), str) else row.get(key) for key in fields}
+
+
+def _error_summary(value) -> str | None:
+    return safe_text(str(value).splitlines()[-1])[:500] if value else None
+
+
+def _job_view(row: dict) -> dict:
+    result = _safe_row(row, (
+        "id", "kind", "status", "attempts", "max_attempts", "run_after", "error_kind",
+        "created_at", "started_at", "finished_at", "duration_seconds",
+    ))
+    result["params"] = _safe_row(row.get("params") or {}, ("topic", "youtube_url", "title", "subreddit"))
+    result["error"] = result["error_summary"] = _error_summary(row.get("error"))
+    current = row.get("current_stage")
+    result["current_stage"] = _safe_row(current, ("stage", "scope", "started_at")) if current else None
+    return result
+
+
+@app.get("/jobs/{job_id}", dependencies=[Depends(require_key)])
+def inspect_job(job_id: UUID) -> dict:
+    detail = db.job_execution(str(job_id))
+    if detail is None:
+        raise HTTPException(status_code=404, detail="job not found")
+    stages = []
+    for row in detail.get("stages", []):
+        stage = _safe_row(row, ("id", "stage", "scope", "attempt", "worker_id", "status", "started_at", "completed_at", "duration_seconds"))
+        stage["error"] = _error_summary(row.get("error"))
+        stages.append(stage)
+    publications = []
+    for row in detail.get("publications", []):
+        publication = _safe_row(row, ("id", "platform", "status", "scheduled_at", "published_at"))
+        publication["error"] = _error_summary(row.get("error"))
+        publications.append(publication)
+    return {"job": _job_view(detail["job"]), "stages": stages, "publications": publications}
 
 
 @app.get("/gallery", dependencies=[Depends(require_key)])
-def gallery(limit: int = 50) -> list[dict]:
+def gallery(limit: int = Query(50, ge=1, le=200)) -> list[dict]:
     """Finished H1 clips and H2/H2b chapters, newest first, with playable URLs."""
     sb = db.client()
     clips = (

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { api } from "../api.js";
 import { useCopy } from "../i18n.jsx";
+import Execution, { duration } from "./Execution.jsx";
 
 /* The work surface. Submitting a job is a three-step flow rather than one form,
    because picking a pipeline and describing the input are different decisions and
@@ -19,26 +20,28 @@ function usePoll(path, intervalMs) {
   const [error, setError] = useState(null);
   const [loaded, setLoaded] = useState(false);
 
-  const refresh = useCallback(() => {
-    api(path).then(
-      (d) => {
-        setData(d);
-        setError(null);
-        setLoaded(true);
-      },
-      (e) => {
-        setError(e.message);
-        setLoaded(true);
-      },
-    );
-  }, [path]);
+  const [revision, setRevision] = useState(0);
+  const refresh = useCallback(() => setRevision((value) => value + 1), []);
 
   useEffect(() => {
-    refresh();
-    if (!intervalMs) return;
-    const id = setInterval(refresh, intervalMs);
-    return () => clearInterval(id);
-  }, [refresh, intervalMs]);
+    let active = true, timer;
+    const controller = new AbortController();
+    async function poll() {
+      try {
+        const next = await api(path, { signal: controller.signal });
+        if (active) { setData(next); setError(null); }
+      } catch (e) {
+        if (active && e.name !== "AbortError") setError(e.message);
+      } finally {
+        if (active) {
+          setLoaded(true);
+          if (intervalMs) timer = setTimeout(poll, intervalMs);
+        }
+      }
+    }
+    poll();
+    return () => { active = false; controller.abort(); clearTimeout(timer); };
+  }, [path, intervalMs, revision]);
 
   return { data, error, loaded, refresh };
 }
@@ -222,14 +225,15 @@ function NewJob({ onQueued }) {
 }
 
 function inputOf(job) {
-  return job.params?.topic || job.params?.youtube_url || "—";
+  return job.params?.topic || job.params?.youtube_url || job.params?.title || "—";
 }
 
 function Queue() {
   const t = useCopy().work;
   const { data, error, loaded } = usePoll("/jobs", 2000);
+  const [selected, setSelected] = useState(null);
 
-  if (error) return <State title={t.unreachable}>{error}</State>;
+  if (error && !data.length) return <State title={t.unreachable}>{error}</State>;
   if (!loaded) return <State title={t.reading}>{t.readingQueue}</State>;
   if (!data.length) return <State title={t.emptyQueue}>{t.emptyQueueBody}</State>;
 
@@ -240,6 +244,7 @@ function Queue() {
 
   return (
     <>
+      {error && <p role="status" className="alarm-text">{t.execution.stale} {error}</p>}
       <div className="count-row">
         {Object.entries(counts).map(([status, n]) => (
           <span className={`status status-${status}`} key={status}>
@@ -260,6 +265,9 @@ function Queue() {
                   <th>{t.colPipeline}</th>
                   <th>{t.colInput}</th>
                   <th>{t.colStatus}</th>
+                  <th>{t.execution.stage}</th>
+                  <th>{t.execution.attempt}</th>
+                  <th>{t.execution.elapsed}</th>
                   <th>{t.colQueued}</th>
                 </tr>
               </thead>
@@ -272,10 +280,18 @@ function Queue() {
                     <td>
                       {inputOf(job)}
                       {job.error && <pre className="trace">{job.error}</pre>}
+                      <button className="btn inspect-job" aria-expanded={selected === job.id}
+                        aria-controls={selected === job.id ? "execution-" + job.id : undefined}
+                        onClick={() => setSelected(selected === job.id ? null : job.id)}>
+                        {selected === job.id ? t.execution.close : t.execution.inspect}
+                      </button>
                     </td>
                     <td>
                       <span className={`status status-${job.status}`}>{job.status}</span>
                     </td>
+                    <td>{job.current_stage ? (t.execution.names[job.current_stage.stage] || job.current_stage.stage) : "—"}</td>
+                    <td className="numeric">{job.attempts ?? 0} / {job.max_attempts ?? 3}</td>
+                    <td className="numeric">{duration(job.duration_seconds)}</td>
                     <td className="muted" style={{ fontSize: 13 }}>
                       {new Date(job.created_at).toLocaleString()}
                     </td>
@@ -286,6 +302,7 @@ function Queue() {
           </div>
         </div>
       </div>
+      {selected && <Execution key={selected} jobId={selected} />}
     </>
   );
 }

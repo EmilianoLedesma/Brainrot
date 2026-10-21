@@ -127,6 +127,14 @@ def operational_metrics() -> dict:
     return client().rpc("operational_metrics", {}).execute().data
 
 
+def list_job_executions(limit: int = 50) -> list[dict]:
+    return client().rpc("list_job_executions", {"p_limit": limit}).execute().data or []
+
+
+def job_execution(job_id: str) -> dict | None:
+    return client().rpc("job_execution", {"p_job": str(job_id)}).execute().data
+
+
 # --- stage execution (migrations/003_stage_execution.sql) ------------------------
 
 
