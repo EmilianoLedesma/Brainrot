@@ -9,6 +9,7 @@ from dataclasses import dataclass
 
 from . import pipeline, reddit, repurpose
 from .application.registry import PipelineRegistry
+from .application import stages
 from .domain.pipelines import PipelineContext, PipelineResult
 
 
@@ -19,7 +20,8 @@ class FunctionPipeline:
     output_key: str
 
     def execute(self, context: PipelineContext) -> PipelineResult:
-        record_id = self.handler(context.job_row())
+        with stages.tracking(context):
+            record_id = self.handler(context.job_row())
         return PipelineResult({self.output_key: record_id})
 
 

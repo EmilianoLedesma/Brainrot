@@ -16,6 +16,7 @@ import yt_dlp
 from pydantic import BaseModel
 
 from . import db, render, scheduler, script
+from .application.stages import stage
 from .domain.jobs import PermanentError
 
 FACE_MODEL_PATH = "models/face_detection_yunet_2023mar.onnx"
@@ -276,22 +277,23 @@ def _source_for(job_id: str, url: str, source: str, info: dict, directory: str) 
     existing = db.client().table("source_videos").select("*").eq("job_id", job_id).execute().data
     if existing:
         return existing[0]
-    return (
-        db.client()
-        .table("source_videos")
-        .insert(
-            {
-                "job_id": job_id,
-                "youtube_url": url,
-                "youtube_id": info.get("id"),
-                "title": info.get("title"),
-                "duration_seconds": info.get("duration"),
-                "transcript": transcribe(source, directory),
-            }
+    with stage("transcribe"):
+        return (
+            db.client()
+            .table("source_videos")
+            .insert(
+                {
+                    "job_id": job_id,
+                    "youtube_url": url,
+                    "youtube_id": info.get("id"),
+                    "title": info.get("title"),
+                    "duration_seconds": info.get("duration"),
+                    "transcript": transcribe(source, directory),
+                }
+            )
+            .execute()
+            .data[0]
         )
-        .execute()
-        .data[0]
-    )
 
 
 def _clips_for(job_id: str, source_row: dict, max_clips: int) -> list[dict]:
@@ -306,20 +308,21 @@ def _clips_for(job_id: str, source_row: dict, max_clips: int) -> list[dict]:
     )
     if existing:
         return existing
-    rows = [
-        {
-            "job_id": job_id,
-            "source_video_id": source_row["id"],
-            "start_seconds": moment.start_seconds,
-            "end_seconds": moment.end_seconds,
-            "title": moment.title,
-            "reason": moment.reason,
-            "score": moment.score,
-            "status": "pending",
-        }
-        for moment in select_moments(source_row["transcript"])[:max_clips]
-    ]
-    return db.client().table("clips").insert(rows).execute().data if rows else []
+    with stage("selection"):
+        rows = [
+            {
+                "job_id": job_id,
+                "source_video_id": source_row["id"],
+                "start_seconds": moment.start_seconds,
+                "end_seconds": moment.end_seconds,
+                "title": moment.title,
+                "reason": moment.reason,
+                "score": moment.score,
+                "status": "pending",
+            }
+            for moment in select_moments(source_row["transcript"])[:max_clips]
+        ]
+        return db.client().table("clips").insert(rows).execute().data if rows else []
 
 
 def run_repurpose(job: dict, max_clips: int = 3) -> str:
@@ -330,7 +333,8 @@ def run_repurpose(job: dict, max_clips: int = 3) -> str:
     """
     url = job["params"]["youtube_url"]
     with tempfile.TemporaryDirectory() as directory:
-        source, info = download(url, directory)
+        with stage("download"):
+            source, info = download(url, directory)
         source_row = _source_for(job["id"], url, source, info, directory)
         transcript = source_row["transcript"]
 
@@ -345,12 +349,15 @@ def run_repurpose(job: dict, max_clips: int = 3) -> str:
                     score=float(clip["score"] or 0),
                 )
                 with tempfile.TemporaryDirectory() as clip_dir:
-                    vertical = cut_and_reframe(source, moment, transcript, clip_dir)
-                    with open(vertical, "rb") as handle:
-                        path = db.upload(f"clips/{clip['id']}.mp4", handle.read(), "video/mp4")
-                db.client().table("clips").update(
-                    {"storage_path": path, "status": "ready"}
-                ).eq("id", clip["id"]).execute()
-            scheduler.plan_clip(clip["id"])
+                    with stage("render", clip["id"]):
+                        vertical = cut_and_reframe(source, moment, transcript, clip_dir)
+                    with stage("upload", clip["id"]):
+                        with open(vertical, "rb") as handle:
+                            path = db.upload(f"clips/{clip['id']}.mp4", handle.read(), "video/mp4")
+                        db.client().table("clips").update(
+                            {"storage_path": path, "status": "ready"}
+                        ).eq("id", clip["id"]).execute()
+            with stage("schedule", clip["id"]):
+                scheduler.plan_clip(clip["id"])
 
     return source_row["id"]

@@ -19,6 +19,7 @@ from datetime import datetime, timezone
 
 from . import db, publish, scheduler
 from .application import retry
+from .domain.jobs import LeaseLost
 from .domain.pipelines import PipelineContext
 from .pipelines import create_registry
 
@@ -78,6 +79,9 @@ def execute(
             attempt=job["attempts"], worker_id=worker_id,
         )
         pipeline.execute(context)
+    except LeaseLost:
+        keeper.stop()
+        return "lease_lost"
     except Exception as exc:
         keeper.stop()
         decision = retry.decide(

@@ -53,9 +53,11 @@ Configure `DASHBOARD_ORIGINS` with the exact dashboard origins allowed to call
 the API, separated by commas. Preview origins need to be allowed explicitly.
 
 Apply migrations in order before starting the matching worker version.
-`002_job_execution.sql` is required for leased execution; a read-only check on
-2026-10-21 found that the configured Supabase project was reachable but still
-lacked `jobs.attempts`.
+`002_job_execution.sql` is required for leased execution, and
+`003_stage_execution.sql` is required for stage tracking. Both migrations were
+applied to the configured Supabase project on 2026-10-21 and validated with
+rolled-back lease and stage smoke tests plus REST schema/RPC checks. The
+existing pending job was left unchanged.
 
 H2/H2b require an active background clip. H1 requires the YuNet face model at
 `models/face_detection_yunet_2023mar.onnx` in the media bucket; the repository

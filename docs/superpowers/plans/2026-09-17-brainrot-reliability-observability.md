@@ -322,6 +322,10 @@ git commit -m "refactor: register content pipelines explicitly"
 
 ## Task 6: Add stage execution tracking
 
+**Status (2026-10-21):** Implemented with migration 003, scoped stage tracking
+for H1/H2/H2b, lease guards, abandoned-stage cleanup and regression tests.
+Task 7 (structured logging) is next.
+
 **Files:** - Create: additive migration under `migrations/` - Create:
 `brainrot/application/stages.py` - Modify: pipeline execution paths -
 Create: `tests/test_stage_execution.py`

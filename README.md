@@ -12,11 +12,11 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
 
 ## Layout
 
-    brainrot/db.py         Supabase client, leased job helpers, media upload
+    brainrot/db.py         Supabase client, leased job/stage helpers, media upload
     brainrot/api.py        FastAPI: job creation plus read-only views for the dashboard
     brainrot/worker.py     leases pending jobs, runs the matching pipeline, retries/recovers
     brainrot/domain/       job states and the pipeline contract (no I/O)
-    brainrot/application/  retry policy and pipeline registry (no I/O)
+    brainrot/application/  retry policy, pipeline registry and stage tracking
     brainrot/pipelines.py  H1/H2/H2b adapters and default pipeline registration
     brainrot/script.py     Claude: topic -> story, Reddit post -> retold story
     brainrot/tts.py        edge-tts narration with per-word timings
@@ -41,7 +41,9 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
    `for f in migrations/*.sql; do psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "$f"; done`.
    `001_init.sql` creates the enums, ten tables, indexes, RLS, and the private `media`
    bucket. `002_job_execution.sql` adds job leases, retries and idempotency keys; the
-   worker needs it, so apply it before running a worker from this version.
+   worker needs it. `003_stage_execution.sql` adds stage records, lease-guarded
+   stage functions and automatic closure of abandoned stages. Apply both before
+   running a worker from this version.
 3. `cp .env.example .env` and fill in `SUPABASE_URL` and `SUPABASE_SERVICE_KEY`
    (Project Settings -> API). The service_role key bypasses RLS — server-side only.
 4. `pip install -r requirements.txt`
@@ -131,6 +133,19 @@ containing the story or source video id. The worker resolves the job's `kind`
 through the registry, without branching on pipeline names. Unknown kinds fail
 permanently. Register implementations in `create_registry()` to extend dispatch;
 new database job kinds still require a migration of the `job_kind` enum.
+
+### Stage execution
+
+Worker-dispatched pipelines record major operations in `stage_executions`.
+Each record includes the job, stage, chapter/clip scope, job attempt, worker,
+status, timestamps, database-calculated duration and error. Retries keep earlier
+attempts; reused scripts, transcripts and finished renders are not reported as
+newly executed work. When an attempt ends, unfinished stages become `abandoned`.
+
+Stages require a live lease. A worker that loses it stops at the next stage
+boundary and leaves the job outcome to recovery. Legacy direct pipeline calls
+have no leased context and do not create stage records. See
+[stage execution details](docs/stage-execution.md).
 
 ### Chapter pacing
 

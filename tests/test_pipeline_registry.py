@@ -5,7 +5,7 @@ import pytest
 
 from brainrot import pipeline, reddit, repurpose, worker
 from brainrot.application.registry import PipelineRegistry, UnknownPipeline
-from brainrot.domain.jobs import PermanentError
+from brainrot.domain.jobs import LeaseLost, PermanentError
 from brainrot.domain.pipelines import Pipeline, PipelineContext, PipelineResult
 from brainrot.pipelines import create_registry
 
@@ -115,3 +115,20 @@ def test_worker_keeps_transient_retry_policy_for_registered_pipelines(monkeypatc
     assert worker.execute(claimed_job, worker_id="worker-a") == "pending"
     assert fail.call_args.args[3] == "transient"
     assert fail.call_args.args[4] is not None
+
+
+def test_worker_leaves_outcomes_to_recovery_after_a_pipeline_loses_its_lease(monkeypatch, claimed_job):
+    class Expired:
+        name = "example"
+
+        def execute(self, context):
+            raise LeaseLost("lease expired during rendering")
+
+    monkeypatch.setattr(worker, "REGISTRY", PipelineRegistry([Expired()]))
+    fail, complete = Mock(return_value="failed"), Mock(return_value=True)
+    monkeypatch.setattr(worker.db, "fail_job", fail)
+    monkeypatch.setattr(worker.db, "complete_job", complete)
+
+    assert worker.execute(claimed_job, worker_id="worker-a") == "lease_lost"
+    fail.assert_not_called()
+    complete.assert_not_called()

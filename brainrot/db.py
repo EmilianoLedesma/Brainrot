@@ -11,6 +11,8 @@ from functools import lru_cache
 from dotenv import load_dotenv
 from supabase import Client, create_client
 
+from .domain.pipelines import PipelineContext
+
 load_dotenv()
 
 MEDIA_BUCKET = os.getenv("MEDIA_BUCKET", "media")
@@ -119,6 +121,25 @@ def fail_job(
 def recover_expired_jobs() -> list[dict]:
     """Requeue (or fail) jobs whose worker stopped renewing. Returns [{id, status}]."""
     return client().rpc("recover_expired_jobs", {}).execute().data or []
+
+
+# --- stage execution (migrations/003_stage_execution.sql) ------------------------
+
+
+def start_stage(context: PipelineContext, stage: str, scope: str = "") -> str | None:
+    return client().rpc("start_stage", {
+        "p_job": context.job_id, "p_worker": context.worker_id,
+        "p_attempt": context.attempt, "p_stage": stage, "p_scope": scope,
+    }).execute().data
+
+
+def finish_stage(execution_id: str, worker_id: str, status: str, error: str | None = None) -> bool:
+    if status not in ("done", "failed"):
+        raise ValueError(f"invalid stage outcome: {status}")
+    return bool(client().rpc("finish_stage", {
+        "p_execution": execution_id, "p_worker": worker_id,
+        "p_status": status, "p_error": error,
+    }).execute().data)
 
 
 def upload(path: str, data: bytes, content_type: str) -> str:
