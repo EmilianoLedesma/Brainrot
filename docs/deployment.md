@@ -42,7 +42,7 @@ npm ci --prefix web
 npm run build --prefix web
 ```
 
-Push changes to the PR branch to trigger a preview. A passing local build does
+Push changes to the connected branch to trigger a deployment. A passing local build does
 not establish that the Vercel preview is ready; check its deployment status too.
 
 ## API and worker
@@ -54,12 +54,24 @@ the API, separated by commas. Preview origins need to be allowed explicitly.
 
 Apply migrations in order before starting the matching worker version.
 `002_job_execution.sql` is required for leased execution, and
-`003_stage_execution.sql` is required for stage tracking. Both migrations were
-applied to the configured Supabase project on 2026-10-21 and validated with
-rolled-back lease and stage smoke tests plus REST schema/RPC checks. The
-existing pending job was left unchanged.
+`003_stage_execution.sql` is required for stage tracking,
+`004_operational_metrics.sql` for metrics, and `005_execution_read_models.sql` for
+dashboard execution views. Migrations 001–005 are applied to the configured
+Supabase project as of 2026-10-21. Lease/stage/metrics/read-model checks passed,
+including a live worker retry with synthetic operations inside a rolled-back
+transaction. The existing pending job was left unchanged.
 
 H2/H2b require an active background clip. H1 requires the YuNet face model at
-`models/face_detection_yunet_2023mar.onnx` in the media bucket; the repository
-still has no model-upload command. OAuth consent and platform credentials are
-also manual setup steps.
+`models/face_detection_yunet_2023mar.onnx` in the media bucket. Run
+`python -m brainrot.cli setup-face-model` once per project to install the pinned,
+checksum-verified official OpenCV model. The configured project's model has
+been verified with OpenCV. OAuth consent and platform credentials are manual
+setup steps.
+
+Run the worker under a process supervisor with restart on failure. A database
+outage can stop the worker loop; persisted leases make interrupted attempts
+recoverable after expiry when the process restarts. Keep FFmpeg/ffprobe and the
+Python requirements on that host. No generation or media work runs inside Vercel.
+
+See [operations](operations.md) for migration precautions, authenticated metrics,
+recovery, publication reconciliation and the remaining provider validation.
