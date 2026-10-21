@@ -241,6 +241,16 @@ export const COPY = {
       tabs: { new: "New job", queue: "Queue", output: "Output" },
       steps: ["Pipeline", "Input", "Review"],
       model: { label: "Model", hint: "Uses this integration’s configured model and your local sign-in.", workerDefault: "Worker default" },
+      brainrot: {
+        label: "Brainrot level", low: "Grounded", high: "Ridiculous",
+        levels: [
+          { name: "Grounded", description: "Just the facts, clearly told. No meme overload." },
+          { name: "Playful", description: "A little wit, a little weirdness. Still easy to follow." },
+          { name: "Chaotic", description: "Fast jokes, meme energy and dramatic comparisons." },
+          { name: "Unhinged", description: "Big exaggerations, surreal images and ridiculous metaphors." },
+          { name: "Max brainrot", description: "Full nonsense energy. Every line goes comically over the top." },
+        ],
+      },
       pipelines: {
         brainrot: { name: "Generate", tagline: "From a topic", blurb: "Your selected model writes a script, narrated over a background clip.", field: "Topic", hint: "One subject. The script finds the single most interesting thing about it." },
         repurpose: { name: "Repurpose", tagline: "From a YouTube link", blurb: "Transcribed, cut into standalone moments, reframed to follow the speaker.", field: "Source URL", hint: "Long-form works best. Up to three clips come out of one video." },
@@ -542,6 +552,16 @@ export const COPY = {
       tabs: { new: "Nuevo job", queue: "Cola", output: "Resultados" },
       steps: ["Pipeline", "Entrada", "Revisión"],
       model: { label: "Modelo", hint: "Usa el modelo configurado en esta integración y tu sesión local.", workerDefault: "Predeterminado del worker" },
+      brainrot: {
+        label: "Nivel de brainrot", low: "Tranquilo", high: "Ridículo",
+        levels: [
+          { name: "Tranquilo", description: "Los hechos, contados con claridad. Sin exceso de memes." },
+          { name: "Juguetón", description: "Un poco de humor y rareza. Fácil de seguir." },
+          { name: "Caótico", description: "Chistes rápidos, energía de meme y comparaciones dramáticas." },
+          { name: "Desquiciado", description: "Exageraciones enormes, imágenes surrealistas y metáforas ridículas." },
+          { name: "Brainrot máximo", description: "Absurdo a todo volumen. Cada frase se pasa de ridícula." },
+        ],
+      },
       pipelines: {
         brainrot: { name: "Generar", tagline: "Desde un tema", blurb: "El modelo elegido escribe el guion y se narra sobre un clip de fondo.", field: "Tema", hint: "Un solo asunto. El guion encuentra lo más interesante que tiene." },
         repurpose: { name: "Reutilizar", tagline: "Desde un link de YouTube", blurb: "Transcrito, cortado en momentos que se sostienen solos, reencuadrado siguiendo a quien habla.", field: "URL de origen", hint: "Funciona mejor con formato largo. De un video salen hasta tres clips." },

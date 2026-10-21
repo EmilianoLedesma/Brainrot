@@ -32,13 +32,30 @@ def test_legacy_enqueue_keeps_worker_default_behavior(http, fake_db):
     response = http.post("/jobs", json={"kind": "brainrot", "topic": "octopuses"})
     assert response.status_code == 200
     assert "llm_provider" not in db.get_job(response.json()["id"])["params"]
+    assert "brainrot_level" not in db.get_job(response.json()["id"])["params"]
+
+
+@pytest.mark.parametrize("level", [0, 35, 100])
+def test_enqueue_persists_brainrot_level(http, fake_db, level):
+    response = http.post("/jobs", json={"kind": "brainrot", "topic": "octopuses", "llm_provider": "codex", "brainrot_level": level})
+    assert response.status_code == 200
+    assert db.get_job(response.json()["id"])["params"]["brainrot_level"] == level
+
+
+@pytest.mark.parametrize("level", [-1, 101, 35.5, "50", True, False])
+def test_invalid_brainrot_level_is_rejected(http, level):
+    assert http.post("/jobs", json={"kind": "brainrot", "topic": "octopuses", "brainrot_level": level}).status_code == 422
+
+
+def test_repurpose_does_not_accept_script_intensity(http):
+    assert http.post("/jobs", json={"kind": "repurpose", "youtube_url": "https://youtu.be/example", "brainrot_level": 50}).status_code == 422
 
 
 def test_operational_job_list_uses_bounded_parameters_and_explicit_fields(http, monkeypatch):
     seen = []
     monkeypatch.setattr(db, "list_job_executions", lambda limit: seen.append(limit) or [{
         "id": "job-1", "kind": "brainrot", "status": "pending", "attempts": 1,
-        "params": {"topic": "story", "llm_provider": "codex", "access_token": "private-provider-token"},
+        "params": {"topic": "story", "llm_provider": "codex", "brainrot_level": 85, "access_token": "private-provider-token"},
         "service_role_key": "private-service-key", "lease_owner": "private-worker",
     }])
     response = http.get("/jobs?limit=20")
@@ -46,6 +63,7 @@ def test_operational_job_list_uses_bounded_parameters_and_explicit_fields(http, 
     assert "private" not in response.text
     assert response.json()[0]["attempts"] == 1
     assert response.json()[0]["params"]["llm_provider"] == "codex"
+    assert response.json()[0]["params"]["brainrot_level"] == 85
     assert http.get("/jobs?limit=-1").status_code == 422
     assert http.get("/jobs?limit=201").status_code == 422
 

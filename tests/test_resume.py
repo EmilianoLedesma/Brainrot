@@ -66,6 +66,21 @@ def test_h2_retry_reuses_the_script_and_finished_chapters(fake_db, background, n
     assert story_id == fake_db.rows("stories")[0]["id"]
 
 
+@pytest.mark.parametrize("level", [0, 35, 100])
+def test_h2_applies_saved_intensity_once_across_retries(fake_db, background, narration, monkeypatch, level):
+    writes = []
+    def write(topic, *, brainrot_level):
+        writes.append((topic, brainrot_level))
+        return script.Story(title="T", script="A saved story.")
+    monkeypatch.setattr(script, "write_story", write)
+    monkeypatch.setattr(render, "render", FlakyRender(fail_on=1))
+    job = {"id": "job-level", "kind": "brainrot", "params": {"topic": "octopuses", "brainrot_level": level}}
+    run_twice(pipeline.run_brainrot, job)
+    assert writes == [("octopuses", level)]
+    assert len(fake_db.rows("stories")) == 1
+    assert fake_db.rows("story_chapters")[0]["status"] == "ready"
+
+
 def test_planning_a_story_twice_does_not_double_queue(fake_db, background, narration, monkeypatch):
     monkeypatch.setattr(script, "write_story", lambda topic: script.Story(title="T", script="Short. Story."))
     monkeypatch.setattr(render, "render", FlakyRender(fail_on=None))

@@ -118,4 +118,6 @@ def produce(job_id: str, write: Callable[[], script.Story], **story_fields) -> s
 def run_brainrot(job: dict) -> str:
     """H2: a topic becomes a story."""
     topic = job["params"]["topic"]
-    return produce(job["id"], lambda: script.write_story(topic), topic=topic)
+    level = job["params"].get("brainrot_level")
+    options = {"brainrot_level": level} if level is not None else {}
+    return produce(job["id"], lambda: script.write_story(topic, **options), topic=topic)

@@ -72,6 +72,20 @@ Existing saved scripts and selected moments are reused on retry. If generation
 needs to run again, the saved job choice takes precedence over the worker default.
 CLI previews can still explicitly override their provider with `--provider`.
 
+## Brainrot intensity
+
+Topic jobs have a **Brainrot level** slider: 0–19 Grounded, 20–39 Playful,
+40–59 Chaotic, 60–79 Unhinged, and 80–100 Max brainrot. New dashboard jobs
+start at 35. Higher values request more slang, comic exaggeration, surreal
+comparisons and absurd delivery while retaining the topic's factual core.
+
+The API accepts optional `brainrot_level`, a strict integer from 0 to 100, for
+`brainrot` jobs. It is saved in `jobs.params` and included in the system prompt
+for either Claude or Chat GPT; no migration or new credentials are needed.
+Jobs and callers without a level retain their original script prompt. Saved
+scripts are reused on retry, so changing intensity requires a new job. H1
+repurposing and scheduled Reddit rewrites keep their existing behavior.
+
 ## Configuration
 
 | Variable | Default / purpose |

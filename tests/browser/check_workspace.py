@@ -21,7 +21,7 @@ def main():
     stamp = "2026-10-21T17:00:00+00:00"
     job = {
         "id": job_id, "kind": "brainrot", "status": "running", "attempts": 2, "max_attempts": 3,
-        "params": {"topic": "The octopus escape", "llm_provider": "codex"}, "created_at": stamp, "started_at": stamp,
+        "params": {"topic": "The octopus escape", "llm_provider": "codex", "brainrot_level": 100}, "created_at": stamp, "started_at": stamp,
         "finished_at": None, "run_after": stamp, "duration_seconds": 12.5,
         "current_stage": {"stage": "render"}, "error_summary": "RuntimeError: raw-job-diagnostic",
     }
@@ -105,26 +105,38 @@ def main():
         expect(model).to_have_value("claude-code")
         model.press("ArrowDown")
         expect(model).to_have_value("codex")
+        intensity = page.get_by_role("slider", name="Brainrot level", exact=True)
+        expect(intensity).to_have_value("35")
+        intensity.press("Home")
+        expect(intensity).to_have_value("0")
+        expect(intensity).to_have_attribute("aria-valuetext", "0/100 · Grounded")
+        intensity.press("End")
+        expect(intensity).to_have_value("100")
+        expect(intensity).to_have_attribute("aria-valuetext", "100/100 · Max brainrot")
         page.get_by_label("Topic", exact=True).fill("The octopus escape")
         page.screenshot(path=str(screenshots / "model-desktop.png"), full_page=True)
         page.set_viewport_size({"width": 390, "height": 844})
         page.get_by_role("button", name="Hablar español", exact=False).click()
         expect(page.get_by_role("combobox", name="Modelo", exact=True)).to_have_value("codex")
+        expect(page.get_by_role("slider", name="Nivel de brainrot", exact=True)).to_have_value("100")
         assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), "model form overflows on mobile"
         page.screenshot(path=str(screenshots / "model-mobile.png"), full_page=True)
         page.get_by_role("button", name="Hablar gringo", exact=False).click()
         page.set_viewport_size({"width": 1440, "height": 1000})
         page.get_by_role("button", name="Review →", exact=True).click()
         expect(page.locator(".review").get_by_text("Chat GPT", exact=True)).to_be_visible()
+        expect(page.locator(".review").get_by_text("100/100 · Max brainrot", exact=True)).to_be_visible()
         page.get_by_role("button", name="← Edit", exact=True).click()
         expect(page.get_by_role("combobox", name="Model", exact=True)).to_have_value("codex")
+        expect(page.get_by_role("slider", name="Brainrot level", exact=True)).to_have_value("100")
         page.get_by_role("button", name="Review →", exact=True).click()
         page.get_by_role("button", name="Queue it", exact=True).click()
         expect(page.get_by_role("heading", name="Live queue", exact=True)).to_be_visible()
-        assert submitted == [{"kind": "brainrot", "topic": "The octopus escape", "llm_provider": "codex"}]
+        assert submitted == [{"kind": "brainrot", "topic": "The octopus escape", "llm_provider": "codex", "brainrot_level": 100}]
         page.get_by_role("button", name="New job", exact=True).click()
         page.locator(".choice").filter(has_text="From a YouTube link").click()
         page.get_by_label("Source URL", exact=True).fill("https://youtube.com/watch?v=example")
+        assert page.get_by_role("slider").count() == 0, "repurposing does not rewrite the source script"
         expect(page.get_by_role("combobox", name="Model", exact=True)).to_have_value("codex")
         page.get_by_role("button", name="Review →", exact=True).click()
         expect(page.locator(".review").get_by_text("Chat GPT", exact=True)).to_be_visible()
@@ -181,6 +193,7 @@ def main():
         expect(stage_table.locator("tbody tr td").nth(1)).to_have_text("2")
         expect(region.get_by_role("heading", name="Publication queue")).to_be_visible()
         expect(region.get_by_text("Chat GPT", exact=True)).to_be_visible()
+        expect(region.get_by_text("100/100 · Max brainrot", exact=True)).to_be_visible()
         expect(region.get_by_text("This took longer than expected. Please try again.", exact=True)).not_to_be_visible()
         expect(region.get_by_text("The video couldn’t be published. Check the connected account before trying again.", exact=True)).to_be_visible()
         visible = page.locator("body").inner_text()

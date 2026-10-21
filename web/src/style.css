@@ -315,6 +315,20 @@ input::placeholder {
   font-weight: 500;
 }
 
+.brainrot-control { --brainrot-color: var(--lime); padding: 18px; border: var(--rule-thin); border-radius: 12px; background: var(--paper-2); }
+.brainrot-band-2 { --brainrot-color: var(--orange); }
+.brainrot-band-3, .brainrot-band-4 { --brainrot-color: var(--pink); }
+.brainrot-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.brainrot-heading output { font-size: 12px; font-weight: 800; padding: 6px 10px; border: var(--rule-thin); border-radius: 999px; background: var(--brainrot-color); color: var(--ink); font-variant-numeric: tabular-nums; }
+input.brainrot-slider { appearance: none; display: block; width: 100%; height: 44px; padding: 0; margin: 8px 0 0; border: 0; background: transparent; border-radius: 4px; cursor: pointer; box-shadow: none; transform: none; }
+.brainrot-slider::-webkit-slider-runnable-track { height: 12px; border: var(--rule-thin); border-radius: 999px; background: linear-gradient(to right, var(--brainrot-color) var(--brainrot-fill), var(--paper) var(--brainrot-fill)); }
+.brainrot-slider::-moz-range-track { height: 8px; border: var(--rule-thin); border-radius: 999px; background: linear-gradient(to right, var(--brainrot-color) var(--brainrot-fill), var(--paper) var(--brainrot-fill)); }
+.brainrot-slider::-webkit-slider-thumb { appearance: none; width: 26px; height: 26px; margin-top: -9px; border: var(--rule); border-radius: 50%; background: var(--paper); box-shadow: 2px 2px 0 var(--ink); }
+.brainrot-slider::-moz-range-thumb { width: 20px; height: 20px; border: var(--rule); border-radius: 50%; background: var(--paper); box-shadow: 2px 2px 0 var(--ink); }
+input.brainrot-slider:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+.brainrot-ends { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; font-weight: 800; color: var(--ink-soft); }
+.brainrot-control p { margin: 12px 0 0; font-size: 13px; line-height: 1.5; color: var(--ink-soft); }
+
 /* ---------- Status pills ---------- */
 
 .status {

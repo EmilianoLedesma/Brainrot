@@ -60,6 +60,7 @@ class JobIn(BaseModel):
     youtube_url: str | None = Field(default=None, max_length=2048)
     topic: str | None = Field(default=None, max_length=1000)
     llm_provider: Literal["claude-code", "codex"] | None = None
+    brainrot_level: int | None = Field(default=None, ge=0, le=100, strict=True)
 
     @model_validator(mode="after")
     def check_payload(self) -> "JobIn":
@@ -72,6 +73,8 @@ class JobIn(BaseModel):
         if self.kind == "brainrot" and not self.topic:
             raise ValueError("brainrot needs topic")
         if self.kind == "repurpose":
+            if self.brainrot_level is not None:
+                raise ValueError("brainrot_level applies to generated scripts only")
             parsed = urlsplit(self.youtube_url)
             hosts = {"youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com", "youtu.be", "www.youtu.be"}
             video_path = (parsed.hostname in {"youtu.be", "www.youtu.be"} and bool(parsed.path.strip("/"))) or (
@@ -109,7 +112,7 @@ def _job_view(row: dict) -> dict:
         "id", "kind", "status", "attempts", "max_attempts", "run_after", "error_kind",
         "created_at", "started_at", "finished_at", "duration_seconds",
     ))
-    result["params"] = _safe_row(row.get("params") or {}, ("topic", "youtube_url", "title", "subreddit", "llm_provider"))
+    result["params"] = _safe_row(row.get("params") or {}, ("topic", "youtube_url", "title", "subreddit", "llm_provider", "brainrot_level"))
     result["error"] = result["error_summary"] = _error_summary(row.get("error"))
     current = row.get("current_stage")
     result["current_stage"] = _safe_row(current, ("stage", "scope", "started_at")) if current else None

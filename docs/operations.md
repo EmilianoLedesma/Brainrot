@@ -29,6 +29,9 @@ Workspace -> Queue shows status, current stage, attempt, duration and a short
 plain-language error message. Queue, Inspect, and forms never render upstream
 error strings. Redacted diagnostics remain in API responses (browser developer
 tools -> Network); full stored tracebacks remain in worker/database diagnostics.
+New topic jobs include a 0–100 Brainrot level slider, defaulting to 35. Its saved
+value appears in Review, Queue and Inspect and controls script style for either
+local model integration. Legacy jobs without it keep their original prompt.
 Inspect shows only the current attempt's stages and publication states. Retry
 clears the displayed stages immediately; they stay empty until the next attempt
 starts. Earlier attempt records remain available in API responses for diagnostics.

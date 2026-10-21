@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "../api.js";
 import { useCopy } from "../i18n.jsx";
-import { GENERATION_PROVIDERS } from "../generation.js";
+import { GENERATION_PROVIDERS, DEFAULT_BRAINROT_LEVEL, brainrotBand, brainrotSummary } from "../generation.js";
 import { userError } from "../errors.js";
 import Execution, { duration } from "./Execution.jsx";
 
@@ -77,12 +77,32 @@ function State({ title, children }) {
   );
 }
 
+function BrainrotSlider({ value, onChange }) {
+  const t = useCopy().work.brainrot;
+  const band = brainrotBand(value);
+  return (
+    <div className={`brainrot-control brainrot-band-${band}`}>
+      <div className="brainrot-heading">
+        <label className="label" htmlFor="brainrot-level">{t.label}</label>
+        <output htmlFor="brainrot-level">{brainrotSummary(value, t)}</output>
+      </div>
+      <input id="brainrot-level" className="brainrot-slider" type="range" min="0" max="100" step="1"
+        value={value} onChange={(event) => onChange(Number(event.target.value))}
+        aria-valuetext={brainrotSummary(value, t)} aria-describedby="brainrot-description"
+        style={{ "--brainrot-fill": `${value}%` }} />
+      <div className="brainrot-ends" aria-hidden="true"><span>{t.low}</span><span>{t.high}</span></div>
+      <p id="brainrot-description">{t.levels[band].description}</p>
+    </div>
+  );
+}
+
 function NewJob({ onQueued }) {
   const t = useCopy().work;
   const [step, setStep] = useState(1);
   const [kind, setKind] = useState(null);
   const [value, setValue] = useState("");
   const [provider, setProvider] = useState("codex");
+  const [brainrotLevel, setBrainrotLevel] = useState(DEFAULT_BRAINROT_LEVEL);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [queued, setQueued] = useState(null);
@@ -108,7 +128,8 @@ function NewJob({ onQueued }) {
     try {
       const { id } = await api("/jobs", {
         method: "POST",
-        body: JSON.stringify({ kind, [field.key]: value.trim(), llm_provider: provider }),
+        body: JSON.stringify({ kind, [field.key]: value.trim(), llm_provider: provider,
+          ...(kind === "brainrot" ? { brainrot_level: brainrotLevel } : {}) }),
       });
       setQueued(id);
       setStep(4);
@@ -199,6 +220,7 @@ function NewJob({ onQueued }) {
               </select>
               <small id="generation-provider-hint" className="muted">{t.model.hint}</small>
             </label>
+            {kind === "brainrot" && <BrainrotSlider value={brainrotLevel} onChange={setBrainrotLevel} />}
             <div className="hero-actions">
               <button type="button" className="btn" onClick={() => setStep(1)}>
                 {t.back}
@@ -227,6 +249,10 @@ function NewJob({ onQueued }) {
                 <dt className="label">{t.model.label}</dt>
                 <dd>{GENERATION_PROVIDERS[provider]}</dd>
               </div>
+              {kind === "brainrot" && <div>
+                <dt className="label">{t.brainrot.label}</dt>
+                <dd>{brainrotSummary(brainrotLevel, t.brainrot)}</dd>
+              </div>}
             </dl>
             <p className="muted" style={{ fontSize: 13 }}>
               {t.reviewWarn}
@@ -368,6 +394,9 @@ function Queue() {
                       {GENERATION_PROVIDERS[job.params?.llm_provider] && (
                         <small className="execution-scope">{GENERATION_PROVIDERS[job.params.llm_provider]}</small>
                       )}
+                      {Number.isInteger(job.params?.brainrot_level) && <small className="execution-scope">
+                        {t.brainrot.label}: {brainrotSummary(job.params.brainrot_level, t.brainrot)}
+                      </small>}
                       {(job.error || job.error_summary) && <p className="job-error">{userError(job.error || job.error_summary, t.errors)}</p>}
                       <div className="job-actions" role="group" aria-label={t.actions}>
                         <button className="btn" aria-expanded={selected === job.id}

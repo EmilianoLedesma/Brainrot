@@ -76,6 +76,12 @@ repurpose job. The choice appears in Review and is saved with the job for every
 attempt. Each integration uses its configured model; the selector does not pick
 individual model versions.
 
+For topic generation, **Brainrot level** runs from 0 (grounded) to 100 (maximum
+comic absurdity), starting at 35. It changes the script's tone, slang, pacing,
+exaggeration and metaphors. Review, Queue and Inspect show the saved setting.
+Retries reuse an existing saved script; choose a new job to generate a different
+intensity. Repurposing keeps the source video's spoken content.
+
 Jobs without a saved selection use the provider in `.env` for topic scripts,
 Reddit rewrites and H1 moment selection. Restart the worker after changing that
 default. There is no automatic

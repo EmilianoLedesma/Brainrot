@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../api.js";
 import { useCopy } from "../i18n.jsx";
-import { GENERATION_PROVIDERS } from "../generation.js";
+import { GENERATION_PROVIDERS, brainrotSummary } from "../generation.js";
 import { userError } from "../errors.js";
 
 export function duration(value) {
@@ -46,6 +46,9 @@ export default function Execution({ jobId }) {
           <span className={"status status-" + job.status}>{job.status}</span>
         </div>
         <p className="muted">{work.model.label}: <b>{GENERATION_PROVIDERS[job.params?.llm_provider] || work.model.workerDefault}</b></p>
+        {Number.isInteger(job.params?.brainrot_level) && <p className="muted">
+          {work.brainrot.label}: <b>{brainrotSummary(job.params.brainrot_level, work.brainrot)}</b>
+        </p>}
         <dl className="execution-facts">
           <div><dt>{t.attempt}</dt><dd>{job.attempts ?? 0} / {job.max_attempts ?? 3}</dd></div>
           <div><dt>{t.started}</dt><dd>{stamp(job.started_at)}</dd></div>
