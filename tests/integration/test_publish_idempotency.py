@@ -56,7 +56,6 @@ def publication(pg):
 
 
 def test_timeout_after_platform_acceptance_never_reuploads(pg, publication, monkeypatch):
-    monkeypatch.setattr(db,"client",lambda:PublicationClient(pg,fail_success=True))
     # Reuse one client so only the first success write times out.
     client = PublicationClient(pg,fail_success=True)
     monkeypatch.setattr(db,"client",lambda:client)

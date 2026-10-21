@@ -3,3 +3,5 @@ pytest>=8.3
 # Drives a throwaway local Postgres in tests/conftest.py; the app itself only
 # talks to Supabase over REST.
 psycopg[binary]>=3.2
+# Browser smoke uses installed Edge on Windows, or Playwright Chromium elsewhere.
+playwright>=1.51

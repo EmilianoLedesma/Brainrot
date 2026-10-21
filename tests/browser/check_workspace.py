@@ -61,7 +61,7 @@ def main():
         page.goto(args.url)
         page.get_by_role("button", name="Workspace", exact=True).first.click()
         page.get_by_role("button", name="Queue", exact=True).click()
-        expect(page.get_by_text("The octopus escape", exact=True)).to_be_visible()
+        expect(page.get_by_role("cell", name="The octopus escape Inspect", exact=True)).to_be_visible()
         page.get_by_role("button", name="Inspect", exact=True).first.click()
         region = page.locator("#execution-" + job_id)
         expect(region.get_by_role("heading", name="Stage history")).to_be_visible()
@@ -69,6 +69,7 @@ def main():
         expect(region.get_by_text("TimeoutError: renderer interrupted")).to_be_visible()
         page.screenshot(path=str(screenshots / "desktop.png"), full_page=True)
         job["status"] = "done"
+        job.update(current_stage=None, finished_at=stamp)
         detail["stages"][1].update(status="done", duration_seconds=12.5, completed_at=stamp)
         expect(region.locator(".execution-heading .status")).to_have_text("done", timeout=10000)
         page.set_viewport_size({"width": 390, "height": 844})
