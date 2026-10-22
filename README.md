@@ -69,6 +69,10 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
 Topic scripts and Reddit retellings automatically use the project-owned
 [storytelling skill](docs/storytelling.md) with both Claude and Chat GPT.
 It guides hooks, narrative progression and payoffs in the existing generation call.
+The skill now considers different openings and reviews narrative consistency and
+payoffs before returning a script. Workspace → Insights imports retention CSVs
+and optional timed subtitles into an explorable report, without platform access
+or model calls. See [content quality and retention](docs/content-quality.md).
 New narration and finished videos must last **90-180 seconds**, including the
 spoken title and pauses. Scripts target 280-380 words at a natural pace; actual
 audio and video duration is checked before upload. Repurposed clips use the same

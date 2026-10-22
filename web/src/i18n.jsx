@@ -237,8 +237,8 @@ export const COPY = {
 
     work: {
       label: "Workspace",
-      headings: { new: "Start a job", queue: "Live queue", output: "Finished output" },
-      tabs: { new: "New job", queue: "Queue", output: "Output" },
+      headings: { new: "Start a job", queue: "Live queue", output: "Finished output", insights: "Find the drop" },
+      tabs: { new: "New job", queue: "Queue", output: "Output", insights: "Insights" },
       steps: ["Pipeline", "Input", "Review"],
       model: { label: "Model", hint: "Uses this integration’s configured model and your local sign-in.", workerDefault: "Worker default" },
       brainrot: {
@@ -549,8 +549,8 @@ export const COPY = {
 
     work: {
       label: "Taller",
-      headings: { new: "Lanzar un job", queue: "Cola en vivo", output: "Resultados" },
-      tabs: { new: "Nuevo job", queue: "Cola", output: "Resultados" },
+      headings: { new: "Lanzar un job", queue: "Cola en vivo", output: "Resultados", insights: "Encuentra la caída" },
+      tabs: { new: "Nuevo job", queue: "Cola", output: "Resultados", insights: "Análisis" },
       steps: ["Pipeline", "Entrada", "Revisión"],
       model: { label: "Modelo", hint: "Usa el modelo configurado en esta integración y tu sesión local.", workerDefault: "Predeterminado del worker" },
       brainrot: {

@@ -4,6 +4,7 @@ import { useCopy } from "../i18n.jsx";
 import { GENERATION_PROVIDERS, BRAINROT_LEVELS, DEFAULT_BRAINROT_LEVEL, brainrotBand, brainrotSummary } from "../generation.js";
 import { userError } from "../errors.js";
 import Execution, { duration } from "./Execution.jsx";
+import Insights, { newInsightsSession } from "./Insights.jsx";
 
 /* The work surface. Submitting a job is a three-step flow rather than one form,
    because picking a pipeline and describing the input are different decisions and
@@ -488,11 +489,12 @@ function Output() {
   );
 }
 
-const SCREENS = { new: NewJob, queue: Queue, output: Output };
+const SCREENS = { new: NewJob, queue: Queue, output: Output, insights: Insights };
 
 export default function Workspace() {
   const t = useCopy().work;
   const [tab, setTab] = useState("new");
+  const [insightSession, setInsightSession] = useState(newInsightsSession);
   const Screen = SCREENS[tab];
 
   return (
@@ -510,7 +512,7 @@ export default function Workspace() {
         ))}
       </div>
 
-      <Screen onQueued={() => setTab("queue")} />
+      <Screen onQueued={() => setTab("queue")} insightSession={insightSession} onInsightSessionChange={setInsightSession} />
     </div>
   );
 }

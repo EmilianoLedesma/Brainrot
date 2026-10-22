@@ -27,6 +27,17 @@ specificity through fabricated numbers, anecdotes, quotes, or evidence.
 
 ## Make a promise worth keeping
 
+Silently consider three genuinely different openings, then use the one that best
+fits the material. Choose from these approaches rather than always reversing a
+claim: an immediate consequence, a revealing detail, a costly decision, a ticking
+deadline, an unanswered mechanism, a small failure that spreads, a collision of
+goals, or a scene already in motion. A grounded explanation can begin with a
+mechanism or real consequence; a fictional premise can begin inside its crisis.
+Never manufacture a statistic, quote, countdown, or personal experience to make a
+pattern fit. Give preference to topic-specific stakes, a clear unanswered question,
+and a line that reads comfortably aloud. Direct address and numerical details are
+optional, not scoring requirements. Do not show the candidates or a numeric score.
+
 Use the spoken title to establish the central tension. Let the opening sentence
 add a concrete problem, consequence, or unanswered detail instead of repeating
 the headline. Give enough context immediately to understand what could change.
@@ -58,6 +69,15 @@ Finish when the payoff lands. Cut the recap, generic moral, engagement request,
 and any extra sentence explaining why the ending was clever.
 
 ## Final silent edit
+
+Check the narrative promises: what does the opening lead the listener to expect,
+which later beat changes their understanding, and which final line pays it off?
+Check that events follow the world's established rules and characters' supplied
+motives. A story can be absurd and internally coherent. Grounded topics need a
+clear mechanism, not a forced hero's journey. Select the appropriate structure;
+do not force a twist, thesis, or moral onto every topic. Resolve dangling promises
+and remove contradictions before returning the final script. Keep this review
+inside the existing generation, without a separate critic call or analysis output.
 
 Read for the ear: cut setup that delays the point, repeated claims, filler bridges,
 and jokes that obscure the next event. Prefer natural speech to polished essay

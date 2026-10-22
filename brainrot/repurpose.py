@@ -50,6 +50,13 @@ A moment qualifies only if it:
 - ends on a natural beat rather than mid-sentence,
 - runs between ninety and one hundred eighty seconds.
 
+Prefer a span with a clear setup, a meaningful development or complication, and
+an earned resolution. Reject openings whose pronouns, unexplained references,
+or missing setup require the preceding video. Score context independence,
+progression, and completeness, not just how sensational a sentence sounds.
+Preserve the source's words and meaning; do not invent a replacement first line,
+voiceover, or twist. Return at most three distinct, non-overlapping moments.
+
 Score each from 0 to 1 on how likely a scrolling viewer is to watch it through.
 Return the strongest moments only - returning three good ones beats returning ten
 padded ones. Timestamps must come from the transcript, never invented."""
@@ -126,16 +133,26 @@ def transcribe(video_path: str, directory: str) -> list[dict]:
 
 
 def select_moments(transcript: list[dict]) -> list[Moment]:
-    lines = "\n".join(f"[{c['start']:.1f}] {c['text']}" for c in transcript)
+    lines = "\n".join(f"[{c['start']:.1f}-{c.get('end', c['start']):.1f}] {c['text']}" for c in transcript)
     response = llm.generate(
         SELECT_SYSTEM, f"Transcript:\n{lines}", Moments,
         max_tokens=8000, api_model=script.MODEL,
     )
     moments = [m for m in response.moments if m.start_seconds >= 0
                and MIN_SECONDS <= m.end_seconds - m.start_seconds <= MAX_SECONDS]
+    source_end = max((cue["end"] for cue in transcript if "end" in cue), default=None)
+    if source_end is not None:
+        moments = [moment for moment in moments if moment.end_seconds <= source_end]
     if not moments:
         raise PermanentError("No complete 90-180 second moments were found in this video.")
-    return sorted(moments, key=lambda m: m.score, reverse=True)
+    selected = []
+    for moment in sorted(moments, key=lambda m: m.score, reverse=True):
+        if all(moment.end_seconds <= other.start_seconds or moment.start_seconds >= other.end_seconds
+               for other in selected):
+            selected.append(moment)
+        if len(selected) == 3:
+            break
+    return selected
 
 
 def face_model_path() -> str:
@@ -254,9 +271,10 @@ def cut_and_reframe(source: str, moment: Moment, transcript: list[dict], directo
             {
                 "text": cue["text"],
                 "start": max(cue["start"] - moment.start_seconds, 0.0),
-                "end": cue["end"] - moment.start_seconds,
+                "end": min(cue["end"], moment.end_seconds) - moment.start_seconds,
             }
         )
+    render.check_captions(cues, moment.end_seconds - moment.start_seconds)
     with open(os.path.join(directory, "captions.ass"), "w", encoding="utf-8") as handle:
         handle.write(render.build_captions(cues))
 
@@ -274,6 +292,7 @@ def cut_and_reframe(source: str, moment: Moment, transcript: list[dict], directo
             "-vf", video_filter,
             "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p",
             *render.VIDEO_RATE_OPTIONS,
+            "-af", render.VOICE_FILTER,
             "-c:a", "aac", "-b:a", "128k", "vertical.mp4",
         ],
         cwd=directory,

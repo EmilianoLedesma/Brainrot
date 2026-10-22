@@ -20,7 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from . import db
+from . import db, retention
 from .observability.metrics import APIMetricsMiddleware, render
 from .observability.logging import safe_text
 
@@ -47,6 +47,25 @@ def require_key(x_api_key: str = Header("")) -> None:
     """Shared-secret gate. With DASHBOARD_API_KEY unset, every request is rejected."""
     if not API_KEY or not secrets.compare_digest(x_api_key.encode("utf-8"), API_KEY.encode("utf-8")):
         raise HTTPException(status_code=401, detail="bad or missing X-API-Key")
+
+
+class RetentionIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    csv_text: str = Field(min_length=1, max_length=250_000)
+    axis: Literal["seconds", "percent", "fraction"]
+    retention_unit: Literal["percent", "fraction"] = "percent"
+    duration_seconds: float = Field(ge=1, le=86_400, allow_inf_nan=False)
+    transcript_srt: str = Field(default="", max_length=250_000)
+    time_column: int = Field(default=0, ge=0, le=99)
+    retention_column: int = Field(default=1, ge=0, le=99)
+
+
+@app.post("/insights/retention", dependencies=[Depends(require_key)])
+def retention_report(payload: RetentionIn) -> dict:
+    try:
+        return retention.analyze(**payload.model_dump())
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
 
 
 @app.get("/metrics", dependencies=[Depends(require_key)], include_in_schema=False)

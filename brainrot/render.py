@@ -1,5 +1,7 @@
 """Compose narration, a looping background, and karaoke captions into 9:16 video."""
 
+import json
+import math
 import os
 import subprocess
 import tempfile
@@ -12,12 +14,33 @@ WIDTH, HEIGHT = 1080, 1920
 # At 180 seconds the constrained video plus 128 kbps audio stays below 45 MB.
 MAX_VIDEO_BYTES = 45_000_000
 VIDEO_RATE_OPTIONS = ("-maxrate", "1800k", "-bufsize", "3600k")
+VOICE_FILTER = "loudnorm=I=-16:TP=-1.5:LRA=11"
+
+
+def check_captions(words: list[dict], seconds: float) -> None:
+    previous = -1.0
+    for word in words:
+        start, end = word["start"], word["end"]
+        if (not math.isfinite(start) or not math.isfinite(end) or start < 0
+                or start <= previous or end <= start or end > seconds + 0.25):
+            raise PermanentError("The captions could not be aligned with the video. Please try again.")
+        previous = start
 
 
 def check_video(path: str) -> None:
-    check_media(path)
     if os.path.getsize(path) > MAX_VIDEO_BYTES:
         raise PermanentError("The video is too large to store. Please try again with a simpler video.")
+    check_media(path)
+    probe = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries",
+         "stream=codec_type,codec_name,width,height", "-of", "json", str(path)],
+        capture_output=True, text=True, check=True, timeout=30,
+    )
+    streams = json.loads(probe.stdout).get("streams", [])
+    video = next((stream for stream in streams if stream["codec_type"] == "video"), {})
+    audio = next((stream for stream in streams if stream["codec_type"] == "audio"), {})
+    if (video.get("width"), video.get("height"), video.get("codec_name"), audio.get("codec_name")) != (WIDTH, HEIGHT, "h264", "aac"):
+        raise PermanentError("The video did not pass its picture and audio checks. Please try again.")
 
 # One word on screen at a time, centred and oversized. Alignment 5 is
 # middle-centre; the heavy outline keeps text readable over any background.
@@ -56,7 +79,9 @@ def build_captions(words: list[dict]) -> str:
         # Braces open an ASS override block, so they cannot reach the renderer raw.
         text = text.replace("\\", "").replace("{", "(").replace("}", ")")
         end = min(words[i + 1]["start"], word["end"] + 0.10) if i + 1 < len(words) else word["end"]
-        end = max(end, word["end"])
+        # A provider's word boundary can overlap the next word slightly. Clear
+        # the old caption at the next start rather than showing both together.
+        end = max(end, word["start"])
         lines.append(
             f"Dialogue: 0,{_timestamp(word['start'])},{_timestamp(end)},Pop,,0,0,0,,{text.upper()}"
         )
@@ -75,7 +100,8 @@ def render(background: bytes, narration: bytes, words: list[dict]) -> bytes:
             with open(os.path.join(tmp, name), "wb") as handle:
                 handle.write(data)
 
-        check_media(os.path.join(tmp, "voice.mp3"))
+        seconds = check_media(os.path.join(tmp, "voice.mp3"))
+        check_captions(words, seconds)
 
         # Run from the temp directory and pass bare filenames: the subtitles filter
         # treats ':' and '\' as syntax, which every Windows absolute path contains.
@@ -90,6 +116,7 @@ def render(background: bytes, narration: bytes, words: list[dict]) -> bytes:
             "-shortest",
             "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p",
             *VIDEO_RATE_OPTIONS,
+            "-af", VOICE_FILTER,
             "-c:a", "aac", "-b:a", "128k",
             "-movflags", "+faststart",
             "out.mp4",
