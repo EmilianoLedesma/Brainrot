@@ -1550,3 +1550,5 @@ pre.code code {
 .video-narration summary { cursor: pointer; font-weight: 800; }
 .video-details { margin-bottom: 32px; }
 @media (max-width: 640px) { .video-detail-layout { grid-template-columns: minmax(0, 1fr); } .detail-player { max-height: 420px; } }
+.output-inspection { scroll-margin-top: 110px; }
+@media (max-width: 640px) { .output-inspection { scroll-margin-top: 220px; } }

@@ -51,7 +51,10 @@ def for_job(job_id, base_url):
             if media.local():
                 sidecar = media.path(path).with_suffix(".srt")
                 if sidecar.is_file() and sidecar.stat().st_size <= 250_000:
-                    subtitles = sidecar.read_text(encoding="utf-8")
+                    try:
+                        subtitles = sidecar.read_text(encoding="utf-8")
+                    except (OSError, UnicodeError):
+                        pass
             result.append({"id": row["id"], "job_id": job_id, "source": source, "title": title, "url": url, "created_at": row.get("created_at"), "subtitles": subtitles,
                 "narration": narration, "source_url": _url(parent.get("permalink") or parent.get("youtube_url")), "publications": visible_publications})
     return result

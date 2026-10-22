@@ -22,7 +22,12 @@ preserved; it does not invent a replacement hook or add synthesized narration.
 
 ## Insights flow
 
-Workspace → Insights has two steps: import, then review. Import a retention CSV
+Workspace → Output → Inspect opens the shared video detail view, also used by
+Queue's Inspect button. It combines playback, saved narration, upload metadata,
+YouTube performance and retention analysis with execution history. There is no
+separate Insights tab. Click a video thumbnail or its Inspect button to open it.
+
+The embedded retention tool has two steps: import, then review. Import a retention CSV
 and enter the finished video's actual duration. Choose both the position and
 retention units explicitly. The analyzer never infers percentages from a short
 timeline. Optional SRT subtitles connect drop intervals to spoken passages.
@@ -60,7 +65,10 @@ virality predictions, or universal healthy/unhealthy grades. Partial exports are
 not labeled as completion rates. No automatic script rewrite, publishing action,
 or pacing decision follows from a report.
 
-Imports and reports remain in memory while switching workspace tabs. Download
+Imports and reports remain in memory per video while switching between Output,
+Queue and other workspace screens. Saved SRT captions and playback duration are
+pre-filled when available. Different videos keep independent analysis sessions.
+Download
 the JSON report to preserve it when leaving the workspace or refreshing. Data is
 processed by the authenticated API; it is not saved to Supabase or sent to an LLM.
 The endpoint is `POST /insights/retention` with the dashboard API key.

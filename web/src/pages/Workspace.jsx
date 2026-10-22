@@ -514,6 +514,15 @@ function Output({ insightSession, onInsightSessionChange, videoSessions, onVideo
   const t = useCopy().work;
   const { lang } = useLang(); const copy = INTEGRATIONS_COPY[lang];
   const [selected, setSelected] = useState(null);
+  const detailRef = useRef(null);
+  useEffect(() => {
+    if (selected && detailRef.current) { detailRef.current.focus({ preventScroll: true }); detailRef.current.scrollIntoView({ block: "start" }); }
+  }, [selected?.id]);
+  function closeDetails() {
+    const id = `output-preview-${selected.source}-${selected.id}`;
+    setSelected(null);
+    requestAnimationFrame(() => document.getElementById(id)?.focus());
+  }
   // Signed URLs expire in an hour, so refresh well inside that window.
   // Media-link signing can take longer than queue reads on a cold connection.
   const { data, error, loaded } = usePoll("/gallery", 15 * 60 * 1000, 45000);
@@ -533,13 +542,13 @@ function Output({ insightSession, onInsightSessionChange, videoSessions, onVideo
     <>
     {error && <p role="status" className="alarm-text">{t.execution.stale} {userError(error, t.errors)}</p>}
     {externalReport && <Insights insightSession={insightSession} onInsightSessionChange={onInsightSessionChange} />}
-    {selected && <><div className="job-actions"><button className="btn" onClick={() => setSelected(null)}>{copy.closeDetails}</button></div>
+    {selected && <div ref={detailRef} className="output-inspection" tabIndex={-1}><div className="job-actions"><button className="btn" onClick={closeDetails}>{copy.closeDetails}</button></div>
       {selected.job_id ? <Execution key={selected.job_id} jobId={selected.job_id} initialAssetId={selected.id} videoSessions={videoSessions} onVideoSessionsChange={onVideoSessionsChange} />
-        : <VideoDetails key={selected.id} assets={[selected]} videoSessions={videoSessions} onVideoSessionsChange={onVideoSessionsChange} />}</>}
+        : <VideoDetails key={selected.id} assets={[selected]} videoSessions={videoSessions} onVideoSessionsChange={onVideoSessionsChange} />}</div>}
     <div className="gallery">
       {data.map((item) => (
         <figure key={`${item.source}-${item.id}`}>
-          <button type="button" className="output-preview" aria-label={`${t.execution.inspect}: ${item.title}`} onClick={() => setSelected(item)}><video src={item.url} muted preload="metadata" tabIndex={-1} /></button>
+          <button type="button" id={`output-preview-${item.source}-${item.id}`} className="output-preview" aria-label={`${t.execution.inspect}: ${item.title}`} onClick={() => setSelected(item)}><video src={item.url} muted preload="metadata" tabIndex={-1} /></button>
           <figcaption>
             {item.title}
             <br />

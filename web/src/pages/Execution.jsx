@@ -18,10 +18,19 @@ export default function Execution({ jobId, initialAssetId, videoSessions, onVide
   const [assets, setAssets] = useState([]);
   const [assetError, setAssetError] = useState(false);
   useEffect(() => {
-    let active = true;
+    let active = true, timer;
+    const controller = new AbortController();
     if (!data?.job) return;
-    api(`/jobs/${jobId}/outputs`, { timeoutMs: 45000 }).then((rows) => { if (active) { setAssets(rows); setAssetError(false); } }).catch(() => { if (active) setAssetError(true); });
-    return () => { active = false; };
+    async function load() {
+      let delay = data.job.status === "running" ? 10000 : 15 * 60 * 1000;
+      try {
+        const rows = await api(`/jobs/${jobId}/outputs`, { timeoutMs: 45000, signal: controller.signal });
+        if (active) { setAssets(rows); setAssetError(false); }
+      } catch (error) { if (active) { setAssetError(true); delay = 2000; } }
+      finally { if (active) timer = setTimeout(load, delay); }
+    }
+    load();
+    return () => { active = false; controller.abort(); clearTimeout(timer); };
   }, [jobId, data?.job?.status]);
   useEffect(() => {
     let active = true, timer;

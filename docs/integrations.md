@@ -173,7 +173,11 @@ YouTube analytics and upload work are independent: unavailable analytics cannot
 stop publishing or change publication status. These controls do not enable TikTok
 or Instagram, which still need their own platform credentials.
 
-Load channel videos, select one and a date range, then open retention in Insights.
+Load channel videos, select one and a date range, then open retention in Output.
+When it matches an app output, its shared inspector opens with the retention
+report attached to that video. Other channel reports appear within Output.
+Clicking an output thumbnail or Inspect opens playback, narration, upload details,
+performance and CSV/YouTube retention tools. Queue's Inspect uses the same view.
 YouTube watch ratios and elapsed-time fractions are converted explicitly. The
 report identifies its actual first observed sample; it does not fabricate data at
 time zero. Recent videos may not yet have enough analytics. Stored local SRT
