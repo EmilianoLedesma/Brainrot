@@ -21,7 +21,7 @@ def test_intensity_reaches_the_model_prompt_without_changing_the_topic(monkeypat
     assert f"Brainrot intensity: {level}/100" in system and style in system
     assert f"Internet slang: {slang}." in system
     assert "sound natural when read aloud" in system
-    assert "120-160 words" in system and "Follow the supplied premise at every intensity" in system
+    assert "280-380 words" in system and "Follow the supplied premise at every intensity" in system
     assert user == "Topic: Roman silver crisis" and options["provider"] == "codex"
 
 

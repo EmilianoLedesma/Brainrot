@@ -4,11 +4,14 @@ H2 turns a topic into a narration script. H2b feeds a Reddit post through
 `rewrite_post` instead, which keeps the events but fixes the telling.
 """
 
+from pathlib import Path
+
 from pydantic import BaseModel
 
 from . import llm
 
 MODEL = llm.API_MODEL
+STORYTELLING_SKILL = Path(__file__).parent / "skills" / "brainrot-storytelling" / "SKILL.md"
 
 _BRAINROT_STYLES = (
     "Grounded: straightforward, clear storytelling within the supplied premise. No meme slang or absurd comparisons.",
@@ -66,7 +69,11 @@ Structure every script in three beats:
 - Close: land the payoff. Never ask for likes, follows, or comments.
 
 Rules:
-- 120-160 words total.
+- Duration: ninety to one hundred eighty seconds, including the spoken title
+  and natural pauses. Aim for roughly two minutes at a comfortable speaking pace.
+- 280-380 words total, including the title. This is a writing target; measured
+  narration duration is authoritative. Develop meaningful events or explanation
+  rather than padding, repetition, or unnaturally fast or slow delivery.
 - Put a short, speakable headline of three to eight words in the title field.
   The narrator reads this title first, pauses, then reads the script. Do not
   repeat the title in the script or write a pause instruction into either field.
@@ -125,8 +132,11 @@ class Story(BaseModel):
 
 
 def _generate(system: str, user: str, provider: str | None = None) -> Story:
+    # Load on every request so prompt edits reach long-lived workers. Both local
+    # CLIs are isolated from project discovery; pass the skill explicitly.
+    guidance = STORYTELLING_SKILL.read_text(encoding="utf-8").split("---", 2)[-1].strip()
     return llm.generate(
-        system, user, Story, max_tokens=4000, provider=provider, api_model=MODEL,
+        system + "\n\n" + guidance, user, Story, max_tokens=4000, provider=provider, api_model=MODEL,
     )
 
 

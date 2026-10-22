@@ -4,6 +4,7 @@ A topic or a Reddit post becomes a script, the script becomes narration, and the
 narration becomes one or more rendered chapters sitting in Supabase Storage.
 """
 
+import math
 import re
 from typing import Callable
 
@@ -11,9 +12,9 @@ from . import db, render, scheduler, script, tts
 from .application.stages import stage
 from .domain.jobs import PermanentError
 
-# Roughly one minute of narration. Anything longer gets split so each chapter
-# stands alone in a feed.
-WORDS_PER_CHAPTER = 160
+# Normal generated scripts stay whole. Balance unusually long saved stories so
+# a final short fragment does not become a separate video. TTS checks real time.
+WORDS_PER_CHAPTER = 450
 
 
 def split_chapters(text: str) -> list[str]:
@@ -23,11 +24,16 @@ def split_chapters(text: str) -> list[str]:
     longer than the budget is left whole rather than broken.
     """
     sentences = [s.strip() for s in re.split(r"(?<=[.!?])\s+", text.strip()) if s.strip()]
+    count = max(1, math.ceil(len(text.split()) / WORDS_PER_CHAPTER))
+    target = len(text.split()) / count
     chapters: list[list[str]] = []
     budget = 0
     for sentence in sentences:
         length = len(sentence.split())
-        if not chapters or budget + length > WORDS_PER_CHAPTER:
+        if not chapters or (
+            len(chapters) < count and budget > 0
+            and abs(budget - target) <= abs(budget + length - target)
+        ):
             chapters.append([sentence])
             budget = length
         else:
@@ -76,7 +82,18 @@ def produce(job_id: str, write: Callable[[], script.Story], **story_fields) -> s
     background = None
     # split_chapters is deterministic, so the same script yields the same chapters.
     with stage("chaptering"):
+        # Preserve existing chapter boundaries across a deployment and retry.
+        # Never reuse a ready video for a newly assigned piece of the script.
         texts = split_chapters(story["script"])
+        if done:
+            saved = [done[i]["text"] for i in sorted(done)]
+            remaining = story["script"].split()
+            for text in saved:
+                tokens = text.split()
+                if remaining[:len(tokens)] != tokens:
+                    raise PermanentError("Saved chapters do not match the story. Create a new job.")
+                remaining = remaining[len(tokens):]
+            texts = saved + (split_chapters(" ".join(remaining)) if remaining else [])
     for index, text in enumerate(texts, start=1):
         chapter = done.get(index)
         if chapter and chapter["status"] == "ready":

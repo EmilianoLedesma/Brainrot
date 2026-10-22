@@ -8,6 +8,8 @@ import os
 import subprocess
 import tempfile
 
+from unittest.mock import patch
+
 from brainrot import render, repurpose
 from brainrot.pipeline import split_chapters
 
@@ -17,7 +19,7 @@ def test_split_chapters():
     assert split_chapters(short) == [short]
 
     sentence = "word " * 50 + "end. "
-    long_script = sentence * 5
+    long_script = sentence * 12
     chapters = split_chapters(long_script)
     assert len(chapters) > 1, "a long script must split"
     # Splitting mid-sentence would cut a chapter off mid-thought.
@@ -32,15 +34,14 @@ def test_timestamps():
     assert render._timestamp(3661.239) == "1:01:01.24"
 
 
-def test_captions_cover_gaps():
+def test_captions_clear_during_pauses():
     words = [
         {"text": "hello", "start": 0.0, "end": 0.3},
         {"text": "there", "start": 1.0, "end": 1.4},
     ]
     ass = render.build_captions(words)
-    # The first word must hold until the second starts, or the screen goes blank
-    # mid-sentence between them.
-    assert "0:00:00.00,0:00:01.00" in ass, ass
+    # Real narration pauses clear the screen after a brief caption hold.
+    assert "0:00:00.00,0:00:00.40" in ass, ass
     assert "HELLO" in ass and "THERE" in ass
     # Braces would open an ASS override block and swallow the text.
     assert "{" not in ass.split("[Events]")[1]
@@ -111,7 +112,9 @@ def test_reframe_produces_vertical_video():
         # Skip face detection: a test pattern has no face, and the model would
         # have to be fetched from Storage.
         repurpose.track_face = lambda path: [(0.0, 0.3), (1.0, 0.7)]
-        output = repurpose.cut_and_reframe(source, moment, transcript, tmp)
+        # This tiny fixture checks cropping; duration enforcement has its own tests.
+        with patch.object(repurpose, "require_duration"), patch.object(render, "check_video"):
+            output = repurpose.cut_and_reframe(source, moment, transcript, tmp)
 
         probe = subprocess.run(
             ["ffprobe", "-v", "error", "-select_streams", "v:0",

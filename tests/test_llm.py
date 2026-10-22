@@ -57,6 +57,34 @@ def test_default_provider_is_local_claude_even_when_an_api_key_exists(local_cli,
     assert local_cli[-1][0][0] == "claude-code"
 
 
+@pytest.mark.parametrize("provider", ["claude-code", "codex"])
+@pytest.mark.parametrize("retelling", [False, True], ids=["topic", "retelling"])
+def test_storytelling_skill_reaches_isolated_cli_in_one_generation(provider, retelling, local_cli, monkeypatch, tmp_path):
+    # A skill edit must reach an already-imported module without CLI discovery.
+    skill = tmp_path / "SKILL.md"
+    skill.write_text("---\nname: editorial-test\ndescription: Test skill\n---\nReward the opening with an earned ending.", encoding="utf-8")
+    monkeypatch.setattr(script, "STORYTELLING_SKILL", skill)
+    if retelling:
+        script.rewrite_post("A source title", "An unchanged outcome.", provider=provider)
+    else:
+        script.write_story("Roman silver crisis", provider=provider, brainrot_level=100)
+
+    generations = [call for call in local_cli if "status" not in call[0]]
+    assert len(generations) == 1
+    command, prompt, _, _ = generations[0]
+    system = command[command.index("--system-prompt") + 1] if provider == "claude-code" else prompt
+    assert "Reward the opening with an earned ending." in system
+    assert "name: editorial-test" not in system
+    assert "280-380 words" in system
+    if retelling:
+        assert "Keep every event" in system
+        assert "An unchanged outcome." in prompt
+    else:
+        assert "Brainrot intensity: 100/100" in system
+        assert "Factual mode:" in system and "Fictional mode:" in system
+        assert "Roman silver crisis" in prompt
+
+
 def test_codex_is_selectable_in_worker_environment(local_cli, monkeypatch):
     monkeypatch.setenv("BRAINROT_LLM_PROVIDER", "codex")
     script.write_story("topic")
@@ -90,8 +118,8 @@ def test_codex_schema_is_closed_at_nested_moment_objects(local_cli, monkeypatch)
             assert schema["$defs"]["Moment"]["additionalProperties"] is False
             Path(command[command.index("--output-last-message") + 1]).write_text(json.dumps({
                 "moments": [
-                    {"start_seconds": 30, "end_seconds": 50, "title": "second", "reason": "complete", "score": 0.5},
-                    {"start_seconds": 1, "end_seconds": 20, "title": "first", "reason": "complete", "score": 0.9},
+                    {"start_seconds": 130, "end_seconds": 250, "title": "second", "reason": "complete", "score": 0.5},
+                    {"start_seconds": 1, "end_seconds": 101, "title": "first", "reason": "complete", "score": 0.9},
                 ],
             }))
             return ""
@@ -162,7 +190,7 @@ def test_status_capture_includes_codex_stderr(monkeypatch, tmp_path):
 
 
 def test_real_process_treats_input_as_data_not_shell_commands(tmp_path):
-    source = 'a "quoted" topic with & | $(anything) and español'
+    source = 'a "quoted" topic with & | $(anything) and espaÃƒÂ±ol'
     result = llm._run(
         [sys.executable, "-c", "import sys; sys.stdout.buffer.write(sys.stdin.buffer.read())"],
         cwd=tmp_path, env=llm._environment(), timeout=10, prompt=source,

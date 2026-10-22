@@ -270,6 +270,7 @@ export const COPY = {
       colInput: "Input",
       colStatus: "Status",
       colQueued: "Queued",
+      pagination: { label: "Queue pages", page: "Page", of: "of", previous: "Previous", next: "Next" },
       actions: "Job actions",
       retry: { label: "Retry", busy: "Retrying…", queued: "Queued again. Saved progress will be reused." },
       errors: {
@@ -581,6 +582,7 @@ export const COPY = {
       colInput: "Entrada",
       colStatus: "Estado",
       colQueued: "Encolado",
+      pagination: { label: "Páginas de la cola", page: "Página", of: "de", previous: "Anterior", next: "Siguiente" },
       actions: "Acciones del job",
       retry: { label: "Reintentar", busy: "Reintentando…", queued: "Encolado de nuevo. Se reutilizará el progreso guardado." },
       errors: {

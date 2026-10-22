@@ -34,7 +34,7 @@ def test_spoken_title_and_thought_pauses_keep_audio_and_captions_aligned(monkeyp
         return speech_sample, [{"text": text, "start": 0.15, "end": 0.95}]
 
     monkeypatch.setattr(tts, "_synthesize", synthesize)
-    audio, words = tts.narrate("First thought.\n\nThe payoff.", title="A little headline")
+    audio, words = tts.narrate("First thought.\n\nThe payoff.", enforce_duration=False, title="A little headline")
     assert [call[0] for call in spoken] == ["A little headline", "First thought.", "The payoff."]
     assert all(call[2] == "+0%" for call in spoken)
     assert [word["start"] for word in words] == pytest.approx([0.15, 1.9, 3.18])
@@ -67,7 +67,7 @@ def test_long_body_pauses_at_sentence_boundaries_without_losing_words(monkeypatc
         return speech_sample, []
 
     monkeypatch.setattr(tts, "_synthesize", synthesize)
-    tts.narrate(body, title="  ")
+    tts.narrate(body, enforce_duration=False, title="  ")
     assert spoken == ["The story", first, "The final sentence."]
     assert " ".join(spoken[1:]) == body
 
@@ -86,7 +86,7 @@ def test_provider_trailing_silence_does_not_stack_with_the_title_pause(monkeypat
         return padded.getvalue(), [{"text": text, "start": 0.15, "end": 0.95}]
 
     monkeypatch.setattr(tts, "_synthesize", synthesize)
-    audio, words = tts.narrate("Body.", title="Headline")
+    audio, words = tts.narrate("Body.", enforce_duration=False, title="Headline")
     assert words[1]["start"] - words[0]["end"] == pytest.approx(1.02)
     decoded = tts._ffmpeg([
         "-i", "pipe:0", "-f", "s16le", "-ar", str(tts.SAMPLE_RATE), "-ac", "1", "pipe:1",
@@ -100,7 +100,7 @@ def test_empty_body_is_rejected_before_contacting_the_synthesizer(monkeypatch):
 
     monkeypatch.setattr(tts, "_synthesize", unexpected_request)
     with pytest.raises(ValueError, match="must not be empty"):
-        tts.narrate(" \n ", title="Headline")
+        tts.narrate(" \n ", enforce_duration=False, title="Headline")
 
 
 def test_tts_failure_does_not_return_a_partial_title_only_recording(monkeypatch, speech_sample):
@@ -111,7 +111,7 @@ def test_tts_failure_does_not_return_a_partial_title_only_recording(monkeypatch,
 
     monkeypatch.setattr(tts, "_synthesize", synthesize)
     with pytest.raises(TransientError, match="service dropped stream"):
-        tts.narrate("Body.", title="Headline")
+        tts.narrate("Body.", enforce_duration=False, title="Headline")
 
 
 def test_captions_hold_short_word_gaps_but_clear_for_a_title_pause():

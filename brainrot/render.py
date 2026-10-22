@@ -4,7 +4,20 @@ import os
 import subprocess
 import tempfile
 
+from .duration import check_media
+from .domain.jobs import PermanentError
+
 WIDTH, HEIGHT = 1080, 1920
+# Leave headroom below the hosted storage service's common 50 MB object cap.
+# At 180 seconds the constrained video plus 128 kbps audio stays below 45 MB.
+MAX_VIDEO_BYTES = 45_000_000
+VIDEO_RATE_OPTIONS = ("-maxrate", "1800k", "-bufsize", "3600k")
+
+
+def check_video(path: str) -> None:
+    check_media(path)
+    if os.path.getsize(path) > MAX_VIDEO_BYTES:
+        raise PermanentError("The video is too large to store. Please try again with a simpler video.")
 
 # One word on screen at a time, centred and oversized. Alignment 5 is
 # middle-centre; the heavy outline keeps text readable over any background.
@@ -62,6 +75,8 @@ def render(background: bytes, narration: bytes, words: list[dict]) -> bytes:
             with open(os.path.join(tmp, name), "wb") as handle:
                 handle.write(data)
 
+        check_media(os.path.join(tmp, "voice.mp3"))
+
         # Run from the temp directory and pass bare filenames: the subtitles filter
         # treats ':' and '\' as syntax, which every Windows absolute path contains.
         command = [
@@ -74,11 +89,14 @@ def render(background: bytes, narration: bytes, words: list[dict]) -> bytes:
             "-map", "[v]", "-map", "1:a",
             "-shortest",
             "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p",
+            *VIDEO_RATE_OPTIONS,
             "-c:a", "aac", "-b:a", "128k",
+            "-movflags", "+faststart",
             "out.mp4",
         ]
         result = subprocess.run(command, cwd=tmp, capture_output=True, text=True)
         if result.returncode != 0:
             raise RuntimeError(f"ffmpeg failed: {result.stderr.strip()[-500:]}")
+        check_video(os.path.join(tmp, "out.mp4"))
         with open(os.path.join(tmp, "out.mp4"), "rb") as handle:
             return handle.read()

@@ -66,6 +66,16 @@ Storage bucket. Nothing on the local disk is expected to survive a job.
    H2b additionally needs approved Reddit API access and the Reddit variables in
    `.env.example`. Platform publishing credentials are configured separately.
 
+Topic scripts and Reddit retellings automatically use the project-owned
+[storytelling skill](docs/storytelling.md) with both Claude and Chat GPT.
+It guides hooks, narrative progression and payoffs in the existing generation call.
+New narration and finished videos must last **90-180 seconds**, including the
+spoken title and pauses. Scripts target 280-380 words at a natural pace; actual
+audio and video duration is checked before upload. Repurposed clips use the same
+range. Out-of-range material fails rather than being padded or cut mid-sentence.
+Previously completed videos remain unchanged; an old short saved script needs a
+new job to generate a longer version.
+
 Preview a topic without creating a job or publishing:
 
 ```sh

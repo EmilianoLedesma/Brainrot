@@ -312,6 +312,16 @@ function Queue() {
   const [retryError, setRetryError] = useState(null);
   const [retried, setRetried] = useState(null);
   const [inspectionVersion, setInspectionVersion] = useState(0);
+  const [page, setPage] = useState(1);
+  const pageSize = 4;
+  const pageCount = Math.max(1, Math.ceil(data.length / pageSize));
+  const currentPage = Math.min(page, pageCount);
+  const firstRow = (currentPage - 1) * pageSize;
+  const visibleJobs = data.slice(firstRow, firstRow + pageSize);
+
+  useEffect(() => {
+    setPage((previous) => Math.min(previous, pageCount));
+  }, [pageCount]);
 
   async function retry(jobId) {
     setRetrying(jobId);
@@ -388,7 +398,7 @@ function Queue() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((job) => (
+                {visibleJobs.map((job) => (
                   <tr key={job.id}>
                     <td>
                       <span className={`kind-tag kind-${job.kind}`}>{job.kind}</span>
@@ -428,6 +438,18 @@ function Queue() {
               </tbody>
             </table>
           </div>
+          <nav className="queue-pagination" aria-label={t.pagination.label}>
+            <span className="muted" aria-live="polite">
+              {t.pagination.page} {currentPage} {t.pagination.of} {pageCount}
+              {" · "}{firstRow + 1}–{Math.min(firstRow + pageSize, data.length)} {t.pagination.of} {data.length}
+            </span>
+            <div className="queue-actions">
+              <button className="btn" disabled={currentPage === 1}
+                onClick={() => setPage(currentPage - 1)}>{t.pagination.previous}</button>
+              <button className="btn" disabled={currentPage === pageCount}
+                onClick={() => setPage(currentPage + 1)}>{t.pagination.next}</button>
+            </div>
+          </nav>
         </div>
       </div>
       {selected && <Execution key={selected + ":" + inspectionVersion} jobId={selected} />}

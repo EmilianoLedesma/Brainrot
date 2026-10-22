@@ -17,6 +17,7 @@ from pydantic import BaseModel
 from . import db, llm, render, scheduler, script
 from .application.stages import stage
 from .domain.jobs import PermanentError
+from .duration import MIN_SECONDS, MAX_SECONDS, require_duration
 from .models import FACE_MODEL_PATH
 
 # Face positions are sampled this often and the crop is keyframed at the same rate.
@@ -47,7 +48,7 @@ A moment qualifies only if it:
 - opens on a line that makes sense with no preceding context,
 - contains one complete idea, claim, or story,
 - ends on a natural beat rather than mid-sentence,
-- runs between fifteen and sixty seconds.
+- runs between ninety and one hundred eighty seconds.
 
 Score each from 0 to 1 on how likely a scrolling viewer is to watch it through.
 Return the strongest moments only - returning three good ones beats returning ten
@@ -130,7 +131,11 @@ def select_moments(transcript: list[dict]) -> list[Moment]:
         SELECT_SYSTEM, f"Transcript:\n{lines}", Moments,
         max_tokens=8000, api_model=script.MODEL,
     )
-    return sorted(response.moments, key=lambda m: m.score, reverse=True)
+    moments = [m for m in response.moments if m.start_seconds >= 0
+               and MIN_SECONDS <= m.end_seconds - m.start_seconds <= MAX_SECONDS]
+    if not moments:
+        raise PermanentError("No complete 90-180 second moments were found in this video.")
+    return sorted(moments, key=lambda m: m.score, reverse=True)
 
 
 def face_model_path() -> str:
@@ -220,6 +225,7 @@ def crop_expression(keyframes: list[tuple[float, float]], width: int, crop_width
 
 def cut_and_reframe(source: str, moment: Moment, transcript: list[dict], directory: str) -> str:
     """Cut one moment, reframe it to 9:16 on the speaker, burn in its captions."""
+    require_duration(moment.end_seconds - moment.start_seconds)
     clip = os.path.join(directory, "cut.mp4")
     subprocess.run(
         [
@@ -267,12 +273,15 @@ def cut_and_reframe(source: str, moment: Moment, transcript: list[dict], directo
             "ffmpeg", "-y", "-hide_banner", "-loglevel", "error", "-i", "cut.mp4",
             "-vf", video_filter,
             "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p",
+            *render.VIDEO_RATE_OPTIONS,
             "-c:a", "aac", "-b:a", "128k", "vertical.mp4",
         ],
         cwd=directory,
         check=True,
     )
-    return os.path.join(directory, "vertical.mp4")
+    output = os.path.join(directory, "vertical.mp4")
+    render.check_video(output)
+    return output
 
 
 def _source_for(job_id: str, url: str, source: str, info: dict, directory: str) -> dict:

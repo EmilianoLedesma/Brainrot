@@ -9,7 +9,7 @@ import pytest
 from brainrot import pipeline, reddit, render, repurpose, script, tts
 
 SENTENCE = " ".join(["word"] * 99) + " end."  # 100 words
-LONG_SCRIPT = " ".join([SENTENCE] * 3)  # splits into three chapters
+LONG_SCRIPT = " ".join([SENTENCE] * 12)  # splits into three chapters
 
 
 @pytest.fixture
@@ -123,6 +123,22 @@ def test_planning_a_story_twice_does_not_double_queue(fake_db, background, narra
 
     assert len(fake_db.rows("stories")) == 1
     assert len(fake_db.rows("publications")) == 3
+
+
+@pytest.mark.parametrize("separator", [" ", "\n\n", "\r\n"])
+def test_retry_preserves_ready_chapter_boundaries_from_before_duration_change(fake_db, background, narration, monkeypatch, separator):
+    text = separator.join([SENTENCE] * 6)
+    saved = " ".join([SENTENCE] * 2)
+    story = fake_db.table("stories").insert({"job_id": "old-job", "title": "T", "script": text}).execute().data[0]
+    fake_db.table("story_chapters").insert({
+        "story_id": story["id"], "chapter_index": 1, "text": saved, "status": "ready",
+    }).execute()
+    monkeypatch.setattr(render, "render", FlakyRender(fail_on=None))
+    pipeline.produce("old-job", lambda: pytest.fail("saved script must be reused"))
+    chapters = sorted(fake_db.rows("story_chapters"), key=lambda chapter: chapter["chapter_index"])
+    assert chapters[0]["text"] == saved
+    assert " ".join(chapter["text"] for chapter in chapters).split() == text.split()
+    assert narration == [("T", " ".join([SENTENCE] * 4))]
 
 
 def test_h2b_retry_does_not_hit_the_unique_post_id(fake_db, background, narration, monkeypatch):

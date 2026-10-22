@@ -13,6 +13,7 @@ import tempfile
 import edge_tts
 
 from .domain.jobs import TransientError
+from .duration import require_duration
 
 VOICE = "en-US-AndrewNeural"
 RATE = "+0%"
@@ -82,7 +83,7 @@ def _ffmpeg(arguments: list[str], data: bytes) -> bytes:
     return result.stdout
 
 
-async def _paced_narration(text: str, title: str, voice: str, rate: str) -> tuple[bytes, list[dict]]:
+async def _paced_narration(text: str, title: str, voice: str, rate: str, enforce_duration: bool) -> tuple[bytes, list[dict]]:
     sections = [title.strip() or "The story", *_thoughts(text)]
     pcm = bytearray()
     words: list[dict] = []
@@ -109,6 +110,9 @@ async def _paced_narration(text: str, title: str, voice: str, rate: str) -> tupl
             pause = TITLE_PAUSE if index == 0 else THOUGHT_PAUSE
             pcm.extend(b"\0\0" * round(SAMPLE_RATE * pause))
 
+    if enforce_duration:
+        require_duration(len(pcm) / BYTES_PER_SECOND)
+
     # A seekable output lets FFmpeg record MP3 encoder delay/padding. Players
     # then start at the same sample zero used by the caption timestamps.
     with tempfile.TemporaryDirectory() as directory:
@@ -120,8 +124,8 @@ async def _paced_narration(text: str, title: str, voice: str, rate: str) -> tupl
         return output.read_bytes(), words
 
 
-def narrate(text: str, voice: str = VOICE, rate: str = RATE, *, title: str = "The story") -> tuple[bytes, list[dict]]:
+def narrate(text: str, voice: str = VOICE, rate: str = RATE, *, title: str = "The story", enforce_duration: bool = True) -> tuple[bytes, list[dict]]:
     """Speak a title, pause, then the body; return MP3 and aligned word timings."""
     if not text.strip():
         raise ValueError("narration text must not be empty")
-    return asyncio.run(_paced_narration(text, title, voice, rate))
+    return asyncio.run(_paced_narration(text, title, voice, rate, enforce_duration))
