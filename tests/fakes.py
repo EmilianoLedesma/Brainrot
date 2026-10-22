@@ -29,6 +29,7 @@ class _Query:
         self.filters: list = []
         self.orders: list = []
         self.limit_n: int | None = None
+        self.offset_n = 0
         self.single_row = False
         self.on_conflict = ""
         self.ignore_duplicates = False
@@ -101,6 +102,10 @@ class _Query:
         self.limit_n = n
         return self
 
+    def range(self, start, end):
+        self.offset_n, self.limit_n = start, end - start + 1
+        return self
+
     def single(self):
         self.single_row = True
         return self
@@ -114,7 +119,7 @@ class _Query:
             present.sort(key=lambda row: row[column], reverse=desc)
             rows = missing + present if nullsfirst else present + missing
         if self.limit_n is not None:
-            rows = rows[: self.limit_n]
+            rows = rows[self.offset_n:self.offset_n + self.limit_n]
         return rows
 
     def execute(self):

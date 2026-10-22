@@ -21,7 +21,11 @@ def test_fetch_rejects_a_wrong_digest_before_upload(monkeypatch):
 
 
 def test_failed_download_does_not_poison_the_local_model_cache(fake_db, tmp_path, monkeypatch):
-    monkeypatch.setattr(repurpose.tempfile, "gettempdir", lambda: str(tmp_path))
-    with pytest.raises(KeyError):
+    from brainrot import media
+    monkeypatch.setenv("BRAINROT_MEDIA_ROOT", str(tmp_path))
+    def unavailable():
+        raise PermanentError("download unavailable")
+    monkeypatch.setattr(models, "fetch_face_model", unavailable)
+    with pytest.raises(PermanentError, match="unavailable"):
         repurpose.face_model_path()
-    assert not (tmp_path / "yunet.onnx").exists()
+    assert not media.path(models.FACE_MODEL_PATH).exists()

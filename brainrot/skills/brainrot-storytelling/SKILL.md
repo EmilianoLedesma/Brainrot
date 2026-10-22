@@ -48,6 +48,27 @@ debunking, or 'everyone thinks X, but actually Y' template.
 
 ## Advance instead of restating
 
+For a factual mystery or explanation, consider this progression when the supplied
+material supports it: a concrete surprising observation, the mechanism or evidence,
+a plausible alternative explanation, the observation that distinguishes them, and
+the consequence that changes how the opening is understood. Give the listener an
+answer along the way, then a deeper question; do not defer all substance to the end.
+Experiments, comparisons, dates and percentages belong only when supported by the
+reference material. Never invent a study, control group, scientist or historical
+anecdote to fit this structure. When evidence is missing, explain the known mechanism
+with an everyday example clearly framed as an illustration, or omit the claim.
+
+Make concepts easy to picture through concrete actions and objects: what is being
+compared, what changes, what stays, and why the difference matters. Narration must
+remain understandable without topic-specific animation. Keep research attribution
+brief and speakable; mark a proposed mechanism as proposed rather than established.
+One meaningful complication can deepen the explanation; do not stack unrelated facts.
+
+This is an optional factual-story structure, not a requirement to refute every topic.
+In explicitly fictional premises, develop consequences within that world instead of
+switching to scientific debunking. Use a final reflective question only when it follows
+from an already-earned payoff; it must not substitute for an answer or ask for comments.
+
 Make each beat change the situation or deepen the explanation. Connect beats
 through cause, obstacle, choice, and consequence rather than listing events.
 Reveal useful information throughout; do not withhold the entire substance for

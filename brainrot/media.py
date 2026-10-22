@@ -1,14 +1,15 @@
 """Portable local media files; the database stores only POSIX relative paths."""
 import hashlib
 import hmac
+import io
 import os
 from pathlib import Path, PurePosixPath
 import tempfile
 import threading
 import time
 from urllib.parse import quote
+from .config import PROJECT_ROOT
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
 _locks = {}
 _guard = threading.Lock()
 
@@ -33,7 +34,11 @@ def root() -> Path:
 
 def path(relative: str) -> Path:
     parts = PurePosixPath(relative)
-    if not relative or "\\" in relative or ":" in relative or parts.is_absolute() or any(p in {".", ".."} for p in relative.split("/")):
+    segments = relative.split("/")
+    reserved = {"CON", "PRN", "AUX", "NUL", *(f"COM{i}" for i in range(1, 10)), *(f"LPT{i}" for i in range(1, 10))}
+    if (not relative or any(character in relative for character in '\\:<>"|?*')
+            or any(ord(character) < 32 for character in relative) or parts.is_absolute()
+            or any(p in {"", ".", ".."} or p.endswith((".", " ")) or p.split(".")[0].upper() in reserved for p in segments)):
         raise ValueError("Invalid media path")
     target = (root() / relative).resolve()
     if not target.is_relative_to(root()) or target == root():
@@ -42,13 +47,22 @@ def path(relative: str) -> Path:
 
 
 def save(relative: str, data: bytes) -> str:
+    return save_stream(relative, io.BytesIO(data))
+
+
+def save_stream(relative: str, source, expected_hash: str | None = None) -> str:
     target = path(relative)
     target.parent.mkdir(parents=True, exist_ok=True)
     temporary = None
     try:
         with tempfile.NamedTemporaryFile(dir=target.parent, delete=False) as output:
             temporary = Path(output.name)
-            output.write(data)
+            digest = hashlib.sha256()
+            while chunk := source.read(1024 * 1024):
+                output.write(chunk)
+                digest.update(chunk)
+        if expected_hash and digest.hexdigest() != expected_hash:
+            raise ValueError("Media checksum does not match the transfer manifest")
         os.replace(temporary, target)
     finally:
         if temporary is not None:

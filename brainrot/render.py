@@ -5,6 +5,9 @@ import math
 import os
 import subprocess
 import tempfile
+from pathlib import Path
+import shutil
+from .config import PROJECT_ROOT
 
 from .duration import check_media
 from .domain.jobs import PermanentError
@@ -15,6 +18,13 @@ WIDTH, HEIGHT = 1080, 1920
 MAX_VIDEO_BYTES = 45_000_000
 VIDEO_RATE_OPTIONS = ("-maxrate", "1800k", "-bufsize", "3600k")
 VOICE_FILTER = "loudnorm=I=-16:TP=-1.5:LRA=11"
+CAPTION_FONT = PROJECT_ROOT / "brainrot" / "assets" / "fonts" / "Anton-Regular.ttf"
+
+
+def install_fonts(directory):
+    folder = Path(directory) / "fonts"
+    folder.mkdir(exist_ok=True)
+    shutil.copyfile(CAPTION_FONT, folder / CAPTION_FONT.name)
 
 
 def check_captions(words: list[dict], seconds: float) -> None:
@@ -53,7 +63,7 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Pop,Arial Black,120,&H00FFFFFF,&H00000000,&H00000000,1,1,8,0,5,80,80,80,1
+Style: Pop,Anton,120,&H00FFFFFF,&H00000000,&H00000000,1,1,8,0,5,80,80,80,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -102,6 +112,7 @@ def build_srt(words: list[dict]) -> str:
 def render(background: bytes, narration: bytes, words: list[dict]) -> bytes:
     """Loop the background under the narration, burn in the captions, return mp4."""
     with tempfile.TemporaryDirectory() as tmp:
+        install_fonts(tmp)
         paths = {
             "bg.mp4": background,
             "voice.mp3": narration,
@@ -122,7 +133,7 @@ def render(background: bytes, narration: bytes, words: list[dict]) -> bytes:
             "-i", "voice.mp3",
             "-filter_complex",
             f"[0:v]scale={WIDTH}:{HEIGHT}:force_original_aspect_ratio=increase,"
-            f"crop={WIDTH}:{HEIGHT},setsar=1,subtitles=captions.ass[v]",
+            f"crop={WIDTH}:{HEIGHT},setsar=1,subtitles=captions.ass:fontsdir=fonts[v]",
             "-map", "[v]", "-map", "1:a",
             "-shortest",
             "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p",

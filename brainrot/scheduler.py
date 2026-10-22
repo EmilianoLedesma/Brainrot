@@ -33,7 +33,9 @@ def queue(target: str, target_id: str, when: datetime) -> list[dict]:
     """
     options = _youtube_options(target, target_id)
     rows = [
-        {"platform": platform, target: target_id, "scheduled_at": when.isoformat()}
+        # PostgREST expands bulk inserts to the union of row columns. Omitting
+        # metadata on other platforms becomes NULL when YouTube has options.
+        {"platform": platform, target: target_id, "scheduled_at": when.isoformat(), "metadata": {}}
         for platform in PLATFORMS if platform != "youtube" or not options or options.get("mode") != "off"
     ]
     if options:

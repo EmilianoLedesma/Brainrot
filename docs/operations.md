@@ -1,24 +1,26 @@
 # Operations
 
 The API, worker and dashboard share Supabase as the source of truth. PostgreSQL
-owns claims, lease guards, retries, stage records and publication claims. Media
-lives in the private `media` bucket. Local downloads and model caches are disposable.
+owns claims, lease guards, retries, stage records and publication claims. New media
+lives on persistent local disk by default; rows keep relative paths. Legacy cloud
+objects can be cached locally. Media and model caches can travel in a verified
+handoff archive; see [moving between computers](moving-between-computers.md).
 Redis/RabbitMQ, separate worker pools and horizontal scaling remain deferred.
 
 ## Start and inspect
 
-Apply migrations 001–005 before starting this version. Install
-`requirements.txt`, FFmpeg/ffprobe, and the server environment in `.env.example`.
-Install H1's detector with `python -m brainrot.cli setup-face-model` and add a
+Apply every unapplied migration through 014 before starting this version. Run
+`python scripts/bootstrap.py`, install FFmpeg/ffprobe, and configure root `.env`.
+H1 bootstraps its detector on first use, or fetch it in advance with
+`python -m brainrot.cli setup-face-model`. Add a
 background for H2/H2b with `python -m brainrot.cli add-background background.mp4`.
 The model command checks a pinned SHA-256 before upload; a failed download cannot
 leave a partial local detector cache.
 
-Run the API and worker as separate supervised processes:
+For local development, start the dashboard, API and worker together:
 
 ```sh
-uvicorn brainrot.api:app --host 0.0.0.0 --port 8000
-python -m brainrot.worker
+uv run --locked python -m brainrot.dev
 ```
 
 The worker polls every five seconds. Chapter pacing and publishing run when idle
@@ -29,7 +31,8 @@ Workspace -> Queue shows status, current stage, attempt, duration and a short
 plain-language error message. Queue, Inspect, and forms never render upstream
 error strings. Redacted diagnostics remain in API responses (browser developer
 tools -> Network); full stored tracebacks remain in worker/database diagnostics.
-New topic jobs include a 0–100 Brainrot level slider, defaulting to 35. Its saved
+New topic jobs use five named Brainrot steps, defaulting to Playful; the API keeps
+its numeric intensity contract. Its saved
 value appears in Review, Queue and Inspect and controls script style for either
 local model integration. Legacy jobs without it keep their original prompt.
 Inspect shows only the current attempt's stages and publication states. Retry
@@ -46,15 +49,18 @@ transient connection failures and resumes its loop instead of exiting.
 
 Repeated `GET /jobs/{uuid}` requests returning HTTP 200 are normal inspector
 polling; the job's status and stage history describe pipeline failures.
-Narration requires `edge-tts>=7.3.1`: older releases can receive HTTP 403 from
-Microsoft following the October 2026 speech-protocol change. Upgrade with
-`python -m pip install -r requirements.txt` and restart the worker before Retry.
+Narration uses the locked edge-tts version. Refresh dependencies with
+`uv sync --locked` and restart the worker when updating. Each narration attempt
+has a five-minute deadline; a stalled stream is cancelled and retried using the
+saved script under the existing retry policy.
 
 Delete opens a confirmation dialog for any job, including running work. Confirming
 revokes its lease and removes its related database rows. The current operation
 may finish, but cannot record completion or start a later stage. An active platform
-upload blocks deletion with HTTP 409. Stored media and existing platform posts
-are retained. Requires migration `006_delete_jobs.sql`.
+upload blocks deletion with HTTP 409. Related generated media is removed, with
+durable cleanup for failed removals and guards against late writes. Shared
+backgrounds and existing remote platform posts remain. Requires migrations
+`006_delete_jobs.sql` and `008_delete_job_media.sql`.
 
 Inspect, Retry, and Delete are arranged in one row. Retry appears for failed jobs
 and requeues the same job using its saved progress. Scripts, finished chapters/clips,

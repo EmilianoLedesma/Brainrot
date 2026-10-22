@@ -21,3 +21,20 @@ def fetch_face_model() -> bytes:
     if hashlib.sha256(response.content).hexdigest() != FACE_MODEL_SHA256:
         raise PermanentError("face model checksum does not match the pinned OpenCV model")
     return response.content
+
+
+def ensure_face_model() -> str:
+    """Use a verified checkout-local model, bootstrapping a fresh machine on demand."""
+    from . import db, media
+    target = media.path(FACE_MODEL_PATH)
+    with media.file_lock(FACE_MODEL_PATH):
+        if target.is_file() and hashlib.sha256(target.read_bytes()).hexdigest() == FACE_MODEL_SHA256:
+            return str(target)
+        try:
+            content = db.download(FACE_MODEL_PATH)
+        except Exception:
+            content = b""
+        if hashlib.sha256(content).hexdigest() != FACE_MODEL_SHA256:
+            content = fetch_face_model()
+        media.save(FACE_MODEL_PATH, content)
+    return str(target)

@@ -22,6 +22,7 @@ THOUGHT_PAUSE = 0.28
 WORDS_PER_THOUGHT = 40
 SAMPLE_RATE = 24_000
 BYTES_PER_SECOND = SAMPLE_RATE * 2  # Signed 16-bit mono PCM.
+NARRATION_TIMEOUT_SECONDS = 300
 
 # edge-tts reports offsets in 100-nanosecond ticks.
 TICKS_PER_SECOND = 10_000_000
@@ -124,8 +125,20 @@ async def _paced_narration(text: str, title: str, voice: str, rate: str, enforce
         return output.read_bytes(), words
 
 
+async def _bounded_narration(text, title, voice, rate, enforce_duration):
+    # WebSocket keepalives can keep a stalled stream alive indefinitely despite
+    # the provider's socket-read timeout. Bound the entire narration attempt.
+    try:
+        return await asyncio.wait_for(
+            _paced_narration(text, title, voice, rate, enforce_duration),
+            timeout=NARRATION_TIMEOUT_SECONDS,
+        )
+    except TimeoutError as error:
+        raise TransientError("Speech generation timed out; the saved script can be retried") from error
+
+
 def narrate(text: str, voice: str = VOICE, rate: str = RATE, *, title: str = "The story", enforce_duration: bool = True) -> tuple[bytes, list[dict]]:
     """Speak a title, pause, then the body; return MP3 and aligned word timings."""
     if not text.strip():
         raise ValueError("narration text must not be empty")
-    return asyncio.run(_paced_narration(text, title, voice, rate, enforce_duration))
+    return asyncio.run(_bounded_narration(text, title, voice, rate, enforce_duration))

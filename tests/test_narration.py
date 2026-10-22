@@ -124,3 +124,21 @@ def test_captions_hold_short_word_gaps_but_clear_for_a_title_pause():
     assert "0:00:00.00,0:00:00.20" in captions
     assert "0:00:00.20,0:00:00.60" in captions
     assert "0:00:01.75,0:00:02.00" in captions
+
+
+def test_stalled_narration_is_cancelled_and_retryable(monkeypatch):
+    import asyncio
+
+    cancelled = []
+
+    async def stalled(*args):
+        try:
+            await asyncio.Event().wait()
+        finally:
+            cancelled.append(True)
+
+    monkeypatch.setattr(tts, "_paced_narration", stalled)
+    monkeypatch.setattr(tts, "NARRATION_TIMEOUT_SECONDS", 0.01)
+    with pytest.raises(TransientError, match="Speech generation timed out"):
+        tts.narrate("A saved script")
+    assert cancelled == [True]

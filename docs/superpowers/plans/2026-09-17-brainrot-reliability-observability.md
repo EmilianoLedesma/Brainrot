@@ -1,5 +1,10 @@
 # Brainrot --- Reliability, Observability & Extensible Pipeline Architecture Implementation Plan
 
+> Historical implementation plan. For current behavior, branch state, setup and
+> remaining work, start with [agent orientation](../../agents/README.md) and the
+> [dated handoff](../../agents/handoff.md). Later local-media and integration work
+> supersedes the original storage assumptions and credential blockers below.
+
 > **For agentic workers:** REQUIRED SUB-SKILL:
 > `superpowers:subagent-driven-development` (or
 > `superpowers:executing-plans` when executing this plan).

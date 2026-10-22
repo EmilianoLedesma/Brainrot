@@ -7,7 +7,7 @@ import subprocess
 import sys
 import shutil
 
-from . import db, llm, models, publish, reddit, scheduler, script, media
+from . import db, llm, models, publish, reddit, scheduler, script, media, portable, render
 from .observability.logging import configure
 
 
@@ -75,21 +75,22 @@ def publish_due(args: argparse.Namespace) -> None:
 
 def doctor(args: argparse.Namespace) -> None:
     import os
-    print(json.dumps({"media_backend": "local" if media.local() else "supabase", "media_root": str(media.root()),
+    report = {"media_backend": "local" if media.local() else "supabase", "media_root": str(media.root()), "python": sys.version.split()[0],
         "ffmpeg": bool(shutil.which("ffmpeg")), "ffprobe": bool(shutil.which("ffprobe")),
         "codex": bool(shutil.which("codex")), "claude": bool(shutil.which("claude")),
         "youtube_oauth_configured": bool(os.getenv("YOUTUBE_CLIENT_ID") and os.getenv("YOUTUBE_CLIENT_SECRET")),
-        "pexels_configured": bool(os.getenv("PEXELS_API_KEY"))}, indent=2))
+        "pexels_configured": bool(os.getenv("PEXELS_API_KEY")), "caption_font": render.CAPTION_FONT.is_file(),
+        "supabase_configured": bool(os.getenv("SUPABASE_URL") and os.getenv("SUPABASE_SERVICE_KEY")),
+        "storytelling_skill": script.STORYTELLING_SKILL.is_file()}
+    if getattr(args, "check_media", False):
+        report["media"] = portable.check_media()
+    print(json.dumps(report, indent=2))
 
 
 def sync_media(args: argparse.Namespace) -> None:
     if not media.local():
         raise ValueError("Set BRAINROT_MEDIA_STORAGE=local before synchronizing media.")
-    paths = set()
-    for table, columns in (("background_clips", ["storage_path"]), ("story_chapters", ["audio_path", "video_path"]),
-                           ("clips", ["storage_path"]), ("source_videos", ["storage_path"])):
-        for row in db.client().table(table).select(",".join(columns)).execute().data:
-            paths.update(row[column] for column in columns if row.get(column))
+    paths = portable.referenced_paths()
     copied, missing = 0, []
     for path in sorted(paths):
         if media.path(path).is_file():
@@ -104,12 +105,31 @@ def sync_media(args: argparse.Namespace) -> None:
     print(json.dumps({"copied": copied, "unavailable": missing, "root": str(media.root())}))
 
 
+def export_media(args):
+    portable.require_idle()
+    print(json.dumps(portable.export_bundle(args.archive)))
+
+
+def import_media(args):
+    portable.require_idle()
+    print(json.dumps(portable.import_bundle(args.archive, overwrite=args.overwrite)))
+
+
 def main(argv: list[str] | None = None) -> int:
     configure()
     parser = argparse.ArgumentParser(prog="brainrot")
     sub = parser.add_subparsers(dest="command", required=True)
-    sub.add_parser("doctor", help="check this computer's project setup without exposing secrets").set_defaults(func=doctor)
+    diagnostics = sub.add_parser("doctor", help="check this computer's project setup without exposing secrets")
+    diagnostics.add_argument("--check-media", action="store_true", help="check every database-referenced media file on this computer")
+    diagnostics.set_defaults(func=doctor)
     sub.add_parser("sync-media", help="copy existing Supabase media into the project's portable local folder").set_defaults(func=sync_media)
+    exporter = sub.add_parser("export-media", help="create a checksum-verified media handoff archive, without project credentials")
+    exporter.add_argument("archive")
+    exporter.set_defaults(func=export_media)
+    importer = sub.add_parser("import-media", help="restore a verified media handoff on this computer")
+    importer.add_argument("archive")
+    importer.add_argument("--overwrite", action="store_true", help="explicitly replace conflicting local media with the archive's copy")
+    importer.set_defaults(func=import_media)
 
     background = sub.add_parser("add-background", help="upload a looping background clip")
     background.add_argument("file")

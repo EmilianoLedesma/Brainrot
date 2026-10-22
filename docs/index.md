@@ -1,5 +1,14 @@
 # Documentation
 
+- [Agent orientation](agents/README.md): start here for a new development session.
+- [Current handoff](agents/handoff.md): dated status, evidence and remaining work.
+- [Architecture](agents/architecture.md): code map, execution flows and model guidance.
+- [Development](agents/development.md): reproducible setup, services and validation.
+- [Product decisions](agents/decisions.md): accepted behavior to preserve.
+- [Moving between computers](moving-between-computers.md): local setup and verified media handoff.
+- [Integrations and YouTube](integrations.md): OAuth, publishing, research and media library.
+- [Storytelling](storytelling.md): runtime writing guidance and quality comparisons.
+- [Content quality](content-quality.md): script review and per-video retention tools.
 - [Deployment](deployment.md): Vercel dashboard settings, API/worker hosting and setup prerequisites.
 - [Operations](operations.md): logs, metrics, job inspection, recovery, migration safety and validation.
 - [Local models](local-models.md): Claude Code and Codex subscription adapters, configuration and previews.

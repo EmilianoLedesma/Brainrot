@@ -1,0 +1,16 @@
+[project]
+name = "brainrot"
+version = "0.1.0"
+requires-python = ">=3.12,<3.15"
+dependencies = [
+  "supabase==2.31.0", "python-dotenv==1.2.3", "fastapi==0.141.1",
+  "uvicorn[standard]==0.53.0", "anthropic==1.6.0", "edge-tts==7.3.1",
+  "praw==8.0.3", "yt-dlp==2026.8.19", "opencv-python-headless==5.0.0.93",
+  "faster-whisper==1.2.1", "numpy==2.5.3", "requests==2.34.2",
+]
+
+[dependency-groups]
+dev = ["pytest==9.1.1", "psycopg[binary]==3.3.6", "playwright==1.64.0"]
+
+[tool.uv]
+package = false

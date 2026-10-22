@@ -1,5 +1,8 @@
 # brainrot
 
+Developing with an agent? Start with [AGENTS.md](AGENTS.md), the
+[current handoff](docs/agents/handoff.md), and the [documentation index](docs/index.md).
+
 Generates and auto-publishes short vertical video (YouTube Shorts, Reels, TikTok)
 from three sources:
 
@@ -9,8 +12,9 @@ from three sources:
 
 Database rows live in Supabase. New media is saved under the project's ignored
 `media/` folder; rows keep portable relative paths. Existing Supabase Storage
-objects are downloaded and cached on first use. Copy `media/` when moving to a
-different computer. See [portable integrations and YouTube setup](docs/integrations.md).
+objects are downloaded and cached on first use. Use a verified media archive when
+switching computers: [local setup and handoff](docs/moving-between-computers.md).
+See also [integrations and YouTube setup](docs/integrations.md).
 
 ## Layout
 
@@ -57,18 +61,24 @@ different computer. See [portable integrations and YouTube setup](docs/integrati
    `007_retry_jobs.sql` adds explicit retries that preserve saved progress.
    `008_delete_job_media.sql` adds durable removal of deleted jobs' media.
    `009_background_rotation.sql` adds persistent per-story background rotation.
-   Apply all nine before starting this version.
+   Migrations 010-013 add publication metadata, library activation, saved YouTube
+   drafts and performance snapshots. `014_local_media_host.sql` prevents separate
+   local-media computers from taking the shared queue concurrently. Apply every
+   unapplied migration before starting this version.
 3. `cp .env.example .env` and fill in `SUPABASE_URL` and `SUPABASE_SERVICE_KEY`
    (Project Settings -> API). The service_role key bypasses RLS — server-side only.
-4. `pip install -r requirements.txt`
-5. `python test_db.py` -> `phase 0 ok`
+4. Install uv and Node.js 24, then run `python scripts/bootstrap.py`. This installs
+   Python 3.14, locked Python dependencies and frontend dependencies, preserving
+   existing settings. Use `uv run --locked python` for subsequent Python commands.
+5. `uv run --locked python test_db.py` -> `phase 0 ok`
 6. Install FFmpeg/ffprobe on the worker host. For local generation, sign in to
    Claude Code with `claude auth login` or Codex with `codex login` on that host.
    Set `BRAINROT_LLM_PROVIDER=claude-code` (the default) or `codex` in `.env`.
    Local modes use the saved subscription login and require no API key.
    H2/H2b need an active background: `python -m brainrot.cli add-background background.mp4`.
-   H1 needs `python -m brainrot.cli setup-face-model`, which downloads pinned,
-   checksum-verified OpenCV YuNet weights and uploads them to the private bucket.
+   H1 downloads pinned, checksum-verified OpenCV YuNet weights into the project's
+   media folder on first use; `python -m brainrot.cli setup-face-model` can also
+   fetch them in advance.
    H2b additionally needs approved Reddit API access and the Reddit variables in
    `.env.example`. Platform publishing credentials are configured separately.
 
@@ -76,7 +86,7 @@ Topic scripts and Reddit retellings automatically use the project-owned
 [storytelling skill](docs/storytelling.md) with both Claude and Chat GPT.
 It guides hooks, narrative progression and payoffs in the existing generation call.
 The skill now considers different openings and reviews narrative consistency and
-payoffs before returning a script. Workspace → Insights imports retention CSVs
+payoffs before returning a script. Output/Inspect imports retention CSVs
 and optional timed subtitles into an explorable report, without platform access
 or model calls. See [content quality and retention](docs/content-quality.md).
 New narration and finished videos must last **90-180 seconds**, including the
@@ -156,6 +166,17 @@ unaudited client to private, and YouTube has no API field that declares a Short 
 a vertical video under three minutes simply becomes one.
 
 ## Running it
+
+Start the local dashboard, API and worker together:
+
+```sh
+uv run --locked python -m brainrot.dev
+```
+
+Open http://localhost:5173. Stop the services with Ctrl+C. For independent local
+development on another computer, follow the [handoff guide](docs/moving-between-computers.md).
+Only one computer should consume a local-media project's queue at a time.
+The individual operator commands remain available inside the project environment:
 
     python -m brainrot.worker                         # claim jobs, render, pace chapters
     python -m brainrot.cli add-background clip.mp4    # H2/H2b need at least one

@@ -52,22 +52,22 @@ dashboard, with the server-side environment variables in `.env.example`.
 Configure `DASHBOARD_ORIGINS` with the exact dashboard origins allowed to call
 the API, separated by commas. Preview origins need to be allowed explicitly.
 
-Apply migrations in order before starting the matching worker version.
+Apply every unapplied migration in order before starting the matching worker
+version, including `014_local_media_host.sql` for current local-media workers.
 `002_job_execution.sql` is required for leased execution, and
 `003_stage_execution.sql` is required for stage tracking,
 `004_operational_metrics.sql` for metrics, `005_execution_read_models.sql` for
 dashboard execution views, `006_delete_jobs.sql` for queue deletion, and
 `007_retry_jobs.sql` for explicit retries that preserve saved progress.
-Migrations 001–007 are applied to the configured
+Historically, migrations 001–007 were applied to the configured
 Supabase project as of 2026-10-21. Lease/stage/metrics/read-model checks passed,
 including a live worker retry with synthetic operations inside a rolled-back
 transaction. Running-job deletion and lease revocation were verified through
 the live dashboard using a temporary synthetic job.
 
-H2/H2b require an active background clip. H1 requires the YuNet face model at
-`models/face_detection_yunet_2023mar.onnx` in the media bucket. Run
-`python -m brainrot.cli setup-face-model` once per project to install the pinned,
-checksum-verified official OpenCV model. The configured project's model has
+H2/H2b require an active background clip. H1 caches the pinned, checksum-verified
+official OpenCV YuNet detector under the project's media root on first use. Run
+`python -m brainrot.cli setup-face-model` to fetch it in advance. The configured project's model has
 been verified with OpenCV. OAuth consent and platform credentials are manual
 setup steps.
 

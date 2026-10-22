@@ -48,6 +48,17 @@ generation sessions.
 
 ## Quality comparison
 
+Factual explainers can build a mystery through an observable example, mechanism,
+plausible alternative, distinguishing evidence and a deeper consequence. This is
+an optional progression, not a required template or an invitation to debunk fictional
+premises. The skill forbids invented experiments, scientists and numbers; concrete
+actions should be easy to picture even with the current background renderer.
+This adapts a narrative approach, not any reference video's wording or animation.
+
+A Codex-only preview about why metal feels colder than wood produced a 326-word
+explanation with a heat-transfer payoff. That is a writing check, not evidence of
+improved audience retention. Topic-specific animated editing remains future work.
+
 For a meaningful writing check, generate multiple new previews with Codex before
 and after a prompt edit, keeping topic and intensity fixed. Use at least these cases:
 

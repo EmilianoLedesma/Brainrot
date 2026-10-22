@@ -19,6 +19,7 @@ import anthropic
 from pydantic import BaseModel, ValidationError
 
 from .domain.jobs import PermanentError
+from . import config  # Load the checkout's .env, including for direct script previews.
 
 T = TypeVar("T", bound=BaseModel)
 WINDOWS = os.name == "nt"

@@ -114,6 +114,11 @@ def test_new_job_publishing_choice_controls_the_worker(connected, fake_db, monke
     else:
         target = fake_db.table("clips").insert({"job_id": job["id"], "status": "ready"}).execute().data[0]
         scheduler.plan_clip(target["id"])
+    # A bulk PostgREST request uses the union of row columns; omitted metadata
+    # becomes NULL on TikTok/Instagram and violates the database constraint.
+    publications = [row for row in fake_db.rows("publications") if row.get(source + "_id") == target["id"]]
+    assert all(isinstance(row.get("metadata"), dict) for row in publications)
+    assert all(row["metadata"] == {} for row in publications if row["platform"] != "youtube")
     rows = [row for row in fake_db.rows("publications") if row.get(source + "_id") == target["id"] and row["platform"] == "youtube"]
     assert len(rows) == (0 if mode == "off" else 1)
     if rows:

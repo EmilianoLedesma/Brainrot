@@ -4,7 +4,6 @@ import os
 from datetime import datetime, timezone
 from functools import lru_cache
 
-from dotenv import load_dotenv
 from supabase import Client, create_client
 from supabase.lib.client_options import SyncClientOptions
 
@@ -12,8 +11,6 @@ from .domain.pipelines import PipelineContext
 from .domain.jobs import LeaseLost
 from .observability.logging import event
 from . import media
-
-load_dotenv()
 
 MEDIA_BUCKET = os.getenv("MEDIA_BUCKET", "media")
 
@@ -84,11 +81,12 @@ def set_job_status(job_id: str, status: str, error: str | None = None) -> None:
 # was recovered cannot overwrite the new owner's outcome.
 
 
-def claim_job(worker_id: str, lease_seconds: int = 600) -> dict | None:
+def claim_job(worker_id: str, lease_seconds: int = 600, host_key: str | None = None) -> dict | None:
     """Lease the oldest claimable job to `worker_id`, or return None."""
-    rows = client().rpc(
-        "claim_job", {"p_worker": worker_id, "p_lease_seconds": lease_seconds}
-    ).execute().data
+    params = {"p_worker": worker_id, "p_lease_seconds": lease_seconds}
+    if host_key is not None:
+        params["p_host"] = host_key
+    rows = client().rpc("claim_job_on_local_host" if host_key is not None else "claim_job", params).execute().data
     return rows[0] if rows else None
 
 

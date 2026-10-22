@@ -7,21 +7,25 @@ sessions with tools disabled; it receives selected reference data as source mate
 
 ## Move to another computer
 
-1. Clone the repository and install `requirements.txt` and the frontend dependencies.
+Follow the [local setup and media handoff guide](moving-between-computers.md) for
+the full workflow. The short version:
+
+1. Clone the same code revision and run `python scripts/bootstrap.py` for locked dependencies.
 2. Install FFmpeg/ffprobe. Sign in to the local generation CLI you intend to use.
 3. Copy `.env` and `web/.env` securely, or populate them from the tracked examples.
    Set `VITE_API_URL` to that computer's API address. These files are never committed.
-4. Copy the entire `media/` folder. Alternatively, configure `BRAINROT_MEDIA_ROOT`
+4. Export and import a verified media archive. Alternatively, configure `BRAINROT_MEDIA_ROOT`
    to a shared data directory available to the API and worker. Relative roots are
    resolved against the repository, independently of the shell's working directory.
 5. Keep using the same Supabase project, or apply all migrations in order to a new
    project. Existing projects need `010_publication_metadata.sql`,
    `011_library_activation.sql`, `012_youtube_metadata_drafts.sql`, and
-   `013_youtube_performance.sql` once.
+   `013_youtube_performance.sql`, and `014_local_media_host.sql` once.
 6. Run `python -m brainrot.cli doctor` to check local configuration without printing secrets.
 
-Relative database paths do not transfer files. Two workers on different computers
-need the same media files or a shared data folder. A copied Git repository alone
+Relative database paths do not transfer files. Updated local-media workers reserve
+the queue for one computer at a time; stop the previous worker before switching.
+A copied Git repository alone
 does not include ignored media or credentials. The API host must be able to read
 the files written by its worker. Run persistent media storage on your own machine
 or a host with persistent disk; a frontend-only Vercel deployment cannot store it.

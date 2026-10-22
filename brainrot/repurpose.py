@@ -18,7 +18,8 @@ from . import db, llm, render, scheduler, script
 from .application.stages import stage
 from .domain.jobs import PermanentError
 from .duration import MIN_SECONDS, MAX_SECONDS, require_duration
-from .models import FACE_MODEL_PATH
+from .models import FACE_MODEL_PATH, ensure_face_model
+from . import media
 
 # Face positions are sampled this often and the crop is keyframed at the same rate.
 # Faster sampling tracks better but makes the ffmpeg crop expression longer.
@@ -127,7 +128,9 @@ def transcribe(video_path: str, directory: str) -> list[dict]:
 
     from faster_whisper import WhisperModel
 
-    model = WhisperModel(os.getenv("WHISPER_MODEL", "base"), device="cpu", compute_type="int8")
+    cache = media.path("models/whisper")
+    cache.mkdir(parents=True, exist_ok=True)
+    model = WhisperModel(os.getenv("WHISPER_MODEL", "base"), device="cpu", compute_type="int8", download_root=str(cache))
     segments, _ = model.transcribe(video_path)
     return [{"text": s.text.strip(), "start": s.start, "end": s.end} for s in segments]
 
@@ -156,22 +159,7 @@ def select_moments(transcript: list[dict]) -> list[Moment]:
 
 
 def face_model_path() -> str:
-    """Cache the detector weights locally; the copy of record lives in Storage."""
-    local = os.path.join(tempfile.gettempdir(), "yunet.onnx")
-    if not os.path.exists(local) or os.path.getsize(local) == 0:
-        data = db.download(FACE_MODEL_PATH)
-        if not data:
-            raise PermanentError("face model is empty; run: python -m brainrot.cli setup-face-model")
-        temporary = None
-        try:
-            with tempfile.NamedTemporaryFile(dir=tempfile.gettempdir(), prefix="yunet-", suffix=".onnx", delete=False) as handle:
-                temporary = handle.name
-                handle.write(data)
-            os.replace(temporary, local)
-        finally:
-            if temporary and os.path.exists(temporary):
-                os.unlink(temporary)
-    return local
+    return ensure_face_model()
 
 
 def track_face(clip_path: str) -> list[tuple[float, float]]:
@@ -277,6 +265,7 @@ def cut_and_reframe(source: str, moment: Moment, transcript: list[dict], directo
     render.check_captions(cues, moment.end_seconds - moment.start_seconds)
     with open(os.path.join(directory, "captions.ass"), "w", encoding="utf-8") as handle:
         handle.write(render.build_captions(cues))
+    render.install_fonts(directory)
 
     # Run from the directory so the subtitles filter never sees a Windows path,
     # whose drive colon and backslashes it would read as filter syntax.
@@ -284,7 +273,7 @@ def cut_and_reframe(source: str, moment: Moment, transcript: list[dict], directo
     # filter separators, so it has to be quoted for ffmpeg itself.
     video_filter = (
         f"crop={crop_width}:{height}:x='{expression}':y=0,"
-        f"scale={render.WIDTH}:{render.HEIGHT},setsar=1,subtitles=captions.ass"
+        f"scale={render.WIDTH}:{render.HEIGHT},setsar=1,subtitles=captions.ass:fontsdir=fonts"
     )
     subprocess.run(
         [

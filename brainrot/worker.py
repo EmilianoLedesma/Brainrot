@@ -17,7 +17,7 @@ import traceback
 import uuid
 from datetime import datetime, timezone
 
-from . import db, publish, scheduler, youtube_sync
+from . import db, publish, scheduler, youtube_sync, media, portable, host
 from .application import retry
 from .domain.jobs import LeaseLost
 from .domain.pipelines import PipelineContext
@@ -120,13 +120,14 @@ def run_once(
     worker_id: str = WORKER_ID,
     lease_seconds: int = LEASE_SECONDS,
     renew_every: float = RENEW_EVERY_SECONDS,
+    host_key: str | None = None,
 ) -> bool:
     """Recover abandoned jobs, then run one job if any is waiting.
     Returns whether it found work."""
     for row in db.recover_expired_jobs():
         event("job_recovered", job_id=row["id"], status=row["status"], worker_id=worker_id)
 
-    job = db.claim_job(worker_id, lease_seconds)
+    job = db.claim_job(worker_id, lease_seconds, host_key=host_key) if host_key else db.claim_job(worker_id, lease_seconds)
     if job is None:
         return False
     event("job_claimed", job_id=job["id"], pipeline=job["kind"], attempt=job["attempts"], worker_id=worker_id)
@@ -149,13 +150,17 @@ def housekeeping() -> None:
     publish.run_due()
 
 
-def main() -> None:
+def _loop(host_key=None, keeper=None) -> None:
     configure()
     event("worker_started", worker_id=WORKER_ID)
     last_housekeeping = 0.0
     while True:
         try:
-            found = run_once()
+            if keeper is not None and not keeper.valid():
+                raise RuntimeError("This computer no longer holds the local-media worker lease; restart after checking the other computer")
+            found = run_once(host_key=host_key) if host_key else run_once()
+            if keeper is not None and not keeper.valid():
+                raise RuntimeError("This computer lost its local-media worker lease; housekeeping has been stopped")
             if not found or time.monotonic() - last_housekeeping > HOUSEKEEPING_EVERY_SECONDS:
                 housekeeping()
                 last_housekeeping = time.monotonic()
@@ -169,6 +174,23 @@ def main() -> None:
             continue
         if not found:
             time.sleep(POLL_SECONDS)
+
+
+def main() -> None:
+    if not media.local():
+        return _loop()
+    report = portable.check_media()
+    if report["missing"]:
+        raise RuntimeError("Local media is incomplete. Import the media handoff and run doctor --check-media before starting the worker")
+    host_key = host.key()
+    if not host.acquire(host_key):
+        raise RuntimeError("Another computer is using this project's local-media queue. Stop its worker, finish active uploads, and wait for its host/job leases to expire before switching")
+    keeper = host.Keeper(host_key)
+    keeper.start()
+    try:
+        _loop(host_key, keeper)
+    finally:
+        keeper.stop()
 
 
 if __name__ == "__main__":
