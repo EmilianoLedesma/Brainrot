@@ -15,7 +15,7 @@ export const COPY = {
 
     footer: {
       blurb:
-        "An automated short-form video pipeline. Built and operated by one person, with no review step anywhere in it.",
+        "A short-form video pipeline. Generate stories, review finished videos, and publish from your own workspace.",
       product: "Product",
       resources: "Resources",
       builtWith: "Built with",
@@ -139,7 +139,7 @@ export const COPY = {
           title: "Running it",
           blocks: [
             { type: "p", text: "Two long-running processes, plus commands you run by hand." },
-            { type: "code", text: "uvicorn brainrot.api:app --port 8000   # the API this UI talks to\npython -m brainrot.worker              # claims jobs, renders, paces, publishes" },
+            { type: "code", text: "uvicorn brainrot.api:app --port 8001   # the API this UI talks to\npython -m brainrot.worker              # claims jobs, renders, paces, publishes" },
             { type: "table", head: ["Command", "Does"], rows: [
               ["`cli add-background FILE`", "Uploads a looping background clip. H2 and H2b need at least one."],
               ["`cli scan-reddit`", "Queues jobs for subreddit posts that clear their bar."],
@@ -196,7 +196,7 @@ export const COPY = {
         {
           title: "Running it",
           items: [
-            { q: "Do I need to approve anything before a video goes out?", a: "No, and there is no way to. There is no review step anywhere in the pipeline — a job that finishes rendering is queued for publishing on its own. If you want a human gate, that is a feature nobody has built." },
+            { q: "Do I need to approve anything before a video goes out?", a: "A new YouTube connection uses reviewed uploads. Choose a finished video in the YouTube page, edit its details and visibility, then upload. Connecting your channel does not publish the existing queue. Previously configured automatic publishing keeps its existing behavior." },
             { q: "Why is my job stuck on pending?", a: "Nothing is consuming the queue. Jobs are claimed by the worker process, so start it with python -m brainrot.worker. Until then rows sit at pending indefinitely." },
             { q: "A job failed. Where do I look?", a: "The queue shows a short explanation. Inspect shows which step needs attention. Technical diagnostics are available in your browser’s developer tools, under Network, and in worker logs." },
             { q: "Can I run more than one worker?", a: "Yes. Claiming a job is conditioned on the row still being pending, so two workers racing for the same job leave exactly one winner. Rendering is CPU-bound, so this mostly helps if you have cores to spare." },
@@ -327,7 +327,7 @@ export const COPY = {
 
     footer: {
       blurb:
-        "Una fábrica automática de video vertical. Construida y operada por una sola persona, sin un solo paso de revisión en medio.",
+        "Una fábrica de video vertical. Genera historias, revisa videos terminados y publica desde tu espacio de trabajo.",
       product: "Producto",
       resources: "Recursos",
       builtWith: "Hecho con",
@@ -451,7 +451,7 @@ export const COPY = {
           title: "Ejecutarlo",
           blocks: [
             { type: "p", text: "Dos procesos permanentes, más comandos que corres a mano." },
-            { type: "code", text: "uvicorn brainrot.api:app --port 8000   # la API con la que habla esta interfaz\npython -m brainrot.worker              # toma jobs, renderiza, dosifica, publica" },
+            { type: "code", text: "uvicorn brainrot.api:app --port 8001   # la API con la que habla esta interfaz\npython -m brainrot.worker              # toma jobs, renderiza, dosifica, publica" },
             { type: "table", head: ["Comando", "Hace"], rows: [
               ["`cli add-background FILE`", "Sube un clip de fondo en loop. H2 y H2b necesitan al menos uno."],
               ["`cli scan-reddit`", "Encola jobs con los posts que pasan su filtro."],
@@ -508,7 +508,7 @@ export const COPY = {
         {
           title: "Operación",
           items: [
-            { q: "¿Tengo que aprobar algo antes de que salga un video?", a: "No, y no hay manera de hacerlo. No existe ningún paso de revisión en el pipeline — un job que termina de renderizar se encola para publicar por su cuenta. Si quieres un freno humano, esa es una función que nadie construyó." },
+            { q: "¿Tengo que aprobar algo antes de que salga un video?", a: "Una conexión nueva de YouTube usa subidas revisadas. Elige un video terminado en YouTube, edita sus detalles y visibilidad y súbelo. Conectar tu canal no publica la cola existente. La publicación automática configurada anteriormente conserva su comportamiento." },
             { q: "¿Por qué mi job se queda en pending?", a: "Nada está consumiendo la cola. Los jobs los reclama el proceso worker, así que arráncalo con python -m brainrot.worker. Hasta entonces las filas se quedan en pending indefinidamente." },
             { q: "Falló un job. ¿Dónde reviso?", a: "La cola muestra una explicación breve. Inspeccionar muestra qué etapa necesita atención. Los detalles técnicos están en las herramientas de desarrollo del navegador, en Red, y en los registros del worker." },
             { q: "¿Puedo correr más de un worker?", a: "Sí. Reclamar un job está condicionado a que la fila siga en pending, así que dos workers compitiendo por el mismo job dejan exactamente un ganador. Renderizar satura CPU, así que esto ayuda sobre todo si te sobran núcleos." },

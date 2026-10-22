@@ -44,7 +44,7 @@ def _subtitles(text: str) -> list[tuple[float, float, str]]:
 
 
 def analyze(csv_text: str, *, axis: str, retention_unit: str, duration_seconds: float,
-            transcript_srt: str = "", time_column: int = 0, retention_column: int = 1) -> dict:
+            transcript_srt: str = "", time_column: int = 0, retention_column: int = 1, allow_partial_start: bool = False) -> dict:
     if axis not in {"seconds", "percent", "fraction"} or retention_unit not in {"percent", "fraction"}:
         raise ValueError("Choose the units used by your export.")
     if not math.isfinite(duration_seconds) or not 1 <= duration_seconds <= 86_400:
@@ -83,10 +83,10 @@ def analyze(csv_text: str, *, axis: str, retention_unit: str, duration_seconds: 
             raise ValueError("Use an export with no more than 5,000 data points.")
     if len(points) < 3:
         raise ValueError("The CSV needs at least three numeric data rows. Check the selected columns and units.")
-    if points[0]["seconds"] > 0.001:
+    if points[0]["seconds"] > 0.001 and not allow_partial_start:
         raise ValueError("The retention curve must start at zero so the opening can be measured.")
     cues = _subtitles(transcript_srt)
-    cutoff = min(30.0, duration_seconds, points[-1]["seconds"])
+    cutoff = max(points[0]["seconds"], min(30.0, duration_seconds, points[-1]["seconds"]))
     opening = points[-1]["retention"]
     for left, right in zip(points, points[1:]):
         if left["seconds"] <= cutoff <= right["seconds"]:
@@ -105,7 +105,7 @@ def analyze(csv_text: str, *, axis: str, retention_unit: str, duration_seconds: 
     # Rank by slope so uneven sampling doesn't make a long interval look like a cliff.
     drops.sort(key=lambda drop: drop["rate_pp_per_second"], reverse=True)
     return {"duration_seconds": duration_seconds, "axis": axis, "retention_unit": retention_unit,
-            "points": points, "opening_seconds": cutoff,
+            "points": points, "opening_seconds": cutoff, "opening_start_seconds": points[0]["seconds"],
             "opening_loss_pp": round(points[0]["retention"] - opening, 3),
             "last_observed_seconds": points[-1]["seconds"], "last_observed_retention": points[-1]["retention"],
             "drops": drops[:5]}

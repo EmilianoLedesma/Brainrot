@@ -56,6 +56,7 @@ def publication(pg):
 
 
 def test_timeout_after_platform_acceptance_never_reuploads(pg, publication, monkeypatch):
+    publication["metadata"] = {"title": "Reviewed clip", "description": "Reviewed description", "tags": []}
     # Reuse one client so only the first success write times out.
     client = PublicationClient(pg,fail_success=True)
     monkeypatch.setattr(db,"client",lambda:client)
@@ -63,7 +64,7 @@ def test_timeout_after_platform_acceptance_never_reuploads(pg, publication, monk
     monkeypatch.setattr(publish,"target",lambda row:{"path":"clip.mp4","title":"Clip"})
     monkeypatch.setattr(db,"download",lambda path:b"video")
     uploads = []
-    monkeypatch.setattr(publish,"post_youtube",lambda *args:uploads.append(1) or ("accepted-id",""))
+    monkeypatch.setattr(publish,"post_youtube",lambda *args, **kwargs:uploads.append(1) or ("accepted-id",""))
     with pytest.raises(TimeoutError):
         publish.publish_one(publication)
     assert publish.publish_one(publication) is False

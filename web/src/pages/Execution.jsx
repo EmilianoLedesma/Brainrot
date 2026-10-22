@@ -3,17 +3,26 @@ import { api } from "../api.js";
 import { useCopy } from "../i18n.jsx";
 import { GENERATION_PROVIDERS, brainrotSummary } from "../generation.js";
 import { userError } from "../errors.js";
+import VideoDetails from "./VideoDetails.jsx";
 
 export function duration(value) {
   if (value == null) return "—";
   return value < 60 ? Number(value).toFixed(1) + "s" : Math.floor(value / 60) + "m " + Math.floor(value % 60) + "s";
 }
 
-export default function Execution({ jobId }) {
+export default function Execution({ jobId, initialAssetId, videoSessions, onVideoSessionsChange }) {
   const work = useCopy().work;
   const t = work.execution;
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
+  const [assets, setAssets] = useState([]);
+  const [assetError, setAssetError] = useState(false);
+  useEffect(() => {
+    let active = true;
+    if (!data?.job) return;
+    api(`/jobs/${jobId}/outputs`, { timeoutMs: 45000 }).then((rows) => { if (active) { setAssets(rows); setAssetError(false); } }).catch(() => { if (active) setAssetError(true); });
+    return () => { active = false; };
+  }, [jobId, data?.job?.status]);
   useEffect(() => {
     let active = true, timer;
     const controller = new AbortController();
@@ -41,6 +50,8 @@ export default function Execution({ jobId }) {
       <span className="panel-label">{t.title} · {job.kind}</span>
       <div className="panel-body">
         {error && <p role="status" className="alarm-text">{t.stale} {userError(error, work.errors)}</p>}
+        {assetError && <p role="status" className="alarm-text">{work.unreachable}</p>}
+        {!!assets.length && <VideoDetails assets={assets} initialAssetId={initialAssetId} videoSessions={videoSessions} onVideoSessionsChange={onVideoSessionsChange} />}
         <div className="execution-heading">
           <code>{job.id}</code>
           <span className={"status status-" + job.status}>{job.status}</span>

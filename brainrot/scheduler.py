@@ -31,10 +31,15 @@ def queue(target: str, target_id: str, when: datetime) -> list[dict]:
     A platform that already has a publication for this target keeps it, so
     planning the same clip or chapter twice (a retried job) never double-posts.
     """
+    options = _youtube_options(target, target_id)
     rows = [
         {"platform": platform, target: target_id, "scheduled_at": when.isoformat()}
-        for platform in PLATFORMS
+        for platform in PLATFORMS if platform != "youtube" or not options or options.get("mode") != "off"
     ]
+    if options:
+        for row in rows:
+            if row["platform"] == "youtube":
+                row["metadata"] = {**{key: value for key, value in options.items() if key != "mode"}, "youtube_mode": options["mode"]}
     return (
         db.client()
         .table("publications")
@@ -44,18 +49,37 @@ def queue(target: str, target_id: str, when: datetime) -> list[dict]:
     )
 
 
+def _youtube_options(target, target_id):
+    client = db.client()
+    rows = client.table("clips" if target == "clip_id" else "story_chapters").select("*").eq("id", target_id).execute().data
+    if not rows:
+        return None
+    row = rows[0]
+    if target == "chapter_id":
+        stories = client.table("stories").select("job_id").eq("id", row["story_id"]).execute().data
+        if not stories:
+            return None
+        row = stories[0]
+    jobs = client.table("jobs").select("params").eq("id", row.get("job_id")).execute().data
+    return (jobs[0].get("params") or {}).get("youtube_publishing") if jobs else None
+
+
 def retention(chapter_id: str) -> float | None:
     """Best retention reported for a chapter across platforms, or None if silent."""
     rows = (
         db.client()
         .table("chapter_metrics")
-        .select("retention_pct")
+        .select("retention_pct,platform,captured_at")
         .eq("chapter_id", chapter_id)
         .not_.is_("retention_pct", "null")
+        .order("captured_at", desc=True)
         .execute()
         .data
     )
-    values = [float(r["retention_pct"]) for r in rows]
+    latest = {}
+    for row in rows:
+        latest.setdefault(row.get("platform", "unknown"), float(row["retention_pct"]))
+    values = list(latest.values())
     return max(values) if values else None
 
 
@@ -143,16 +167,21 @@ def tick() -> list[str]:
     return queued
 
 
-def due(limit: int = 20) -> list[dict]:
+def due(limit: int = 20, *, platform: str | None = None, created_after: str | None = None, youtube_mode: str | None = None, channel_id: str | None = None) -> list[dict]:
     """Publications whose time has come. Phase 5 will hand these to the platforms."""
-    return (
+    query = (
         db.client()
         .table("publications")
         .select("*")
         .eq("status", "scheduled")
         .lte("scheduled_at", _now().isoformat())
-        .order("scheduled_at")
-        .limit(limit)
-        .execute()
-        .data
     )
+    if platform:
+        query = query.eq("platform", platform)
+    if created_after:
+        query = query.gte("created_at", created_after)
+    if youtube_mode == "auto":
+        query = query.contains("metadata", {"youtube_mode": "auto", "channel_id": channel_id})
+    elif youtube_mode == "legacy":
+        query = query.not_.contains("metadata", {"youtube_mode": "auto"}).not_.contains("metadata", {"youtube_mode": "review"})
+    return query.order("scheduled_at").limit(limit).execute().data

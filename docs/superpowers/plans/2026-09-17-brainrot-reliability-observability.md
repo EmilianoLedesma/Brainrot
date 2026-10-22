@@ -32,6 +32,14 @@ An Anthropic API key is no longer required for local H1/H2 model steps.
 Full-pipeline acceptance and Reddit approval remain separate checks. See
 [local model setup](../../local-models.md).
 
+**YouTube follow-up (2026-10-22):** The connected channel now supports reviewed
+Shorts uploads, repo-owned metadata drafting, explicit automatic-upload settings,
+and bounded Analytics API ingestion into chapter pacing. Performance reporting
+and retention import are available in the app. Missing/zero-view reports do not
+become zero-retention evidence. The earlier analytics deferral in Task 10 is
+resolved for YouTube; other platform adapters remain deferred. See
+[integrations](../../integrations.md).
+
 **Spec path:**
 `docs/superpowers/specs/2026-09-17-brainrot-reliability-observability.md`
 

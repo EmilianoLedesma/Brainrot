@@ -60,6 +60,9 @@ def main():
         page.on("pageerror", lambda error: errors.append(str(error)))
 
         def respond(route):
+            if route.request.url.split("?")[0].endswith("/outputs"):
+                route.fulfill(status=200, content_type="application/json", body="[]")
+                return
             if route.request.url.split("?")[0].endswith("/gallery"):
                 if gallery_unavailable["enabled"]:
                     route.fulfill(status=503, body="raw-storage-error")
@@ -95,6 +98,7 @@ def main():
         page.route("**/jobs*", respond)
         page.route("**/jobs/**", respond)
         page.route("**/gallery*", respond)
+        page.route("**/youtube/status", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps({"connected": True, "channel_title": "Test channel", "channel_id": "channel"})))
         page.goto(args.url)
         page.get_by_role("button", name="Workspace", exact=True).first.click()
         page.locator(".choice").filter(has_text="From a topic").click()
@@ -134,6 +138,10 @@ def main():
         page.screenshot(path=str(screenshots / "model-mobile.png"), full_page=True)
         page.get_by_role("button", name="Hablar gringo", exact=False).click()
         page.set_viewport_size({"width": 1440, "height": 1000})
+        expect(page.get_by_role("combobox", name="When the video is ready", exact=True)).to_have_value("review")
+        page.get_by_role("combobox", name="When the video is ready", exact=True).select_option("auto")
+        page.get_by_role("combobox", name="YouTube visibility", exact=True).select_option("unlisted")
+        page.get_by_label("Contains realistic altered or synthetic content", exact=False).check()
         page.get_by_role("button", name="Review →", exact=True).click()
         expect(page.locator(".review").get_by_text("Chat GPT", exact=True)).to_be_visible()
         expect(page.locator(".review").get_by_text("Max brainrot", exact=True)).to_be_visible()
@@ -143,7 +151,8 @@ def main():
         page.get_by_role("button", name="Review →", exact=True).click()
         page.get_by_role("button", name="Queue it", exact=True).click()
         expect(page.get_by_role("heading", name="Live queue", exact=True)).to_be_visible()
-        assert submitted == [{"kind": "brainrot", "topic": "The octopus escape", "llm_provider": "codex", "brainrot_level": 100}]
+        assert submitted == [{"kind": "brainrot", "topic": "The octopus escape", "llm_provider": "codex", "brainrot_level": 100,
+                              "youtube_publishing": {"mode": "auto", "privacy_status": "unlisted", "made_for_kids": False, "contains_synthetic_media": True}}]
         page.get_by_role("button", name="New job", exact=True).click()
         page.locator(".choice").filter(has_text="From a YouTube link").click()
         page.get_by_label("Source URL", exact=True).fill("https://youtube.com/watch?v=example")
@@ -153,7 +162,8 @@ def main():
         expect(page.locator(".review").get_by_text("Chat GPT", exact=True)).to_be_visible()
         page.get_by_role("button", name="Queue it", exact=True).click()
         expect(page.get_by_role("heading", name="Live queue", exact=True)).to_be_visible()
-        assert submitted[1] == {"kind": "repurpose", "youtube_url": "https://youtube.com/watch?v=example", "llm_provider": "codex"}
+        assert submitted[1] == {"kind": "repurpose", "youtube_url": "https://youtube.com/watch?v=example", "llm_provider": "codex",
+                                "youtube_publishing": {"mode": "review", "privacy_status": "private", "made_for_kids": False, "contains_synthetic_media": False}}
         expect(page.get_by_role("row").filter(has_text="The octopus escape")).to_be_visible()
         running_row = page.get_by_role("row").filter(has_text="The octopus escape")
         running_row.get_by_role("button", name="Delete", exact=True).click()

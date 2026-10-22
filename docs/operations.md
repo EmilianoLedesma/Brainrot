@@ -224,7 +224,8 @@ Real H1/H2/H2b full-pipeline acceptance remains separate from successful script
 generation. H2b still requires approved Reddit credentials; typing an H2 topic
 requires no Reddit access.
 
-Publishing OAuth onboarding and actual platform uploads remain unvalidated.
-Platform analytics fetching is deferred. The scheduler consumes normalized stored
-performance; without retention it waits 24h, then schedules at the previous
-publication plus 48h. Redis/RabbitMQ and scaling are intentionally outside this increment.
+YouTube now has OAuth onboarding, reviewed uploads, optional automatic publishing,
+and bounded performance ingestion. See [integrations](integrations.md) for setup,
+current validation limits, and migration 013. TikTok/Instagram authorization and
+analytics remain separate. Without metrics the scheduler waits 24h, then uses the
+previous publication plus 48h. Redis/RabbitMQ and scaling remain outside this increment.

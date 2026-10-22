@@ -11,6 +11,12 @@ from brainrot import db
 from tests.fakes import fake_supabase
 
 
+@pytest.fixture(autouse=True)
+def storage_backend(monkeypatch):
+    # Existing cloud-contract tests keep their explicit backend; local tests override it.
+    monkeypatch.setenv("BRAINROT_MEDIA_STORAGE", "supabase")
+
+
 @pytest.fixture
 def fake_db(monkeypatch):
     """Point every `db.client()` call at an in-memory fake for the test."""

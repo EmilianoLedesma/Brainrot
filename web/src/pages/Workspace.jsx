@@ -5,6 +5,12 @@ import { GENERATION_PROVIDERS, BRAINROT_LEVELS, DEFAULT_BRAINROT_LEVEL, brainrot
 import { userError } from "../errors.js";
 import Execution, { duration } from "./Execution.jsx";
 import Insights, { newInsightsSession } from "./Insights.jsx";
+import Research from "./Research.jsx";
+import Library from "./Library.jsx";
+import YouTube from "./YouTube.jsx";
+import VideoDetails from "./VideoDetails.jsx";
+import { INTEGRATIONS_COPY } from "../integrations-copy.js";
+import { useLang } from "../i18n.jsx";
 
 /* The work surface. Submitting a job is a three-step flow rather than one form,
    because picking a pipeline and describing the input are different decisions and
@@ -101,21 +107,37 @@ function BrainrotSlider({ value, onChange }) {
   );
 }
 
-function NewJob({ onQueued }) {
+function NewJob({ onQueued, initialDraft }) {
   const t = useCopy().work;
-  const [step, setStep] = useState(1);
-  const [kind, setKind] = useState(null);
-  const [value, setValue] = useState("");
+  const { lang } = useLang();
+  const [step, setStep] = useState(initialDraft ? 2 : 1);
+  const [kind, setKind] = useState(initialDraft ? "brainrot" : null);
+  const [value, setValue] = useState(initialDraft?.label || "");
+  const [reference, setReference] = useState(initialDraft || null);
   const [provider, setProvider] = useState("codex");
   const [brainrotLevel, setBrainrotLevel] = useState(DEFAULT_BRAINROT_LEVEL);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [queued, setQueued] = useState(null);
+  const yt = INTEGRATIONS_COPY[lang];
+  const [youtubeStatus, setYoutubeStatus] = useState(null);
+  const [youtubeMode, setYoutubeMode] = useState("review");
+  const [youtubePrivacy, setYoutubePrivacy] = useState("private");
+  const [youtubeKids, setYoutubeKids] = useState(false);
+  const [youtubeSynthetic, setYoutubeSynthetic] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    api("/youtube/status", { signal: controller.signal }).then(setYoutubeStatus).catch(() => {
+      if (!controller.signal.aborted) setYoutubeStatus({ unavailable: true });
+    });
+    return () => controller.abort();
+  }, []);
 
   const field = kind ? FIELDS[kind] : null;
   const copy = kind ? t.pipelines[kind] : null;
 
   function choose(next) {
+    setReference(null);
     setKind(next);
     setValue("");
     setError(null);
@@ -134,6 +156,8 @@ function NewJob({ onQueued }) {
       const { id } = await api("/jobs", {
         method: "POST",
         body: JSON.stringify({ kind, [field.key]: value.trim(), llm_provider: provider,
+          youtube_publishing: { mode: youtubeMode, privacy_status: youtubePrivacy, made_for_kids: youtubeKids, contains_synthetic_media: youtubeSynthetic },
+          ...(reference && kind === "brainrot" ? { reference_entity: reference.id } : {}),
           ...(kind === "brainrot" ? { brainrot_level: brainrotLevel } : {}) }),
       });
       setQueued(id);
@@ -154,6 +178,7 @@ function NewJob({ onQueued }) {
     setValue("");
     setQueued(null);
     setError(null);
+    setYoutubeMode("review"); setYoutubePrivacy("private"); setYoutubeKids(false); setYoutubeSynthetic(false);
   }
 
   if (step === 4) {
@@ -180,6 +205,8 @@ function NewJob({ onQueued }) {
       <span className="panel-label">{t.tabs.new}</span>
       <div className="panel-body">
         <Stepper step={step} labels={t.steps} />
+        {reference && <p className="muted">Wikidata: <a href={reference.url} target="_blank" rel="noreferrer">{reference.label}</a>
+          <button className="btn" type="button" aria-label={INTEGRATIONS_COPY[lang].clearReference} onClick={() => setReference(null)}>×</button></p>}
 
         {error && <p className="alarm-text form-error">{userError(error, t.errors)}</p>}
 
@@ -226,6 +253,26 @@ function NewJob({ onQueued }) {
               <small id="generation-provider-hint" className="muted">{t.model.hint}</small>
             </label>
             {kind === "brainrot" && <BrainrotSlider value={brainrotLevel} onChange={setBrainrotLevel} />}
+            <fieldset className="job-youtube">
+              <legend>{yt.jobPublishing}</legend>
+              <p className="muted">{youtubeStatus === null ? yt.jobChecking : youtubeStatus.unavailable ? yt.error : youtubeStatus.connected ? `${yt.connected}: ${youtubeStatus.channel_title || "YouTube"}` : yt.jobNotConnected}</p>
+              <label><span className="label">{yt.jobAfterGeneration}</span>
+                <select aria-label={yt.jobAfterGeneration} value={youtubeMode} onChange={(event) => setYoutubeMode(event.target.value)}>
+                  <option value="review">{yt.jobReview}</option>
+                  <option value="auto" disabled={!youtubeStatus?.connected}>{yt.jobAuto}</option>
+                  <option value="off">{yt.jobOff}</option>
+                </select>
+              </label>
+              <p className="muted">{youtubeMode === "auto" ? yt.jobAutoHint : youtubeMode === "review" ? yt.jobReviewHint : yt.jobOffHint}</p>
+              {youtubeMode !== "off" && <>
+                <label><span className="label">{yt.privacy}</span><select aria-label={yt.jobVisibility} value={youtubePrivacy} onChange={(event) => setYoutubePrivacy(event.target.value)}>
+                  {["private", "unlisted", "public"].map((id) => <option key={id} value={id}>{yt[id]}</option>)}
+                </select></label>
+                <label className="checkbox-field"><input type="checkbox" checked={youtubeKids} onChange={(event) => setYoutubeKids(event.target.checked)} />{yt.kids}</label>
+                <label className="checkbox-field"><input type="checkbox" checked={youtubeSynthetic} onChange={(event) => setYoutubeSynthetic(event.target.checked)} />{yt.synthetic}</label>
+                <small className="muted">{yt.syntheticHint}</small>
+              </>}
+            </fieldset>
             <div className="hero-actions">
               <button type="button" className="btn" onClick={() => setStep(1)}>
                 {t.back}
@@ -258,6 +305,9 @@ function NewJob({ onQueued }) {
                 <dt className="label">{t.brainrot.label}</dt>
                 <dd>{brainrotSummary(brainrotLevel, t.brainrot)}</dd>
               </div>}
+              <div><dt className="label">{yt.jobPublishing}</dt><dd>{youtubeMode === "auto" ? yt.jobAuto : youtubeMode === "review" ? yt.jobReview : yt.jobOff}
+                {youtubeMode !== "off" && <> · {yt[youtubePrivacy]}</>}
+                {youtubeMode === "auto" && <> · {youtubeStatus?.channel_title}</>}</dd></div>
             </dl>
             <p className="muted" style={{ fontSize: 13 }}>
               {t.reviewWarn}
@@ -302,7 +352,7 @@ function DeleteDialog({ job, busy, error, onConfirm, onCancel }) {
   );
 }
 
-function Queue() {
+function Queue({ videoSessions, onVideoSessionsChange }) {
   const t = useCopy().work;
   const { data, error, loaded, refresh } = usePoll("/jobs", 2000);
   const [selected, setSelected] = useState(null);
@@ -453,34 +503,48 @@ function Queue() {
           </nav>
         </div>
       </div>
-      {selected && <Execution key={selected + ":" + inspectionVersion} jobId={selected} />}
+      {selected && <Execution key={selected + ":" + inspectionVersion} jobId={selected} videoSessions={videoSessions} onVideoSessionsChange={onVideoSessionsChange} />}
       {confirming && <DeleteDialog job={confirming} busy={!!deleting} error={deleteError}
         onConfirm={() => remove(confirming.id)} onCancel={() => setConfirming(null)} />}
     </>
   );
 }
 
-function Output() {
+function Output({ insightSession, onInsightSessionChange, videoSessions, onVideoSessionsChange }) {
   const t = useCopy().work;
+  const { lang } = useLang(); const copy = INTEGRATIONS_COPY[lang];
+  const [selected, setSelected] = useState(null);
   // Signed URLs expire in an hour, so refresh well inside that window.
   // Media-link signing can take longer than queue reads on a cold connection.
   const { data, error, loaded } = usePoll("/gallery", 15 * 60 * 1000, 45000);
+  const matched = data.find((item) => item.youtube_video_id && item.youtube_video_id === insightSession?.report?.video_id);
+  useEffect(() => {
+    if (!matched || !insightSession?.report) return;
+    setSelected(matched);
+    onVideoSessionsChange((previous) => ({ ...previous, [`${matched.source}:${matched.id}`]: insightSession }));
+  }, [matched?.id, insightSession?.report]);
+  const externalReport = insightSession?.report && !matched;
 
-  if (error && !data.length) return <State title={t.unreachable}>{userError(error, t.errors)}</State>;
+  if (error && !data.length && !externalReport) return <State title={t.unreachable}>{userError(error, t.errors)}</State>;
   if (!loaded) return <State title={t.reading}>{t.readingOutput}</State>;
-  if (!data.length) return <State title={t.emptyOutput}>{t.emptyOutputBody}</State>;
+  if (!data.length && !externalReport) return <State title={t.emptyOutput}>{t.emptyOutputBody}</State>;
 
   return (
     <>
     {error && <p role="status" className="alarm-text">{t.execution.stale} {userError(error, t.errors)}</p>}
+    {externalReport && <Insights insightSession={insightSession} onInsightSessionChange={onInsightSessionChange} />}
+    {selected && <><div className="job-actions"><button className="btn" onClick={() => setSelected(null)}>{copy.closeDetails}</button></div>
+      {selected.job_id ? <Execution key={selected.job_id} jobId={selected.job_id} initialAssetId={selected.id} videoSessions={videoSessions} onVideoSessionsChange={onVideoSessionsChange} />
+        : <VideoDetails key={selected.id} assets={[selected]} videoSessions={videoSessions} onVideoSessionsChange={onVideoSessionsChange} />}</>}
     <div className="gallery">
       {data.map((item) => (
         <figure key={`${item.source}-${item.id}`}>
-          <video src={item.url} controls preload="metadata" />
+          <button type="button" className="output-preview" aria-label={`${t.execution.inspect}: ${item.title}`} onClick={() => setSelected(item)}><video src={item.url} muted preload="metadata" tabIndex={-1} /></button>
           <figcaption>
             {item.title}
             <br />
             <span className="label">{item.source}</span>
+            <div className="job-actions"><button className="btn" onClick={() => setSelected(item)}>{t.execution.inspect}</button></div>
           </figcaption>
         </figure>
       ))}
@@ -489,30 +553,39 @@ function Output() {
   );
 }
 
-const SCREENS = { new: NewJob, queue: Queue, output: Output, insights: Insights };
+const SCREENS = { new: NewJob, queue: Queue, output: Output, research: Research, library: Library, youtube: YouTube };
 
 export default function Workspace() {
   const t = useCopy().work;
+  const { lang } = useLang(); const integrations = INTEGRATIONS_COPY[lang];
   const [tab, setTab] = useState("new");
+  const [draft, setDraft] = useState(null);
   const [insightSession, setInsightSession] = useState(newInsightsSession);
+  const [videoSessions, setVideoSessions] = useState({});
   const Screen = SCREENS[tab];
 
   return (
     <div className="page">
       <header className="page-head">
         <span className="label">{t.label}</span>
-        <h1>{t.headings[tab]}</h1>
+        <h1>{t.headings[tab] || integrations[tab]}</h1>
       </header>
 
-      <div className="segmented">
-        {Object.keys(SCREENS).map((id) => (
+      <div className="workspace-navigation"><div className="segmented">
+        {["new", "queue", "output"].map((id) => (
           <button key={id} aria-current={id === tab} onClick={() => setTab(id)}>
             {t.tabs[id]}
           </button>
         ))}
-      </div>
+      </div><div className="workspace-tools"><details><summary className="btn">{integrations.tools}</summary><div className="workspace-tool-menu">
+        {["research", "library"].map((id) => <button className="btn" key={id} onClick={(event) => { setTab(id); event.currentTarget.closest("details").removeAttribute("open"); }}>{integrations[id]}</button>)}
+      </div></details><button className="btn" aria-current={tab === "youtube"} onClick={() => setTab("youtube")}>YouTube</button></div></div>
 
-      <Screen onQueued={() => setTab("queue")} insightSession={insightSession} onInsightSessionChange={setInsightSession} />
+      <Screen onQueued={() => { setTab("queue"); setDraft(null); }} initialDraft={draft}
+        onReference={(item) => { setDraft(item); setTab("new"); }}
+        onRetention={(report, title) => { setInsightSession({ ...newInsightsSession(), report, csvName: `YouTube · ${title}`, step: 2 }); setTab("output"); }}
+        videoSessions={videoSessions} onVideoSessionsChange={setVideoSessions}
+        insightSession={insightSession} onInsightSessionChange={setInsightSession} />
     </div>
   );
 }

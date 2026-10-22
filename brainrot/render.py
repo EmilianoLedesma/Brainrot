@@ -88,6 +88,17 @@ def build_captions(words: list[dict]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def build_srt(words: list[dict]) -> str:
+    def stamp(seconds):
+        milliseconds = round(seconds * 1000)
+        hours, rest = divmod(milliseconds, 3_600_000)
+        minutes, rest = divmod(rest, 60_000)
+        seconds, milliseconds = divmod(rest, 1000)
+        return f"{hours:02d}:{minutes:02d}:{seconds:02d},{milliseconds:03d}"
+    return "\n\n".join(f"{index}\n{stamp(word['start'])} --> {stamp(word['end'])}\n{word['text']}"
+                         for index, word in enumerate(words, 1)) + "\n"
+
+
 def render(background: bytes, narration: bytes, words: list[dict]) -> bytes:
     """Loop the background under the narration, burn in the captions, return mp4."""
     with tempfile.TemporaryDirectory() as tmp:

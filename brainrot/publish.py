@@ -15,12 +15,13 @@ Populate a platform like this, once its app exists:
 """
 
 import json
+import os
 import time
 from datetime import datetime, timedelta, timezone
 
 import requests
 
-from . import db
+from . import db, media
 from .observability.logging import event, safe_text
 
 TIMEOUT = 120
@@ -74,8 +75,8 @@ def youtube_token(data: dict) -> str:
     response = requests.post(
         "https://oauth2.googleapis.com/token",
         data={
-            "client_id": data["client_id"],
-            "client_secret": data["client_secret"],
+            "client_id": data.get("client_id") or os.environ["YOUTUBE_CLIENT_ID"],
+            "client_secret": data.get("client_secret") or os.environ["YOUTUBE_CLIENT_SECRET"],
             "refresh_token": data["refresh_token"],
             "grant_type": "refresh_token",
         },
@@ -89,10 +90,11 @@ def youtube_token(data: dict) -> str:
     return data["access_token"]
 
 
-def post_youtube(data: dict, video: bytes, title: str, description: str) -> tuple[str, str]:
+def post_youtube(data: dict, video: bytes, title: str, description: str, *, privacy_status: str | None = None, tags: list[str] | None = None,
+                 made_for_kids: bool = False, contains_synthetic_media: bool = False) -> tuple[str, str]:
     """Resumable upload. Returns (video id, watch URL).
 
-    A vertical video under three minutes is treated as a Short by YouTube itself -
+    A vertical video up to three minutes is treated as a Short by YouTube itself -
     there is no API field that declares one.
     """
     token = youtube_token(data)
@@ -101,10 +103,12 @@ def post_youtube(data: dict, video: bytes, title: str, description: str) -> tupl
             "title": title[:100],
             "description": description[:5000],
             "categoryId": "24",
+            "tags": tags or [],
         },
         "status": {
-            "privacyStatus": data.get("privacy_status", "public"),
-            "selfDeclaredMadeForKids": False,
+            "privacyStatus": privacy_status or data.get("privacy_status", "public"),
+            "selfDeclaredMadeForKids": made_for_kids,
+            "containsSyntheticMedia": contains_synthetic_media,
         },
     }
 
@@ -125,7 +129,7 @@ def post_youtube(data: dict, video: bytes, title: str, description: str) -> tupl
 
     upload = requests.put(
         session_url,
-        headers={"Content-Type": "video/mp4", "Content-Length": str(len(video))},
+        headers={"Authorization": f"Bearer {token}", "Content-Type": "video/mp4", "Content-Length": str(len(video))},
         data=video,
         timeout=TIMEOUT,
     )
@@ -275,7 +279,7 @@ def _take(publication_id: str) -> bool:
     return bool(taken)
 
 
-def publish_one(publication: dict) -> bool:
+def publish_one(publication: dict, *, claimed: bool = False) -> bool:
     """Upload one publication and record what happened to it.
 
     Returns False if another caller already took it. Raises MissingCredentials
@@ -283,7 +287,9 @@ def publish_one(publication: dict) -> bool:
     """
     platform = publication["platform"]
     creds = credentials(platform)
-    if not _take(publication["id"]):
+    if platform == "instagram" and media.local() and not os.getenv("BRAINROT_PUBLIC_API_URL"):
+        raise MissingCredentials("Instagram needs a publicly reachable media server")
+    if not claimed and not _take(publication["id"]):
         event("publication_already_taken", publication_id=publication["id"], platform=platform)
         return False
 
@@ -294,12 +300,30 @@ def publish_one(publication: dict) -> bool:
             raise RuntimeError("nothing rendered for this publication yet")
 
         if platform == "youtube":
-            post_id, url = post_youtube(creds, db.download(item["path"]), item["title"], item["title"])
+            metadata = publication.get("metadata") or {}
+            if not metadata.get("title"):
+                from . import youtube_metadata
+                source = "clip" if publication.get("clip_id") else "chapter"
+                generated = youtube_metadata.draft(source, publication.get("clip_id") or publication["chapter_id"])
+                metadata = {**metadata, **generated}
+                client.table("publications").update({"metadata": metadata}).eq("id", publication["id"]).execute()
+            if creds.get("channel_id"):
+                metadata = {**metadata, "channel_id": creds["channel_id"]}
+                client.table("publications").update({"metadata": metadata}).eq("id", publication["id"]).execute()
+            post_id, url = post_youtube(creds, db.download(item["path"]), metadata["title"], metadata.get("description", ""),
+                                       privacy_status=metadata.get("privacy_status", creds.get("privacy_status", "private")), tags=metadata.get("tags", []),
+                                       made_for_kids=metadata.get("made_for_kids", False), contains_synthetic_media=metadata.get("contains_synthetic_media", False))
         elif platform == "tiktok":
             post_id, url = post_tiktok(creds, db.download(item["path"]), item["title"])
         elif platform == "instagram":
+            video_url = db.signed_url(item["path"], SIGNED_URL_TTL)
+            if video_url.startswith("/"):
+                base = os.getenv("BRAINROT_PUBLIC_API_URL", "").rstrip("/")
+                if not base:
+                    raise MissingCredentials("Instagram needs a public media URL for local files")
+                video_url = base + video_url
             post_id, url = post_instagram(
-                creds, db.signed_url(item["path"], SIGNED_URL_TTL), item["title"]
+                creds, video_url, item["title"]
             )
         else:
             raise RuntimeError(f"unknown platform {platform}")
@@ -332,8 +356,35 @@ def run_due(limit: int = 5) -> list[str]:
     from . import scheduler
 
     published = []
-    for publication in scheduler.due(limit):
+    due = []
+    for platform in scheduler.PLATFORMS:
         try:
+            settings = credentials(platform)
+        except MissingCredentials:
+            continue
+        if platform == "youtube":
+            if settings.get("channel_id"):
+                due.extend(scheduler.due(limit, platform=platform, youtube_mode="auto", channel_id=settings["channel_id"]))
+            if settings.get("auto_publish", True):
+                due.extend(scheduler.due(limit, platform=platform, youtube_mode="legacy", created_after=settings.get("auto_publish_after")))
+        else:
+            due.extend(scheduler.due(limit, platform=platform))
+    due.sort(key=lambda row: row["scheduled_at"])
+    for publication in due[:limit]:
+        try:
+            if publication["platform"] == "youtube":
+                settings = credentials("youtube")
+                metadata = publication.get("metadata") or {}
+                mode = metadata.get("youtube_mode")
+                if mode == "review":
+                    continue
+                if mode == "auto" and metadata.get("channel_id") != settings.get("channel_id"):
+                    continue
+                if mode != "auto" and settings.get("auto_publish", True) is False:
+                    continue
+                cutoff = settings.get("auto_publish_after")
+                if mode != "auto" and cutoff and datetime.fromisoformat(publication["created_at"]) < datetime.fromisoformat(cutoff):
+                    continue
             if publish_one(publication):
                 published.append(publication["id"])
         except MissingCredentials as exc:

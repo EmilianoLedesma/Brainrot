@@ -5,8 +5,9 @@ import json
 import pathlib
 import subprocess
 import sys
+import shutil
 
-from . import db, llm, models, publish, reddit, scheduler, script
+from . import db, llm, models, publish, reddit, scheduler, script, media
 from .observability.logging import configure
 
 
@@ -72,10 +73,43 @@ def publish_due(args: argparse.Namespace) -> None:
     print(f"published {len(sent)}")
 
 
+def doctor(args: argparse.Namespace) -> None:
+    import os
+    print(json.dumps({"media_backend": "local" if media.local() else "supabase", "media_root": str(media.root()),
+        "ffmpeg": bool(shutil.which("ffmpeg")), "ffprobe": bool(shutil.which("ffprobe")),
+        "codex": bool(shutil.which("codex")), "claude": bool(shutil.which("claude")),
+        "youtube_oauth_configured": bool(os.getenv("YOUTUBE_CLIENT_ID") and os.getenv("YOUTUBE_CLIENT_SECRET")),
+        "pexels_configured": bool(os.getenv("PEXELS_API_KEY"))}, indent=2))
+
+
+def sync_media(args: argparse.Namespace) -> None:
+    if not media.local():
+        raise ValueError("Set BRAINROT_MEDIA_STORAGE=local before synchronizing media.")
+    paths = set()
+    for table, columns in (("background_clips", ["storage_path"]), ("story_chapters", ["audio_path", "video_path"]),
+                           ("clips", ["storage_path"]), ("source_videos", ["storage_path"])):
+        for row in db.client().table(table).select(",".join(columns)).execute().data:
+            paths.update(row[column] for column in columns if row.get(column))
+    copied, missing = 0, []
+    for path in sorted(paths):
+        if media.path(path).is_file():
+            continue
+        try:
+            db.download(path)
+            copied += 1
+            print("saved " + path, flush=True)
+        except Exception:
+            missing.append(path)
+            print("unavailable " + path, flush=True)
+    print(json.dumps({"copied": copied, "unavailable": missing, "root": str(media.root())}))
+
+
 def main(argv: list[str] | None = None) -> int:
     configure()
     parser = argparse.ArgumentParser(prog="brainrot")
     sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("doctor", help="check this computer's project setup without exposing secrets").set_defaults(func=doctor)
+    sub.add_parser("sync-media", help="copy existing Supabase media into the project's portable local folder").set_defaults(func=sync_media)
 
     background = sub.add_parser("add-background", help="upload a looping background clip")
     background.add_argument("file")

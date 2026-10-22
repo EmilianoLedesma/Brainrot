@@ -75,6 +75,14 @@ H.264 video, and AAC audio. Existing videos remain unchanged.
 
 ## Sources and adaptation
 
+The repo-owned [Shorts publishing skill](../brainrot/skills/youtube-shorts-publishing/SKILL.md)
+adapts the same promise/payoff and source-fidelity criteria to upload titles,
+descriptions, hashtags, and tags. It considers title angles silently, packages
+the actual finished narration, and avoids claims of guaranteed reach. Preview
+and automatic publishing share this guidance; they do not invoke a global
+plugin or change the original narration. This is an additional model call per
+uncached draft, with explicit regeneration available in the upload details view.
+
 These are project-specific implementations inspired by reviewed MIT-licensed
 resources; no upstream installer, agent personality, or executable was installed.
 

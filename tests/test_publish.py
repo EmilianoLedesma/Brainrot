@@ -1,6 +1,11 @@
 import pytest
 
-from brainrot import publish
+from brainrot import publish, youtube_metadata
+
+
+@pytest.fixture(autouse=True)
+def upload_copy(monkeypatch):
+    monkeypatch.setattr(youtube_metadata, "draft", lambda *args: {"title": "Tale", "description": "A short tale. #Shorts", "tags": ["tale", "story", "shorts"]})
 
 
 @pytest.fixture
@@ -28,7 +33,7 @@ def schedule(fake_db, chapter, platform="youtube") -> dict:
 
 def test_publishes_and_records_the_post(fake_db, chapter, youtube_creds, monkeypatch):
     sent = []
-    monkeypatch.setattr(publish, "post_youtube", lambda creds, video, title, desc: sent.append(video) or ("vid1", "https://y/vid1"))
+    monkeypatch.setattr(publish, "post_youtube", lambda creds, video, title, desc, **kwargs: sent.append(video) or ("vid1", "https://y/vid1"))
     row = schedule(fake_db, chapter)
 
     assert publish.publish_one(row) is True
@@ -42,7 +47,7 @@ def test_publishes_and_records_the_post(fake_db, chapter, youtube_creds, monkeyp
 def test_a_publication_is_uploaded_once_even_when_two_callers_race(fake_db, chapter, youtube_creds, monkeypatch):
     # The worker loop and `cli publish` can both read the same due row.
     uploads = []
-    monkeypatch.setattr(publish, "post_youtube", lambda *a: uploads.append(1) or ("vid1", ""))
+    monkeypatch.setattr(publish, "post_youtube", lambda *a, **kw: uploads.append(1) or ("vid1", ""))
     row = schedule(fake_db, chapter)
     stale_copy = dict(row)
 
@@ -62,7 +67,7 @@ def test_missing_credentials_leave_the_publication_scheduled(fake_db, chapter):
 
 
 def test_run_due_skips_platforms_without_credentials(fake_db, chapter, youtube_creds, monkeypatch):
-    monkeypatch.setattr(publish, "post_youtube", lambda *a: ("vid1", ""))
+    monkeypatch.setattr(publish, "post_youtube", lambda *a, **kw: ("vid1", ""))
     yt = schedule(fake_db, chapter, "youtube")
     schedule(fake_db, chapter, "tiktok")
 
@@ -72,7 +77,7 @@ def test_run_due_skips_platforms_without_credentials(fake_db, chapter, youtube_c
 
 
 def test_upload_failure_is_recorded_and_not_retried(fake_db, chapter, youtube_creds, monkeypatch):
-    def boom(*_):
+    def boom(*_, **kwargs):
         raise RuntimeError("platform said no")
 
     monkeypatch.setattr(publish, "post_youtube", boom)

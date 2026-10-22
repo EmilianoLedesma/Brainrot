@@ -140,8 +140,11 @@ def _generate(system: str, user: str, provider: str | None = None) -> Story:
     )
 
 
-def write_story(topic: str, *, provider: str | None = None, brainrot_level: int | None = None) -> Story:
-    return _generate(STORY_SYSTEM + _brainrot_style(brainrot_level), f"Topic: {topic}", provider)
+def write_story(topic: str, *, provider: str | None = None, brainrot_level: int | None = None, reference_context: str | None = None) -> Story:
+    source = f"Topic: {topic}"
+    if reference_context:
+        source += "\n\nReference material:\n" + reference_context
+    return _generate(STORY_SYSTEM + _brainrot_style(brainrot_level), source, provider)
 
 
 def rewrite_post(title: str, body: str, *, provider: str | None = None) -> Story:

@@ -73,6 +73,9 @@ class _Query:
     def neq(self, column, value):
         return self._add(lambda r: r.get(column) != value)
 
+    def contains(self, column, value):
+        return self._add(lambda row: all((row.get(column) or {}).get(key) == expected for key, expected in value.items()))
+
     def in_(self, column, values):
         values = list(values)
         return self._add(lambda r: r.get(column) in values)
@@ -90,8 +93,8 @@ class _Query:
         assert value == "null", "fake only supports is_(col, 'null')"
         return self._add(lambda r: r.get(column) is None)
 
-    def order(self, column, desc: bool = False):
-        self.orders.append((column, desc))
+    def order(self, column, desc: bool = False, nullsfirst: bool = False):
+        self.orders.append((column, desc, nullsfirst))
         return self
 
     def limit(self, n):
@@ -105,8 +108,11 @@ class _Query:
     # execution -------------------------------------------------------------
     def _matching(self) -> list[dict]:
         rows = [r for r in self.fake.tables.setdefault(self.table, []) if all(f(r) for f in self.filters)]
-        for column, desc in reversed(self.orders):
-            rows.sort(key=lambda r: (r.get(column) is None, r.get(column)), reverse=desc)
+        for column, desc, nullsfirst in reversed(self.orders):
+            present = [row for row in rows if row.get(column) is not None]
+            missing = [row for row in rows if row.get(column) is None]
+            present.sort(key=lambda row: row[column], reverse=desc)
+            rows = missing + present if nullsfirst else present + missing
         if self.limit_n is not None:
             rows = rows[: self.limit_n]
         return rows

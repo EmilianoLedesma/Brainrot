@@ -8,7 +8,7 @@ import math
 import re
 from typing import Callable
 
-from . import db, render, scheduler, script, tts
+from . import db, render, scheduler, script, tts, media
 from .application.stages import stage
 from .domain.jobs import PermanentError
 
@@ -119,6 +119,9 @@ def produce(job_id: str, write: Callable[[], script.Story], **story_fields) -> s
         with stage("render", scope):
             video = render.render(background, audio, words)
         with stage("upload", scope):
+            if media.local():
+                db.upload_job_media(job_id, "story_chapters", chapter_id, f"stories/{story_id}/{index:02d}.srt",
+                                    render.build_srt(words).encode("utf-8"), "application/x-subrip")
             audio_path = db.upload_job_media(job_id, "story_chapters", chapter_id,
                                              f"stories/{story_id}/{index:02d}.mp3", audio, "audio/mpeg")
             video_path = db.upload_job_media(job_id, "story_chapters", chapter_id,
@@ -138,4 +141,6 @@ def run_brainrot(job: dict) -> str:
     topic = job["params"]["topic"]
     level = job["params"].get("brainrot_level")
     options = {"brainrot_level": level} if level is not None else {}
+    if job["params"].get("reference_context"):
+        options["reference_context"] = job["params"]["reference_context"]
     return produce(job["id"], lambda: script.write_story(topic, **options), topic=topic)

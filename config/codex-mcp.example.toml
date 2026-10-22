@@ -1,0 +1,4 @@
+# Optional interactive Codex research. Copy into this project's .codex/config.toml.
+# The unattended app uses its own bounded HTTP research adapter, not agent tools.
+[mcp_servers.wikidata]
+url = "https://wd-mcp.wmcloud.org/mcp/"

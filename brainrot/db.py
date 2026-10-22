@@ -1,8 +1,4 @@
-"""Supabase access layer.
-
-Every piece of persistent state lives in Supabase: rows in Postgres, media in the
-`media` Storage bucket. Nothing on the local disk survives a job.
-"""
+"""Supabase rows and portable local media, with legacy Storage compatibility."""
 
 import os
 from datetime import datetime, timezone
@@ -15,6 +11,7 @@ from supabase.lib.client_options import SyncClientOptions
 from .domain.pipelines import PipelineContext
 from .domain.jobs import LeaseLost
 from .observability.logging import event
+from . import media
 
 load_dotenv()
 
@@ -156,6 +153,11 @@ def cleanup_media(job_id: str | None = None) -> bool:
         rows = client().rpc("pending_media_cleanup", {"p_job": job_id}).execute().data or []
         paths = [row["storage_path"] for row in rows if not row["is_referenced"]]
         if paths:
+            if media.local():
+                for relative in paths:
+                    media.path(relative).unlink(missing_ok=True)
+                    if relative.endswith((".mp3", ".mp4")):
+                        media.path(relative).with_suffix(".srt").unlink(missing_ok=True)
             client().storage.from_(MEDIA_BUCKET).remove(paths)
         if rows:
             client().rpc("finish_media_cleanup", {
@@ -200,6 +202,8 @@ def finish_stage(execution_id: str, worker_id: str, status: str, error: str | No
 
 def upload(path: str, data: bytes, content_type: str) -> str:
     """Put bytes in the media bucket at `path` and return that path."""
+    if media.local():
+        return media.save(path, data)
     client().storage.from_(MEDIA_BUCKET).upload(
         path, data, {"content-type": content_type, "upsert": "true"}
     )
@@ -227,9 +231,20 @@ def upload_job_media(job_id: str, table: str, asset_id: str, path: str, data: by
 
 
 def download(path: str) -> bytes:
+    if media.local():
+        with media.file_lock(path):
+            local_file = media.path(path)
+            if local_file.is_file():
+                return local_file.read_bytes()
+            # Concurrent browser range requests share one legacy download.
+            data = client().storage.from_(MEDIA_BUCKET).download(path)
+            media.save(path, data)
+            return data
     return client().storage.from_(MEDIA_BUCKET).download(path)
 
 
 def signed_url(path: str, expires_in: int = 3600) -> str:
+    if media.local():
+        return media.signed_url(path, expires_in)
     res = client().storage.from_(MEDIA_BUCKET).create_signed_url(path, expires_in)
     return res["signedURL"]

@@ -7,12 +7,18 @@ from three sources:
 - **H2 — brainrot**: a topic becomes an LLM-written story narrated over a looping background.
 - **H2b — Reddit narrator**: filtered subreddit posts, rewritten and chaptered, through the H2 pipeline.
 
-All persistent state lives in Supabase: rows in Postgres, media in the `media`
-Storage bucket. Nothing on the local disk is expected to survive a job.
+Database rows live in Supabase. New media is saved under the project's ignored
+`media/` folder; rows keep portable relative paths. Existing Supabase Storage
+objects are downloaded and cached on first use. Copy `media/` when moving to a
+different computer. See [portable integrations and YouTube setup](docs/integrations.md).
 
 ## Layout
 
     brainrot/db.py         Supabase client, leased job/stage helpers, media upload
+    brainrot/media.py      atomic local files, relative paths and signed playback
+    brainrot/research.py   optional Wikidata reference snapshots for new stories
+    brainrot/library.py    NASA/Pexels discovery, provenance and local video import
+    brainrot/youtube.py    OAuth connection, reviewed Shorts upload and retention
     brainrot/api.py        FastAPI: job creation plus read-only views for the dashboard
     brainrot/worker.py     leases pending jobs, runs the matching pipeline, retries/recovers
     brainrot/domain/       job states and the pipeline contract (no I/O)
@@ -122,12 +128,13 @@ Windows executable discovery, timeouts and deployment boundaries.
 | 2 | H2b: Reddit scan, rewrite, chapters | done |
 | 3 | H1: download, transcribe, face-track reframe | done |
 | 4 | Publishing scheduler, retention-based chapter pacing | done |
-| 5 | YouTube / TikTok / Instagram posting | uploaders built, unauthorized |
+| 5 | YouTube / TikTok / Instagram posting | YouTube OAuth, reviewed/automatic uploads and analytics built; other platforms require credentials |
 
-Phase 5 uploads but cannot authorize. There is no OAuth consent flow in the code -
-registering each developer app and granting consent is a manual, browser-bound
-step. `publish.py` reads whatever tokens are in `platform_credentials` and skips
-any platform that has no row, so the worker keeps running while apps are pending.
+Connect YouTube through the app's YouTube page. Google consent is browser-based;
+the app handles OAuth, token refresh, upload review, Shorts metadata, optional
+automatic publishing, and performance ingestion. See [integration setup](docs/integrations.md).
+TikTok and Instagram still need manually configured credentials. Missing platform
+credentials leave publications scheduled.
 
 Once an app exists, insert its row:
 
@@ -137,8 +144,8 @@ Once an app exists, insert its row:
                  "client_id": "...", "client_secret": "..."},
     }, on_conflict="platform").execute()
 
-A platform with no row is skipped: its publications stay `scheduled` and go out
-once the row exists.
+A platform with no row is skipped. New YouTube connections also require enabling
+automatic uploads explicitly; connecting alone does not publish the backlog.
 
 Per platform: YouTube wants `access_token` plus `refresh_token`/`client_id`/
 `client_secret` (it refreshes itself, since Google tokens last an hour); TikTok
@@ -266,8 +273,9 @@ If the platforms report nothing within 24h of a chapter going out, pacing falls
 back to the slowest cadence instead of stalling the story forever.
 
 The normalized analytics contract and pure pacing policy live in
-`brainrot/application/analytics.py`. Platform analytics fetching remains deferred;
-without ingested retention, the existing 48h fallback applies.
+`brainrot/application/analytics.py`. YouTube performance ingestion now feeds
+chapter pacing with reported average percentage watched. TikTok and Instagram
+analytics remain deferred; without metrics, the existing 48h fallback applies.
 
 ### Transcription
 
@@ -290,7 +298,7 @@ in `brainrot/db.py` goes through the REST API with the service_role key.
 
 Two processes. The API holds the service_role key; the browser never sees it.
 
-    uvicorn brainrot.api:app --reload --port 8000
+    uvicorn brainrot.api:app --reload --port 8001
     cd web && npm install && npm run dev
 
 Open http://localhost:5173. Home, Docs and FAQ describe the product; Workspace

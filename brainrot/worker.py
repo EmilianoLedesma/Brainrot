@@ -17,7 +17,7 @@ import traceback
 import uuid
 from datetime import datetime, timezone
 
-from . import db, publish, scheduler
+from . import db, publish, scheduler, youtube_sync
 from .application import retry
 from .domain.jobs import LeaseLost
 from .domain.pipelines import PipelineContext
@@ -33,6 +33,7 @@ LEASE_SECONDS = 600
 RENEW_EVERY_SECONDS = 60
 # Pacing and publishing also run between jobs when the queue never empties.
 HOUSEKEEPING_EVERY_SECONDS = 300
+_last_youtube_sync = None
 
 POLICY = retry.DEFAULT_POLICY
 WORKER_ID = f"{socket.gethostname()}:{os.getpid()}:{uuid.uuid4().hex[:6]}"
@@ -136,6 +137,13 @@ def run_once(
 def housekeeping() -> None:
     """Advance chapter pacing and upload whatever is due."""
     db.cleanup_media()
+    global _last_youtube_sync
+    if _last_youtube_sync is None or time.monotonic() - _last_youtube_sync >= 3600:
+        _last_youtube_sync = time.monotonic()
+        try:
+            youtube_sync.sync()
+        except Exception as exc:
+            event("youtube_analytics_unavailable", error_type=type(exc).__name__)
     for chapter_id in scheduler.tick():
         event("chapter_scheduled", chapter_id=chapter_id)
     publish.run_due()

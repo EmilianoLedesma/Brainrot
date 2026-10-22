@@ -128,7 +128,7 @@ export default function Insights({ insightSession: session, onInsightSessionChan
           <button className="btn" onClick={download}>{t.download}</button>
         </div></div>
         <dl className="retention-facts">
-          <div><dt>{t.opening} · {report.opening_seconds}s</dt><dd>{number(-report.opening_loss_pp)} pp</dd></div>
+          <div><dt>{t.opening} · {number(report.opening_start_seconds || 0)}–{number(report.opening_seconds)}s</dt><dd>{number(-report.opening_loss_pp)} pp</dd></div>
           <div><dt>{t.last} · {number(report.last_observed_seconds)}s</dt><dd>{number(report.last_observed_retention)}%</dd></div>
           <div><dt>{t.samples}</dt><dd>{report.points.length}</dd></div>
         </dl>
