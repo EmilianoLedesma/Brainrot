@@ -1,0 +1,22 @@
+{
+  "title": "Why metal feels colder",
+  "language": "en",
+  "voice": "en-US-GuyNeural",
+  "scenes": [
+    {"id":"same-room","module":"scenes_open","text":"Touch a metal spoon, then a wooden one. The metal feels colder. Leave both in the same room long enough, though, and they settle at the same temperature. So what is your hand actually telling you?","visual":"Two materials establish the sensory mystery; reveal matching starting temperatures."},
+    {"id":"thermometer","module":"scenes_open","text":"Start with a thermometer. Before you touch them, both objects might read twenty two degrees. That number describes their temperature. It does not describe how quickly either object will exchange energy with your skin.","visual":"Two illustrative twenty-two-degree readings; temperature is a starting condition."},
+    {"id":"direction","module":"scenes_open","text":"Your hand is usually warmer than the room. When it meets either object, energy flows from your warmer skin into the cooler material. The direction is the same. The important difference is how fast that transfer happens.","visual":"A warm fingertip meets a cooler object; arrows travel from skin to material."},
+    {"id":"metal","module":"scenes_mechanism","text":"Metal conducts heat well. Energy spreads away from the contact point into the rest of the object, allowing more energy to leave your skin. Your skin cools more quickly, and that stronger cooling feels cold.","visual":"Energy spreads into metal from the contact point; fast flow cools the fingertip."},
+    {"id":"wood","module":"scenes_mechanism","text":"Wood is a poorer conductor. The small region beneath your finger warms more locally, and energy spreads through the material more slowly. Your skin loses heat less quickly. The wood feels warmer, despite its matching starting temperature.","visual":"Local warming in wood, with slower spreading than the preceding metal scene."},
+    {"id":"two-measures","module":"scenes_mechanism","text":"That gives us a useful distinction. Temperature tells us about an object's thermal state. Touch responds to changes in our skin as heat flows. Two matching thermometer readings can therefore produce very different sensations.","visual":"Separate the equal temperature readings from the different rates of heat transfer."},
+    {"id":"hot-reversal","module":"scenes_payoff","text":"Now put both materials somewhere hotter than your skin. The direction reverses: energy flows into your hand. Metal can transfer that energy quickly too, so it may feel hotter. Good conduction amplifies the sensation in either direction.","visual":"Conceptual hot-object diagram reverses energy arrows; no invitation to touch hot surfaces."},
+    {"id":"ice","module":"scenes_payoff","text":"There is another way to see the difference without using your hand. Place matching ice cubes on room temperature metal and wood. With comparable blocks, the ice on metal typically melts faster because energy reaches it more readily.","visual":"Qualitative illustrative melting comparison, with no measured speeds or invented data.","cue_after":{"melt_start":"wood"}},
+    {"id":"paradox","module":"scenes_payoff","text":"The metal can feel colder while delivering heat to the ice faster. That is not a contradiction. Your warm hand loses energy to the metal; the colder ice gains energy from it. The starting temperatures set the direction.","visual":"Hand to metal and metal to ice; warm-to-cool energy transfer resolves the mystery."},
+    {"id":"payoff","module":"scenes_payoff","text":"So the next time a metal handle feels colder than a wooden door, remember what changed. Their temperatures may match. The speed of heat transfer does not. Your hand is reporting an exchange, not giving you a thermometer reading.","visual":"Return to the opening comparison, ending on the exchange of energy."}
+  ],
+  "sources": [
+    {"url":"https://www.aps.org/learning-resources/getting-warmer-colder","supports":"Equal room-temperature metal and wood can feel different because energy leaves fingers at different rates; ice on metal melts faster than on wood."},
+    {"url":"https://www.acs.org/middleschoolchemistry/lessonplans/chapter2/lesson1.html","supports":"Conduction, transfer from warmer to cooler material, temperature and touch."},
+    {"url":"https://annex.exploratorium.edu/xref/exhibits/cold_metal.html","supports":"Touch does not reliably measure object temperature; material conductivity affects sensation."}
+  ]
+}

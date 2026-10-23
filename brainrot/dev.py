@@ -69,7 +69,8 @@ def main(argv=None):
     processes = []
     try:
         for service in services:
-            process = subprocess.Popen(commands(args.api_port, args.web_port)[service], cwd=PROJECT_ROOT,
+            process = subprocess.Popen(commands(args.api_port, args.web_port)[service],
+                cwd=PROJECT_ROOT / "web" if service == "web" else PROJECT_ROOT,
                 env=environment(args.api_port, args.web_port), creationflags=(subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW) if os.name == "nt" else 0,
                 start_new_session=os.name != "nt")
             processes.append(process)

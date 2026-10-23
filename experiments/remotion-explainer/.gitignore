@@ -1,0 +1,5 @@
+node_modules/
+public/narration.mp3
+public/scene-plan.json
+public/words.json
+.remotion/

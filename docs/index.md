@@ -8,6 +8,9 @@
 - [Moving between computers](moving-between-computers.md): local setup and verified media handoff.
 - [Integrations and YouTube](integrations.md): OAuth, publishing, research and media library.
 - [Storytelling](storytelling.md): runtime writing guidance and quality comparisons.
+- [Video-use explainer prototype](../experiments/video-use-prototype/README.md): isolated animated explainer, reproduction and review artifacts.
+- [Remotion explainer prototype](../experiments/remotion-explainer/README.md): channel-informed animation experiment and local rendering.
+- [Stupy Doo reference review](../experiments/remotion-explainer/REFERENCE-REVIEW.md): four sampled Shorts, evidence and visual design findings.
 - [Content quality](content-quality.md): script review and per-video retention tools.
 - [Deployment](deployment.md): Vercel dashboard settings, API/worker hosting and setup prerequisites.
 - [Operations](operations.md): logs, metrics, job inspection, recovery, migration safety and validation.

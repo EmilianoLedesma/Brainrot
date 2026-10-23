@@ -1,0 +1,19 @@
+{
+  "upstream_repository": "https://github.com/browser-use/video-use",
+  "upstream_commit": "43cfc566833548093455c9d4a46bd69913b7e552",
+  "license": "MIT",
+  "files": {
+    "helpers/grade.py": "f5df58e81f31c95a621ffba5973fd866f6662fc481a36ebd37a2e68eb81220c2",
+    "helpers/render.py": "6bbde45ad5929c7c94fa068996f81e0c44b55a9c9dedcf716fc24c071a5c8dd7",
+    "helpers/timeline_view.py": "69aee88e4204f86127740cca9de6a6eaa75a558df1bb07745dd62f69a3c2e9cf",
+    "install.md": "9a78c92932864a728cfe80700d1a6bd5a4c4b4cf2d3f4694f3fd53b49fc93394",
+    "LICENSE": "5afa3d97bf1e6f998d587fa101e3fe0d0c416840b7fe77bcd6ae97690a334631",
+    "SKILL.md": "d3bbeb19bc0e81e197d74806fba15e0a5f5694a0cdf33f0a2348bffe8472a27b"
+  },
+  "font": {
+    "name": "DM Sans",
+    "source": "https://github.com/google/fonts/tree/main/ofl/dmsans",
+    "license": "SIL Open Font License 1.1",
+    "sha256": "8cd08d97e89c24d0aa92edd2f0f4c8ee6195eee9b7c9f154865a58b02f0c1c0d"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "brainrot-remotion-explainer",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "studio": "remotion studio index.tsx --port=5191",
+    "render": "remotion render index.tsx Explainer ../../out/remotion-explainer/edit/final.mp4 --concurrency=2 --crf=19 --x264-preset=veryfast",
+    "still": "remotion still index.tsx Explainer ../../out/remotion-explainer/edit/still.png --frame=120",
+    "check": "tsc --noEmit",
+    "prepare-assets": "node prepare.mjs"
+  },
+  "dependencies": {
+    "remotion": "4.0.538",
+    "@remotion/cli": "4.0.538",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3"
+  }
+}

@@ -1,10 +1,217 @@
-# Handoff — 2026-10-22
+# Handoff — 2026-10-23
 
 Read this with the latest user request and `git status`; this is a dated snapshot,
 not a live dashboard. Do not assume another checkout has its credentials, media
 or migrations just because this development machine does.
 
-## Current work
+## Prototype and local dashboard — 2026-10-23
+
+### Zebra-stripes test video (latest)
+
+The user asked for a fresh test video, "why zebras have stripes", edited like the
+`QClZnH2NDIM` reference but with focus-grabbing elements used sparingly (bubbles
+were only an example). Built as a second composition, `Zebra`, in
+`experiments/remotion-explainer/zebra/` (`Zebra.tsx`, `Quad.tsx`, `story.json`),
+registered beside `Explainer` in `index.tsx`. `video-use-prototype/prepare.py` gained
+a `--story` option (default unchanged). Narration came from Brainrot's existing TTS
+(Guy, no paid API): 316 words, 123.4 s. Narration assets are staged in
+`experiments/remotion-explainer/public/zebra/`.
+
+The script was written by hand, not by the main flow: it did not run `script.py`, the
+`brainrot-storytelling` skill, intensity rules or the Codex provider. Facts were
+checked against Caro et al. 2014 (Nature Communications), Caro et al. 2019 (PLOS ONE,
+horseflies) and Kojima et al. 2019 (PLOS ONE, painted cows); source links are in
+`story.json`. Against the skill: length and factual progression fit, but the hook is
+the generic "everyone assumes X" opening the skill discourages.
+
+Output: ignored `out/zebra-stripes/edit/final.mp4` (copy `zebra-v1.mp4`), 1080×1920,
+30 fps, 123.4 s, 25.6 MB, decodes cleanly, audio mastered by the video-use helper.
+About 85% of sampled frames change. Eight scenes, one device each: stripe draw-in and
+idea chips, counters and ✕/✓ rows on a study card, alert and blood-drop, speed gauges
+with a bounce shockwave, dotted coat comparison, flick meters, blurred fly's-eye view,
+runway lights. Study visuals are schematic and labelled illustrative.
+
+Not done: nobody has played it end to end or listened; review was contact sheets and
+stills only. Known weaknesses: the zebra silhouette is crude, the same hero pose repeats
+in four scenes, there is no morphing, the fly in the landing scene is too small, and the
+landing panels leave the lower screen empty. Not committed.
+
+### Motion and editing pass on the Remotion explainer
+
+The user supplied a target reference, Stupy Doo `QClZnH2NDIM` (Spanish, ~142 s;
+language difference is intentional). Reviewed it as downloaded video through 3-second
+contact sheets and frame-change measurement (ignored `out/inspiration-review/`). It
+changes almost every frame, rarely hard-cuts, keeps one hero object (a phone) through
+every scene, and proves each claim with a prop (stamped documents, counters, labelled
+experiments, per-keyword text). The polished v2 render changed only ~27% of sampled
+frames at 10 fps and held static diagrams for seconds. Gaps named: continuous motion,
+hero object continuity, evidence props, morphing instead of cutting.
+
+Implemented in `experiments/remotion-explainer/` only (`index.tsx`, new `Overlay.tsx`):
+per-beat camera punch-in, floating props, drifting dot grid, four rotating scene
+transitions (side wipe, vertical wipe, iris, staggered bars), narration-timed pop-up
+speech bubbles, alert cards and stamps, and a four-word spoken caption with the active
+word popping. Pop-up text only restates that scene's narration; cues come from the
+cached `words.json`. No new speech, provider, database or upload calls.
+
+Local outputs in ignored `out/remotion-explainer/edit/`: `final-v1.mp4` (first prototype),
+`final-v2.mp4` (30-beat polish), `final-v3.mp4` (motion pass, no pop-ups) and
+**`final-v4.mp4`** (current; `final.mp4` is a copy of it). v4: 145.2 s, 1080×1920,
+30 fps, 34,380,411 bytes, no decode errors, audio −16.0 LUFS / −1.5 dBTP via the
+video-use two-pass loudnorm helper. About 90% of sampled frames change at 10 fps.
+Vendored video-use helpers match the pinned hashes in `provenance.json`. A re-render
+reproduced a complete file; Remotion downloaded its headless browser into its cache
+on first use. The dashboard on 5173 and API on 8001 were not touched.
+
+Not done: nobody has played v4 end to end or listened to it; only stills at pop-up cue
+times were inspected, before the final overlay position tweak. `verify/critic.md` is
+the old v1 critique and does not cover v2–v4. Remaining product gaps versus the
+reference are the hero object, evidence props such as counters and stamped documents,
+and morphing between diagrams. Production integration is still undecided. Uncommitted:
+`brainrot/dev.py`, `.gitignore`, docs and all of `experiments/`. No commit or push.
+
+### Earlier direction: polish the 2D Remotion explainer
+
+The user explicitly chose to improve the Remotion video rather than pursue the
+additional 3D-like Monopoly reference. The new source stages thirty word-timed
+visual beats across the same ten narration chapters. The opening hand overlap and
+global decorative drift were removed. Contact develops into schematic cutaways
+and simultaneous metal/wood comparisons, with distributed/local energy spread
+and visible skin cooling. The payoff now returns to the mechanism. Narration and
+its original factual sources are retained; no production integration or upload.
+
+The earlier Remotion output is preserved locally as
+`out/remotion-explainer/edit/final-v1.mp4`. `finish_audio.py` uses the pinned
+video-use two-pass normalization helper, targets −16 LUFS and −1.5 dBTP, and
+copies the video stream unchanged. `verify.py` now extracts all thirty visual
+beat midpoints in addition to chapter-boundary filmstrips and the ending.
+Final measured outcome and review are recorded in the local verification report;
+the earlier rendering measurements below describe the previous version.
+
+### Follow-up: channel research and actual Remotion prototype
+
+The user requested several Stupy Doo videos be investigated and a new prototype
+made with Remotion or a video-use-supported tool. Reviewed the existing moth Short
+plus actual downloaded shoelace (`giSlwCqtrMA`), shell (`ULowbuFTq1g`) and bee-play
+(`nv5ViFsvwhY`) videos through timecoded frames and automatic captions. Findings,
+source links and limitations are in
+[the reference review](../../experiments/remotion-explainer/REFERENCE-REVIEW.md).
+Reference footage remains ignored under `out/stupy-channel-review/`.
+
+Implemented [a separate Remotion experiment](../../experiments/remotion-explainer/README.md)
+using pinned Remotion 4.0.538, React, bundled licensed font and original SVG art.
+Reused the first prototype's narration and word timings for a direct visual
+comparison. No new speech/provider calls, production generation edits or uploads.
+Video-use supplies the editing/review workflow and filmstrip helper; Remotion
+actually composes/renders this version, without the upstream FFmpeg assembly step.
+
+Final: `out/remotion-explainer/edit/final.mp4`, **145.20 seconds, 1080×1920,
+30fps, H.264/AAC, 27,625,360 bytes**. TypeScript check passed; full media decode,
+duration/size/codec checks passed. Twenty scene samples, nine cut filmstrips and
+ending samples are saved beside it, along with measurements and independent
+critique. Final output hash is recorded in `verification.json` and critique.
+Audio measures **−20.0 LUFS, 2.7 LU range, −4.6 dBFS true peak**; no listening
+assessment or full real-time playback was performed. Source and reproduction
+instructions are portable; generated speech must be transferred or recreated.
+
+Three review passes corrected encoding and fingertip contact defects. Remaining
+limits: opening decorative hand partly overlaps a temperature label; illustration
+is flatter and compositions hold longer than the reference channel. The lattice
+is schematic. Treat this as a complete reviewable prototype, not equivalent
+channel production quality or an unattended editing pipeline. No integration,
+commit or push was requested. Existing Brainrot dashboard still returned HTTP200
+at localhost5173 during this work; no services were restarted.
+
+The user approved a standalone video-use explainer prototype before deciding on
+production integration. Implemented it under
+[`experiments/video-use-prototype/`](../../experiments/video-use-prototype/README.md),
+with separate locked Python dependencies, bundled licensed DM Sans, an original
+365-word factual script, ten animated diagram scenes, and pinned selected MIT
+video-use helpers (`43cfc566833548093455c9d4a46bd69913b7e552`). Three Codex agents
+authored animation sections in parallel; another agent critiqued the finished file.
+
+The finished local file is `out/video-use-prototype/edit/final.mp4`: **145.20 seconds,
+1080×1920, 24fps, H.264/AAC, 4,963,266 bytes**. Narration is 145.178 seconds. The
+output directory also contains a scene plan, exact word timings, transcript/SRT,
+per-scene cached renders, EDL, contact sheet, cut-boundary filmstrips and measurements.
+These are ignored local artifacts; transfer them deliberately or reproduce them on
+another computer. No global skill installation is needed by the source.
+
+The prototype uses Brainrot's existing TTS and Pillow/FFmpeg animations, then the
+actual video-use concat/EDL finishing and inspection helpers. Guy is explicitly
+selected for this experiment: Andrew returned audio with sentence boundaries but
+failed with requested word boundaries in live probes. Production voice settings
+were not changed. No ElevenLabs transcription, paid model API, Claude validation,
+database job or publication call was used by the prototype. This demonstrates an
+interactive agent workflow; it is not an unattended editor or a queue integration.
+
+Full media decode passed, with all nine visual cut boundaries and opening/ending
+sampled. Audio measures **−14.3 LUFS, 2.9 LU loudness range, −0.9 dBFS true peak**.
+Audio performance was not assessed by listening. Critique led to corrected ice heat
+paths, a melting cue anchored after the actual spoken setup, and an explicit hot
+surface contact diagram. Remaining visual pacing/style polish needs user review;
+the prototype does not establish retention improvements or match the reference's
+full visual variety. No integration decision has been made.
+
+The user also asked to run Brainrot while work continued. Dashboard is available
+at `http://localhost:5173`, API at `http://127.0.0.1:8001`, with a live worker host
+reservation. API/frontend HTTP checks pass. Existing queue activity is separate
+from the prototype. Local process records/logs are ignored under `out/dev-services/`;
+inspect them before stopping anything. An earlier launcher also keeps a frontend
+on 5189 with the wrong root; the working dashboard is on 5173. No tracked PIDs.
+
+Fixed `brainrot.dev` to launch Vite from `web/`; the repository-root working
+directory produced a 404 dashboard. Vite needed unsandboxed startup to read its
+config/dependencies. Added `.vite/` to ignored generated files. The affected
+portability/launcher test file passed **26 tests**, including disposable local
+Postgres, using a fresh workspace test directory. Earlier runs hit sandbox/Postgres
+and shared-temp permissions; the fresh-directory run passed. Prototype sources
+compile and vendored hashes verify. No commit or push requested for this work.
+
+## Reference discussion recovered — 2026-10-23
+
+The user resumed the generation-capabilities discussion. Read the original local
+conversation and inspected the saved reference's sampled frames, automatic Spanish
+transcript, metadata and media duration. Reference: Stupy Doo's
+`https://www.youtube.com/shorts/F7nZV4p5c40`, about memory across metamorphosis,
+approximately 155 seconds. The ignored `out/reference-review/` directory on this
+computer contains the video, transcript and contact sheet; these are local review
+artifacts, not portable runtime dependencies. Audio performance was not assessed.
+
+The earlier request prioritized computer portability, authorized factual writing
+improvements, and deferred discussion of AI agents for video generation/editing.
+No editor or animation engine was selected. Source inspection confirms that the
+storytelling guidance includes the factual progression, while H2 still loops a
+background with word captions. Matching the reference's visual approach would
+require scene planning, topic-specific assets/diagrams, animation and narration
+timing, with selective labels. This is a proposed direction, not an implemented
+feature or an approved choice of tool/provider.
+
+Initial recommendation: evaluate a local Remotion-based animated explainer mode
+with one complete 90–180-second prototype before queue integration. Use an original
+visual style, a small reusable scene library, structured model-produced scene plans,
+and existing narration word timings. Save narration, plans and assets for selective
+revision/retry. Review the applicable Remotion license before adoption. This remains
+a recommendation awaiting the user's direction, not an implementation commitment.
+
+The user then suggested `https://github.com/browser-use/video-use`. Reviewed its
+README, skill/install guidance, dependencies and rendering/transcription/timeline
+helpers through GitHub; nothing was installed or executed. It is an MIT-licensed
+agent editing workflow plus Python/FFmpeg helpers, with optional animation engines
+including Remotion, Manim and HyperFrames. Its default source-footage workflow
+uses ElevenLabs Scribe. Revised recommendation: evaluate that agent editing
+workflow for one local explainer prototype, adapting generated narration and word
+timings to avoid unnecessary retranscription, then choose the animation engine
+from actual results. Integration needs a dedicated tool-enabled editor stage:
+current generation calls deliberately disable tools and external skill discovery.
+Keep any adopted guidance/helpers project-owned, preserve license notices, pin
+dependencies and retain existing duration, output, lease and publication controls.
+No adoption, provider expense or installation has been authorized by this review.
+
+The initial context-review turns changed only this handoff and ran no generation
+or tests. The later authorized prototype and dashboard work is recorded above.
+
+## Previous implementation session — 2026-10-22
 
 The user wants to develop and generate locally from either their main computer
 or another computer. They clarified that they do not want a central hosting
@@ -72,9 +279,10 @@ and agent documentation structure.
 2. Pull the updated `master` on the other computer. Transfer credentials securely,
    sign in to the CLI there, and make a fresh
    media export after the last generation. Never copy a venv or `node_modules`.
-3. Discuss the desired AI video editor workflow before integrating it. The current
-   H2 renderer uses backgrounds and captions, not topic-specific animated diagrams.
-   Reference Short reviewed: `https://www.youtube.com/shorts/F7nZV4p5c40`.
+3. Review the completed standalone video-use prototype before deciding on an AI
+   editor integration, visual direction and animation engine. The production H2
+   renderer still uses backgrounds and captions. Reference Short reviewed:
+   `https://www.youtube.com/shorts/F7nZV4p5c40`.
 4. H1 and approved Reddit H2b end-to-end checks remain separate from successful H2
    generation. H2 topic input does not require Reddit credentials.
 5. Interrupted remote upload reconciliation, other platform authorization and

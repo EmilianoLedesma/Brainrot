@@ -1,0 +1,20 @@
+{
+  "title": "Why zebras have stripes",
+  "language": "en",
+  "voice": "en-US-GuyNeural",
+  "scenes": [
+    {"id": "hook", "text": "Zebras are among the most recognizable animals on Earth, yet scientists argued for generations about why they wear stripes. Camouflage. Confusing lions. Staying cool. Every idea sounds right, so researchers decided to test them against each other."},
+    {"id": "survey", "text": "In 2014, biologist Tim Caro and colleagues compared striping across seven horse relatives and twenty one subspecies, then checked it against where each animal lives. Camouflage, predators, heat and social life did not match the stripes consistently. One factor did. Places with lots of biting flies."},
+    {"id": "flies", "text": "That matters, because biting flies are more than a nuisance. Horseflies and tsetse flies drink blood, and they can spread disease. A zebra's short hair gives them very little to get through."},
+    {"id": "landing", "text": "But do stripes really stop flies? Caro's team watched horseflies at a horse farm in England in 2019. Flies circled zebras about as often as they circled horses, so stripes do not keep flies away. The difference came at the very end. Near a zebra, the flies failed to slow down, so they flew past or bumped into the animal and bounced off."},
+    {"id": "coats", "text": "The team then dressed horses in striped, black and white coats. Hardly any flies landed on the striped coats, compared with the plain ones."},
+    {"id": "cows", "text": "Another test used cattle. Researchers in Japan painted stripes on cows. The cows with black and white stripes attracted fewer biting flies, and flicked and stamped less than unpainted cows."},
+    {"id": "why", "text": "Why do stripes spoil a landing? That part is still a hypothesis. One idea is that stripes confuse a fly's low resolution vision in the final moments of its approach. Researchers are still testing it."},
+    {"id": "payoff", "text": "So the best supported answer today is that stripes help defend against biting flies, rather than hide a zebra from lions. Other benefits are not ruled out, but flies have the strongest evidence. A zebra's coat may look like a costume, but it works more like a bad runway."}
+  ],
+  "sources": [
+    {"url": "https://research-information.bris.ac.uk/en/publications/the-function-of-zebra-stripes/", "supports": "Caro et al. 2014 Nature Communications: striping compared across equid species and subspecies against five hypotheses; biting fly exposure was the best match, with no consistent support for camouflage, predator avoidance, heat or social functions."},
+    {"url": "https://bristol.ac.uk/news/2019/february/zebra-stripes.html", "supports": "Caro et al. 2019 PLOS ONE: flies approach zebras and horses at similar rates but fail to decelerate near stripes, so they fly past or bounce off; striped coats on horses received hardly any landings compared with plain coats."},
+    {"url": "https://doi.org/10.1371/journal.pone.0223447", "supports": "Kojima et al. 2019 PLOS ONE: cows painted with black and white stripes had fewer biting flies and showed fewer fly-repelling behaviors than unpainted or black-striped cows."}
+  ]
+}
