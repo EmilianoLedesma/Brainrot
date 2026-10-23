@@ -16,7 +16,7 @@ terminals. It supplies frontend credentials from root `.env`. Apply unapplied
 migrations before starting the matching worker. Setup does not apply SQL.
 
 `pyproject.toml` plus `uv.lock` define Python dependencies; `.python-version`
-selects 3.14. `requirements.lock` and `requirements-dev.lock` are hashed pip
+selects 3.14. `requirements/runtime.lock` and `requirements/dev.lock` are hashed pip
 exports, used by the traditional requirements entrypoints. Update all exports
 when intentionally changing dependencies. Use `npm ci` with the frontend lock and, for the motion-graphics edit, `npm ci --prefix motion`
 (`scripts/bootstrap.py` runs both).
@@ -25,7 +25,7 @@ when intentionally changing dependencies. Use `npm ci` with the frontend lock an
 
 ```sh
 uv run --locked python -m pytest tests -q
-uv run --locked python test_pipeline.py
+uv run --locked python -m scripts.checks.pipeline
 npm run build --prefix web
 git diff --check
 ```
@@ -45,7 +45,7 @@ For the browser smoke, start a separate frontend on port 5189, then run
 `uv run --locked python tests/browser/check_workspace.py --url http://127.0.0.1:5189`.
 It intercepts API requests with synthetic responses. On non-Windows systems,
 install Playwright Chromium first. See [operations](../operations.md) for the
-live `test_db.py` and rollback-only `test_live.py` boundaries; they are not part
+live `scripts/checks/database.py` and rollback-only `scripts/checks/live.py` boundaries; they are not part
 of routine offline pytest. Never present mocks as real generation or upload checks.
 
 ## Existing services and failures

@@ -4,7 +4,30 @@ Read this with the latest user request and `git status`; this is a dated snapsho
 not a live dashboard. Do not assume another checkout has its credentials, media
 or migrations just because this development machine does.
 
-## Commit and push status — 2026-10-23
+## Repository organization and final save — 2026-10-23
+
+The other session finished and committed/pushed the runtime motion work as
+`5fac0f6` on `origin/master`. The tree was clean before this follow-up. The user
+authorized organizing the repository and committing/pushing all remaining work.
+This status supersedes the older waiting/uncommitted notes below.
+
+Grouped explicit operator checks under `scripts/checks/`, invoked from the root
+as `python -m scripts.checks.pipeline`, `.database`, and `.live`. Moved pip
+entrypoints and hashed exports to `requirements/`, and distribution documentation
+to `docs/distribution/`. Folded pytest settings into `pyproject.toml`. Updated
+current commands, dashboard help, license notice pointers, archive requirements,
+README and documentation index; historical plans/snapshots keep their old paths.
+Python package versions/hashes are unchanged. Added `scripts/README.md` for the
+new command map. Licenses and tool entrypoints remain at the root.
+
+Validation: dashboard production build, motion TypeScript check, seven offline
+pipeline/FFmpeg checks, operator module imports, pip includes, documentation links,
+lockfile consistency, and source archive secret/integrity checks passed. All
+475 offline tests passed, including disposable local PostgreSQL 18 tests. No live providers,
+Supabase checks, generation jobs, or platform uploads were started for this task.
+Live model-driven scene design and end-to-end motion limitations below still apply.
+
+## Earlier commit and push status — 2026-10-23
 
 While runtime edits were on hold for commit, the user requested a polished general
 README using Markdown and no CSS. Reworked the product overview, feature/input

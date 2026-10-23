@@ -62,17 +62,17 @@ resetting it to `scheduled`.
 ## Tests
 
     uv run --locked python -m pytest tests -q
-    uv run --locked python test_pipeline.py
-    uv run --locked python test_db.py    # explicit live Supabase check
-    uv run --locked python test_live.py  # explicit rollback-only live SQL check
+    uv run --locked python -m scripts.checks.pipeline
+    uv run --locked python -m scripts.checks.database    # explicit live Supabase check
+    uv run --locked python -m scripts.checks.live  # explicit rollback-only live SQL check
 
 The SQL tests start a throwaway Postgres using `PG_BIN`, or find its binaries
 through `pg_ctl` on `PATH` (falling back to `/usr/lib/postgresql/16/bin`). They
 support Windows and Unix and skip if Postgres is not installed. They never use
 `DATABASE_URL` or your Supabase project.
 
-The two live scripts are explicit operator checks, outside pytest. `test_db.py`
-leaves compact metric observations of its temporary job; `test_live.py` requires
+The two live scripts are explicit operator checks, outside pytest. `scripts/checks/database.py`
+leaves compact metric observations of its temporary job; `scripts/checks/live.py` requires
 `DATABASE_URL` and rolls back its synthetic work, including metric observations.
 Neither calls a generation or publishing provider. See the
 [operations guide](operations.md) for browser checks and troubleshooting.

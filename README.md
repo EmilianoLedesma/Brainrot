@@ -36,15 +36,16 @@ range. Generated scripts aim for **280–380 words** at a natural pace.
 | **Choose your writing provider** | Select **Claude** or **Chat GPT** per job using your local CLI sign-in. |
 | **Control the tone** | Move through Grounded, Playful, Chaotic, Unhinged, and Max brainrot. Factual topics stay factual; explicit fiction stays inside its premise. |
 | **Create captioned videos** | Combine natural narration, timed captions, and rotating background clips. |
+| **Try motion graphics** | Choose an experimental Remotion edit for generated stories, with keyword animations and narration-based visual devices. |
 | **Follow every job** | Inspect stages, timing, errors, saved narration, and finished videos. Retry from saved progress. |
 | **Control YouTube publishing** | Choose review, automatic publishing, or off, with a selected channel and privacy settings. |
 | **Review performance** | Explore available YouTube metrics and retention reports alongside the video. Import retention CSVs and timed subtitles for local analysis. |
 | **Bring your media** | Manage backgrounds and optional reference assets through the library. |
 | **Switch computers deliberately** | Use independent local checkouts, a shared Supabase project, and verified media export/import. |
 
-> **Explore motion graphics.** The standalone Remotion prototypes in
-> [`experiments/`](experiments/remotion-explainer/README.md) demonstrate animated
-> explainer videos. Integration into the main generation workflow is in progress.
+> **Motion graphics is experimental.** The runtime option uses reusable templates;
+> the hand-built films in [`experiments/`](experiments/remotion-explainer/README.md)
+> demonstrate richer editing. Live model-driven scene planning still needs validation.
 
 ## How it works
 
@@ -62,7 +63,7 @@ review while a platform upload is still scheduled or needs credentials.
 
 - **Git** and **Python** to clone the project and run setup.
 - **uv** for the locked Python environment; bootstrap selects Python 3.14.
-- **Node.js 24 and npm** for the dashboard.
+- **Node.js 24 and npm** for the dashboard and motion renderer.
 - **FFmpeg and ffprobe** on your worker's PATH.
 - A **Supabase project** and a signed-in **Codex or Claude Code CLI**.
 
@@ -95,7 +96,7 @@ Sign in to the selected CLI on the computer that will run the worker. Job-level
 provider choices override the configured default. Provider limits still apply;
 Brainrot does not automatically switch providers or opt into a paid API.
 
-For generated stories, add at least one background clip you have permission to use:
+For generated stories using background clips, add footage you have permission to use:
 
 ```sh
 uv run --locked python -m brainrot.cli add-background background.mp4
@@ -160,10 +161,11 @@ its shared API credential is included in the browser build.
 uv run --locked python -m pytest tests -q
 
 # Offline pipeline and FFmpeg self-checks
-uv run --locked python test_pipeline.py
+uv run --locked python -m scripts.checks.pipeline
 
-# Dashboard build
+# Dashboard build and motion TypeScript check
 npm run build --prefix web
+npm run check --prefix motion
 ```
 
 SQL tests use disposable local databases. Configure `PG_BIN` or put `pg_ctl` on
@@ -176,9 +178,11 @@ Live database checks are separate operator actions.
 ```text
 brainrot/       Python API, worker, pipelines, and runtime guidance
 web/            React + Vite dashboard
+motion/         Runtime Remotion compositions and bundled assets
 migrations/     Ordered database migrations
 tests/          Unit, integration, SQL, and browser checks
-scripts/        Bootstrap and source-packaging tools
+scripts/        Bootstrap, source packaging, and explicit operator checks
+requirements/   Hash-pinned pip exports and compatibility entrypoints
 experiments/    Standalone animation prototypes and reference studies
 docs/           Setup, operations, architecture, and product decisions
 ```
@@ -195,7 +199,8 @@ docs/           Setup, operations, architecture, and product decisions
 | Troubleshoot jobs, retries, and uploads | [Operations](docs/operations.md) |
 | Look up pipeline behavior and operator commands | [Pipeline reference](docs/pipeline-reference.md) |
 | Explore the animation prototypes | [Remotion experiment](experiments/remotion-explainer/README.md) |
-| Prepare a source upload | [GitHub upload guide](GITHUB_UPLOAD.md) |
+| Prepare a source upload | [GitHub upload guide](docs/distribution/github-upload.md) |
+| Run setup and operator checks | [Script commands](scripts/README.md) |
 
 [Browse all documentation →](docs/index.md)
 
@@ -214,5 +219,5 @@ See [LICENSE](LICENSE) for the grant and [NOTICE](NOTICE) for attribution.
 **Created by Emiliano Ledesma and contributors.**
 
 Bundled fonts, third-party software, and imported media keep their respective
-licenses. See [third-party notices](THIRD_PARTY_NOTICES.md).
+licenses. See [third-party notices](docs/distribution/third-party-notices.md).
 

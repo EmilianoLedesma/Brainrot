@@ -1,2 +1,2 @@
 # Runtime plus development dependencies, exported from uv.lock with hashes.
--r requirements-dev.lock
+-r dev.lock

@@ -1,11 +1,12 @@
 # Documentation
 
-- [License](../LICENSE), [third-party notices](../THIRD_PARTY_NOTICES.md), and [GitHub upload guide](../GITHUB_UPLOAD.md).
+- [License](../LICENSE), [third-party notices](distribution/third-party-notices.md), and [GitHub upload guide](distribution/github-upload.md).
 
 - [Agent orientation](agents/README.md): start here for a new development session.
 - [Current handoff](agents/handoff.md): dated status, evidence and remaining work.
 - [Architecture](agents/architecture.md): code map, execution flows and model guidance.
 - [Development](agents/development.md): reproducible setup, services and validation.
+- [Script commands](../scripts/README.md): bootstrap, packaging and explicit offline/live operator checks.
 - [Product decisions](agents/decisions.md): accepted behavior to preserve.
 - [Moving between computers](moving-between-computers.md): local setup and verified media handoff.
 - [Integrations and YouTube](integrations.md): OAuth, publishing, research and media library.

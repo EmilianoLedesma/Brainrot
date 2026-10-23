@@ -1,7 +1,7 @@
 """Self-checks for the parts with real logic in them.
 
 Everything here runs offline: no Supabase, no Claude, no network. Run with
-`python test_pipeline.py`.
+`python -m scripts.checks.pipeline`.
 """
 
 import os

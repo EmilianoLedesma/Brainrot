@@ -51,7 +51,7 @@ while an existing one is running without checking its host reservation and jobs.
 
 ```sh
 uv run --locked python -m pytest tests -q
-uv run --locked python test_pipeline.py
+uv run --locked python -m scripts.checks.pipeline
 npm run build --prefix web
 ```
 

@@ -96,9 +96,9 @@ supplies their corresponding local assets.
 
 ## Resources and limits
 
-- Dependencies: `uv.lock` is canonical. `requirements.lock` is a hash-pinned
-  runtime export for pip users (`pip install --require-hashes -r requirements.lock`).
-  `requirements.txt` points to that export; `requirements-dev.txt` points to the
+- Dependencies: `uv.lock` is canonical. `requirements/runtime.lock` is a hash-pinned
+  runtime export for pip users (`pip install --require-hashes -r requirements/runtime.lock`).
+  `requirements/runtime.txt` points to that export; `requirements/dev.txt` points to the
   corresponding development export. Refresh both exports from `uv.lock` when
   intentionally changing dependencies. Frontend versions come
   from `web/package-lock.json`.

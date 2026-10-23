@@ -1,7 +1,7 @@
 """Phase 0 smoke check: round-trip a job row and a media file through Supabase.
 
 Needs a real project (SUPABASE_URL + SUPABASE_SERVICE_KEY in .env) and
-all migrations applied. Run with `python test_db.py`.
+all migrations applied. Run with `python -m scripts.checks.database`.
 Creates and deletes its own delayed job and media object; leaves compact
 operational observations of that job in the metrics journal.
 """

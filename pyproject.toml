@@ -14,3 +14,7 @@ dev = ["pytest==9.1.1", "psycopg[binary]==3.3.6", "playwright==1.64.0"]
 
 [tool.uv]
 package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

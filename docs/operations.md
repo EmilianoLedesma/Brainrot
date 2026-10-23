@@ -194,11 +194,11 @@ and is not a safe operational rollback.
 ## Validation and current limits
 
 ```sh
-pip install -r requirements-dev.txt
+pip install -r requirements/dev.txt
 python -m pytest -q
-python test_pipeline.py
-python test_db.py
-python test_live.py
+python -m scripts.checks.pipeline
+python -m scripts.checks.database
+python -m scripts.checks.live
 npm ci --prefix web
 npm run build --prefix web
 ```
@@ -207,8 +207,8 @@ Pytest SQL tests use a throwaway local Postgres via `PG_BIN` or `pg_ctl` on PATH
 they do not connect to Supabase. Ensure SQL tests actually run rather than skip
 when validating a release. The offline pipeline script exercises real FFmpeg.
 
-`test_db.py` uses Supabase REST/Storage, deletes its own delayed diagnostic job
-and file, and leaves compact metric observations. `test_live.py` uses
+`scripts/checks/database.py` uses Supabase REST/Storage, deletes its own delayed diagnostic job
+and file, and leaves compact metric observations. `scripts/checks/live.py` uses
 `DATABASE_URL` with a transaction-local synthetic pipeline to test worker retry,
 stage history, JSON logs, metrics and authenticated API responses, then rolls back.
 Run it while other workers are idle; it verifies that pre-existing job counts and

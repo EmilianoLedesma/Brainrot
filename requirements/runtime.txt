@@ -1,2 +1,2 @@
 # Runtime compatibility entrypoint. Canonical dependencies live in pyproject.toml/uv.lock.
--r requirements.lock
+-r runtime.lock

@@ -2,9 +2,9 @@
 
 The repository's original code and documentation use **MIT OR Apache-2.0**,
 at the recipient's choice. Free personal and commercial use, modification and
-redistribution are allowed under the selected license's terms. See [LICENSE](LICENSE),
-[LICENSE-MIT](LICENSE-MIT), [LICENSE-APACHE](LICENSE-APACHE), and [NOTICE](NOTICE).
-Third-party terms remain separate; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+redistribution are allowed under the selected license's terms. See [LICENSE](../../LICENSE),
+[LICENSE-MIT](../../LICENSE-MIT), [LICENSE-APACHE](../../LICENSE-APACHE), and [NOTICE](../../NOTICE).
+Third-party terms remain separate; see [third-party notices](third-party-notices.md).
 
 Suggested human-readable credit: **Brainrot by Emiliano Ledesma and contributors**.
 A link back to the project's GitHub repository is appreciated. Retain the notices

@@ -49,7 +49,7 @@ def main():
             raise SystemExit('Private configuration detected in: ' + name)
         files.append((name, data))
     names = {name for name, _ in files}
-    for required in ('LICENSE', 'LICENSE-MIT', 'LICENSE-APACHE', 'NOTICE', 'README.md', 'THIRD_PARTY_NOTICES.md', 'GITHUB_UPLOAD.md', '.gitignore'):
+    for required in ('LICENSE', 'LICENSE-MIT', 'LICENSE-APACHE', 'NOTICE', 'README.md', 'docs/distribution/third-party-notices.md', 'docs/distribution/github-upload.md', '.gitignore'):
         if required not in names:
             raise SystemExit('Missing distribution file: ' + required)
     target = ROOT / 'out/releases/brainrot-github-source.zip'
