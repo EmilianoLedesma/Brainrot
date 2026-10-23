@@ -16,6 +16,7 @@
 - [Content quality](content-quality.md): script review and per-video retention tools.
 - [Deployment](deployment.md): Vercel dashboard settings, API/worker hosting and setup prerequisites.
 - [Operations](operations.md): logs, metrics, job inspection, recovery, migration safety and validation.
+- [Pipeline reference](pipeline-reference.md): detailed job lifecycle, operator commands, stages, publishing recovery and chapter pacing.
 - [Local models](local-models.md): Claude Code and Codex subscription adapters, configuration and previews.
 - [Stage execution](stage-execution.md): per-operation records, attempts, lease guards and inspection.
 - [Reliability baseline](reliability-baseline.md): historical behavior before the reliability work.

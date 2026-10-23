@@ -1,352 +1,218 @@
-# brainrot
+# Brainrot
 
-Developing with an agent? Start with [AGENTS.md](AGENTS.md), the
-[current handoff](docs/agents/handoff.md), and the [documentation index](docs/index.md).
+### Create, review, and publish short-form video from one workspace.
 
-Generates and auto-publishes short vertical video (YouTube Shorts, Reels, TikTok)
-from three sources:
+[![License: MIT OR Apache-2.0](https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-2563eb)](LICENSE)
+[![Python 3.14](https://img.shields.io/badge/Python-3.14-3776ab)](.python-version)
+[![React + Vite](https://img.shields.io/badge/dashboard-React%20%2B%20Vite-646cff)](web/package.json)
 
-- **H1 — repurposing**: a YouTube link becomes 9:16 clips with face tracking and captions.
-- **H2 — brainrot**: a topic becomes an LLM-written story narrated over a looping background.
-- **H2b — Reddit narrator**: filtered subreddit posts, rewritten and chaptered, through the H2 pipeline.
+Turn a topic, a longer YouTube video, or an approved Reddit story into a vertical
+video. Shape the narration, follow generation progress, review the result, and
+manage publishing without leaving the dashboard.
 
-Database rows live in Supabase. New media is saved under the project's ignored
-`media/` folder; rows keep portable relative paths. Existing Supabase Storage
-objects are downloaded and cached on first use. Use a verified media archive when
-switching computers: [local setup and handoff](docs/moving-between-computers.md).
-See also [integrations and YouTube setup](docs/integrations.md).
+**Your local worker. Your media library. Your publishing choices.**
 
-## Layout
+[Quick start](#quick-start) · [Features](#features) · [Integrations](#integrations) · [Documentation](docs/index.md) · [License](#license)
 
-    brainrot/db.py         Supabase client, leased job/stage helpers, media upload
-    brainrot/media.py      atomic local files, relative paths and signed playback
-    brainrot/research.py   optional Wikidata reference snapshots for new stories
-    brainrot/library.py    NASA/Pexels discovery, provenance and local video import
-    brainrot/youtube.py    OAuth connection, reviewed Shorts upload and retention
-    brainrot/api.py        FastAPI: job creation plus read-only views for the dashboard
-    brainrot/worker.py     leases pending jobs, runs the matching pipeline, retries/recovers
-    brainrot/domain/       job states and the pipeline contract (no I/O)
-    brainrot/application/  retry policy, pipeline registry, stage tracking and pacing policy
-    brainrot/observability/ structured execution logs and Prometheus metrics
-    brainrot/pipelines.py  H1/H2/H2b adapters and default pipeline registration
-    brainrot/llm.py        typed generation via Claude Code, Codex or explicit Anthropic API
-    brainrot/script.py     topic -> story, Reddit post -> retold story
-    brainrot/tts.py        edge-tts narration with per-word timings
-    brainrot/render.py     ffmpeg: looping background + narration + karaoke captions
-    brainrot/pipeline.py   H2/H2b: script -> chapters -> rendered video
-    brainrot/reddit.py     H2b: subreddit scan and post filtering
-    brainrot/repurpose.py  H1: YouTube -> transcript -> moments -> 9:16 face-tracked clips
-    brainrot/scheduler.py  publication queue and retention-based chapter pacing
-    brainrot/publish.py    uploads due publications to the three platforms
-    brainrot/cli.py        operator commands
-    web/                   Vite + React dashboard (new job, job list, gallery)
-    migrations/            SQL applied by hand in the Supabase SQL editor, in order
-    tests/                 pytest suite; SQL tests run against a throwaway local Postgres
-    test_db.py             Supabase round-trip check (needs credentials)
-    test_live.py           rollback-only live worker/API smoke with synthetic operations
-    test_pipeline.py       offline self-checks for captions, chaptering, reframing
-    docs/                  reliability baseline, spec and plan
+---
 
-## Setup
+## The workspace
 
-1. Create a Supabase project.
-2. Apply every file in `migrations/` in order — paste each into the SQL editor, or run
-   `for f in migrations/*.sql; do psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "$f"; done`.
-   `001_init.sql` creates the enums, ten tables, indexes, RLS, and the private `media`
-   bucket. `002_job_execution.sql` adds job leases, retries and idempotency keys; the
-   worker needs it. `003_stage_execution.sql` adds stage records, lease-guarded
-   stage functions and automatic closure of abandoned stages. `004_operational_metrics.sql`
-   adds durable metric observations; `005_execution_read_models.sql` adds the dashboard
-   read models. `006_delete_jobs.sql` adds guarded queue deletion and
-   `007_retry_jobs.sql` adds explicit retries that preserve saved progress.
-   `008_delete_job_media.sql` adds durable removal of deleted jobs' media.
-   `009_background_rotation.sql` adds persistent per-story background rotation.
-   Migrations 010-013 add publication metadata, library activation, saved YouTube
-   drafts and performance snapshots. `014_local_media_host.sql` prevents separate
-   local-media computers from taking the shared queue concurrently. Apply every
-   unapplied migration before starting this version.
-3. `cp .env.example .env` and fill in `SUPABASE_URL` and `SUPABASE_SERVICE_KEY`
-   (Project Settings -> API). The service_role key bypasses RLS — server-side only.
-4. Install uv and Node.js 24, then run `python scripts/bootstrap.py`. This installs
-   Python 3.14, locked Python dependencies and frontend dependencies, preserving
-   existing settings. Use `uv run --locked python` for subsequent Python commands.
-5. `uv run --locked python test_db.py` -> `phase 0 ok`
-6. Install FFmpeg/ffprobe on the worker host. For local generation, sign in to
-   Claude Code with `claude auth login` or Codex with `codex login` on that host.
-   Set `BRAINROT_LLM_PROVIDER=claude-code` (the default) or `codex` in `.env`.
-   Local modes use the saved subscription login and require no API key.
-   H2/H2b need an active background: `python -m brainrot.cli add-background background.mp4`.
-   H1 downloads pinned, checksum-verified OpenCV YuNet weights into the project's
-   media folder on first use; `python -m brainrot.cli setup-face-model` can also
-   fetch them in advance.
-   H2b additionally needs approved Reddit API access and the Reddit variables in
-   `.env.example`. Platform publishing credentials are configured separately.
+Brainrot brings the content workflow together: **create → generate → review → publish → learn**.
 
-Topic scripts and Reddit retellings automatically use the project-owned
-[storytelling skill](docs/storytelling.md) with both Claude and Chat GPT.
-It guides hooks, narrative progression and payoffs in the existing generation call.
-The skill now considers different openings and reviews narrative consistency and
-payoffs before returning a script. Output/Inspect imports retention CSVs
-and optional timed subtitles into an explorable report, without platform access
-or model calls. See [content quality and retention](docs/content-quality.md).
-New narration and finished videos must last **90-180 seconds**, including the
-spoken title and pauses. Scripts target 280-380 words at a natural pace; actual
-audio and video duration is checked before upload. Repurposed clips use the same
-range. Out-of-range material fails rather than being padded or cut mid-sentence.
-Previously completed videos remain unchanged; an old short saved script needs a
-new job to generate a longer version.
+| Start with | Brainrot produces |
+| --- | --- |
+| **A topic** | An original narrated story with paced speech, timed captions, and a vertical render. |
+| **A YouTube video** | Selected moments with the source speech, face-tracked framing, and captions. |
+| **A Reddit story** | A faithful retelling from approved API access, followed by the narrated-video pipeline. |
 
-Preview a topic without creating a job or publishing:
+Finished narration and videos are checked against a **90–180-second** duration
+range. Generated scripts aim for **280–380 words** at a natural pace.
+
+## Features
+
+| Capability | What you can do |
+| --- | --- |
+| **Choose your writing provider** | Select **Claude** or **Chat GPT** per job using your local CLI sign-in. |
+| **Control the tone** | Move through Grounded, Playful, Chaotic, Unhinged, and Max brainrot. Factual topics stay factual; explicit fiction stays inside its premise. |
+| **Create captioned videos** | Combine natural narration, timed captions, and rotating background clips. |
+| **Follow every job** | Inspect stages, timing, errors, saved narration, and finished videos. Retry from saved progress. |
+| **Control YouTube publishing** | Choose review, automatic publishing, or off, with a selected channel and privacy settings. |
+| **Review performance** | Explore available YouTube metrics and retention reports alongside the video. Import retention CSVs and timed subtitles for local analysis. |
+| **Bring your media** | Manage backgrounds and optional reference assets through the library. |
+| **Switch computers deliberately** | Use independent local checkouts, a shared Supabase project, and verified media export/import. |
+
+> **Explore motion graphics.** The standalone Remotion prototypes in
+> [`experiments/`](experiments/remotion-explainer/README.md) demonstrate animated
+> explainer videos. Integration into the main generation workflow is in progress.
+
+## How it works
+
+1. **Create a job.** Choose an input, provider, tone, and publishing settings.
+2. **Generate locally.** The worker prepares the content, creates or reuses saved stages, and renders the video.
+3. **Review the output.** Open playback, narration, metadata, and execution details in the shared inspector.
+4. **Publish and learn.** Approve a YouTube draft or use the job's automatic setting, then review available performance data.
+
+Generation and publishing have separate states. A finished video can be ready to
+review while a platform upload is still scheduled or needs credentials.
+
+## Quick start
+
+### 1. Install the prerequisites
+
+- **Git** and **Python** to clone the project and run setup.
+- **uv** for the locked Python environment; bootstrap selects Python 3.14.
+- **Node.js 24 and npm** for the dashboard.
+- **FFmpeg and ffprobe** on your worker's PATH.
+- A **Supabase project** and a signed-in **Codex or Claude Code CLI**.
+
+### 2. Clone and bootstrap
 
 ```sh
-python -m brainrot.cli generate-script "Why octopuses can open jars" --provider claude-code
-python -m brainrot.cli generate-script "Why octopuses can open jars" --provider codex
+git clone https://github.com/EmilianoLedesma/Brainrot.git brainrot
+cd brainrot
+python scripts/bootstrap.py
 ```
 
-Workspace's Model selector chooses Claude or Chat GPT for each new topic or
-repurpose job. The choice appears in Review and is saved with the job for every
-attempt. Each integration uses its configured model; the selector does not pick
-individual model versions.
+Bootstrap installs the locked Python and npm dependencies and creates missing
+settings templates. Existing settings are preserved.
 
-For topic generation, **Brainrot level** snaps between five named steps:
-Grounded, Playful (the default), Chaotic, Unhinged and Max brainrot.
-It changes the script's tone, slang, pacing,
-exaggeration and story developments. Ordinary real-world topics stay factual;
-clearly invented premises are developed as fiction. Higher levels increase comic
-delivery for factual subjects and can escalate events inside fictional stories.
-Review, Queue and Inspect show the saved setting.
-Retries reuse an existing saved script; choose a new job to generate a different
-intensity. Repurposing keeps the source video's spoken content.
+### 3. Connect your project
 
-Jobs without a saved selection use the provider in `.env` for topic scripts,
-Reddit rewrites and H1 moment selection. Restart the worker after changing that
-default. There is no automatic
-fallback to another provider or paid API. Subscription limits still apply, and
-account-level extra usage settings can incur charges. Local adapters are intended
-for your own private worker, running as the signed-in OS user.
+Apply every unapplied SQL file in [`migrations/`](migrations/) in filename order
+through the Supabase SQL editor. Bootstrap does not apply database migrations.
 
-The existing API remains available only with `BRAINROT_LLM_PROVIDER=anthropic`
-and `ANTHROPIC_API_KEY`. See [local model setup](docs/local-models.md) for login,
-Windows executable discovery, timeouts and deployment boundaries.
+Edit the generated root `.env` using [`.env.example`](.env.example) as the reference:
 
-## Phases
+| Setting | Purpose |
+| --- | --- |
+| `SUPABASE_URL` | Your Supabase project URL. |
+| `SUPABASE_SERVICE_KEY` | Server-side database access. Keep it private. |
+| `DASHBOARD_API_KEY` | Shared dashboard/API secret; bootstrap generates one for a new settings file. |
+| `BRAINROT_LLM_PROVIDER` | `codex` for Chat GPT or `claude-code` for Claude. |
 
-| Phase | Scope | State |
-|---|---|---|
-| 0 | Schema, buckets, Supabase access layer | done |
-| 1 | H2: topic -> script -> TTS -> render | done |
-| 2 | H2b: Reddit scan, rewrite, chapters | done |
-| 3 | H1: download, transcribe, face-track reframe | done |
-| 4 | Publishing scheduler, retention-based chapter pacing | done |
-| 5 | YouTube / TikTok / Instagram posting | YouTube OAuth, reviewed/automatic uploads and analytics built; other platforms require credentials |
+Sign in to the selected CLI on the computer that will run the worker. Job-level
+provider choices override the configured default. Provider limits still apply;
+Brainrot does not automatically switch providers or opt into a paid API.
 
-Connect YouTube through the app's YouTube page. Google consent is browser-based;
-the app handles OAuth, token refresh, upload review, Shorts metadata, optional
-automatic publishing, and performance ingestion. See [integration setup](docs/integrations.md).
-TikTok and Instagram still need manually configured credentials. Missing platform
-credentials leave publications scheduled.
-
-Once an app exists, insert its row:
-
-    db.client().table("platform_credentials").upsert({
-        "platform": "youtube",
-        "data": {"access_token": "...", "refresh_token": "...",
-                 "client_id": "...", "client_secret": "..."},
-    }, on_conflict="platform").execute()
-
-A platform with no row is skipped. New YouTube connections also require enabling
-automatic uploads explicitly; connecting alone does not publish the backlog.
-
-Per platform: YouTube wants `access_token` plus `refresh_token`/`client_id`/
-`client_secret` (it refreshes itself, since Google tokens last an hour); TikTok
-wants `access_token`; Instagram wants `access_token` and `ig_user_id`.
-
-Two platform facts worth knowing before you test: TikTok forces every post from an
-unaudited client to private, and YouTube has no API field that declares a Short -
-a vertical video under three minutes simply becomes one.
-
-## Running it
-
-Start the local dashboard, API and worker together:
+For generated stories, add at least one background clip you have permission to use:
 
 ```sh
+uv run --locked python -m brainrot.cli add-background background.mp4
+```
+
+Reddit access and platform publishing have additional credentials. Set them up
+only for the integrations you intend to use: [integration guide](docs/integrations.md).
+
+### 4. Check and launch
+
+```sh
+uv run --locked python -m brainrot.dev --check
+uv run --locked python -m brainrot.cli doctor --check-media
 uv run --locked python -m brainrot.dev
 ```
 
-Open http://localhost:5173. Stop the services with Ctrl+C. For independent local
-development on another computer, follow the [handoff guide](docs/moving-between-computers.md).
-Only one computer should consume a local-media project's queue at a time.
-The individual operator commands remain available inside the project environment:
+| Service | Local address |
+| --- | --- |
+| **Dashboard** | [localhost:5173](http://localhost:5173) |
+| **API** | [127.0.0.1:8001](http://127.0.0.1:8001) |
 
-    python -m brainrot.worker                         # claim jobs, render, pace chapters
-    python -m brainrot.cli add-background clip.mp4    # H2/H2b need at least one
-    python -m brainrot.cli scan-reddit                # queue jobs from subreddits
-    python -m brainrot.cli tick                       # pacing pass, list what is due
-    python -m brainrot.cli publish                    # upload everything that is due
-    python test_pipeline.py                           # offline checks, no credentials
+The launcher runs the dashboard, API, and worker together. Use **Ctrl+C** to stop
+them. Open **Workspace → New job** to create your first video.
 
-Generated stories rotate through active backgrounds in order of least recent
-use, starting with `background_clips.rotation_order`. Each story saves its choice,
-so all its chapters and retries use the same gameplay. Concurrent workers share
-the same rotation in Supabase. Adding or deactivating a clip changes the pool
-for new assignments; existing stories keep their assigned background.
+For a second computer or an existing shared project, follow the
+[computer-switching guide](docs/moving-between-computers.md) before starting a worker.
 
-### Job lifecycle
+## Integrations
 
-    pending --claim--> running --> done
-                          |------> failed                 (permanent error, or out of attempts)
-                          '------> pending (run_after)    (transient error: retry later)
-    running, lease expired --recover--> pending | failed
+| Integration | Current scope |
+| --- | --- |
+| **Chat GPT / Codex** | Local subscription-backed CLI for generation and selection. |
+| **Claude Code** | Local subscription-backed CLI; an Anthropic API path is available only when explicitly configured. |
+| **YouTube** | OAuth connection, metadata drafts, review/automatic upload choices, and performance ingestion. |
+| **TikTok & Instagram** | Publishing adapters require separate credentials and platform setup. |
+| **Reddit** | Approved API access for story discovery and retelling. |
+| **Supabase** | Job state, saved content records, publishing settings, and analytics. |
 
-A claim leases the job to one worker for ten minutes, and the worker renews it
-every minute while the pipeline runs. If the worker dies, the lease lapses and the
-next worker iteration puts the job back in the queue. Network errors, timeouts,
-rate limits and 5xx responses are retried after 30s, 60s, 120s... (capped at 30
-minutes) up to `jobs.max_attempts` (3); anything else fails the job, since retrying
-a bug repeats the same model work. A retried job resumes: it reuses
-the story, transcript and moment selection its earlier attempt saved and only
-renders what is missing.
+Connecting YouTube alone does not publish an old backlog. Each job keeps its
+own publishing choice and channel binding. Missing platform credentials leave
+publications scheduled. See [integrations](docs/integrations.md) for setup and limits.
 
-The queue's Delete action opens a confirmation dialog, then removes the job and
-its related database rows. Deleting a running job revokes its lease; its current
-operation may finish, but it cannot record completion or start another stage.
-Active platform uploads must finish before deletion. These checks are atomic with
-worker claims. Audio, videos and saved source files are removed from Supabase
-Storage as well. Apply `008_delete_job_media.sql` before deploying this behavior.
-A durable cleanup queue retries Storage failures and rechecks any in-flight
-upload after its old lease expires; the worker also removes late uploads when
-their owner has been deleted. Shared background clips stay in the library.
-Posts already published on external platforms are not removed. Database network
-operations have an eight-second timeout. Queue reads have a 15-second deadline;
-Output allows 45 seconds for media-link signing and promptly retries failed reads;
-the queue retries failed reads and keeps the last successful update visible.
+## Local media and deployment
 
-Failed jobs have a Retry action alongside Inspect and Delete. Retry requeues the
-same job, keeping its saved script, completed chapters/clips, and attempt history.
-Each explicit retry grants up to three further attempts. Finished jobs and running
-jobs cannot be retried, and repeated clicks cannot create a second job.
+Brainrot runs locally with a cloud database. Generated media stays under the
+ignored `media/` directory by default; database records store portable paths.
+Git does not synchronize videos, backgrounds, credentials, or model caches.
 
-Publishing is not retried. A failed upload stays `failed`, because an upload that
-timed out after the platform accepted it would otherwise post twice. A publication
-stuck in `uploading` means the worker died mid-upload: check the platform before
-resetting it to `scheduled`.
+A verified export/import transfers media when you switch computers. One active
+local-media computer consumes the shared queue at a time.
+[Read the handoff workflow →](docs/moving-between-computers.md)
 
-## Tests
+The dashboard can be deployed separately, including to Vercel. The API and
+generation worker need their own running host. Keep the dashboard private:
+its shared API credential is included in the browser build.
+[Deployment guide →](docs/deployment.md)
 
-    pip install -r requirements-dev.txt
-    pytest                    # unit tests plus SQL tests against a local Postgres
-    python test_pipeline.py   # ffmpeg end-to-end checks
-    python test_db.py         # real Supabase row/Storage smoke; removes its own objects
-    python test_live.py       # real DB worker/API retry smoke; rolls its transaction back
+## Development
 
-The SQL tests start a throwaway Postgres using `PG_BIN`, or find its binaries
-through `pg_ctl` on `PATH` (falling back to `/usr/lib/postgresql/16/bin`). They
-support Windows and Unix and skip if Postgres is not installed. They never use
-`DATABASE_URL` or your Supabase project.
+```sh
+# Offline test suite; SQL tests need local PostgreSQL
+uv run --locked python -m pytest tests -q
 
-The two live scripts are explicit operator checks, outside pytest. `test_db.py`
-leaves compact metric observations of its temporary job; `test_live.py` requires
-`DATABASE_URL` and rolls back its synthetic work, including metric observations.
-Neither calls a generation or publishing provider. See the
-[operations guide](docs/operations.md) for browser checks and troubleshooting.
+# Offline pipeline and FFmpeg self-checks
+uv run --locked python test_pipeline.py
 
-### Pipeline registration
+# Dashboard build
+npm run build --prefix web
+```
 
-`brainrot/pipelines.py` registers `repurpose` (H1), `brainrot` (H2), and `reddit`
-(H2b). Each adapter accepts a `PipelineContext` and returns a `PipelineResult`
-containing the story or source video id. The worker resolves the job's `kind`
-through the registry, without branching on pipeline names. Unknown kinds fail
-permanently. Register implementations in `create_registry()` to extend dispatch;
-new database job kinds still require a migration of the `job_kind` enum.
+SQL tests use disposable local databases. Configure `PG_BIN` or put `pg_ctl` on
+PATH, and check for skipped tests before treating a run as database validation.
+Live database checks are separate operator actions.
+[Development and browser checks →](docs/agents/development.md)
 
-### Stage execution
+### Repository map
 
-Worker-dispatched pipelines record major operations in `stage_executions`.
-Each record includes the job, stage, chapter/clip scope, job attempt, worker,
-status, timestamps, database-calculated duration and error. Retries keep earlier
-attempts; reused scripts, transcripts and finished renders are not reported as
-newly executed work. When an attempt ends, unfinished stages become `abandoned`.
+```text
+brainrot/       Python API, worker, pipelines, and runtime guidance
+web/            React + Vite dashboard
+migrations/     Ordered database migrations
+tests/          Unit, integration, SQL, and browser checks
+scripts/        Bootstrap and source-packaging tools
+experiments/    Standalone animation prototypes and reference studies
+docs/           Setup, operations, architecture, and product decisions
+```
 
-Stages require a live lease. A worker that loses it stops at the next stage
-boundary and leaves the job outcome to recovery. Legacy direct pipeline calls
-have no leased context and do not create stage records. See
-[stage execution details](docs/stage-execution.md).
+## Documentation
 
-### Logs, metrics and inspection
+| I want to… | Start here |
+| --- | --- |
+| Set up or move to another computer | [Local setup and media handoff](docs/moving-between-computers.md) |
+| Connect publishing and content sources | [Integrations](docs/integrations.md) |
+| Understand the generation flow | [Architecture](docs/agents/architecture.md) |
+| Tune storytelling and evaluate scripts | [Storytelling](docs/storytelling.md) |
+| Inspect retention and content quality | [Content quality](docs/content-quality.md) |
+| Troubleshoot jobs, retries, and uploads | [Operations](docs/operations.md) |
+| Look up pipeline behavior and operator commands | [Pipeline reference](docs/pipeline-reference.md) |
+| Explore the animation prototypes | [Remotion experiment](experiments/remotion-explainer/README.md) |
+| Prepare a source upload | [GitHub upload guide](GITHUB_UPLOAD.md) |
 
-The worker emits JSON lifecycle events with job, pipeline, attempt, worker and
-stage context. Saved errors and operational responses redact configured secrets;
-logs omit prompts and provider payloads. Workspace -> Queue -> Inspect shows
-attempts, current stage, duration, stage history and publication states.
+[Browse all documentation →](docs/index.md)
 
-`GET /metrics` requires the same `X-API-Key` as the other operational endpoints.
-Job, retry, recovery, publication and duration metrics come from durable database
-observations shared across worker/API processes, beginning with migration 004.
-Queue gauges describe current rows; API latency is per API process and resets on
-restart. [Metric names, scrape setup and limitations](docs/operations.md).
+### Contributing
 
-### Chapter pacing
+Start with [AGENTS.md](AGENTS.md), the [development guide](docs/agents/development.md),
+and the [current handoff](docs/agents/handoff.md). Keep runtime functionality and
+guidance in the repository so another computer can reproduce the workflow.
 
-Chapter one publishes immediately. Each later chapter waits on the previous one's
-best reported retention: at or above 60% it follows after 12h, 40-60% after 24h,
-below that 48h, and under 20% the story is dropped rather than given more slots.
-If the platforms report nothing within 24h of a chapter going out, pacing falls
-back to the slowest cadence instead of stalling the story forever.
+## License
 
-The normalized analytics contract and pure pacing policy live in
-`brainrot/application/analytics.py`. YouTube performance ingestion now feeds
-chapter pacing with reported average percentage watched. TikTok and Instagram
-analytics remain deferred; without metrics, the existing 48h fallback applies.
+Brainrot's original software and documentation are available under
+**[MIT](LICENSE-MIT) OR [Apache 2.0](LICENSE-APACHE)**, at your choice.
+See [LICENSE](LICENSE) for the grant and [NOTICE](NOTICE) for attribution.
 
-### Transcription
+**Created by Emiliano Ledesma and contributors.**
 
-H1 uses YouTube's own captions when the video has them, which is free and instant.
-`faster-whisper` runs only as the fallback, and downloads its model on first use.
-
-## Connection note
-
-The direct host `db.<ref>.supabase.co` only publishes an AAAA record, so it is
-unreachable from IPv4-only networks. `DATABASE_URL` therefore points at the session
-pooler, which is IPv4:
-
-    postgresql://postgres.<ref>:<password>@aws-0-us-west-2.pooler.supabase.com:5432/postgres
-
-Note the user is `postgres.<ref>`, not `postgres`, and the password must be
-percent-encoded. This connection is used for migrations and explicit live SQL checks; the application code
-in `brainrot/db.py` goes through the REST API with the service_role key.
-
-## Dashboard
-
-Two processes. The API holds the service_role key; the browser never sees it.
-
-    uvicorn brainrot.api:app --reload --port 8001
-    cd web && npm install && npm run dev
-
-Open http://localhost:5173. Home, Docs and FAQ describe the product; Workspace
-contains job creation, the job list and finished videos.
-
-Queue includes per-job execution inspection. Requests poll sequentially every 2s,
-keep the last successful response on connection failure and stop when the view closes.
-
-`DASHBOARD_API_KEY` is a shared secret sent as the `X-API-Key` header; the API
-rejects every request while it is unset. `web/.env` carries the same value as
-`VITE_API_KEY`, and that file is gitignored — a Vite `VITE_` variable is baked into
-the bundle, so only ever serve this dashboard somewhere private.
-
-The job list polls every 2s rather than using Supabase Realtime. Realtime from the
-browser would need `SELECT` policies for `anon` on `jobs`, and the anon key ships in
-the JS bundle, so that would make the table readable by anyone with the project URL.
-Reading through the API keeps RLS closed.
-
-### Vercel deployment
-
-Vercel hosts the Vite dashboard. Keep its Root Directory at the repository root;
-`vercel.json` selects Vite, installs with `npm ci --prefix web`, builds with
-`npm run build --prefix web`, and serves `web/dist`. This overrides automatic
-FastAPI detection at the Python repository root.
-
-The API and media worker run separately. Configure `VITE_API_URL` and
-`VITE_API_KEY` in Vercel before building, and allow the dashboard origin in the
-API's `DASHBOARD_ORIGINS`. See [deployment details](docs/deployment.md) and the
-[documentation index](docs/index.md).
+Bundled fonts, third-party software, and imported media keep their respective
+licenses. See [third-party notices](THIRD_PARTY_NOTICES.md).
 
