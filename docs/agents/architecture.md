@@ -17,6 +17,7 @@ it does not run the local generation worker or store durable videos.
 | Media and computer handoff | `brainrot/media.py`, `brainrot/portable.py`, `brainrot/host.py` |
 | Topic and Reddit stories | `brainrot/script.py`, `brainrot/pipeline.py`, `brainrot/reddit.py` |
 | Speech and compositing | `brainrot/tts.py`, `brainrot/render.py`, `brainrot/assets/fonts/` |
+| Motion-graphics edit | `brainrot/motion.py`, Remotion project in `motion/` |
 | Repurposing | `brainrot/repurpose.py`, `brainrot/models.py` |
 | Publishing and pacing | `brainrot/scheduler.py`, `brainrot/publish.py` |
 | YouTube | `brainrot/youtube.py`, `youtube_metadata.py`, `youtube_sync.py`, `web/src/pages/YouTube.jsx` |
@@ -63,4 +64,13 @@ the app's reference search uses its own backend adapter.
 
 Editing a runtime skill affects newly generated content; a retry keeps its saved
 script or metadata. Prompt improvements do not prove audience retention gains.
-Current H2 video editing remains deterministic FFmpeg compositing over backgrounds.
+H2 video editing is deterministic FFmpeg compositing over backgrounds by default. A job
+with `params.motion_graphics` instead renders the Remotion project in `motion/` through
+`brainrot/motion.py`: word timings are grouped into ~11 s scenes with up to three spoken
+keywords each, then one extra call to the job's selected provider (`skills/motion-graphics/SKILL.md`,
+loaded explicitly) picks at most one device per scene (stat, compare, checklist, steps, stamp, alert)
+from the narration alone. Output is validated in code; if the call fails the render continues with
+keyword punches only (logged). The result then gets the same loudness and `render.check_video`
+checks. Script, TTS, chapters, upload, publication and insights are unchanged. The
+`experiments/` folder holds the hand-built prototypes this was derived from; runtime code
+must not depend on it.

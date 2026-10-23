@@ -235,6 +235,7 @@ class JobIn(BaseModel):
     llm_provider: Literal["claude-code", "codex"] | None = None
     brainrot_level: int | None = Field(default=None, ge=0, le=100, strict=True)
     reference_entity: str | None = Field(default=None, pattern=r"^Q[1-9]\d{0,11}$")
+    motion_graphics: bool = False
     youtube_publishing: JobYouTubeIn | None = None
 
     @model_validator(mode="after")
@@ -252,6 +253,8 @@ class JobIn(BaseModel):
                 raise ValueError("References apply to generated stories only")
             if self.brainrot_level is not None:
                 raise ValueError("brainrot_level applies to generated scripts only")
+            if self.motion_graphics:
+                raise ValueError("motion_graphics applies to generated stories only")
             parsed = urlsplit(self.youtube_url)
             hosts = {"youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com", "youtu.be", "www.youtu.be"}
             video_path = (parsed.hostname in {"youtu.be", "www.youtu.be"} and bool(parsed.path.strip("/"))) or (
@@ -266,7 +269,7 @@ class JobIn(BaseModel):
 
 @app.post("/jobs", dependencies=[Depends(require_key)])
 def create_job(job: JobIn) -> dict:
-    params = {k: v for k, v in job.model_dump(exclude={"kind"}).items() if v is not None}
+    params = {k: v for k, v in job.model_dump(exclude={"kind"}).items() if v is not None and v is not False}
     if job.reference_entity:
         params["reference_context"] = research.context(research.entity(job.reference_entity))
     if job.youtube_publishing:
@@ -338,7 +341,7 @@ def _job_view(row: dict) -> dict:
         "id", "kind", "status", "attempts", "max_attempts", "run_after", "error_kind",
         "created_at", "started_at", "finished_at", "duration_seconds",
     ))
-    result["params"] = _safe_row(row.get("params") or {}, ("topic", "youtube_url", "title", "subreddit", "llm_provider", "brainrot_level"))
+    result["params"] = _safe_row(row.get("params") or {}, ("topic", "youtube_url", "title", "subreddit", "llm_provider", "brainrot_level", "motion_graphics"))
     publishing = (row.get("params") or {}).get("youtube_publishing")
     if isinstance(publishing, dict):
         result["params"]["youtube_publishing"] = _safe_row(publishing, ("mode", "privacy_status", "made_for_kids", "contains_synthetic_media"))

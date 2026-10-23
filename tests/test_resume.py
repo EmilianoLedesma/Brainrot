@@ -210,3 +210,13 @@ def test_h1_retry_reuses_the_transcript_and_moment_selection(fake_db, monkeypatc
     clips = fake_db.rows("clips")
     assert len(clips) == 2 and all(c["status"] == "ready" for c in clips)
     assert len(fake_db.rows("publications")) == 6  # two clips x three platforms
+
+
+def test_motion_graphics_job_skips_background_and_uses_motion_render(fake_db, narration, monkeypatch):
+    from brainrot import motion
+    monkeypatch.setattr(script, "write_story", lambda topic: script.Story(title="T", script="Short. Story."))
+    monkeypatch.setattr(pipeline, "pick_background", lambda story_id: pytest.fail("no background for motion edit"))
+    monkeypatch.setattr(render, "render", lambda *a: pytest.fail("main render must not run"))
+    monkeypatch.setattr(motion, "render_video", lambda audio, words: b"motion-video")
+    pipeline.run_brainrot({"id": "job-motion", "kind": "brainrot", "params": {"topic": "t", "motion_graphics": True}})
+    assert fake_db.rows("story_chapters")[0]["status"] == "ready"

@@ -20,6 +20,11 @@
 - **Backgrounds:** rotate through active clips and retain each story's saved
   selection on retry. The configured project has a five-clip parkour pool;
   do not hard-code a dependency on those particular rows.
+- **Video style choice:** New Job (Generate only) has a "Motion graphics edit"
+  checkbox, off by default. Off keeps the main flow (narration over a background
+  clip). On keeps the same script, narration, publishing, queue and insights but
+  renders the repo's Remotion project in `motion/` instead of a clip. It is saved as
+  `params.motion_graphics` (only when true) and is not available for repurposing.
 - **Queue:** four rows per page; Inspect, Retry and Delete align in one row.
   Confirm deletion, including running jobs. Retry resumes saved progress and
   resets the displayed attempt history; detailed diagnostics remain available.

@@ -8,7 +8,7 @@ import math
 import re
 from typing import Callable
 
-from . import db, render, scheduler, script, tts, media
+from . import db, motion, render, scheduler, script, tts, media
 from .application.stages import stage
 from .domain.jobs import PermanentError
 
@@ -66,8 +66,10 @@ def _story_for(job_id: str, write: Callable[[], script.Story], fields: dict) -> 
         return db.client().table("stories").insert(row).execute().data[0]
 
 
-def produce(job_id: str, write: Callable[[], script.Story], **story_fields) -> str:
+def produce(job_id: str, write: Callable[[], script.Story], motion_graphics: bool = False, **story_fields) -> str:
     """Render every chapter of the job's story and record it. Returns the story id.
+
+    motion_graphics swaps the looping background for the Remotion motion edit.
 
     Safe to re-run: chapters an earlier attempt finished are left alone, and only
     the missing or unfinished ones are rendered.
@@ -110,14 +112,14 @@ def produce(job_id: str, write: Callable[[], script.Story], **story_fields) -> s
             chapter_id = chapter["id"]
             db.client().table("story_chapters").update({"status": "rendering"}).eq("id", chapter_id).execute()
 
-        if background is None:
+        if background is None and not motion_graphics:
             with stage("background"):
                 background = pick_background(story_id)
         scope = f"chapter:{index}"
         with stage("tts", scope):
             audio, words = tts.narrate(text, title=story.get("title") or story.get("topic") or "The story")
         with stage("render", scope):
-            video = render.render(background, audio, words)
+            video = motion.render_video(audio, words) if motion_graphics else render.render(background, audio, words)
         with stage("upload", scope):
             if media.local():
                 db.upload_job_media(job_id, "story_chapters", chapter_id, f"stories/{story_id}/{index:02d}.srt",
@@ -143,4 +145,5 @@ def run_brainrot(job: dict) -> str:
     options = {"brainrot_level": level} if level is not None else {}
     if job["params"].get("reference_context"):
         options["reference_context"] = job["params"]["reference_context"]
-    return produce(job["id"], lambda: script.write_story(topic, **options), topic=topic)
+    return produce(job["id"], lambda: script.write_story(topic, **options),
+                   motion_graphics=bool(job["params"].get("motion_graphics")), topic=topic)

@@ -40,9 +40,10 @@ def main():
     uv = shutil.which("uv")
     if not uv:
         raise RuntimeError("Install uv first: https://docs.astral.sh/uv/getting-started/installation/")
-    commands = [[uv, "sync", "--locked", "--python", "3.14"], [*npm_command(), "ci", "--prefix", "web"]]
+    commands = [[uv, "sync", "--locked", "--python", "3.14"], [*npm_command(), "ci", "--prefix", "web"],
+                [*npm_command(), "ci", "--prefix", "motion"]]
     if args.check:
-        print("Setup available: locked Python environment, npm ci, missing settings templates only")
+        print("Setup available: locked Python environment, npm ci (web and motion), missing settings templates only")
         return
     environment = {**os.environ, "UV_PROJECT_ENVIRONMENT": str(ROOT / ".venv")}
     for command in commands:

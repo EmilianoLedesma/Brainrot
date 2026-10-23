@@ -18,7 +18,8 @@ migrations before starting the matching worker. Setup does not apply SQL.
 `pyproject.toml` plus `uv.lock` define Python dependencies; `.python-version`
 selects 3.14. `requirements.lock` and `requirements-dev.lock` are hashed pip
 exports, used by the traditional requirements entrypoints. Update all exports
-when intentionally changing dependencies. Use `npm ci` with the frontend lock.
+when intentionally changing dependencies. Use `npm ci` with the frontend lock and, for the motion-graphics edit, `npm ci --prefix motion`
+(`scripts/bootstrap.py` runs both).
 
 ## Validate the affected boundary
 

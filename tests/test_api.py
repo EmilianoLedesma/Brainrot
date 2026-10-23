@@ -155,3 +155,14 @@ def test_retry_requires_auth_and_valid_uuid(http, monkeypatch):
     monkeypatch.setattr(db, "retry_job", lambda job_id: pytest.fail("unexpected retry"))
     assert TestClient(api.app).post("/jobs/00000000-0000-0000-0000-000000000001/retry").status_code == 401
     assert http.post("/jobs/not-a-uuid/retry").status_code == 422
+
+
+def test_motion_graphics_is_stored_only_when_chosen(http, fake_db):
+    off = http.post("/jobs", json={"kind": "brainrot", "topic": "octopuses", "motion_graphics": False})
+    on = http.post("/jobs", json={"kind": "brainrot", "topic": "octopuses", "motion_graphics": True})
+    assert "motion_graphics" not in db.get_job(off.json()["id"])["params"]
+    assert db.get_job(on.json()["id"])["params"]["motion_graphics"] is True
+
+
+def test_repurpose_does_not_accept_motion_graphics(http):
+    assert http.post("/jobs", json={"kind": "repurpose", "youtube_url": "https://youtu.be/example", "motion_graphics": True}).status_code == 422

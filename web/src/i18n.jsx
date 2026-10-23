@@ -241,6 +241,7 @@ export const COPY = {
       tabs: { new: "New job", queue: "Queue", output: "Output", insights: "Insights" },
       steps: ["Pipeline", "Input", "Review"],
       model: { label: "Model", hint: "Uses this integration’s configured model and your local sign-in.", workerDefault: "Worker default" },
+      motion: { label: "Motion graphics edit", hint: "Off: the main flow narrates over a background clip. On: same script and narration, animated with keyword punches and transitions instead of a clip.", on: "Motion graphics", off: "Main flow (background clip)" },
       brainrot: {
         label: "Brainrot level", low: "Grounded", high: "Max brainrot",
         levels: [
@@ -553,6 +554,7 @@ export const COPY = {
       tabs: { new: "Nuevo job", queue: "Cola", output: "Resultados", insights: "Análisis" },
       steps: ["Pipeline", "Entrada", "Revisión"],
       model: { label: "Modelo", hint: "Usa el modelo configurado en esta integración y tu sesión local.", workerDefault: "Predeterminado del worker" },
+      motion: { label: "Edición con motion graphics", hint: "Apagado: el flujo principal narra sobre un clip de fondo. Encendido: mismo guion y narración, animados con palabras clave y transiciones en vez de un clip.", on: "Motion graphics", off: "Flujo principal (clip de fondo)" },
       brainrot: {
         label: "Nivel de brainrot", low: "Tranquilo", high: "Brainrot máximo",
         levels: [

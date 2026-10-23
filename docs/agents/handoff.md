@@ -4,7 +4,93 @@ Read this with the latest user request and `git status`; this is a dated snapsho
 not a live dashboard. Do not assume another checkout has its credentials, media
 or migrations just because this development machine does.
 
+## Commit and push status — 2026-10-23
+
+While runtime edits were on hold for commit, the user requested a polished general
+README using Markdown and no CSS. Reworked the product overview, feature/input
+tables, quick start, integration status, local-media/deployment boundaries,
+development commands, documentation navigation and dual-license credit. Preserved
+the old detailed lifecycle, stages, metrics, pacing and operator guidance in
+`docs/pipeline-reference.md`, linked from README and the documentation index.
+Local file links and README navigation anchors passed checks; no CSS was added.
+This was documentation-only work, without service restarts or new runtime tests.
+The user then authorized pushing independent changes while leaving work that
+depends on the other session. Committed and pushed README, pipeline reference,
+and documentation index as `6ae9243` to `origin/master`. The README describes the
+committed standalone prototypes and leaves unfinished runtime integration out of
+setup commands. Documentation link and no-CSS checks passed for all three files.
+Shared handoff and runtime changes remain uncommitted for the other session.
+
+Committed and pushed the independent licensing/source-packaging files to
+`origin/master` as `011f4d7`. The user explicitly asked to wait for another session
+to finish runtime motion edits before committing those files. Runtime changes
+and the broader handoff remain uncommitted; inspect both staged
+and unstaged differences before resuming. Do not treat this as a clean tree.
+
+Pre-push checks: 474 offline tests passed, including disposable local Postgres18;
+frontend production build, motion TypeScript check, offline pipeline self-checks,
+source archive secret/integrity checks passed. Another session changed runtime
+scene-design code during these checks, so validate the finished runtime changes
+again before committing them. No live model calls, generation or uploads were
+started by this commit/push task. No PR or new branch was created.
+
 ## Prototype and local dashboard — 2026-10-23
+
+### Licensing and GitHub upload package
+
+Follow-up: the user asked to include Apache licensing. The current original-source
+grant is **MIT OR Apache-2.0**, at the recipient's choice. `LICENSE` states the
+choice; full texts are `LICENSE-MIT` and `LICENSE-APACHE` (the latter retrieved
+from Apache's official site), with attribution in `NOTICE`. README, upload guide,
+third-party notices and archive requirements reflect this choice. This supersedes
+the initial MIT-only setup described below; third-party licenses are unchanged.
+
+The user requested free use with recognition and files ready for GitHub. Added
+root MIT `LICENSE`, copyright Emiliano Ledesma and Brainrot contributors (holder
+name taken from the configured Git author), plus `THIRD_PARTY_NOTICES.md` and
+`GITHUB_UPLOAD.md`. MIT requires copyright/license retention; a visible credit
+in every video is not required. Fonts, video-use and Remotion retain their own
+terms. Imported media is not relicensed by the project.
+
+`scripts/package_source.py` packages the current source, including uncommitted
+changes, into ignored `out/releases/brainrot-github-source.zip`. It excludes local
+agent settings, credentials, installed dependencies, private/generated media and
+Git metadata; checks configured secret values without printing them; and verifies
+ZIP integrity. README/index link the notices and guide. No GitHub repository,
+commit or push is created. Preserve other in-progress working-tree changes.
+
+### Motion-graphics option wired into the main flow (latest)
+
+- New Job (Generate) has a "Motion graphics edit" checkbox (EN/ES copy, review row). It sends
+  `motion_graphics` to `POST /jobs`; stored in `params` only when true; rejected for repurpose;
+  visible in the job view. `pipeline.produce(..., motion_graphics=)` skips background selection and
+  calls `brainrot/motion.py` instead of `render.render`. Everything else (script, TTS, upload,
+  schedule, YouTube modes, insights, retries) is the shared path.
+- `motion/` is the runtime Remotion project (generic `Motion` composition, `Transition`, font,
+  lockfile). `scripts/bootstrap.py` runs `npm ci --prefix motion`. Worker needs Node on PATH; if
+  `motion/node_modules` is missing the job fails with a friendly "run npm ci --prefix motion".
+- Validation: new tests for plan/API/pipeline pass; full run was 418 passed, 56 errors, all SQL
+  tests needing local Postgres (same errors without these changes). Web build passes. A real
+  `motion.render_video` render of the zebra narration (123 s) passed `check_video` in ~2.5 min,
+  8.4 MB.
+- Scene devices: `motion.design()` makes one extra call to the job's provider with
+  `brainrot/skills/motion-graphics/SKILL.md` (stat, compare, checklist, steps, stamp, alert, none;
+  facts only from the narration, ~1 in 3 scenes plain, no repeats back to back). Validation drops
+  malformed beats; a failed call logs and renders keyword punches only. `motion/Devices.tsx` draws
+  them; checked with stills built from hand-made props (all six devices render), and a unit test
+  covers validation with a faked model.
+- Restart needed: an API or worker started before this change rejects `motion_graphics` (422 "check
+  your input") because request validation is strict. Restart `brainrot.dev` after pulling.
+
+**Pending (not done):**
+- The live Codex call for `design()` has NOT succeeded yet: one try hit the 180 s CLI timeout
+  (`BRAINROT_LLM_TIMEOUT_SECONDS`), a second was stopped. Confirm the schema is accepted and see how
+  long it takes (raise the timeout or shrink the prompt if needed) before relying on it.
+- No end-to-end render with model-chosen devices, and no live worker job with the checkbox on.
+- Visual polish: devices sit below the keyword punches in a fixed layout; check overlaps with
+  captions and long labels on real output. The checkbox is not shown on queue/inspect rows beyond
+  the job view field. Render takes minutes per video (concurrency fixed at 2).
+- Prototype commit `61fd3de` was pushed earlier; this work is committed in the following commit.
 
 ### Zebra-stripes test video (latest)
 

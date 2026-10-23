@@ -55,6 +55,9 @@ uv run --locked python test_pipeline.py
 npm run build --prefix web
 ```
 
+The optional motion-graphics edit needs `npm ci --prefix motion` (bootstrap runs it); its
+Remotion project and font live in `motion/`, so another computer needs nothing extra.
+
 SQL tests require local Postgres (`PG_BIN` or `pg_ctl` on PATH). Check for skipped
 tests before claiming database validation. Follow the development guide for
 browser checks and the separate live database scripts.

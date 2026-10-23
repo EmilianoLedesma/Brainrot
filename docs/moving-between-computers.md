@@ -23,10 +23,10 @@ this protection; workers from older versions do not participate.
    python scripts/bootstrap.py
    ```
 
-   Setup installs Python 3.14 and the versions in `uv.lock`, runs `npm ci`, and
+   Setup installs Python 3.14 and the versions in `uv.lock`, runs `npm ci` for `web` and `motion`, and
    creates missing settings templates. It preserves existing `.env` files. On
    Windows, `py scripts/bootstrap.py` also works if Python uses the `py` launcher.
-   Do not copy `.venv` or `web/node_modules` between computers.
+   Do not copy `.venv` or `web/node_modules` or `motion/node_modules` between computers.
 3. Securely copy your root `.env` from the first computer, or fill in its template.
    Keep the same Supabase project and YouTube OAuth client. Use
    `BRAINROT_MEDIA_STORAGE=local` and `BRAINROT_MEDIA_ROOT=media`; a relative root
