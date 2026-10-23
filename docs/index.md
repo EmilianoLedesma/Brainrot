@@ -1,5 +1,7 @@
 # Documentation
 
+- [License](../LICENSE), [third-party notices](../THIRD_PARTY_NOTICES.md), and [GitHub upload guide](../GITHUB_UPLOAD.md).
+
 - [Agent orientation](agents/README.md): start here for a new development session.
 - [Current handoff](agents/handoff.md): dated status, evidence and remaining work.
 - [Architecture](agents/architecture.md): code map, execution flows and model guidance.
