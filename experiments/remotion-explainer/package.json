@@ -10,14 +10,17 @@
     "prepare-assets": "node prepare.mjs"
   },
   "dependencies": {
-    "remotion": "4.0.538",
     "@remotion/cli": "4.0.538",
+    "@remotion/motion-blur": "4.0.538",
+    "@remotion/noise": "4.0.538",
+    "@remotion/paths": "4.0.538",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "remotion": "4.0.538"
   },
   "devDependencies": {
-    "typescript": "5.9.3",
     "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3"
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
   }
 }

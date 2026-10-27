@@ -1,0 +1,14 @@
+Original procrastination cartoon, character, props, staging and score: Brainrot contributors.
+Lemo-Opuscar Mid-century Cartoon drawing engine and style guidance: copyright 2026 LemoLab, MIT.
+https://github.com/lemomo-ai/lemo-opuscar
+Revision: 413a6bd6d78ebd3bdd5abaec9538a26867f890df
+Selected-style license and hashes: guidance/LICENSE and guidance/provenance.json.
+Shared rendering/readcheck/event/sound tools and notices:
+experiments/coffee-comparison/vendor/lemo-opuscar/LICENSE and provenance.json.
+No upstream demo characters, story, film, still or soundtrack reused.
+
+DM Sans: project-bundled font, SIL Open Font License 1.1; motion/OFL-DMSans.txt.
+Voice: Brainrot edge-tts, en-US-GuyNeural, generated for this unpublished film.
+Quiet foley: Lemo's procedural sound helpers; music: original sparse local synthesis.
+No paid video/image model, stock media, voice cloning or external music library.
+Research links and the limits of visual metaphors: FACTS.md.

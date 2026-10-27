@@ -1,0 +1,23 @@
+{
+  "survey2005": {
+    "n": 499,
+    "min_age": 14,
+    "max_age": 94,
+    "source": "https://pubmed.ncbi.nlm.nih.gov/16512313/",
+    "doi": "10.2466/pr0.97.3.921-935",
+    "meaning": "Survey participants, not memory counts or age-specific outcome values."
+  },
+  "samples2021": [293, 263, 262],
+  "samples2021_source": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2021.744551/full",
+  "samples2021_meaning": "Three sample sizes; number of reported events/memories did not predict passage-of-time judgments in these analyses. Not three memory measurements.",
+  "design2026": {
+    "n": 120,
+    "per_group": 20,
+    "groups": ["20–29", "30–39", "40–49", "50–59", "60–69", "70+"],
+    "last_group_range": [70, 91],
+    "source": "https://doi.org/10.3758/s13421-026-01879-1",
+    "meaning": "Recruitment design, not a distribution of a population or measured time-speed outcomes.",
+    "observational": true,
+    "preregistered": false
+  }
+}

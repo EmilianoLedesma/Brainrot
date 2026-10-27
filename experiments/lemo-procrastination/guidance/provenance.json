@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/lemomo-ai/lemo-opuscar",
+  "revision": "413a6bd6d78ebd3bdd5abaec9538a26867f890df",
+  "license": "MIT",
+  "files": {
+    "midcentury-toon/STYLE.md": "e73614b6f9e2f2e8ee279f4909da8429235b96f6d13a12345b6e57d5823c30b8",
+    "midcentury-toon/DEMO.md": "374bc7e10b00e5ecfcef47fb512ec05d2e40b096f7470b198019b3ec07386fa5",
+    "midcentury-toon/demo/engine/toon.js": "261c79fa7aff5489a98d9e44f91659eae10e90d3bcb13a6e23e84098b709b0bf"
+  }
+}

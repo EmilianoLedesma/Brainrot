@@ -9,6 +9,9 @@ Third-party components retain their own licenses and attribution requirements.
 | Anton caption font | SIL Open Font License 1.1; copyright 2020 The Anton Project Authors. See `brainrot/assets/fonts/OFL.txt`. |
 | DM Sans font | SIL Open Font License 1.1; copyright 2014 The DM Sans Project Authors. See `motion/OFL-DMSans.txt` and the OFL files beside prototype font copies. |
 | Selected video-use helpers and guidance | MIT; copyright 2026 Browser Use. See `experiments/video-use-prototype/vendor/video-use/LICENSE` and `provenance.json` in the prototype directory. |
+| Selected Lemo-Opuscar engines, helpers and guidance | MIT; copyright 2026 LemoLab. See `experiments/coffee-comparison/vendor/lemo-opuscar/LICENSE` and `provenance.json`, plus `experiments/lemo-procrastination/guidance/LICENSE` and `provenance.json`. No upstream demo film or soundtrack is bundled. |
+| Selected Lemo Data Storytelling engine/guidance | MIT; copyright 2026 LemoLab. See `experiments/lemo-time-perception/guidance/LICENSE` and `provenance.json`. |
+| Newsreader, Caveat and IBM Plex Mono fonts | SIL Open Font License 1.1; individual notices and exact source hashes in `experiments/lemo-time-perception/fonts/`. |
 | Remotion | Its own Remotion license; it is not relicensed under Brainrot's dual license. See the installed packages' license files and https://www.remotion.dev/docs/license. Eligibility and production use depend on those terms. |
 
 Other Python and npm dependencies are identified in their manifests and lockfiles.

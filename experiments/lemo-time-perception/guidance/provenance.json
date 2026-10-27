@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/lemomo-ai/lemo-opuscar",
+  "revision": "413a6bd6d78ebd3bdd5abaec9538a26867f890df",
+  "license": "MIT",
+  "files": {
+    "dataviz/STYLE.md": "e94013d5a7c548c8844598a671ff0b49bc78770696cbca0d8d00846336f3c67f",
+    "dataviz/DEMO.md": "997cf8707a29ba6fee86b07db7745769e58c2c3fe23093164fb2e774cabf0d24",
+    "dataviz/demo/engine.js": "d4e4a84552a81eb8bc75c7031783ba7c42dad5376c787b48cf9d44a6ffde2bb2"
+  }
+}

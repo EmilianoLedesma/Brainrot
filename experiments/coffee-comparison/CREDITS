@@ -1,0 +1,14 @@
+Original coffee film, geometry and Brainrot bridge: Brainrot contributors.
+Lemo-Opuscar selected source and guidance: copyright 2026 LemoLab, MIT.
+https://github.com/lemomo-ai/lemo-opuscar
+Revision: 413a6bd6d78ebd3bdd5abaec9538a26867f890df
+License: vendor/lemo-opuscar/LICENSE. File hashes: vendor/lemo-opuscar/provenance.json.
+Used: isometric engine, renderer, directing/style guides, reading-time and event tools, procedural sound helpers.
+No upstream demo film, artwork, still, melody or voice recording reused.
+
+DM Sans font: project-bundled font from motion/; SIL Open Font License 1.1.
+See motion/OFL-DMSans.txt.
+Narration: Brainrot edge-tts, en-US-GuyNeural; generated once for this private comparison.
+No cloned voice, imported footage, generated raster image, paid video model or stock music.
+Quiet sound effects: synthesized locally with the selected MIT Lemo sound helpers.
+Research links and the limits of schematic illustrations: FACTS.md.

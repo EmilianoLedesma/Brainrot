@@ -1,0 +1,7 @@
+{
+  "name": "brainrot-coffee-comparison",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "dependencies": {"playwright-core": "1.56.1"}
+}

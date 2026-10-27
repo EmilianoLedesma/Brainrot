@@ -1,0 +1,18 @@
+Original narration, direction and film code generation: Claude Opus 5.5 via user's Claude Code subscription.
+Requested/reported model: claude-opus-5-5; sanitized audit saved beside output.
+Brainrot bridge, source review, finishing and verification: Brainrot contributors.
+Lemo-Opuscar Data Storytelling engine/style: copyright 2026 LemoLab, MIT.
+https://github.com/lemomo-ai/lemo-opuscar
+Pinned revision: 413a6bd6d78ebd3bdd5abaec9538a26867f890df
+Selected-source license and hashes: guidance/LICENSE, guidance/provenance.json.
+Rendering/readcheck/event/sound tools: shared project-owned subset under
+experiments/coffee-comparison/vendor/lemo-opuscar (MIT and provenance retained).
+No Lemo demo film, storyline, data series, illustration, score or voice is reused.
+
+Newsreader, Caveat, IBM Plex Mono: bundled fonts under SIL Open Font License 1.1.
+See fonts/*-OFL.txt and fonts/provenance.json for the exact source and hashes.
+Voice: Brainrot edge-tts, en-US-GuyNeural, generated for this unpublished film.
+Foley: local procedural synthesis with selected MIT Lemo helpers.
+Sonification: original tones for verified study-count anchors only.
+Research: source URLs and limits in FACTS.md and dataset.json.
+No paid video/image API, stock soundtrack, voice cloning or platform publication.

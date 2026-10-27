@@ -13,6 +13,10 @@
 - [Storytelling](storytelling.md): runtime writing guidance and quality comparisons.
 - [Video-use explainer prototype](../experiments/video-use-prototype/README.md): isolated animated explainer, reproduction and review artifacts.
 - [Remotion explainer prototype](../experiments/remotion-explainer/README.md): channel-informed animation experiment and local rendering.
+- [Silent vector motion-graphics recipe](motion-graphics-recipe.md): cookbook for the light pastel, script-driven look (coffee and zebra proofs of concept) and the steps to integrate it into the main flow.
+- [Coffee A/B comparison](../experiments/coffee-comparison/README.md): current Brainrot Remotion versus a pinned Lemo-Opuscar animation bridge, shared Grounded narration and local review artifacts.
+- [Lemo procrastination cartoon](../experiments/lemo-procrastination/README.md): agent-selected cartoon style, continuous action and camera editing without progress or persistent heading overlays.
+- [Opus time-perception film](../experiments/lemo-time-perception/README.md): Claude Opus 5.5 Data Storytelling experiment, traceable study counts and explicitly illustrative memory diagrams.
 - [Stupy Doo reference review](../experiments/remotion-explainer/REFERENCE-REVIEW.md): four sampled Shorts, evidence and visual design findings.
 - [Content quality](content-quality.md): script review and per-video retention tools.
 - [Deployment](deployment.md): Vercel dashboard settings, API/worker hosting and setup prerequisites.

@@ -1,4 +1,219 @@
-# Handoff — 2026-10-23
+# Handoff — 2026-10-27
+
+## Silent vector motion-graphics recipe and two PoCs — 2026-10-27
+
+User wanted the "first sample" look (Download.mp4, an AI-delegation explainer: kinetic
+type, UI cards, hero object that changes shape) as light pastel, After-Effects-style
+vector animation, silent, driven by a script, with no frame (no corner brackets,
+timecode, label, progress line) and no film filters (grain, vignette, chromatic
+aberration). Built without the repo's motion skill.
+
+- Recipe: `docs/motion-graphics-recipe.md` (look, tools, ten steps, sound, render
+  commands, gotchas, integration checklist).
+- Dark first attempts, kept for reference only: `experiments/remotion-explainer/delegation/`
+  and `coffee-sci/Coffee.tsx`; the user rejected their film look.
+- Target look: `coffee-sci/CoffeeLight.tsx` + `script-light.json` (coffee science, 16 s) and
+  `zebra-stripes/` (`ZebraStripes.tsx`, `script.json`, 18 s; facts from the sources
+  already verified for the earlier narrated `zebra/story.json`). Shared primitives are in
+  `coffee-sci/kit.tsx`; `coffee-sci/sfx.py` synthesizes the sound bed (numpy, no speech).
+- New dependencies in `experiments/remotion-explainer/package.json` (exact 4.0.538):
+  `@remotion/paths`, `@remotion/noise`, `@remotion/motion-blur`.
+- Validation: `npx tsc --noEmit` clean; contact sheets of 12 stills per video and a frame
+  from each final render. Renders (ignored `out/`): `out/coffee-sci/coffee-light.mp4`,
+  `out/zebra-stripes/zebra-stripes.mp4`, 1080×1920, 30 fps, with sound effects muxed.
+  Nobody has watched full playback or listened to the sound bed.
+- Limits: schematic values are labelled illustrative; flies and counts in the zebra
+  video are not data; the 18–22 % and 90–96 °C coffee figures were attributed to the
+  Specialty Coffee Association from memory and not source-checked. Not integrated into
+  `motion/` or `brainrot/motion.py`; the recipe lists the steps. Not committed.
+
+## Claude Opus 5.5 time-perception film — 2026-10-27
+
+User requested a new English film on years feeling faster with age, explicitly
+using Claude Opus 5.5 and Lemo Data Storytelling. This task overrides the normal
+Codex validation preference only for this film; no project defaults changed.
+Subscription login verified; three successful creative calls reported exactly
+`claude-opus-5-5` in sanitized CLI model metadata: story, direction, compact chart
+source. No paid model API or other provider fallback. The broad full-film code
+request exceeded Windows argv size initially, then timed out at 1200 s after
+moving references to stdin. No usable source came from that long request. After
+the user asked for status, a small low-effort request to the same Opus model
+returned the chart/transform layer. Use bounded smaller calls going forward.
+
+Added `experiments/lemo-time-perception/`. Existing Brainrot guidance generated
+337 Grounded words; Guy speech measures 127.0275 s. Per-utterance TTS caching
+recovered flaky streams without regenerating the saved Opus script. Opus's
+sixteen-beat direction and chart artwork use pinned Lemo Data Storytelling:
+cream paper, pencil, calendar/recollection illustrations, actual survey/sample
+counts. Local code supplies vertical camera/caption/render infrastructure.
+Sources are reviewed, hash-recorded and executed locally with unchanged Lemo
+engine. Fonts Newsreader/Caveat/IBM Plex Mono are bundled with OFL notices/hashes.
+
+The scientific premise is qualified: retrospective judgments, routine and
+landmarks are a plausible account, not a proven sole age mechanism. Dataset
+numbers are participants/recruitment design, not memory counts or time-speed
+outcomes. No fabricated age curve, brain scan or causal percentage. Qualitative
+drawings are marked illustration. No progress bar or persistent upper header.
+Local review shortened labels and removed a misleading strike-through of a
+negative finding. The final beat starts at the concluding paragraph for reading
+time. A Windows default-encoding issue in age-group labels was fixed with UTF-8;
+101.7–110.1 s was rerendered and assembled on exact frame boundaries, preserving
+the narration. Corrected data/source now reproduce the proper labels directly.
+
+Ignored `out/lemo-time-perception/` includes `final.mp4`, `watch.html`, poster,
+SRT, voice/timing, model audit, direction/authorship/source-review records, real
+style/final/action sheets and verification. Final: 127.033333 s, 1080×1920,
+30 fps, H.264/AAC, 11,101,176 bytes; −16.07 LUFS / −1.48 dBTP. Complete decode,
+duration/dimensions/codecs/size, black-interval and model-audit checks passed.
+Text reading checks passed; inspected actual final timeline/action sheets,
+including the corrected age labels. Engine/font provenance, docs links, syntax
+and `git diff --check` passed. No full production suite rerun: runtime code was
+unchanged. This is a directed local prototype, not a new dashboard/queue mode;
+no sensory watch/listen or audience-retention claim. No job, worker, upload,
+service restart, commit or push. Earlier uncommitted experiments were preserved.
+Complete normal-speed headless playback of the corrected final file reached its
+end with no page/media errors; report is in `playback.json` beside the output.
+
+## Agent-selected procrastination cartoon — 2026-10-27
+
+User requested one English Lemo film on why procrastination can prioritize
+immediate emotional relief, with the agent choosing the style. They prohibited
+the coffee film's progress bar/fixed upper header and then requested more camera
+movement/effects. Preserved Grounded delivery. Live Codex compared midcentury-toon,
+one-line and paper-popup, selecting midcentury-toon. Saved choice/reasons are local
+outputs, not a guessed style assignment. The existing Brainrot storytelling call
+generated 326 original words; Guy narration measures 123.53 s. A subsequent live
+Codex call read the selected guide and DIRECTOR.md to produce eighteen beats.
+
+Added `experiments/lemo-procrastination/`: original character/desk/laptop/phone
+drawings using the actual pinned Lemo printed-cel engine, eighteen timed beats,
+side/overhead/hand-detail views, camera tracks/pushes/pulls, depth-plane parallax,
+circle reveals and object/color-plane wipes. Bottom speech captions remain;
+there is no progress indicator, persistent heading, step header or completion
+quote card. Only a small diegetic DRAFT label appears on the laptop. A sparse
+original synthesized score and 49 quiet timed foley events support the voice.
+The final action remains unfinished and the illustrative discomfort stays visible.
+
+Style-frame review led to distinct overhead views, connected sleeves/hands,
+corrected worried mouth shape and removal of one unreadably short prop label.
+Upstream readcheck then passed. Outputs under ignored `out/lemo-procrastination/`:
+`final.mp4`, `watch.html`, `poster.jpg`, SRT, saved narration/words, agent choice,
+direction/timed data, source/credits and verification/contact-sheet artifacts.
+Final is 123.533333 s, 1080×1920, 30 fps, H.264/AAC, 17,347,231 bytes. Complete
+decode, duration/codec/dimensions/size and black-interval checks pass; measured
+audio −16.05 LUFS / −1.37 dBTP. Inspected final timeline and 0.2-second action/
+transition sheets. Selected style hashes/docs links and Python/JS syntax pass.
+Full normal-speed headless browser playback of the actual final file reached
+its end without page or media errors; this verifies playback, not sensory review.
+`git diff --check` passed.
+
+Limits: an authored directed film, with scene code tied to its saved eighteen-beat
+plan, not a generic autonomous animation mode or queue integration. This explains
+a common psychological account, not a universal brain cause; visuals are original
+metaphors, not scans or data. Technical checks/sheets do not establish sensory
+watch/listen or viewer retention. Reuses project-owned pinned Lemo core tools and
+the coffee experiment's locked browser/audio dependencies; original Lemo code is
+unchanged with MIT notice/hash records. User constraints override its step-card
+defaults. No Claude, paid model/media API, worker/job, upload, restart, commit or
+push. Earlier uncommitted work is preserved. Docs index/notices updated; no full
+production suite rerun because production code is unchanged.
+
+## Coffee video A/B comparison — 2026-10-27
+
+The user requested an actual Grounded coffee-science video through the current
+Brainrot/Remotion flow, then the same topic through Lemo-Opuscar integrated for
+comparison. They explicitly changed the requested language to English. Generated
+one original 331-word title/script with `script.write_story`, provider `codex`,
+level 0 and researched reference context. Reused one Guy narration and its word
+times for both films: measured speech 128.5025 s. No Claude or paid model API.
+
+Implemented a portable, local experiment in `experiments/coffee-comparison/`.
+Baseline invokes unchanged `brainrot.motion.render_video`; its real Codex design
+call succeeded, producing four devices across eight scenes. The process-local
+timeout was 900 s; no `.env` or normal runtime setting changed. This supersedes
+the older claim that no live runtime scene-design call had succeeded. It still
+does not establish a queue job with the dashboard checkbox.
+
+Lemo uses a pinned MIT subset at `413a6bd6d78ebd3bdd5abaec9538a26867f890df`,
+including the actual isometric engine, frame renderer, readcheck, event exporter
+and procedural sounds. A separate Codex call reads its directing/style guides;
+exact spoken cues become ten timed shots after short/adjacent beats are merged.
+Original coffee geometry illustrates roast, pores, surface area, uneven flow and
+dilution. Fixed a platform depth-sorting defect found in actual style frames.
+Guides/tools are repo-owned with hashes/notices; no global plugin or machine path.
+
+Ignored outputs under `out/coffee-comparison/`: `baseline/final.mp4` (128.6 s,
+9,439,867 bytes), `lemo/final.mp4` (128.5 s, 8,966,817 bytes), optional
+`lemo/voice-only.mp4`, synchronized `comparison.html`, side-by-side
+`comparison.mp4`, saved script/audio/timing/shot props, contact sheets and reports.
+Both main films are 1080×1920, 30 fps, H.264/AAC. All three exports pass complete
+decode, duration/dimensions/codecs/size and black-interval checks. Main films
+measure −16.03 LUFS; peaks −1.50 and −1.43 dBTP respectively. Upstream label
+reading-time/bounds checks, 19 vendored hashes, Python/JS syntax and
+`git diff --check` passed. Reviewed final timeline sheets and transition strips.
+Full-speed headless browser playback of both actual films to their ends passed,
+with audio selection and restart exercised and no page/media errors. Fixed an
+audio-source switching AbortError exposed by the first browser run, then repeated
+the complete playback successfully. This checks playback behavior, not sensory
+editorial quality. Separate experiment Python dependencies have a hash-pinned
+lock; installation against that lock was checked.
+
+Limits: this is a directed coffee prototype and local shared-audio bridge, not
+an arbitrary-topic autonomous editor or new queue/dashboard mode. The model's
+direction is adapted to a finite coffee scene vocabulary. Lemo final adds quiet
+procedural effects; its voice-only control isolates the picture. Some scenes
+hold for long narration passages; transitions remain simpler than the channel
+reference. Technical checks/contact sheets do not establish a full sensory
+watch/listen, retention gains or reference-channel production quality. No worker,
+database job, publication, service restart, commit or push. Existing handoff
+review edits were preserved; docs index and third-party notices were updated.
+No full offline suite rerun: production code was unchanged. See the experiment
+README for reproduction and facts/credits.
+
+## Lemo-Opuscar review — 2026-10-27
+
+Reviewed `lemomo-ai/lemo-opuscar` main: README/licensing, directing and technique
+guides, style index, whiteboard/isometric/visual-investigation guides, core tool
+reference, frame renderer, reading-time checker and procedural sound helpers.
+Source review only: no installation, demo playback, rendering, model calls, jobs,
+uploads or new tests. Preserved the earlier MoneyPrinterTurbo handoff edits.
+
+Proposed adaptations, not implemented: a few repo-owned visual style guides for
+the current Remotion renderer; a saved shot/timeline plan tied to existing TTS
+timings; continuous subject/camera transitions; metadata-driven on-screen label
+duration/bounds checks; optional event-timed procedural sounds; and actual
+full-speed audiovisual review alongside stills. Upstream readcheck depends on
+declared text/bounds and does not verify all visual overlap or comprehension.
+
+Upstream is an agent-driven film-authoring workflow, not a drop-in queue backend.
+Its docs target Claude, default to shorter landscape films and recommend WSL on
+Windows. Compatibility/quality with Codex and Brainrot's 90–180 s vertical output
+remain untested. Keep existing provider choices, portable setup and output rules.
+Code/docs are MIT; demo films/stills have separate CC BY 4.0 terms and some voice
+tracks are excluded. Preserve notices for reused source and inspect asset credits.
+Only the handoff changed; no commit/push. `git diff --check` passed.
+
+## MoneyPrinterTurbo review — 2026-10-27
+
+Reviewed upstream `harry0703/MoneyPrinterTurbo` main via its README, license,
+task/material/video services, model schema, LLM search-term generation, music
+service and search cache. Compared these with Brainrot's pipeline, library,
+FFmpeg renderer, TTS and Remotion adapter. This was a source review, without
+installing or running upstream code, model calls, jobs or uploads; no new tests.
+
+Recommended adaptations, not implemented or approved for implementation: an
+optional narration-led stock-footage montage using the existing media library;
+persisted timed scene/asset choices for retries; image-to-clip motion; caption
+presets; optional local music; and atomic validated material downloads plus a
+bounded search cache. Upstream chronological search terms and sequential clips
+do not establish precise sentence-level semantic alignment or an autonomous
+visual editor. Keep Brainrot's provider choices, SQL ownership/publication
+controls, duration rules and deliberate media handoff. The upstream MIT license
+requires retaining its notice when incorporating substantial source portions.
+
+Repository was clean on `master` at `10cba90` before this review. Only this handoff
+was edited; no commit or push was requested. The last completed test run remains
+the 475-test run recorded below, not a new validation on October 27.
 
 Read this with the latest user request and `git status`; this is a dated snapshot,
 not a live dashboard. Do not assume another checkout has its credentials, media

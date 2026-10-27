@@ -1,0 +1,29 @@
+{
+ "duration": 16,
+ "phases": {"bean":[0,3.7],"grind":[3.7,8.3],"extract":[8.3,12.7],"card":[12.7,16]},
+ "texts": [
+  {"at":0.2,"until":3.5,"text":"the science of","size":40,"color":"ink","y":330,"font":"mono"},
+  {"at":0.7,"until":3.5,"text":"COFFEE","size":210,"color":"coral","y":1500,"font":"sans","wave":10},
+  {"at":3.9,"until":8.1,"text":"01 / grind","size":34,"color":"coral","y":250,"font":"mono"},
+  {"at":6.0,"until":8.1,"text":"FINER = MORE SURFACE","size":64,"color":"ink","y":1570,"font":"sans"},
+  {"at":8.5,"until":12.5,"text":"02 / extraction","size":34,"color":"coral","y":250,"font":"mono"},
+  {"at":10.3,"until":11.8,"text":"STOP IN THE SWEET SPOT","size":58,"color":"green","y":1570,"font":"sans"},
+  {"at":11.9,"until":12.6,"text":"TOO LONG = BITTER","size":58,"color":"coral","y":1570,"font":"sans"},
+  {"at":12.9,"until":16,"text":"03 / target","size":34,"color":"coral","y":250,"font":"mono"}
+ ],
+ "cam": [
+  {"at":0,"zoom":1,"cy":960},{"at":2.6,"zoom":1.12,"cy":945},{"at":3.7,"zoom":1,"cy":960},
+  {"at":8.3,"zoom":1.03,"cy":1000},{"at":12.7,"zoom":1,"cy":960},{"at":16,"zoom":1.04,"cy":980}
+ ],
+ "dials": [
+  {"id":"grind","at":4.2,"until":8.2,"label":"particle size","unit":"µm","from":1100,"to":300,"x":170,"y":620,"max":1100,"decimals":0},
+  {"id":"area","at":4.2,"until":8.2,"label":"surface (relative)","unit":"x","from":1,"to":4,"x":910,"y":620,"max":4,"decimals":1},
+  {"id":"extract","at":8.9,"until":12.4,"label":"extraction","unit":"%","from":0,"to":20,"x":540,"y":1420,"max":30,"decimals":1}
+ ],
+ "sfx": [
+  {"at":0.2,"kind":"tick"},{"at":0.7,"kind":"hit"},{"at":2.8,"kind":"whoosh"},
+  {"at":3.7,"kind":"whoosh"},{"at":4.6,"kind":"tick"},{"at":4.9,"kind":"tick"},{"at":5.2,"kind":"tick"},{"at":6.0,"kind":"hit"},
+  {"at":8.3,"kind":"whoosh"},{"at":8.9,"kind":"tick"},{"at":9.6,"kind":"riser"},{"at":10.3,"kind":"hit"},{"at":11.9,"kind":"hit"},
+  {"at":12.7,"kind":"whoosh"},{"at":13.4,"kind":"hit"},{"at":14.6,"kind":"tick"}
+ ]
+}

@@ -1,0 +1,26 @@
+{
+  "repository": "https://github.com/lemomo-ai/lemo-opuscar",
+  "revision": "413a6bd6d78ebd3bdd5abaec9538a26867f890df",
+  "license": "MIT",
+  "files": {
+    "LICENSE": "14c9ff6f14bfb2391e74fedb01c256891d2a3bba1c2acf5789901bdf77e54e33",
+    "DIRECTOR.md": "3b8b0c40011a0cea796bb1afe6dae0f212115b57e2aa4c9a976b1994a923d564",
+    "TECHNIQUE.md": "8790803f846846032cba16c11c6f1c477625460e9df74f32d1c650717ea8526b",
+    "core/README.md": "c13c11532dda994b3e4c0933e8756286fa4f8b7f288cb47ba0beee26d399dbfa",
+    "core/lib.js": "f6aafa10a156d52b066a39b9445b4d23f3261b326042a92b95bdea4ba71bac24",
+    "styles/iso-infographic/STYLE.md": "a3bf89913255043ff2c8616bff9be9f9536efe1eb7a3b98c755cb4189bd7dff1",
+    "styles/iso-infographic/DEMO.md": "8b93a8caa338a0e4073e6233ebea27652a10cfa6b71a67744badad802d19b2b3",
+    "styles/iso-infographic/demo/engine.js": "0c2fd6fb834acda6bbe708caa3360e59e4c1573e34bf3d5edb6f624c9f2a3eae",
+    "core/audio/sfx.py": "d43584b58527a40bd720889bb2fb5c9d62b9868a43fbb73c68e06b1161a75689",
+    "core/render/browser.mjs": "e1709a756c8e7533e5467ca4a8891442d05f68cdc40831ab99979dd4fe731d67",
+    "core/render/events.mjs": "bacef94cd9bde0100125df19566faa2bd2a9616cfa32506358537621baf63b93",
+    "core/render/page.mjs": "9549c827ff93e94b1a46e4ca46d4111199a47cc6b9f0b5766b1b65d00a7f54b1",
+    "core/render/readcheck.mjs": "36f273516937154b51a512e9be264d545ccd4a592b0677327835a328bb5cfc9c",
+    "core/render/serve.mjs": "67960fc1f8be551d62c7d4129407f6b0ce1c7ed6238bc720d3bed396ad3f0356",
+    "core/render/sheet.py": "1b24e5fed9d5a4df86171fb4e18d6b1cdc4138901efe3044125ff046724711bb",
+    "core/render/slot.mjs": "eed70ee5be47d608eadfabdcb5e550ce509c32fb42a5afb9377644e7226d8ef0",
+    "core/render/srt.py": "027cbf45fa03ef183da5fb8bfdda4064414639c1b023cc2cf1a8db12977bdeb3",
+    "core/render/still.mjs": "b1c7688e600f12c1211c64e8ea2e70738053f327c0851af39913816ce7e864e4",
+    "core/render/video.mjs": "502bfe4fd9f5e2d9ff14d5930927dc7e2b03fb55b2b3d17f201064a766bb87b3"
+  }
+}
