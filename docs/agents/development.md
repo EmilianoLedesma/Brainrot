@@ -45,8 +45,9 @@ count) about a fifth of the suite skips with "no Postgres binaries". FFmpeg test
 
 For the browser smoke, start a separate frontend on port 5189, then run
 `uv run --locked python tests/browser/check_workspace.py --url http://127.0.0.1:5189`.
-It intercepts API requests with synthetic responses. On non-Windows systems,
-install Playwright Chromium first. See [operations](../operations.md) for the
+It intercepts API requests with synthetic responses. On Windows it uses Edge when
+available at the path checked by the smoke script. Otherwise install Chromium
+first with `uv run --locked python -m playwright install chromium`. See [operations](../operations.md) for the
 live `scripts/checks/database.py` and rollback-only `scripts/checks/live.py` boundaries; they are not part
 of routine offline pytest. Never present mocks as real generation or upload checks.
 
