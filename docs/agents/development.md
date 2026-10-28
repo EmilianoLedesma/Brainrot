@@ -27,6 +27,7 @@ when intentionally changing dependencies. Use `npm ci` with the frontend lock an
 uv run --locked python -m pytest tests -q
 uv run --locked python -m scripts.checks.pipeline
 npm run build --prefix web
+npm run check --prefix motion
 git diff --check
 ```
 
@@ -39,7 +40,8 @@ uv run --locked python -m pytest tests -q
 ```
 
 Use your installed version's directory. Ensure database tests ran rather than
-skipped. FFmpeg tests check playable audio/video, pauses and caption alignment.
+skipped: without usable binaries (an old install such as PostgreSQL 9.2 does not
+count) about a fifth of the suite skips with "no Postgres binaries". FFmpeg tests check playable audio/video, pauses and caption alignment.
 
 For the browser smoke, start a separate frontend on port 5189, then run
 `uv run --locked python tests/browser/check_workspace.py --url http://127.0.0.1:5189`.

@@ -59,6 +59,9 @@ version, including `014_local_media_host.sql` for current local-media workers.
 `004_operational_metrics.sql` for metrics, `005_execution_read_models.sql` for
 dashboard execution views, `006_delete_jobs.sql` for queue deletion, and
 `007_retry_jobs.sql` for explicit retries that preserve saved progress.
+Migrations `008`–`014` follow (job media cleanup, background rotation, publication
+metadata, library activation, YouTube metadata drafts and performance, local-media
+host reservation); apply the whole `migrations/` folder in filename order.
 Historically, migrations 001–007 were applied to the configured
 Supabase project as of 2026-10-21. Lease/stage/metrics/read-model checks passed,
 including a live worker retry with synthetic operations inside a rolled-back

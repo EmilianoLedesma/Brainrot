@@ -113,8 +113,9 @@ For a job that appears stuck:
 2. Check worker logs for the job ID and the latest lease renewal failures.
 3. Restore database connectivity and restart the supervised worker if needed.
 4. Let the ten-minute lease expire and recovery run; do not clear a live lease.
-5. For a terminal failure, resolve the cause before creating replacement work.
-   There is no dashboard retry/reset action in this increment.
+5. For a terminal failure, resolve the cause, then use Retry in Queue or Inspect
+   to requeue the same job with its saved progress (migration 007). Do not create
+   replacement work unless the saved script itself must change.
 
 Lease loss stops a worker at the next guarded stage boundary. A provider call
 already in progress can finish before that boundary; publication claims provide

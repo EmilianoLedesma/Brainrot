@@ -1,5 +1,31 @@
 # Handoff — 2026-10-27
 
+## Incoming session orientation — 2026-10-27
+
+Read agent orientation, handoff, architecture, development, product decisions,
+documentation index, computer-switching guide and IDE contributor instructions.
+Reviewed root environment variable presence with user authorization; no secret
+values were printed or recorded. Configuration presence does not establish valid
+credentials, provider authentication or service health.
+
+Current branch is `master`. Existing changes to `AGENTS.md` and untracked IDE
+instruction directories were preserved. This session changed only this handoff.
+No services, workers, model calls, database checks, generation, uploads or tests
+were started. No commit or push. Await the next concrete development request;
+inspect source and live state for its affected flow before making changes.
+
+### Setup and verification on this computer — 2026-10-27
+
+Installed `uv` (winget); bootstrap, `brainrot.dev --check` and `doctor` ran. Offline
+suite: 368 passed, 107 skipped (only PostgreSQL 9.2 installed, so SQL tests skip; no
+database validation claimed). Web build, `npm run check --prefix motion` and
+`scripts.checks.pipeline` passed. Read-only Supabase probe found `local_media_host`
+(014) and `youtube_metadata_drafts` (012) present. Codex CLI not installed here;
+Claude CLI present. 14 referenced media files missing until a media import. Corrected
+stale docs: retry now exists (operations), `web/.env` only for standalone Vite,
+migrations 008–014 (deployment, integrations), motion check and Postgres note
+(development). No services started, no commit or push.
+
 ## Silent vector motion-graphics recipe and two PoCs — 2026-10-27
 
 User wanted the "first sample" look (Download.mp4, an AI-delegation explainer: kinetic
