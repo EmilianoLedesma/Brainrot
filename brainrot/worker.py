@@ -179,8 +179,7 @@ def _loop(host_key=None, keeper=None) -> None:
 def main() -> None:
     if not media.local():
         return _loop()
-    report = portable.check_media()
-    if report["missing"]:
+    if portable.blocking_missing():
         raise RuntimeError("Local media is incomplete. Import the media handoff and run doctor --check-media before starting the worker")
     host_key = host.key()
     if not host.acquire(host_key):

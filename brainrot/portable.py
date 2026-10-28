@@ -51,6 +51,19 @@ def check_media():
     return {"referenced": len(paths), "missing": missing}
 
 
+def blocking_missing():
+    """Missing referenced media that should stop a worker from starting.
+
+    BRAINROT_ALLOW_MISSING_MEDIA=1 is a deliberate opt-in for a computer that has
+    not imported the handoff yet: jobs needing a missing file fail on their own.
+    """
+    missing = check_media()["missing"]
+    if missing and os.getenv("BRAINROT_ALLOW_MISSING_MEDIA") == "1":
+        print(f"warning: {len(missing)} referenced media files are missing; BRAINROT_ALLOW_MISSING_MEDIA=1 lets the worker start anyway", flush=True)
+        return []
+    return missing
+
+
 def require_idle():
     running = db.client().table("jobs").select("id").eq("status", "running").limit(1).execute().data
     uploading = db.client().table("publications").select("id").eq("status", "uploading").limit(1).execute().data
