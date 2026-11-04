@@ -1,0 +1,27 @@
+{
+ "title": "Por qué el cielo es azul",
+ "fps": 30,
+ "durationFrames": 300,
+ "shots": [
+  {"id": "est1", "type": "establishing", "start": 0, "end": 60, "camera": {"pos": [0, 2.4, 16], "target": [0, 3.0, 0], "fov": 35}},
+  {"id": "cut", "type": "cutaway", "start": 60, "end": 150, "camera": {"pos": [0, -1, 14], "target": [0, -1, 0], "fov": 35}},
+  {"id": "macro", "type": "insert", "start": 150, "end": 220, "camera": {"pos": [0, 0, 7], "target": [0, 0, 0], "fov": 35}},
+  {"id": "eye", "type": "metaphor", "start": 220, "end": 280, "camera": {"pos": [0, 0, 7], "target": [0, 0, 0], "fov": 35}},
+  {"id": "est2", "type": "establishing", "start": 280, "end": 300, "camera": {"pos": [0, 2.4, 16], "target": [0, 3.0, 0], "fov": 35}}
+ ],
+ "captions": [
+  {"id": "c1", "at": 6, "until": 56, "text": "El cielo no siempre fue azul.", "style": "word", "y": 1700, "size": 64, "wordGap": 4},
+  {"id": "c2", "at": 66, "until": 146, "text": "La luz del sol es blanca.", "style": "word", "y": 1500, "size": 64, "wordGap": 6},
+  {"id": "c3", "at": 158, "until": 212, "text": "Se separa al chocar.", "style": "word", "y": 1480, "size": 64, "wordGap": 8},
+  {"id": "t3", "at": 176, "until": 220, "text": "DISPERSIÓN DE RAYLEIGH", "style": "term", "y": 1620, "size": 76, "wordGap": 4},
+  {"id": "c4", "at": 224, "until": 276, "text": "Por eso lo vemos azul, mires donde mires.", "style": "word", "y": 1640, "size": 64, "wordGap": 5}
+ ],
+ "events": [
+  {"id": "composed", "shot": "cut", "caption": "c2", "word": "blanca"},
+  {"id": "split", "shot": "macro", "caption": "c3", "word": "separa"},
+  {"id": "converge", "shot": "eye", "caption": "c4", "word": "azul"}
+ ],
+ "stillFrames": [10, 50, 75, 100, 130, 165, 180, 205, 250, 290],
+ "sources": [],
+ "note": "Schematic explainer. Event frames are the frame where the named caption word appears (silent video, no narration)."
+}
