@@ -1,0 +1,18 @@
+{
+ "title": "No depende de uno, sino de varios",
+ "fps": 30,
+ "durationFrames": 300,
+ "events": {"frayStart": 130, "cut": 150, "sparkEnd": 155, "joltEnd": 165, "reactStart": 155, "reactEnd": 170},
+ "captions": [
+  {"from": 0, "to": 90, "parts": [{"t": "No depende de uno,"}]},
+  {"from": 170, "to": 280, "parts": [{"t": "sino de "}, {"t": "varios", "key": true}, {"t": "."}]}
+ ],
+ "cam": [
+  {"f": 0, "zoom": 1, "cy": 960}, {"f": 60, "zoom": 1, "cy": 960},
+  {"f": 130, "zoom": 1.6, "cy": 800}, {"f": 170, "zoom": 1.6, "cy": 800},
+  {"f": 250, "zoom": 1, "cy": 960}, {"f": 300, "zoom": 1, "cy": 960}
+ ],
+ "floors": [7, 6, 5, 4],
+ "sources": [],
+ "note": "Schematic metaphor about redundancy. No factual claim, number or source is stated on screen."
+}

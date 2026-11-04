@@ -11,3 +11,11 @@ out/
 web/.env
 media/
 .brainrot/
+node_modules/
+.remotion/
+# HyperFrames experiment: renders, review stills, tool state and scaffolded agent files
+experiments/hyperframes-pressure-cooker/*.mp4
+experiments/hyperframes-pressure-cooker/shots/
+experiments/hyperframes-pressure-cooker/video/.hyperframes/
+experiments/hyperframes-pressure-cooker/video/AGENTS.md
+experiments/hyperframes-pressure-cooker/video/CLAUDE.md

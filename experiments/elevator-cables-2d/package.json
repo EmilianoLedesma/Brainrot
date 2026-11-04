@@ -1,0 +1,25 @@
+{
+  "name": "brainrot-elevator-cables-2d",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "studio": "remotion studio index.tsx --port=5192",
+    "still": "remotion still index.tsx ElevatorCables ../../out/elevator-cables-2d/still.png --frame=150",
+    "render": "remotion render index.tsx ElevatorCables ../../out/elevator-cables-2d/final.mp4 --concurrency=2 --crf=18",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.538",
+    "@remotion/motion-blur": "4.0.538",
+    "@remotion/noise": "4.0.538",
+    "@remotion/paths": "4.0.538",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.538"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
+  }
+}
