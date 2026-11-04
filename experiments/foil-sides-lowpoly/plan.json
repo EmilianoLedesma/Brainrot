@@ -1,0 +1,476 @@
+{
+ "duration": 93.65,
+ "voice": "es-MX-JorgeNeural",
+ "scenes": [
+  {
+   "start": 0.0,
+   "end": 14.95,
+   "text": "El secreto del aluminio El papel aluminio puede verse distinto por cada lado pero esa diferencia no está dentro del metal aparece mientras lo fabrican El aluminio empieza como una lámina mucho más gruesa",
+   "notes": [],
+   "model": {
+    "shot": "establishing",
+    "event": "none",
+    "why": "Opens the video with the roll in context; ambient motion only."
+   },
+   "shot": "establishing",
+   "event": {
+    "kind": "none"
+   },
+   "cue": "",
+   "caption": {
+    "text": "El papel aluminio puede verse distinto por cada lado",
+    "at": 2.58,
+    "until": 6.68,
+    "words": [
+     {
+      "text": "El",
+      "at": 2.58
+     },
+     {
+      "text": "papel",
+      "at": 2.79
+     },
+     {
+      "text": "aluminio",
+      "at": 3.14
+     },
+     {
+      "text": "puede",
+      "at": 3.67
+     },
+     {
+      "text": "verse",
+      "at": 3.96
+     },
+     {
+      "text": "distinto",
+      "at": 4.29
+     },
+     {
+      "text": "por",
+      "at": 4.84
+     },
+     {
+      "text": "cada",
+      "at": 5.05
+     },
+     {
+      "text": "lado",
+      "at": 5.34
+     }
+    ]
+   },
+   "index": 0
+  },
+  {
+   "start": 14.95,
+   "end": 31.47,
+   "text": "Para convertirla en ese papel flexible de cocina la hacen pasar entre rodillos de acero pulido que la comprimen hasta dejarla muy delgada Pero al llegar a ese grosor final una sola lámina podría romperse si la pasaran sola por los rodillos",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "event": "force_arrows",
+    "why": "Arrows on the hero sheet show the squeezing as the word is spoken."
+   },
+   "shot": "cutaway",
+   "event": {
+    "kind": "force_arrows",
+    "cue": "comprimen",
+    "at": 21.19,
+    "term": ""
+   },
+   "caption": {
+    "text": "la hacen pasar entre rodillos de acero pulido",
+    "at": 18.13,
+    "until": 21.63,
+    "words": [
+     {
+      "text": "la",
+      "at": 18.13
+     },
+     {
+      "text": "hacen",
+      "at": 18.27
+     },
+     {
+      "text": "pasar",
+      "at": 18.58
+     },
+     {
+      "text": "entre",
+      "at": 18.95
+     },
+     {
+      "text": "rodillos",
+      "at": 19.23
+     },
+     {
+      "text": "de",
+      "at": 19.74
+     },
+     {
+      "text": "acero",
+      "at": 19.82
+     },
+     {
+      "text": "pulido",
+      "at": 20.16
+     }
+    ]
+   },
+   "index": 1
+  },
+  {
+   "start": 31.47,
+   "end": 41.58,
+   "text": "Así que juntan dos láminas y las pasan al mismo tiempo Ahí nace la diferencia La cara que toca el rodillo pulido sale brillante",
+   "notes": [],
+   "model": {
+    "shot": "metaphor",
+    "event": "force_arrows",
+    "why": "The one scene explaining the two sheets passing together between rollers; arrows show movement."
+   },
+   "shot": "metaphor",
+   "event": {
+    "kind": "force_arrows",
+    "cue": "pasan",
+    "at": 33.47,
+    "term": ""
+   },
+   "caption": {
+    "text": "Así que juntan dos láminas y las pasan al mismo tiempo",
+    "at": 31.47,
+    "until": 35.86,
+    "words": [
+     {
+      "text": "Así",
+      "at": 31.47
+     },
+     {
+      "text": "que",
+      "at": 31.8
+     },
+     {
+      "text": "juntan",
+      "at": 31.93
+     },
+     {
+      "text": "dos",
+      "at": 32.39
+     },
+     {
+      "text": "láminas",
+      "at": 32.64
+     },
+     {
+      "text": "y",
+      "at": 33.18
+     },
+     {
+      "text": "las",
+      "at": 33.26
+     },
+     {
+      "text": "pasan",
+      "at": 33.47
+     },
+     {
+      "text": "al",
+      "at": 33.85
+     },
+     {
+      "text": "mismo",
+      "at": 33.99
+     },
+     {
+      "text": "tiempo",
+      "at": 34.39
+     }
+    ]
+   },
+   "index": 2
+  },
+  {
+   "start": 41.58,
+   "end": 53.52,
+   "text": "La cara que queda presionada contra la otra lámina sin tocar el rodillo queda mate Y como las dos hojas se enrollan juntas cada una sale con una cara brillante y una mate",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "event": "split",
+    "why": "The laminated sheets separate to reveal one shiny and one matte face."
+   },
+   "shot": "cutaway",
+   "event": {
+    "kind": "split",
+    "cue": "sale",
+    "at": 50.27,
+    "term": ""
+   },
+   "caption": {
+    "text": "cada una sale con una cara brillante y una mate",
+    "at": 49.77,
+    "until": 53.42,
+    "words": [
+     {
+      "text": "cada",
+      "at": 49.77
+     },
+     {
+      "text": "una",
+      "at": 50.04
+     },
+     {
+      "text": "sale",
+      "at": 50.27
+     },
+     {
+      "text": "con",
+      "at": 50.59
+     },
+     {
+      "text": "una",
+      "at": 50.8
+     },
+     {
+      "text": "cara",
+      "at": 51.0
+     },
+     {
+      "text": "brillante",
+      "at": 51.27
+     },
+     {
+      "text": "y",
+      "at": 51.83
+     },
+     {
+      "text": "una",
+      "at": 51.99
+     },
+     {
+      "text": "mate",
+      "at": 52.2
+     }
+    ]
+   },
+   "index": 3
+  },
+  {
+   "start": 53.52,
+   "end": 71.96,
+   "text": "No porque les hayan puesto un acabado distinto ni porque una tenga una composición especial Las dos caras son aluminio lo que cambia es la superficie que tocó el rodillo durante la fabricación Eso también explica por qué el brillo no señala una cara hecha para cocinar mejor",
+   "notes": [
+    "reviewer override: event term_callout on 'rodillo'"
+   ],
+   "model": {
+    "shot": "insert",
+    "event": "term_callout",
+    "why": "Close-up on the surface that touched the roller lands the key term."
+   },
+   "shot": "insert",
+   "event": {
+    "kind": "term_callout",
+    "term": "RODILLOS",
+    "cue": "rodillo",
+    "at": 64.03
+   },
+   "caption": {
+    "text": "lo que cambia es la superficie que tocó el rodillo durante la fabricación",
+    "at": 61.9,
+    "until": 66.78,
+    "words": [
+     {
+      "text": "lo",
+      "at": 61.9
+     },
+     {
+      "text": "que",
+      "at": 62.0
+     },
+     {
+      "text": "cambia",
+      "at": 62.15
+     },
+     {
+      "text": "es",
+      "at": 62.53
+     },
+     {
+      "text": "la",
+      "at": 62.69
+     },
+     {
+      "text": "superficie",
+      "at": 62.77
+     },
+     {
+      "text": "que",
+      "at": 63.47
+     },
+     {
+      "text": "tocó",
+      "at": 63.62
+     },
+     {
+      "text": "el",
+      "at": 63.92
+     },
+     {
+      "text": "rodillo",
+      "at": 64.03
+     },
+     {
+      "text": "durante",
+      "at": 64.47
+     },
+     {
+      "text": "la",
+      "at": 64.89
+     },
+     {
+      "text": "fabricación",
+      "at": 64.99
+     }
+    ]
+   },
+   "index": 4
+  },
+  {
+   "start": 71.96,
+   "end": 82.71,
+   "text": "La apariencia te cuenta cómo pasó el aluminio por la máquina no que haya dos tipos de metal La lámina no es brillante de un lado por tener un aluminio diferente",
+   "notes": [
+    "reviewer override: event curl on 'brillante'"
+   ],
+   "model": {
+    "shot": "cutaway",
+    "event": "none",
+    "why": "Hold on the two faces of the hero; no event needed."
+   },
+   "shot": "cutaway",
+   "event": {
+    "kind": "curl",
+    "cue": "brillante",
+    "at": 78.89
+   },
+   "cue": "",
+   "caption": {
+    "text": "La lámina no es brillante de un lado por tener un aluminio diferente",
+    "at": 77.89,
+    "until": 82.61,
+    "words": [
+     {
+      "text": "La",
+      "at": 77.89
+     },
+     {
+      "text": "lámina",
+      "at": 78.08
+     },
+     {
+      "text": "no",
+      "at": 78.51
+     },
+     {
+      "text": "es",
+      "at": 78.74
+     },
+     {
+      "text": "brillante",
+      "at": 78.89
+     },
+     {
+      "text": "de",
+      "at": 79.41
+     },
+     {
+      "text": "un",
+      "at": 79.53
+     },
+     {
+      "text": "lado",
+      "at": 79.68
+     },
+     {
+      "text": "por",
+      "at": 79.96
+     },
+     {
+      "text": "tener",
+      "at": 80.18
+     },
+     {
+      "text": "un",
+      "at": 80.51
+     },
+     {
+      "text": "aluminio",
+      "at": 80.64
+     },
+     {
+      "text": "diferente",
+      "at": 81.16
+     }
+    ]
+   },
+   "index": 5
+  },
+  {
+   "start": 82.71,
+   "end": 93.65,
+   "text": "Es brillante porque ese lado tocó el acero pulido el mate quedó contra otra lámina La diferencia que parecía estar en el material en realidad viene del proceso",
+   "notes": [],
+   "model": {
+    "shot": "establishing",
+    "event": "none",
+    "why": "Returns to the roll in context to close the video."
+   },
+   "shot": "establishing",
+   "event": {
+    "kind": "none"
+   },
+   "cue": "",
+   "caption": {
+    "text": "La diferencia que parecía estar en el material",
+    "at": 88.41,
+    "until": 91.91,
+    "words": [
+     {
+      "text": "La",
+      "at": 88.41
+     },
+     {
+      "text": "diferencia",
+      "at": 88.57
+     },
+     {
+      "text": "que",
+      "at": 89.2
+     },
+     {
+      "text": "parecía",
+      "at": 89.35
+     },
+     {
+      "text": "estar",
+      "at": 89.83
+     },
+     {
+      "text": "en",
+      "at": 90.15
+     },
+     {
+      "text": "el",
+      "at": 90.25
+     },
+     {
+      "text": "material",
+      "at": 90.37
+     }
+    ]
+   },
+   "index": 6
+  }
+ ]
+}

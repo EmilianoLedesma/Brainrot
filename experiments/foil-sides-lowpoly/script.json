@@ -1,0 +1,579 @@
+{
+ "title": "El secreto del aluminio",
+ "fps": 30,
+ "durationFrames": 2810,
+ "shots": [
+  {
+   "id": "s0",
+   "type": "establishing",
+   "start": 0,
+   "end": 448,
+   "camera": {
+    "pos": [
+     3.0,
+     2.2,
+     7.8
+    ],
+    "target": [
+     0.7,
+     0.6,
+     0
+    ],
+    "fov": 35
+   }
+  },
+  {
+   "id": "s1",
+   "type": "cutaway",
+   "start": 448,
+   "end": 944,
+   "camera": {
+    "pos": [
+     2.6,
+     1.9,
+     5.8
+    ],
+    "target": [
+     0,
+     0.1,
+     0
+    ],
+    "fov": 35
+   }
+  },
+  {
+   "id": "s2",
+   "type": "metaphor",
+   "start": 944,
+   "end": 1247,
+   "camera": {
+    "pos": [
+     1.2,
+     0.5,
+     7.3
+    ],
+    "target": [
+     0,
+     0,
+     0
+    ],
+    "fov": 35
+   }
+  },
+  {
+   "id": "s3",
+   "type": "cutaway",
+   "start": 1247,
+   "end": 1606,
+   "camera": {
+    "pos": [
+     2.6,
+     1.9,
+     5.8
+    ],
+    "target": [
+     0,
+     0.1,
+     0
+    ],
+    "fov": 35
+   }
+  },
+  {
+   "id": "s4",
+   "type": "insert",
+   "start": 1606,
+   "end": 2159,
+   "camera": {
+    "pos": [
+     2.4,
+     1.5,
+     5.2
+    ],
+    "target": [
+     0,
+     0.3,
+     0
+    ],
+    "fov": 35
+   }
+  },
+  {
+   "id": "s5",
+   "type": "cutaway",
+   "start": 2159,
+   "end": 2481,
+   "camera": {
+    "pos": [
+     2.6,
+     1.9,
+     5.8
+    ],
+    "target": [
+     0,
+     0.1,
+     0
+    ],
+    "fov": 35
+   }
+  },
+  {
+   "id": "s6",
+   "type": "establishing",
+   "start": 2481,
+   "end": 2810,
+   "camera": {
+    "pos": [
+     3.0,
+     2.2,
+     7.8
+    ],
+    "target": [
+     0.7,
+     0.6,
+     0
+    ],
+    "fov": 35
+   }
+  }
+ ],
+ "captions": [
+  {
+   "id": "c0",
+   "at": 77,
+   "until": 200,
+   "style": "word",
+   "y": 1480,
+   "size": 54,
+   "text": "El papel aluminio puede verse distinto por cada lado",
+   "words": [
+    {
+     "text": "El",
+     "at": 77
+    },
+    {
+     "text": "papel",
+     "at": 84
+    },
+    {
+     "text": "aluminio",
+     "at": 94
+    },
+    {
+     "text": "puede",
+     "at": 110
+    },
+    {
+     "text": "verse",
+     "at": 119
+    },
+    {
+     "text": "distinto",
+     "at": 129
+    },
+    {
+     "text": "por",
+     "at": 145
+    },
+    {
+     "text": "cada",
+     "at": 152
+    },
+    {
+     "text": "lado",
+     "at": 160
+    }
+   ]
+  },
+  {
+   "id": "c1",
+   "at": 544,
+   "until": 649,
+   "style": "word",
+   "y": 1480,
+   "size": 64,
+   "text": "la hacen pasar entre rodillos de acero pulido",
+   "words": [
+    {
+     "text": "la",
+     "at": 544
+    },
+    {
+     "text": "hacen",
+     "at": 548
+    },
+    {
+     "text": "pasar",
+     "at": 557
+    },
+    {
+     "text": "entre",
+     "at": 568
+    },
+    {
+     "text": "rodillos",
+     "at": 577
+    },
+    {
+     "text": "de",
+     "at": 592
+    },
+    {
+     "text": "acero",
+     "at": 595
+    },
+    {
+     "text": "pulido",
+     "at": 605
+    }
+   ]
+  },
+  {
+   "id": "c2",
+   "at": 944,
+   "until": 1076,
+   "style": "word",
+   "y": 1480,
+   "size": 54,
+   "text": "Así que juntan dos láminas y las pasan al mismo tiempo",
+   "words": [
+    {
+     "text": "Así",
+     "at": 944
+    },
+    {
+     "text": "que",
+     "at": 954
+    },
+    {
+     "text": "juntan",
+     "at": 958
+    },
+    {
+     "text": "dos",
+     "at": 972
+    },
+    {
+     "text": "láminas",
+     "at": 979
+    },
+    {
+     "text": "y",
+     "at": 995
+    },
+    {
+     "text": "las",
+     "at": 998
+    },
+    {
+     "text": "pasan",
+     "at": 1004
+    },
+    {
+     "text": "al",
+     "at": 1016
+    },
+    {
+     "text": "mismo",
+     "at": 1020
+    },
+    {
+     "text": "tiempo",
+     "at": 1032
+    }
+   ]
+  },
+  {
+   "id": "c3",
+   "at": 1493,
+   "until": 1603,
+   "style": "word",
+   "y": 1480,
+   "size": 54,
+   "text": "cada una sale con una cara brillante y una mate",
+   "words": [
+    {
+     "text": "cada",
+     "at": 1493
+    },
+    {
+     "text": "una",
+     "at": 1501
+    },
+    {
+     "text": "sale",
+     "at": 1508
+    },
+    {
+     "text": "con",
+     "at": 1518
+    },
+    {
+     "text": "una",
+     "at": 1524
+    },
+    {
+     "text": "cara",
+     "at": 1530
+    },
+    {
+     "text": "brillante",
+     "at": 1538
+    },
+    {
+     "text": "y",
+     "at": 1555
+    },
+    {
+     "text": "una",
+     "at": 1560
+    },
+    {
+     "text": "mate",
+     "at": 1566
+    }
+   ]
+  },
+  {
+   "id": "c4",
+   "at": 1857,
+   "until": 2003,
+   "style": "word",
+   "y": 1480,
+   "size": 54,
+   "text": "lo que cambia es la superficie que tocó el rodillo durante la fabricación",
+   "words": [
+    {
+     "text": "lo",
+     "at": 1857
+    },
+    {
+     "text": "que",
+     "at": 1860
+    },
+    {
+     "text": "cambia",
+     "at": 1864
+    },
+    {
+     "text": "es",
+     "at": 1876
+    },
+    {
+     "text": "la",
+     "at": 1881
+    },
+    {
+     "text": "superficie",
+     "at": 1883
+    },
+    {
+     "text": "que",
+     "at": 1904
+    },
+    {
+     "text": "tocó",
+     "at": 1909
+    },
+    {
+     "text": "el",
+     "at": 1918
+    },
+    {
+     "text": "rodillo",
+     "at": 1921
+    },
+    {
+     "text": "durante",
+     "at": 1934
+    },
+    {
+     "text": "la",
+     "at": 1947
+    },
+    {
+     "text": "fabricación",
+     "at": 1950
+    }
+   ]
+  },
+  {
+   "id": "t4",
+   "at": 1921,
+   "until": 2033,
+   "style": "term",
+   "y": 1685,
+   "size": 76,
+   "text": "RODILLOS",
+   "words": [
+    {
+     "text": "RODILLOS",
+     "at": 1921
+    }
+   ]
+  },
+  {
+   "id": "c5",
+   "at": 2337,
+   "until": 2478,
+   "style": "word",
+   "y": 1480,
+   "size": 54,
+   "text": "La lámina no es brillante de un lado por tener un aluminio diferente",
+   "words": [
+    {
+     "text": "La",
+     "at": 2337
+    },
+    {
+     "text": "lámina",
+     "at": 2342
+    },
+    {
+     "text": "no",
+     "at": 2355
+    },
+    {
+     "text": "es",
+     "at": 2362
+    },
+    {
+     "text": "brillante",
+     "at": 2367
+    },
+    {
+     "text": "de",
+     "at": 2382
+    },
+    {
+     "text": "un",
+     "at": 2386
+    },
+    {
+     "text": "lado",
+     "at": 2390
+    },
+    {
+     "text": "por",
+     "at": 2399
+    },
+    {
+     "text": "tener",
+     "at": 2405
+    },
+    {
+     "text": "un",
+     "at": 2415
+    },
+    {
+     "text": "aluminio",
+     "at": 2419
+    },
+    {
+     "text": "diferente",
+     "at": 2435
+    }
+   ]
+  },
+  {
+   "id": "c6",
+   "at": 2652,
+   "until": 2757,
+   "style": "word",
+   "y": 1480,
+   "size": 64,
+   "text": "La diferencia que parecía estar en el material",
+   "words": [
+    {
+     "text": "La",
+     "at": 2652
+    },
+    {
+     "text": "diferencia",
+     "at": 2657
+    },
+    {
+     "text": "que",
+     "at": 2676
+    },
+    {
+     "text": "parecía",
+     "at": 2680
+    },
+    {
+     "text": "estar",
+     "at": 2695
+    },
+    {
+     "text": "en",
+     "at": 2704
+    },
+    {
+     "text": "el",
+     "at": 2708
+    },
+    {
+     "text": "material",
+     "at": 2711
+    }
+   ]
+  }
+ ],
+ "events": [
+  {
+   "id": "e1",
+   "shot": "s1",
+   "kind": "force_arrows",
+   "at": 636,
+   "term": ""
+  },
+  {
+   "id": "e2",
+   "shot": "s2",
+   "kind": "force_arrows",
+   "at": 1004,
+   "term": ""
+  },
+  {
+   "id": "e3",
+   "shot": "s3",
+   "kind": "split",
+   "at": 1508,
+   "term": ""
+  },
+  {
+   "id": "e4",
+   "shot": "s4",
+   "kind": "term_callout",
+   "at": 1921,
+   "term": "RODILLOS"
+  },
+  {
+   "id": "e5",
+   "shot": "s5",
+   "kind": "curl",
+   "at": 2367,
+   "term": ""
+  }
+ ],
+ "stillFrames": [
+  40,
+  300,
+  500,
+  680,
+  880,
+  1010,
+  1100,
+  1300,
+  1560,
+  1700,
+  1960,
+  2200,
+  2420,
+  2520,
+  2650,
+  2790
+ ],
+ "sources": [],
+ "note": "Generated from plan.json by build_script.py. Schematic explainer; no figures are stated on screen."
+}
