@@ -1,0 +1,588 @@
+{
+ "duration": 119.3,
+ "voice": "es-MX-JorgeNeural",
+ "rate": "+0%",
+ "provider": "claude-code",
+ "model_env": null,
+ "scenes": [
+  {
+   "start": 0.0,
+   "end": 13.33,
+   "text": "Los dientes de tu cierre no cierran nada Tu chamarra se cierra con un truco y los dientes no tienen nada que ver Mira una cremallera tiene dos tiras de tela cosidas a los bordes de la prenda",
+   "notes": [
+    "highlight at 0.1s dropped: collides with another event"
+   ],
+   "model": {
+    "shot": "establishing",
+    "sustain": "camera",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "dientes",
+      "term": "",
+      "target": "teeth"
+     },
+     {
+      "kind": "highlight",
+      "cue": "los dientes",
+      "term": "",
+      "target": "teeth"
+     },
+     {
+      "kind": "highlight",
+      "cue": "dos tiras",
+      "term": "",
+      "target": "tape"
+     }
+    ],
+    "why": "Open on the whole jacket zipper while the narration frames the myth and names teeth and tapes."
+   },
+   "shot": "establishing",
+   "sustain": "camera",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "dientes",
+     "at": 0.33,
+     "target": "teeth"
+    },
+    {
+     "kind": "highlight",
+     "cue": "dos tiras",
+     "at": 9.64,
+     "target": "tape"
+    }
+   ],
+   "index": 0,
+   "event": {
+    "kind": "highlight",
+    "cue": "dientes",
+    "at": 0.33,
+    "target": "teeth"
+   }
+  },
+  {
+   "start": 13.33,
+   "end": 24.82,
+   "text": "En cada orilla va una fila de dientes pequeños Pueden ser de metal de plástico o un coil que es como un resorte delgado Los dientes están alternados",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "dientes",
+      "term": "dientes",
+      "target": ""
+     },
+     {
+      "kind": "highlight",
+      "cue": "coil",
+      "term": "",
+      "target": "teeth"
+     },
+     {
+      "kind": "highlight",
+      "cue": "alternados",
+      "term": "",
+      "target": "teeth"
+     }
+    ],
+    "why": "First introduction of the teeth, shown up close on the opened zipper."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "dientes",
+     "at": 14.93,
+     "target": "teeth",
+     "term": "DIENTES"
+    },
+    {
+     "kind": "highlight",
+     "cue": "coil",
+     "at": 19.33,
+     "target": "teeth"
+    },
+    {
+     "kind": "highlight",
+     "cue": "alternados",
+     "at": 23.18,
+     "target": "teeth"
+    }
+   ],
+   "index": 1,
+   "event": {
+    "kind": "term_callout",
+    "cue": "dientes",
+    "at": 14.93,
+    "target": "teeth",
+    "term": "DIENTES"
+   }
+  },
+  {
+   "start": 24.82,
+   "end": 39.2,
+   "text": "Cada diente de un lado queda entre dos dientes del otro Y cada uno tiene una pequeña bolita la cabeza y una cavidad Así que se enganchan como piezas de rompecabezas Pero aquí viene lo bueno",
+   "notes": [],
+   "model": {
+    "shot": "insert",
+    "sustain": "camera",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "diente",
+      "term": "",
+      "target": "teeth"
+     },
+     {
+      "kind": "highlight",
+      "cue": "cabeza",
+      "term": "",
+      "target": "teeth"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "enganchan",
+      "term": "",
+      "target": ""
+     }
+    ],
+    "why": "Extreme close-up of a single tooth with its head and cavity hooking."
+   },
+   "shot": "insert",
+   "sustain": "camera",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "diente",
+     "at": 25.07,
+     "target": "teeth"
+    },
+    {
+     "kind": "highlight",
+     "cue": "cabeza",
+     "at": 30.95,
+     "target": "teeth"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "enganchan",
+     "at": 34.08,
+     "target": ""
+    }
+   ],
+   "index": 2,
+   "event": {
+    "kind": "highlight",
+    "cue": "diente",
+    "at": 25.07,
+    "target": "teeth"
+   }
+  },
+  {
+   "start": 39.2,
+   "end": 52.58,
+   "text": "Los dientes no se cierran solos Puedes jalar la tela de las dos tiras con toda tu fuerza y no pasa nada Todo el trabajo lo hace el cursor esa piecita con forma de Y que va montada sobre los dientes",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "dientes",
+      "term": "",
+      "target": "teeth"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "jalar la tela",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "term_callout",
+      "cue": "cursor",
+      "term": "cursor",
+      "target": ""
+     }
+    ],
+    "why": "Pulling the fabric does nothing; the slider is introduced as the real worker."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "dientes",
+     "at": 39.43,
+     "target": "teeth"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "jalar la tela",
+     "at": 42.32,
+     "target": ""
+    },
+    {
+     "kind": "term_callout",
+     "cue": "cursor",
+     "at": 47.71,
+     "target": "slider",
+     "term": "CURSOR"
+    }
+   ],
+   "index": 3,
+   "event": {
+    "kind": "highlight",
+    "cue": "dientes",
+    "at": 39.43,
+    "target": "teeth"
+   }
+  },
+  {
+   "start": 52.58,
+   "end": 75.53,
+   "text": "Las dos filas entran por separado por la parte ancha Conforme subes el cursor ese canal se va estrechando y aprieta las dos filas una contra otra Los dientes encajan uno tras otro y salen por la parte angosta ya amarrados Y el jalador la patita que agarras es solamente el mango para mover el cursor Ahora y cuando lo bajas",
+   "notes": [
+    "force_arrows on 'el cursor' has no force or motion word; downgraded to highlight(slider)",
+    "highlight at 57.34s dropped: collides with another event"
+   ],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "el cursor",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "pushin",
+      "cue": "dientes encajan",
+      "term": "",
+      "target": "neck"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "jalador",
+      "term": "jalador",
+      "target": ""
+     },
+     {
+      "kind": "highlight",
+      "cue": "cursor",
+      "term": "",
+      "target": "slider"
+     }
+    ],
+    "why": "Slider squeezes rows together; push-in lands the teeth meshing at the neck."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "el cursor",
+     "at": 57.23,
+     "target": "slider"
+    },
+    {
+     "kind": "pushin",
+     "cue": "dientes encajan",
+     "at": 62.66,
+     "target": "neck"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "jalador",
+     "at": 67.77,
+     "target": "tab",
+     "term": "JALADOR"
+    }
+   ],
+   "index": 4,
+   "event": {
+    "kind": "highlight",
+    "cue": "el cursor",
+    "at": 57.23,
+    "target": "slider"
+   }
+  },
+  {
+   "start": 75.53,
+   "end": 86.71,
+   "text": "Adentro del cursor hay una cuña un divisor Al bajarlo esa cuña se mete entre las filas y hace palanca para separar los dientes Y ojo con esto",
+   "notes": [
+    "term_callout at 76.88s dropped: collides with another event",
+    "force_arrows on 'esa cuña' has no force or motion word; downgraded to highlight(slider)"
+   ],
+   "model": {
+    "shot": "insert",
+    "sustain": "camera",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "cursor",
+      "term": "",
+      "target": "slider"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "cuña",
+      "term": "cuña",
+      "target": ""
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "esa cuña",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "separar los dientes",
+      "term": "",
+      "target": ""
+     }
+    ],
+    "why": "Close-up of the wedge prying the rows apart."
+   },
+   "shot": "insert",
+   "sustain": "camera",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "cursor",
+     "at": 76.16,
+     "target": "slider"
+    },
+    {
+     "kind": "highlight",
+     "cue": "esa cuña",
+     "at": 80.12,
+     "target": "slider"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "separar los dientes",
+     "at": 83.12,
+     "target": ""
+    }
+   ],
+   "index": 5,
+   "event": {
+    "kind": "highlight",
+    "cue": "cursor",
+    "at": 76.16,
+    "target": "slider"
+   }
+  },
+  {
+   "start": 86.71,
+   "end": 99.05,
+   "text": "Ya cerrado la forma de gancho mantiene todo unido aunque jales la tela hacia los lados Lo único que lo abre es esa cuña Los topes en los extremos evitan que el cursor se salga",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "jales",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "highlight",
+      "cue": "esa cuña",
+      "term": "",
+      "target": "slider"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "topes",
+      "term": "topes",
+      "target": ""
+     },
+     {
+      "kind": "highlight",
+      "cue": "cursor",
+      "term": "",
+      "target": "slider"
+     }
+    ],
+    "why": "Hooks resist sideways pull; only the wedge opens it; stops limit the slider."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "events": [
+    {
+     "kind": "force_arrows",
+     "cue": "jales",
+     "at": 90.07,
+     "target": ""
+    },
+    {
+     "kind": "highlight",
+     "cue": "esa cuña",
+     "at": 94.08,
+     "target": "slider"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "topes",
+     "at": 95.43,
+     "target": "stop",
+     "term": "TOPES"
+    },
+    {
+     "kind": "highlight",
+     "cue": "cursor",
+     "at": 97.17,
+     "target": "slider"
+    }
+   ],
+   "index": 6,
+   "event": {
+    "kind": "force_arrows",
+    "cue": "jales",
+    "at": 90.07,
+    "target": ""
+   }
+  },
+  {
+   "start": 99.05,
+   "end": 109.98,
+   "text": "En las cremalleras separables abajo hay una caja con un pasador Por eso cuando una cremallera falla casi siempre es por un diente doblado o un cursor gastado",
+   "notes": [
+    "highlight at 108.13s dropped: collides with another event"
+   ],
+   "model": {
+    "shot": "establishing",
+    "sustain": "camera",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "una caja",
+      "term": "",
+      "target": "stop"
+     },
+     {
+      "kind": "highlight",
+      "cue": "diente",
+      "term": "",
+      "target": "teeth"
+     },
+     {
+      "kind": "highlight",
+      "cue": "cursor",
+      "term": "",
+      "target": "slider"
+     }
+    ],
+    "why": "Back to the whole zipper for the bottom box and common failures."
+   },
+   "shot": "establishing",
+   "sustain": "camera",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "una caja",
+     "at": 101.39,
+     "target": "stop"
+    },
+    {
+     "kind": "highlight",
+     "cue": "diente",
+     "at": 107.0,
+     "target": "teeth"
+    }
+   ],
+   "index": 7,
+   "event": {
+    "kind": "highlight",
+    "cue": "una caja",
+    "at": 101.39,
+    "target": "stop"
+   }
+  },
+  {
+   "start": 109.98,
+   "end": 119.3,
+   "text": "Los dientes dejan de alinearse bien y ya no cierra Plot twist lo único que cierra y abre tu chamarra es una cuña chiquita escondida dentro del cursor",
+   "notes": [],
+   "model": {
+    "shot": "insert",
+    "sustain": "camera",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "dientes",
+      "term": "",
+      "target": "teeth"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "cierra y abre",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "highlight",
+      "cue": "cuña",
+      "term": "",
+      "target": "slider"
+     },
+     {
+      "kind": "highlight",
+      "cue": "cursor",
+      "term": "",
+      "target": "slider"
+     }
+    ],
+    "why": "Closing punchline on the tiny wedge hidden inside the slider."
+   },
+   "shot": "insert",
+   "sustain": "camera",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "dientes",
+     "at": 110.22,
+     "target": "teeth"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "cierra y abre",
+     "at": 114.67,
+     "target": ""
+    },
+    {
+     "kind": "highlight",
+     "cue": "cuña",
+     "at": 116.42,
+     "target": "slider"
+    },
+    {
+     "kind": "highlight",
+     "cue": "cursor",
+     "at": 118.25,
+     "target": "slider"
+    }
+   ],
+   "index": 8,
+   "event": {
+    "kind": "highlight",
+    "cue": "dientes",
+    "at": 110.22,
+    "target": "teeth"
+   }
+  }
+ ]
+}
