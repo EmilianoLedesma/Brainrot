@@ -1,0 +1,18 @@
+{
+ "title": "Moka en corte transversal",
+ "fps": 30,
+ "durationFrames": 300,
+ "caption": {"text": "Encima", "from": 120, "to": 200, "size": 60, "y": 1260},
+ "cam": [
+  {"f": 0, "dist": 14, "tx": -0.6, "ty": 2.2}, {"f": 60, "dist": 14, "tx": -0.6, "ty": 2.2},
+  {"f": 150, "dist": 6, "tx": 0, "ty": 1.75}, {"f": 200, "dist": 6.4, "tx": 0, "ty": 2.35},
+  {"f": 240, "dist": 6.4, "tx": 0, "ty": 2.45}, {"f": 300, "dist": 7, "tx": 0, "ty": 2.2}
+ ],
+ "orbit": {"degrees": 5, "period": 150},
+ "bubbleBirths": [60, 78, 96, 114, 132, 150, 163, 175, 186, 196, 205, 213, 221, 228, 235, 242, 248, 254, 260, 266, 272, 278],
+ "bubbleLife": 25,
+ "steam": {"fadeFrom": 180, "fadeTo": 190, "puffBirths": [180, 190, 200, 210, 220], "puffLife": 40},
+ "lemonPeriods": [200, 240, 280],
+ "stillFrames": [0, 40, 75, 105, 135, 165, 200, 225, 260, 295],
+ "note": "Schematic cutaway. No factual claim, number or source is stated on screen."
+}
