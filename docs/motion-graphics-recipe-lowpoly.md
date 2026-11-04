@@ -5,17 +5,39 @@ product explainer where the hero object is shown mid-section, with a continuous
 narration and hard cuts between a fixed set of shot types. Reverse-engineered
 frame-by-frame from reference videos: four from `@conrazon_es` on TikTok (a
 windproof lighter, a ballpoint pen, a pressure cooker, and — the one that
-started this — a moka pot), plus a fifth from a different channel (a bridge
+started this — a moka pot), a fifth from a different channel (a bridge
 explainer: vigas, pilares, socavación, junta de dilatación) that confirmed the
-same grammar on a different topic. No reference footage, audio or channel
-artwork is copied into any prototype — only the technique.
+same grammar on a different topic, and a sixth from yet another channel
+(`@construlandai`, a mountain-tunnel construction explainer) that exposed a
+fluidity gap none of the others had surfaced — see "Sustained motion" below.
+No reference footage, audio or channel artwork is copied into any prototype —
+only the technique.
 
-Status: no longer a pure hypothesis. Two of this repo's own renders have been
-reviewed frame-by-frame against this recipe — a 10s silent "why the sky is
-blue" POC, and a 93.65s silent "why aluminum foil has two sides" full test —
-and both exposed real gaps, listed below with what each one proved. Treat the
-rest of the document as validated; treat anything still marked a hypothesis as
-genuinely untested.
+Status: no longer a pure hypothesis. Four of this repo's own renders have
+been reviewed frame-by-frame against this recipe — a 10s silent "why the sky
+is blue" POC, a 93.65s silent "why aluminum foil has two sides" full test, a
+10s silent "how a deadbolt lock works" POC built specifically to test the
+camera/caption/environment fixes, and a 146.97s silent "how a car's shock
+absorber works" full test (run with `BRAINROT_CLAUDE_MODEL=claude-opus-5-5`,
+confounded with a model-upgrade experiment — see below) — each exposed or
+confirmed something, listed below. The deadbolt test was the first one to
+pass clean on camera motion, captions, environment and color. The shock-
+absorber test confirmed the sustained-motion fix (the piston's continuous
+oscillation is genuinely good) but surfaced two new gaps: object motion was
+used as an excuse to skip camera motion entirely in the long cutaway hold,
+and — the bigger one — one graphic composition was held for 20-30+ seconds
+while the script named several parts that never got their own visual moment,
+producing a video with far less visual variety than any reference despite
+technically following the per-shot rules. Treat the rest of the document as
+validated; treat anything still marked a hypothesis as genuinely untested.
+
+**On the Opus 5.5 confound:** this test changed the model and the recipe at
+the same time, so a clean result would not have told us which one to credit.
+The script this run was noticeably stronger (clear hook, no repeated premise,
+earned callback) than the foil script, but attribute that cautiously — it
+could be the model, or ordinary variance between generations. Re-run the same
+topic on the default model before concluding Opus 5.5 is why the script was
+better.
 
 ## Lessons from test renders (read this before building)
 
@@ -63,6 +85,30 @@ a suggestion.
   in the code* that behavior is decided. Future fix requests for this recipe
   should name the exact script field or component responsible, not just the
   visible symptom.
+- **The camera/caption/environment fixes landed cleanly on the first try.**
+  The deadbolt-lock POC was checked by comparing specific full-resolution
+  frames, not just a thumbnail contact sheet, and confirmed: a real push-in
+  over the establishing shot, phrase-replacement captions with no
+  accumulation, a richer establishing environment (door + frame + wall +
+  floor), correct red/yellow color discipline, and — notably — real geometry
+  progression *during* a single held caption, not only at cut points (the
+  key-bitting profile visibly forms while "La llave empuja los pines" stays
+  on screen). This confirms these fixes were specified concretely enough to
+  implement correctly; contrast with the caption bug above, which was not.
+- **Sustained motion is a different, higher bar than "not static," found from
+  a sixth reference video (`@construlandai`, a tunnel-construction
+  explainer).** Frame-by-frame inspection at 6fps (not just 1fps) showed two
+  things this recipe had not yet asked for: (1) a tool or mechanism performs
+  a complete, legible, *repeating* work cycle for the full duration of a held
+  shot — a pickaxe swings and strikes repeatedly with rock-chip particles on
+  every impact, not once — rather than a single idle wobble; (2) the
+  underlying scene motion (a tunnel-boring machine's continuous forward
+  travel through the rock, in that reference) runs as **one continuous move
+  sustained across many caption changes**, decoupled from the faster
+  word-level caption rhythm on top of it. The deadbolt POC's within-shot
+  geometry change is a step toward this (point 2 above) but is a one-time
+  progression, not yet a sustained repeating cycle — treat that as the next
+  thing to test, not a new failure.
 
 ## The look
 
@@ -133,6 +179,25 @@ Camera position/target are frame-driven (`interpolate` against
 across shot types — carrying one shot's camera rig into another leaks FOV or
 position state.
 
+**Sustain motion across the whole shot, not per caption.** A shot type
+(especially cutaway interior) often holds through several caption changes.
+The camera/object motion for that shot is one continuous move computed over
+the shot's full duration, not something recalculated or reset every time the
+caption text changes underneath it (confirmed by the tunnel-construction
+reference's boring machine, which travels continuously through a single
+cutaway for 30+ seconds while captions cycle on top of it at the normal
+word rate). Two independent rhythms, not one: the caption layer changes fast,
+the scene/camera layer moves slowly and continuously underneath it.
+
+**Object-level motion never substitutes for camera motion — confirmed broken
+on the shock-absorber render.** That render's long cutaway hold had a
+genuinely good, continuously oscillating piston (point 3 of the Recipe) and
+*zero* camera movement for over 20 seconds — verified by comparing full-
+resolution frames, not a thumbnail. The heading of this section says object
+motion does not cover this requirement; that render is the proof of why it
+needs saying twice. Camera motion and ambient object motion are two separate
+required fields — satisfying one is never grounds for skipping the other.
+
 ## Shot grammar — up to four types, cut hard between them
 
 The camera does **not** orbit one continuous composition across unrelated
@@ -175,16 +240,22 @@ simplification of it.
    shot (see point 3, required, non-null), and a `sources` list. The
    component only interprets the script.
 3. **Ambient motion is a required field on every shot, not a fallback
-   behavior.** The script must name it explicitly — e.g.
+   behavior — and it must be a complete, legible, repeating work cycle, not
+   a subtle idle detail.** The script must name it explicitly — e.g.
    `ambient: {kind: "fill-rise" | "flame-flicker" | "surface-sheen" |
-   "idle-wobble", ...params}` — and the renderer should treat a missing or
-   null `ambient` field as a build-time error, not a silently static shot.
-   The fill level/line rises continuously across consecutive words (not a
-   loop: it progresses with the narration), steam/smoke clusters are born
-   small and keep accumulating, a flame never stops flickering, water/metal
-   surfaces carry a slow-moving sheen highlight. This runs independent of
-   any scripted event, every single shot, no exceptions — this is the rule
-   that produced bit-for-bit static frames when treated as optional.
+   "strike-cycle" | "bore-travel", ...params}` — and the renderer should
+   treat a missing or null `ambient` field as a build-time error, not a
+   silently static shot. "Legible work cycle" is the bar, not "something is
+   technically moving": a tool should swing and strike repeatedly with an
+   impact effect on every hit, a boring mechanism should travel continuously,
+   a flame never stops flickering, water/metal surfaces carry a slow-moving
+   sheen highlight, steam clusters are born small and keep accumulating. A
+   single one-time progression (a part slowly changing shape once over the
+   shot) is weaker than this bar and should be paired with a true repeating
+   motion where the mechanism supports one. This runs independent of any
+   scripted event, every single shot, no exceptions — this is the rule that
+   produced bit-for-bit static frames when treated as optional, and the one
+   still worth over-delivering on even after a render stops being static.
 4. **Every establishing and cutaway shot needs at least 2-3 environmental
    elements beyond the hero object** (e.g. water + riverbank + trees; stove +
    counter + a second kitchen object) so the subject reads as being somewhere,
@@ -198,15 +269,34 @@ simplification of it.
    to a new number on the beat (never tweens — a value flip, not a count-up);
    a small macro insert where a part visibly latches/locks on its own word;
    gray/white flow chevrons for a current or scouring effect (see The Look).
-6. **Reserve one indicator that escalates across several beats**, distinct
+6. **Cap how long any single unchanging composition can hold the screen —
+   confirmed missing on the shock-absorber render.** That render held one
+   graphic (a cylinder with an oscillating piston) for 20-30+ seconds while
+   the script named several different parts (varilla, carrocería, válvulas,
+   aceite) that never got their own visual moment — the piston's ambient
+   oscillation was mistakenly treated as enough to cover all of it. It is
+   not: ambient motion satisfies point 3, it does not substitute for content
+   variety. Reference videos never do this — the `@conrazon_es` videos cut
+   every 2-4 words, and even the tunnel reference's long continuous camera
+   move keeps traveling past genuinely new sub-subjects (the arch, then the
+   blast, then the rebar, then the TBM) rather than holding one static
+   composition. Rule: if roughly 8-10 seconds pass with no new event, no new
+   callout, and no camera move toward a different part of the object, that is
+   too long — either cut to a new composition or reframe toward whatever
+   part the narration has moved on to. Every technical noun the script
+   introduces (not just the ones that got picked as the term-callout word)
+   should get *some* visual acknowledgment — a quick highlight, a brief
+   reframe, a small part-specific event — not just be spoken over an
+   unrelated held shot.
+7. **Reserve one indicator that escalates across several beats**, distinct
    from the hard-cut counters above: a stack of upward arrows that grows in
    count and height over 3-4 consecutive beats as pressure/intensity builds
    narratively. This is the one place smooth progression belongs.
-7. **The payoff transformation is a state change on the hero object itself**,
+8. **The payoff transformation is a state change on the hero object itself**,
    not a new object: the flame changes shape and color when the windproof
    cage engages; the pot's valve pin visibly rises as the indicator. Never cut
    away from the object to show the "answer" — the object becomes the answer.
-8. **Captions — exact behavior, no exceptions:** each caption is a short
+9. **Captions — exact behavior, no exceptions:** each caption is a short
    phrase (roughly 2-5 words) that fully **replaces** the previous one; it is
    never built by appending words to what is already on screen, and it never
    grows into a full sentence. The script's `captions` array holds complete,
@@ -224,10 +314,18 @@ simplification of it.
    the yellow callout style, synced to a scripted event rather than to
    narration — it is a sound-effect graphic, not a caption, and must never
    replace or merge with the phrase caption that is active at the same time.
-9. **Stat badges attach to the object, not the frame corner** — "118°C",
-   "11 min" sit near the part they describe and update in place as the shot
-   continues, they do not live in a fixed HUD position.
-10. **Vary cheap secondary details between repeated beats** — if a secondary
+   A short trailing fragment left over at a sentence boundary (e.g. the final
+   word of one sentence, like "perfecto.") must get folded cleanly into
+   either the caption before it or the one after it at script-write time —
+   never concatenated onto the next phrase as literal adjacent text (seen on
+   the shock-absorber render as "perfecto El problema viene después" showing
+   as one caption). If grouping logic produces a fragment shorter than ~2
+   words on its own, merge it into a neighboring phrase's *text*, don't let
+   it render as a standalone beat that visually runs into the next one.
+10. **Stat badges attach to the object, not the frame corner** — "118°C",
+    "11 min" sit near the part they describe and update in place as the shot
+    continues, they do not live in a fixed HUD position.
+11. **Vary cheap secondary details between repeated beats** — if a secondary
     object recurs across several shots (a car crossing a bridge, a container
     passing through a process), change a trivial attribute each time (its
     color) so repetition doesn't read as a looped asset. Low cost, confirmed
@@ -274,4 +372,8 @@ this repo — technique only, no footage copied): a windproof lighter
 (the original reference image this recipe was requested from). A fifth video,
 from a different channel, covering a bridge explainer (vigas, pilares,
 socavación, junta de dilatación), confirmed the grammar holds on a
-single-subject, multi-angle video with no metaphor shot.
+single-subject, multi-angle video with no metaphor shot. A sixth video, from
+`@construlandai` (a mountain-tunnel construction explainer), surfaced the
+sustained-motion requirement above: a continuous machine-travel move held
+across 30+ seconds of caption changes, and tool strikes animated as a
+complete repeating cycle with impact particles rather than a single gesture.
