@@ -12,15 +12,18 @@ the full workflow. The short version:
 
 1. Clone the same code revision and run `python scripts/bootstrap.py` for locked dependencies.
 2. Install FFmpeg/ffprobe. Sign in to the local generation CLI you intend to use.
-3. Copy `.env` and `web/.env` securely, or populate them from the tracked examples.
-   Set `VITE_API_URL` to that computer's API address. These files are never committed.
+3. Copy `.env` securely, or populate it from the tracked example. `brainrot.dev`
+   supplies `VITE_API_URL` and `VITE_API_KEY` to the frontend from root `.env`, so
+   `web/.env` is needed only when running Vite on its own (set `VITE_API_URL` to
+   that computer's API address). These files are never committed.
 4. Export and import a verified media archive. Alternatively, configure `BRAINROT_MEDIA_ROOT`
    to a shared data directory available to the API and worker. Relative roots are
    resolved against the repository, independently of the shell's working directory.
 5. Keep using the same Supabase project, or apply all migrations in order to a new
-   project. Existing projects need `010_publication_metadata.sql`,
-   `011_library_activation.sql`, `012_youtube_metadata_drafts.sql`, and
-   `013_youtube_performance.sql`, and `014_local_media_host.sql` once.
+   project. Existing projects need every unapplied file, once, in order; the
+   YouTube and handoff features rely on `010_publication_metadata.sql`,
+   `011_library_activation.sql`, `012_youtube_metadata_drafts.sql`,
+   `013_youtube_performance.sql` and `014_local_media_host.sql`.
 6. Run `python -m brainrot.cli doctor` to check local configuration without printing secrets.
 
 Relative database paths do not transfer files. Updated local-media workers reserve

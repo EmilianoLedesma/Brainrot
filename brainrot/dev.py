@@ -63,9 +63,9 @@ def main(argv=None):
         print("Local prerequisites available; no processes started")
         return 0
     if "worker" in services and media.local():
-        report = portable.check_media()
-        if report["missing"]:
-            raise SystemExit(f"{len(report['missing'])} referenced media files are missing on this computer. Import your handoff archive, or run doctor --check-media for details.")
+        missing = portable.blocking_missing()
+        if missing:
+            raise SystemExit(f"{len(missing)} referenced media files are missing on this computer. Import your handoff archive, or run doctor --check-media for details.")
     processes = []
     try:
         for service in services:

@@ -1,5 +1,90 @@
 # Handoff — 2026-10-27
 
+## Claude Code integration check — 2026-10-27
+
+Verified the user-indicated PowerShell session owns a running native Claude Code
+child. Brainrot independently launches CLI requests; it does not attach generation
+to an existing interactive session. Resolved Claude Code 2.1.312 through the actual
+adapter, using its isolated temporary directory and filtered child environment.
+The adapter's subscription authentication check passed. Required visible flags
+are present; hidden --max-turns was accepted by a help-only parser check.
+All 33 tests in tests/test_llm.py passed without model usage. Current configured
+default remains codex; no model override is configured for Claude. No live model
+request, provider change, process restart, generation or publication occurred.
+This verifies executable/authentication/adapter contracts, not a live structured
+model response or remaining subscription quota. No secrets or machine PIDs saved.
+
+## Follow-up readiness validation — 2026-10-27
+
+This inspection supersedes conflicting machine-presence claims below. Installed
+uv through the available Python pip, then `uv sync --locked --python 3.14` passed;
+the environment reports Python 3.14.10. Standard `uv` is now on PATH. Local startup
+prerequisite check passes; FFmpeg, ffprobe, Codex and Claude executables, bundled
+caption font and runtime storytelling skill are present. Executable presence does
+not establish provider authentication. No model calls were made.
+
+Validation: 368 pytest tests passed, 107 SQL tests skipped because modern Postgres
+binaries are not configured (only an old 9.2 installation was found). No complete
+SQL validation is claimed. Seven offline pipeline/FFmpeg checks, web production
+build and motion TypeScript check passed. Six agent-entry documentation files had
+no broken local links. Installed Playwright Chromium because the checked Edge
+path was absent. Browser smoke initially exposed a stale expected request payload;
+updated it to include the existing false motion_graphics field. Full desktop/mobile
+browser smoke then passed with synthetic API responses. Temporary Vite closed;
+no production API, worker, generation, publication or live model test was started.
+Updated development instructions for Chromium installation when Edge is absent.
+
+Read-only database-backed media audit succeeded. A subsequent legacy Storage
+recovery restored eight ignored local files, including all six backgrounds and one
+story audio/video pair. Final audit: 14 referenced files, six missing story files.
+The user explicitly said to skip unavailable media for now; no records were deleted
+and the worker's existing missing-media startup guard remains unchanged. Full
+worker startup remains blocked by those missing references. No further recovery
+or media regeneration is requested.
+
+Concurrent commits appeared on master during this check, including the browser
+expectation fix; preserved them. This agent did not commit or push. Remaining local
+prerequisite for full SQL validation is modern PostgreSQL plus PG_BIN configuration.
+No credential values were printed or recorded.
+
+## Incoming session orientation — 2026-10-27
+
+Read agent orientation, handoff, architecture, development, product decisions,
+documentation index, computer-switching guide and IDE contributor instructions.
+Reviewed root environment variable presence with user authorization; no secret
+values were printed or recorded. Configuration presence does not establish valid
+credentials, provider authentication or service health.
+
+Current branch is `master`. Existing changes to `AGENTS.md` and untracked IDE
+instruction directories were preserved. This session changed only this handoff.
+No services, workers, model calls, database checks, generation, uploads or tests
+were started. No commit or push. Await the next concrete development request;
+inspect source and live state for its affected flow before making changes.
+
+### Setup and verification on this computer — 2026-10-27
+
+Installed `uv` (winget); bootstrap, `brainrot.dev --check` and `doctor` ran. Offline
+suite: 368 passed, 107 skipped (only PostgreSQL 9.2 installed, so SQL tests skip; no
+database validation claimed). Web build, `npm run check --prefix motion` and
+`scripts.checks.pipeline` passed. Read-only Supabase probe found `local_media_host`
+(014) and `youtube_metadata_drafts` (012) present. Codex CLI not installed here;
+Claude CLI present. 14 referenced media files missing until a media import. Corrected
+stale docs: retry now exists (operations), `web/.env` only for standalone Vite,
+migrations 008–014 (deployment, integrations), motion check and Postgres note
+(development). No services started, no commit or push.
+
+Follow-up: Codex CLI was only bundled in the VS Code ChatGPT extension, so it was
+installed globally with npm (`@openai/codex`, same ChatGPT login). `sync-media`
+recovered the 6 backgrounds still in Supabase Storage (8 of 14 files at that point;
+doctor now reports 6 missing, all `stories/*` audio/video of finished jobs that exist
+only on the other computer). Added opt-in `BRAINROT_ALLOW_MISSING_MEDIA=1`
+(`portable.blocking_missing`, used by `dev.py` and `worker.py`; documented in
+`.env.example`; one new test, 369 passed / 107 SQL skipped). Default behavior is
+unchanged: without the flag the worker still refuses to start. With it, the full
+stack was started on 5173/8001 and the worker took the host reservation; all four
+existing jobs are done, so no queued work depends on the missing files. Retrying or
+re-rendering those four jobs needs the media import first. Not committed.
+
 ## Silent vector motion-graphics recipe and two PoCs — 2026-10-27
 
 User wanted the "first sample" look (Download.mp4, an AI-delegation explainer: kinetic

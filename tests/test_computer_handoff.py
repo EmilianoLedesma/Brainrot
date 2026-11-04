@@ -83,6 +83,14 @@ def test_media_audit_paginates_all_references(computer, fake_db):
     assert result["referenced"] == 1005 and len(result["missing"]) == 1004
 
 
+def test_missing_media_blocks_worker_unless_explicitly_allowed(computer, fake_db, monkeypatch):
+    fake_db.table("clips").insert([{"storage_path": "clips/gone.mp4"}]).execute()
+    monkeypatch.delenv("BRAINROT_ALLOW_MISSING_MEDIA", raising=False)
+    assert portable.blocking_missing() == ["clips/gone.mp4"]
+    monkeypatch.setenv("BRAINROT_ALLOW_MISSING_MEDIA", "1")
+    assert portable.blocking_missing() == []
+
+
 def test_stream_checksum_failure_preserves_existing_output(computer):
     media.save("clips/one.mp4", b"good")
     with pytest.raises(ValueError):

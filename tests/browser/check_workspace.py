@@ -151,7 +151,7 @@ def main():
         page.get_by_role("button", name="Review →", exact=True).click()
         page.get_by_role("button", name="Queue it", exact=True).click()
         expect(page.get_by_role("heading", name="Live queue", exact=True)).to_be_visible()
-        assert submitted == [{"kind": "brainrot", "topic": "The octopus escape", "llm_provider": "codex", "brainrot_level": 100,
+        assert submitted == [{"kind": "brainrot", "topic": "The octopus escape", "llm_provider": "codex", "brainrot_level": 100, "motion_graphics": False,
                               "youtube_publishing": {"mode": "auto", "privacy_status": "unlisted", "made_for_kids": False, "contains_synthetic_media": True}}]
         page.get_by_role("button", name="New job", exact=True).click()
         page.locator(".choice").filter(has_text="From a YouTube link").click()
