@@ -1,0 +1,42 @@
+{
+ "title": "Cómo funciona un cerrojo",
+ "fps": 30,
+ "durationFrames": 300,
+ "shots": [
+  {"id": "s0", "type": "establishing", "start": 0, "end": 60,
+   "camera": {"from": {"pos": [-3.4, 1.9, 9.6], "target": [0.15, 1.9, 0]}, "to": {"pos": [-1.6, 1.9, 8.6], "target": [0.15, 1.9, 0]}, "fov": 35},
+   "ambient": {"kind": "sheen-dust", "moving": "slow sheen highlight travelling over the deadbolt cylinder, knob and bolt; dust specks drifting in the air"},
+   "environment": ["door", "door frame", "knob", "strike plate", "wall", "floor"]},
+  {"id": "s1", "type": "cutaway", "start": 60, "end": 180,
+   "camera": {"from": {"pos": [-3.0, 1.3, 9.2], "target": [0.1, 0, 0]}, "to": {"pos": [-2.0, 1.0, 8.0], "target": [0.1, 0, 0]}, "fov": 35},
+   "ambient": {"kind": "spring-wobble-sheen", "moving": "springs breathing a few hundredths of a unit; sheen highlight travelling over the plug and bolt"},
+   "environment": ["door slab", "lock housing", "bolt and cam", "mounting screws"]},
+  {"id": "s2", "type": "insert", "start": 180, "end": 240,
+   "camera": {"from": {"pos": [-2.4, 0.6, 4.6], "target": [0, -0.1, 0]}, "to": {"pos": [-2.0, 0.55, 4.0], "target": [0, -0.1, 0]}, "fov": 35},
+   "ambient": {"kind": "spring-wobble-sheen", "moving": "spring above the pin breathing; sheen highlight on the plug"},
+   "environment": []},
+  {"id": "s3", "type": "establishing", "start": 240, "end": 300,
+   "camera": {"from": {"pos": [3.2, 1.9, 9.6], "target": [0.15, 1.9, 0]}, "to": {"pos": [1.7, 1.9, 8.6], "target": [0.15, 1.9, 0]}, "fov": 35},
+   "ambient": {"kind": "sheen-dust", "moving": "slow sheen highlight on the deadbolt cylinder, knob and bolt; dust specks drifting in the air"},
+   "environment": ["door", "door frame", "knob", "strike plate", "wall", "floor"]}
+ ],
+ "captions": [
+  {"id": "c0", "at": 6, "until": 54, "style": "phrase", "text": "Así funciona un cerrojo"},
+  {"id": "c1", "at": 66, "until": 120, "style": "phrase", "text": "La llave empuja los pines"},
+  {"id": "t1", "at": 78, "until": 146, "style": "term", "text": "PINES"},
+  {"id": "c2", "at": 124, "until": 176, "style": "phrase", "text": "Hasta alinearlos"},
+  {"id": "c3", "at": 186, "until": 232, "style": "phrase", "text": "El pin alcanza la línea"},
+  {"id": "t3", "at": 196, "until": 240, "style": "term", "text": "LÍNEA DE CORTE"},
+  {"id": "c4", "at": 246, "until": 294, "style": "phrase", "text": "Y el pestillo se retira"}
+ ],
+ "events": [
+  {"id": "e1", "shot": "s1", "kind": "key-push", "at": 72, "caption": "c1"},
+  {"id": "e2", "shot": "s1", "kind": "align", "at": 124, "caption": "c2"},
+  {"id": "e3", "shot": "s2", "kind": "pin-push", "at": 190, "caption": "c3"},
+  {"id": "e4", "shot": "s3", "kind": "turn", "at": 248, "caption": "c4"},
+  {"id": "e5", "shot": "s3", "kind": "retract", "at": 262, "caption": "c4"}
+ ],
+ "stillFrames": [6, 24, 45, 62, 75, 90, 105, 120, 128, 150, 172, 184, 192, 205, 222, 238, 250, 258, 272, 294],
+ "sources": [],
+ "note": "Schematic explainer. Each caption is an independent phrase that replaces the previous one; events fire at the start of their caption."
+}
