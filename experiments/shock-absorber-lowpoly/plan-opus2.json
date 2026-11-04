@@ -1,0 +1,255 @@
+{
+ "duration": 146.98,
+ "voice": "es-MX-JorgeNeural",
+ "rate": "+0%",
+ "provider": "claude-code",
+ "model_env": "claude-opus-5-5",
+ "scenes": [
+  {
+   "start": 0.0,
+   "end": 13.58,
+   "text": "El resorte que nunca deja de rebotar Si tu coche solo tuviera resortes cada bache te dejaría brincando como en trampolín durante un buen rato Y eso que el resorte es el héroe que todos conocen",
+   "notes": [],
+   "model": {
+    "shot": "establishing",
+    "event": "force_arrows",
+    "cue": "cada bache",
+    "term": "",
+    "why": "Opens on the whole suspension; arrows show the bump hitting the wheel."
+   },
+   "shot": "establishing",
+   "event": {
+    "kind": "force_arrows",
+    "cue": "cada bache",
+    "at": 5.58
+   },
+   "index": 0
+  },
+  {
+   "start": 13.58,
+   "end": 23.63,
+   "text": "Es esa espiral gruesa de metal junto a cada rueda Carga todo el peso del coche Cuando pasas un bache se aprieta y absorbe el golpe",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "event": "force_arrows",
+    "cue": "se aprieta",
+    "term": "",
+    "why": "Arrows show the spring compressing under the bump."
+   },
+   "shot": "cutaway",
+   "event": {
+    "kind": "force_arrows",
+    "cue": "se aprieta",
+    "at": 21.11
+   },
+   "index": 1
+  },
+  {
+   "start": 23.63,
+   "end": 33.08,
+   "text": "Hasta ahí perfecto El problema viene después Un resorte apretado quiere regresar y cuando regresa se pasa de largo",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "event": "term_callout",
+    "cue": "resorte",
+    "term": "resorte",
+    "why": "Names the spring as it overshoots on rebound."
+   },
+   "shot": "cutaway",
+   "event": {
+    "kind": "term_callout",
+    "cue": "resorte",
+    "at": 28.28,
+    "term": "RESORTE"
+   },
+   "index": 2
+  },
+  {
+   "start": 33.08,
+   "end": 45.83,
+   "text": "Luego vuelve a bajar Luego a subir otra vez Solito no sabe parar El coche seguiría subiendo y bajando como lancha en olas Aquí entra el amortiguador",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "event": "term_callout",
+    "cue": "amortiguador",
+    "term": "amortiguador",
+    "why": "Introduces the damper by name."
+   },
+   "shot": "cutaway",
+   "event": {
+    "kind": "term_callout",
+    "cue": "amortiguador",
+    "at": 44.2,
+    "term": "AMORTIGUADOR"
+   },
+   "index": 3
+  },
+  {
+   "start": 45.83,
+   "end": 58.57,
+   "text": "Y plot twist no carga nada del peso Ese trabajo es todo del resorte El amortiguador solo controla qué tan rápido se mueve la suspensión Por dentro es bien sencillo",
+   "notes": [
+    "cue 'el peso' not found in scene; event moved to scene start + 0.8 s"
+   ],
+   "model": {
+    "shot": "cutaway",
+    "event": "force_arrows",
+    "cue": "el peso",
+    "term": "",
+    "why": "Arrows show the weight going into the spring, not the damper."
+   },
+   "shot": "cutaway",
+   "event": {
+    "kind": "force_arrows",
+    "cue": "el peso",
+    "at": 46.63
+   },
+   "index": 4
+  },
+  {
+   "start": 58.57,
+   "end": 70.52,
+   "text": "Es un cilindro sellado lleno de aceite Adentro corre un pistón pegado a una varilla La varilla se conecta a la carrocería y el cilindro a la suspensión de la rueda",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "event": "term_callout",
+    "cue": "cilindro",
+    "term": "cilindro",
+    "why": "Labels the sealed oil cylinder in cross-section."
+   },
+   "shot": "cutaway",
+   "event": {
+    "kind": "term_callout",
+    "cue": "cilindro",
+    "at": 58.9,
+    "term": "CILINDRO"
+   },
+   "index": 5
+  },
+  {
+   "start": 70.52,
+   "end": 83.77,
+   "text": "Cuando el coche sube o baja el pistón se mueve dentro del aceite Ese pistón tiene pasajes pequeñitos unas válvulas Para moverse tiene que empujar el aceite a través de esos hoyitos",
+   "notes": [],
+   "model": {
+    "shot": "insert",
+    "event": "flow_chevrons",
+    "cue": "empujar el aceite",
+    "term": "",
+    "why": "Close-up of the piston passages with oil squeezing through."
+   },
+   "shot": "insert",
+   "event": {
+    "kind": "flow_chevrons",
+    "cue": "empujar el aceite",
+    "at": 80.42
+   },
+   "index": 6
+  },
+  {
+   "start": 83.77,
+   "end": 95.57,
+   "text": "Y eso cuesta fuerza Imagina sacar miel espesa por un popote Entre más rápido lo intentas más se resiste Esa resistencia frena cada rebote",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "event": "damp",
+    "cue": "frena cada rebote",
+    "term": "",
+    "why": "The damper's resistance switches ringing to settling."
+   },
+   "shot": "cutaway",
+   "event": {
+    "kind": "damp",
+    "cue": "frena cada rebote",
+    "at": 93.61
+   },
+   "index": 7
+  },
+  {
+   "start": 95.57,
+   "end": 110.91,
+   "text": "Y la energía del movimiento no desaparece Se convierte en calor dentro del aceite Por eso un amortiguador que trabajó mucho se siente tibio Además puede resistir distinto al comprimirse que al estirarse de regreso",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "event": "term_callout",
+    "cue": "aceite",
+    "term": "aceite",
+    "why": "Labels the oil, where the motion energy becomes heat."
+   },
+   "shot": "cutaway",
+   "event": {
+    "kind": "term_callout",
+    "cue": "aceite",
+    "at": 100.71,
+    "term": "ACEITE"
+   },
+   "index": 8
+  },
+  {
+   "start": 110.91,
+   "end": 121.55,
+   "text": "Así el coche absorbe el bache y luego vuelve a su lugar sin columpiarse Y si el amortiguador ya no sirve El coche sigue rebotando después de cada bache",
+   "notes": [],
+   "model": {
+    "shot": "establishing",
+    "event": "force_arrows",
+    "cue": "absorbe el bache",
+    "term": "",
+    "why": "Back to context to show the bump being absorbed."
+   },
+   "shot": "establishing",
+   "event": {
+    "kind": "force_arrows",
+    "cue": "absorbe el bache",
+    "at": 111.68
+   },
+   "index": 9
+  },
+  {
+   "start": 121.55,
+   "end": 139.38,
+   "text": "Las llantas pierden contacto con el piso más fácil Y una llanta que casi no toca el piso no te ayuda a frenar ni a dar vuelta La neta eso es lo que de verdad importa Así que la próxima vez que un bache se apague en un solo movimiento ya sabes a quién darle el crédito",
+   "notes": [],
+   "model": {
+    "shot": "establishing",
+    "event": "force_arrows",
+    "cue": "pierden contacto",
+    "term": "",
+    "why": "Arrows show the tire lifting off the road with a dead damper."
+   },
+   "shot": "establishing",
+   "event": {
+    "kind": "force_arrows",
+    "cue": "pierden contacto",
+    "at": 122.19
+   },
+   "index": 10
+  },
+  {
+   "start": 139.38,
+   "end": 146.98,
+   "text": "No al resorte A un tubito de aceite con agujeros diminutos que convierte cada salto en un poquito de calor",
+   "notes": [],
+   "model": {
+    "shot": "insert",
+    "event": "flow_chevrons",
+    "cue": "agujeros diminutos",
+    "term": "",
+    "why": "Closing close-up of oil flowing through the tiny holes."
+   },
+   "shot": "insert",
+   "event": {
+    "kind": "flow_chevrons",
+    "cue": "agujeros diminutos",
+    "at": 142.56
+   },
+   "index": 11
+  }
+ ]
+}
