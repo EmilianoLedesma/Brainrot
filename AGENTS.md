@@ -19,8 +19,6 @@
   Follow [the switching guide](docs/moving-between-computers.md).
 - Keep `.env`, credentials, OAuth tokens, CLI login state and private media out
   of Git and diagnostics. Inspect configuration presence without printing values.
-- Use **Codex / Chat GPT for live model checks** unless the user changes this
-  preference. Keep Claude supported; do not consume its quota for validation.
   Do not silently fall back to another provider or paid API.
 - The UI labels are **Claude** and **Chat GPT**; saved provider IDs remain
   `claude-code` and `codex`.
