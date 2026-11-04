@@ -9,7 +9,11 @@ started this — a moka pot), a fifth from a different channel (a bridge
 explainer: vigas, pilares, socavación, junta de dilatación) that confirmed the
 same grammar on a different topic, and a sixth from yet another channel
 (`@construlandai`, a mountain-tunnel construction explainer) that exposed a
-fluidity gap none of the others had surfaced — see "Sustained motion" below.
+fluidity gap none of the others had surfaced — see "Sustained motion" below —
+and a seventh (`@stupydoo`, a tree-house construction explainer, 164s) that
+was reviewed at much higher frame density specifically to extract camera and
+object-motion technique, confirming and refining the sustained-motion rule —
+see "Two valid ways to sustain a shot" below.
 No reference footage, audio or channel artwork is copied into any prototype —
 only the technique.
 
@@ -109,6 +113,64 @@ a suggestion.
   geometry change is a step toward this (point 2 above) but is a one-time
   progression, not yet a sustained repeating cycle — treat that as the next
   thing to test, not a new failure.
+- **The model question is closed: the gap was prompt specificity, not
+  capability.** A controlled planner test ran the same `words.json` through
+  Opus 5.5 and the default model twice each, first against the v1 planner
+  prompt (which never stated the max-hold cap or a per-noun rule), then
+  against a v2 prompt that stated both explicitly. Under v1, the default
+  model leaked reasoning text into output fields, returned empty "none"
+  events on 2-4 of 12 blocks despite being told not to, and both models blew
+  past the (unstated) 10s cap by 68-99 seconds. Under v2, both models scored
+  identically: zero cap violations, 11/11 nouns acknowledged, zero
+  placeholders, zero validator corrections. Conclusion: do not reach for a
+  more expensive model to fix a planning defect before checking whether the
+  defect is actually an unstated rule — this recipe's own planning bugs
+  (the cap, noun coverage) were exactly that twice in a row now (the caption
+  bug earlier was the same pattern, a different symptom).
+- **Red force-arrows get used as filler once a model is told to acknowledge
+  every noun within a time cap, found from the v2 planner test.** 19-21 of
+  32-36 events across four plans were `force_arrows`, several on words with
+  no actual force or direction ("importa", "largo") — the model reaches for
+  the arrow as a generic default when it needs *some* event to satisfy the
+  cap/coverage rules and nothing better comes to mind. This breaks the
+  red-is-exclusively-force rule from The Look. Fix: give the event vocabulary
+  a neutral option for "just acknowledge this part was mentioned," borrowed
+  from the schematic-world recipe's UI-select highlight (a brief outline or
+  pulse on the part, no color implying force or flow) — see the new `highlight`
+  event kind below. Red arrows should only ever be chosen when something is
+  actually being pushed, compressed, or directed.
+- **A shot can sustain itself without camera motion, as long as something
+  else is visibly continuous — found from a dense (3-5fps) frame-by-frame
+  pass on a tree-house construction reference, a much closer read than any
+  prior reference got.** Roughly half this video's shots are genuinely
+  locked-off for 8-12+ seconds across several caption changes — the camera
+  does not move at all — and they still read as alive because the object in
+  frame is visibly *assembling itself* the whole time: reinforcement strips
+  extend board-by-board along an edge, screws drive in one at a time, roof
+  slats appear in sequence. The other half of the shots instead hold a slow,
+  continuous camera orbit around the growing structure (the brick wall behind
+  it visibly slides past, confirmed by comparing the background's position
+  across a 10s window) while the object itself stays static. Both are valid;
+  what's never acceptable — confirmed by the shock-absorber failure above —
+  is a long hold where *neither* the camera nor the object is doing anything.
+  See "Two valid ways to sustain a shot" in the Camera section below.
+- **Introduced objects fly in and settle with a tiny arc and rotation — they
+  never simply pop into existence, and this applies to every part, not just
+  the ambient mechanism.** Confirmed repeatedly on the tree-house reference:
+  a plank enters from off-frame on a curved path, rotates into its final
+  orientation, and settles with a small bounce; several short pieces can
+  converge on one assembly from different directions in parallel. This
+  recipe's existing `ambient` requirement already covers the hero mechanism;
+  this extends the same "no instant pop-in" rule to one-time introductions
+  (a newly-added part, a tool entering frame) that aren't ambient at all.
+- **A detail callout can be a continuous push-in/pull-out on the same camera,
+  not a cut to a separate insert shot.** The tree-house reference's dimension-
+  line close-up (a measurement label pushed right up against the rail) is
+  reached by the establishing camera smoothly zooming in, holding, and
+  zooming back out — the same shot, not a hard cut to Insert Macro and back.
+  Treat this as an alternative to cutting into a separate `<Sequence>` for a
+  quick callout, not a replacement for Insert Macro's harder cuts on a truly
+  separate, isolated part.
 
 ## The look
 
@@ -125,9 +187,12 @@ a suggestion.
   gas, blue water, amber honey) that is always the visual protagonist of the
   shot.
 - Three reserved indicator colors, never used for anything else and never
-  mixed with each other:
+  mixed with each other, plus one colorless event kind for when none of the
+  three apply:
   - **Red** — force/direction/pressure (arrows showing a push, a compression,
-    a load).
+    a load). Reserve this strictly — see the `highlight` event kind below for
+    what to use instead when a model (or a human) reaches for an arrow just
+    to have *something* happen on a word that isn't actually a force.
   - **Yellow** — the on-screen technical-term callout, and only that (name
     the real mechanism part — "rodillos", "pilares" — never a generic word
     like "superficie").
@@ -136,6 +201,15 @@ a suggestion.
     around something (confirmed in the bridge reference's under-water
     scour shot). Use this instead of red when nothing is being pushed or
     compressed, only carried or flowing.
+  - **`highlight` (no reserved color, no arrow)** — a brief outline or pulse
+    on a part, used purely to acknowledge "this is the thing being talked
+    about right now," with no claim about force, flow, or a named term.
+    Borrowed from the schematic-world recipe's UI-select highlight. Exists
+    specifically so a planner satisfying a noun-coverage or max-hold-cap rule
+    has a correct neutral choice instead of defaulting to a red arrow on a
+    word with no actual force behind it (confirmed happening in the v2
+    planner test: 19-21 of 32-36 events were `force_arrows`, several on
+    words like "importa" and "largo" that aren't forces at all).
 - Captions: white bold sans, heavy black stroke, **no background pill** in the
   large majority of shots. This is the opposite default from
   `motion-graphics-recipe.md`'s dark rounded card — do not default to a card
@@ -197,6 +271,32 @@ resolution frames, not a thumbnail. The heading of this section says object
 motion does not cover this requirement; that render is the proof of why it
 needs saying twice. Camera motion and ambient object motion are two separate
 required fields — satisfying one is never grounds for skipping the other.
+
+**Two valid ways to sustain a shot (confirmed on the tree-house reference).**
+The rule above ("camera motion is mandatory, object motion doesn't cover it")
+still holds, but a dense frame-by-frame pass on a seventh reference video
+showed the inverse failure mode is also avoidable without the camera doing
+the work every time. Pick one per held shot, deliberately, not by default:
+
+1. **Camera-driven hold** — the object is static or close to it; the camera
+   does the continuous slow orbit/push described above. The background must
+   visibly change position relative to frame over the hold (a wall, a fence,
+   anything behind the subject) — if nothing behind the subject moves against
+   the frame, the orbit isn't actually happening.
+2. **Assembly-driven hold** — the camera is genuinely locked off, but the
+   object is visibly under active, continuous construction the whole time:
+   parts extend, attach, or get added one at a time, never all at once and
+   never frozen mid-assembly for more than a beat or two. This is a
+   legitimate substitute for camera motion specifically *when the shot's job
+   is to show something being built* — it is not a general exception to the
+   camera-motion rule, and does not apply to a shot that is simply narrating
+   over an already-complete object (that shot still needs camera motion).
+
+A held shot that qualifies for neither — static object, static camera — is
+exactly the shock-absorber failure above and is never acceptable. When
+picking which to use, favor the assembly-driven hold for "how it's built/put
+together" beats and the camera-driven hold for "look at the finished
+mechanism" beats.
 
 ## Shot grammar — up to four types, cut hard between them
 
@@ -268,7 +368,11 @@ simplification of it.
    depresses on a "press/firm" word; an odometer-style stat that **hard-cuts**
    to a new number on the beat (never tweens — a value flip, not a count-up);
    a small macro insert where a part visibly latches/locks on its own word;
-   gray/white flow chevrons for a current or scouring effect (see The Look).
+   gray/white flow chevrons for a current or scouring effect (see The Look);
+   a colorless `highlight` pulse/outline on a part's own word when nothing
+   about it is force, flow, or term-worthy — this is the correct choice for
+   "just acknowledge this noun," never a red arrow reached for out of
+   convenience (see The Look's `highlight` entry).
 6. **Cap how long any single unchanging composition can hold the screen —
    confirmed missing on the shock-absorber render.** That render held one
    graphic (a cylinder with an oscillating piston) for 20-30+ seconds while
@@ -377,3 +481,12 @@ single-subject, multi-angle video with no metaphor shot. A sixth video, from
 sustained-motion requirement above: a continuous machine-travel move held
 across 30+ seconds of caption changes, and tool strikes animated as a
 complete repeating cycle with impact particles rather than a single gesture.
+A seventh video, from `@stupydoo` (a tree-house construction explainer,
+164s), was reviewed at far higher frame density (3-5fps dense windows at
+several points, not just a sparse overview) specifically to isolate camera
+and object-motion technique rather than visual style — it confirmed the two
+valid sustain strategies above, the no-pop-in rule for introduced objects,
+the push-in/pull-out detail callout, and (as a hook technique worth noting
+even though this recipe's topics are rarely destructive) a cold open where
+the finished structure explodes into tumbling, rotating debris for 2-3s
+before cutting to the calm starting point.
