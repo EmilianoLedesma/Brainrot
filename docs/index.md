@@ -14,6 +14,9 @@
 - [Video-use explainer prototype](../experiments/video-use-prototype/README.md): isolated animated explainer, reproduction and review artifacts.
 - [Remotion explainer prototype](../experiments/remotion-explainer/README.md): channel-informed animation experiment and local rendering.
 - [Silent vector motion-graphics recipe](motion-graphics-recipe.md): cookbook for the light pastel, script-driven look (coffee and zebra proofs of concept) and the steps to integrate it into the main flow.
+- [Low-poly cutaway recipe](motion-graphics-recipe-lowpoly.md): 3D low-poly explainer style, camera and sustain rules, event vocabulary and lessons from the test renders.
+- [Schematic-world recipe](motion-graphics-recipe-schematic-world.md): companion recipe for schematic, UI-style animated worlds.
+- Low-poly experiments: [moka cutaway](../experiments/moka-cutaway-3d/README.md), [sky blue](../experiments/sky-blue-lowpoly/README.md), [deadbolt](../experiments/deadbolt-lowpoly/README.md), [foil sides](../experiments/foil-sides-lowpoly/README.md), [shock absorber](../experiments/shock-absorber-lowpoly/README.md) (model comparison and planner audit), [zipper](../experiments/zipper-lowpoly/README.md), plus the 2D [elevator cables](../experiments/elevator-cables-2d/README.md) test.
 - [Coffee A/B comparison](../experiments/coffee-comparison/README.md): current Brainrot Remotion versus a pinned Lemo-Opuscar animation bridge, shared Grounded narration and local review artifacts.
 - [Lemo procrastination cartoon](../experiments/lemo-procrastination/README.md): agent-selected cartoon style, continuous action and camera editing without progress or persistent heading overlays.
 - [Opus time-perception film](../experiments/lemo-time-perception/README.md): Claude Opus 5.5 Data Storytelling experiment, traceable study counts and explicitly illustrative memory diagrams.

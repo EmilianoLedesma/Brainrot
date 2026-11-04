@@ -1,4 +1,42 @@
-# Handoff — 2026-10-27
+# Handoff — 2026-11-04
+
+## Low-poly 3D experiments, planner and recipe — 2026-11-04
+
+Nothing here is wired into the main Brainrot flow; every piece lives under `experiments/` or `docs/`.
+
+Built (each folder has its own README with commands and numbers):
+- `hyperframes-pressure-cooker` (8 s HyperFrames graphics test), `elevator-cables-2d` (10 s Remotion 2D), `moka-cutaway-3d` (first
+  `@remotion/three` proof of concept), `sky-blue-lowpoly` and `deadbolt-lowpoly` (10 s silent tests of the low-poly recipe),
+  `foil-sides-lowpoly` (93.65 s), `shock-absorber-lowpoly` (146.97 s) and `zipper-lowpoly` (119.3 s).
+- The three long ones use real Brainrot code for the script (`brainrot.script.write_story`) and the word timing (`brainrot.tts.narrate`,
+  audio discarded; the videos are silent), a planner modelled on `brainrot/motion.py` (`plan()` blocks, then a Pydantic `design()` that picks
+  shot types and events), a deterministic phrase-caption grouper (`build_script.py`), `script.json` for the Remotion composition, an
+  `audit.py` (shock absorber) and a `verify.py` that measures the MP4 and pulls contact sheets.
+- Recipes: `docs/motion-graphics-recipe-lowpoly.md` (consolidated from the renders: sustain strategies, no pop-in, push-in/pull-out,
+  `highlight`, hold cap, phrase captions) and `docs/motion-graphics-recipe-schematic-world.md`.
+
+Validation actually run: `tsc --noEmit` in each Remotion project; full renders checked with `verify.py` (duration, 1080x1920/30 fps, no audio
+stream, black frames and identical consecutive frames both 0); contact sheets inspected by hand (dense, plus 6 fps runs inside single shots);
+planner audits on four v1 and four v2 plans. Not run: the repository tests, any live Brainrot job, any video watched in motion.
+
+Findings worth keeping:
+- Model question closed: Opus 5.5 versus the default Claude model made no difference once the planner prompt stated the rules (hold cap,
+  noun coverage, `damp` once). The earlier gap was prompt specificity. The default model is used for later runs.
+- A model told to acknowledge every noun reaches for red arrows. A neutral `highlight` event plus a code check (a `force_arrows` cue needs a
+  force or motion word) fixed it; the planner enforces the 9 s hold cap in code (`fill_gaps()`), and a term may be used once per video.
+- Caption grouping must fold a one-word leftover into a neighbour of the SAME sentence (a glued "perfecto El problema viene después" shipped
+  once). Load-time `validate()` functions in the compositions reject static cameras outside assembly shots, missing ambient fields,
+  accumulating captions and non-part callouts, and caught a planner/renderer parts-list mismatch before encoding.
+- Codex exited with code 1 intermittently on structured calls, so the planner runs used the Claude provider at the user's request; `edge-tts`
+  dropped streams and the experiment `timing.py` retries each section without touching repo code.
+
+Remaining work and limits:
+- Shock absorber: red arrows cropped in cutaways, small hero, three consecutive cutaway shots restart the camera at each cut, plain hub block.
+  Zipper: captions sit over the hero, pull tab is the same grey as the slider, highlight boxes are heavy, close-up arrows cropped.
+- Rendered videos and contact sheets are in the ignored `out/` folders, not in Git; re-run each README to recreate them.
+- `AGENTS.md` lost its Codex-preference lines in a user edit but still has the sentence "Do not silently fall back to another provider or
+  paid API." directly after them; check that it reads as intended.
+- Integration into `motion/` and a runtime skill is still the six-step path listed in `motion-graphics-recipe.md`; not started.
 
 ## Claude Code integration check — 2026-10-27
 
