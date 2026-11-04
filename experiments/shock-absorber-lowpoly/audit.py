@@ -16,7 +16,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 FPS = 30
 NOUNS = ["amortiguador", "resorte", "pistón", "varilla", "carrocería", "cilindro", "aceite", "válvulas", "suspensión", "rueda", "llantas"]
-COLOR = {"force_arrows": "red", "term_callout": "yellow", "flow_chevrons": "gray/white", "damp": "none (state change)"}
+COLOR = {"force_arrows": "red", "term_callout": "yellow", "flow_chevrons": "gray/white", "damp": "none (state change)", "highlight": "pale blue (neutral)"}
 CAP = 10.0  # seconds: the recipe's "roughly 8-10 s with no new event, callout or camera move" cap
 
 

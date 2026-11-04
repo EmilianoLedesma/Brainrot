@@ -94,31 +94,31 @@
   },
   {
    "id": "s2",
-   "type": "cutaway",
+   "type": "establishing",
    "start": 709,
    "end": 992,
    "camera": {
     "from": {
      "pos": [
-      -3.4,
-      1.8,
-      9.6
+      -5.0,
+      2.0,
+      9.8
      ],
      "target": [
       0,
-      1.6,
+      1.3,
       0
      ]
     },
     "to": {
      "pos": [
-      -1.7,
-      2.0,
-      8.2
+      -1.4,
+      2.3,
+      8.4
      ],
      "target": [
-      0,
-      1.6,
+      0.15,
+      1.3,
       0
      ]
     },
@@ -127,13 +127,14 @@
    "ambient": {
     "kind": "damper-cycle",
     "period": 60,
-    "moving": "every 2 s the piston strokes down and back up through the oil while the rod, coil spring and mounts move with it"
+    "moving": "every 2 s a bump kicks the wheel; the chassis, coil spring and damper rod ring down and settle; road markings scroll the whole time"
    },
    "environment": [
-    "coil spring",
-    "chassis mount",
-    "wheel hub mount",
-    "outer tube"
+    "wheel",
+    "suspension arm",
+    "chassis",
+    "road",
+    "coil spring"
    ]
   },
   {
@@ -353,9 +354,48 @@
   },
   {
    "id": "s8",
-   "type": "cutaway",
+   "type": "insert",
    "start": 2867,
    "end": 3327,
+   "camera": {
+    "from": {
+     "pos": [
+      -2.4,
+      1.45,
+      4.9
+     ],
+     "target": [
+      0,
+      1.2,
+      0
+     ]
+    },
+    "to": {
+     "pos": [
+      -1.5,
+      1.5,
+      4.1
+     ],
+     "target": [
+      0,
+      1.2,
+      0
+     ]
+    },
+    "fov": 35
+   },
+   "ambient": {
+    "kind": "valve-cycle",
+    "period": 60,
+    "moving": "every 2 s the piston face strokes through the oil while oil is squeezed through the valve passages"
+   },
+   "environment": []
+  },
+  {
+   "id": "s9",
+   "type": "cutaway",
+   "start": 3327,
+   "end": 3646,
    "camera": {
     "from": {
      "pos": [
@@ -393,51 +433,6 @@
     "chassis mount",
     "wheel hub mount",
     "outer tube"
-   ]
-  },
-  {
-   "id": "s9",
-   "type": "establishing",
-   "start": 3327,
-   "end": 3646,
-   "camera": {
-    "from": {
-     "pos": [
-      -5.0,
-      2.0,
-      9.8
-     ],
-     "target": [
-      0,
-      1.3,
-      0
-     ]
-    },
-    "to": {
-     "pos": [
-      -1.4,
-      2.3,
-      8.4
-     ],
-     "target": [
-      0.15,
-      1.3,
-      0
-     ]
-    },
-    "fov": 35
-   },
-   "ambient": {
-    "kind": "damper-cycle",
-    "period": 60,
-    "moving": "every 2 s a bump kicks the wheel; the chassis, coil spring and damper rod ring down and settle; road markings scroll the whole time"
-   },
-   "environment": [
-    "wheel",
-    "suspension arm",
-    "chassis",
-    "road",
-    "coil spring"
    ]
   },
   {
@@ -1197,28 +1192,42 @@
    "text": "un poquito de calor"
   },
   {
-   "id": "t2",
-   "at": 848,
-   "until": 939,
+   "id": "t1_0",
+   "at": 476,
+   "until": 542,
    "style": "term",
-   "text": "RESORTE"
+   "text": "RUEDA"
   },
   {
-   "id": "t3",
+   "id": "t3_2",
    "at": 1326,
    "until": 1374,
    "style": "term",
    "text": "AMORTIGUADOR"
   },
   {
-   "id": "t5",
-   "at": 1883,
-   "until": 1925,
+   "id": "t5_0",
+   "at": 1767,
+   "until": 1833,
+   "style": "term",
+   "text": "CILINDRO"
+  },
+  {
+   "id": "t6_0",
+   "at": 2174,
+   "until": 2228,
    "style": "term",
    "text": "PISTÓN"
   },
   {
-   "id": "t8",
+   "id": "t6_1",
+   "at": 2324,
+   "until": 2397,
+   "style": "term",
+   "text": "VÁLVULA"
+  },
+  {
+   "id": "t8_0",
    "at": 3021,
    "until": 3090,
    "style": "term",
@@ -1227,126 +1236,311 @@
  ],
  "events": [
   {
-   "id": "e0",
+   "id": "e0_0",
    "shot": "s0",
-   "kind": "force_arrows",
-   "at": 167,
-   "term": ""
+   "kind": "highlight",
+   "at": 9,
+   "term": "",
+   "target": "spring"
   },
   {
-   "id": "e1",
+   "id": "e0_1",
+   "shot": "s0",
+   "kind": "highlight",
+   "at": 142,
+   "term": "",
+   "target": "spring"
+  },
+  {
+   "id": "e1_0",
+   "shot": "s1",
+   "kind": "term_callout",
+   "at": 476,
+   "term": "RUEDA",
+   "target": "wheel"
+  },
+  {
+   "id": "e1_1",
+   "shot": "s1",
+   "kind": "force_arrows",
+   "at": 533,
+   "term": "",
+   "target": ""
+  },
+  {
+   "id": "e1_2",
    "shot": "s1",
    "kind": "force_arrows",
    "at": 633,
-   "term": ""
+   "term": "",
+   "target": ""
   },
   {
-   "id": "e2",
+   "id": "e2_0",
    "shot": "s2",
-   "kind": "term_callout",
+   "kind": "highlight",
    "at": 848,
-   "term": "RESORTE"
+   "term": "",
+   "target": "spring"
   },
   {
-   "id": "e3",
+   "id": "e2_1",
+   "shot": "s2",
+   "kind": "force_arrows",
+   "at": 921,
+   "term": "",
+   "target": ""
+  },
+  {
+   "id": "e3_0",
+   "shot": "s3",
+   "kind": "force_arrows",
+   "at": 1013,
+   "term": "",
+   "target": ""
+  },
+  {
+   "id": "e3_1",
+   "shot": "s3",
+   "kind": "force_arrows",
+   "at": 1217,
+   "term": "",
+   "target": ""
+  },
+  {
+   "id": "e3_2",
    "shot": "s3",
    "kind": "term_callout",
    "at": 1326,
-   "term": "AMORTIGUADOR"
+   "term": "AMORTIGUADOR",
+   "target": "damper"
   },
   {
-   "id": "e4",
+   "id": "e4_0",
    "shot": "s4",
-   "kind": "force_arrows",
-   "at": 1430,
-   "term": ""
+   "kind": "highlight",
+   "at": 1515,
+   "term": "",
+   "target": "spring"
   },
   {
-   "id": "e5",
+   "id": "e4_1",
+   "shot": "s4",
+   "kind": "damp",
+   "at": 1593,
+   "term": "",
+   "target": ""
+  },
+  {
+   "id": "e4_2",
+   "shot": "s4",
+   "kind": "highlight",
+   "at": 1649,
+   "term": "",
+   "target": "suspension"
+  },
+  {
+   "id": "e5_0",
    "shot": "s5",
    "kind": "term_callout",
-   "at": 1883,
-   "term": "PISTÓN"
+   "at": 1767,
+   "term": "CILINDRO",
+   "target": "cylinder"
   },
   {
-   "id": "e6",
+   "id": "e5_1",
+   "shot": "s5",
+   "kind": "highlight",
+   "at": 1910,
+   "term": "",
+   "target": "rod"
+  },
+  {
+   "id": "e5_2",
+   "shot": "s5",
+   "kind": "highlight",
+   "at": 2052,
+   "term": "",
+   "target": "suspension"
+  },
+  {
+   "id": "e6_0",
+   "shot": "s6",
+   "kind": "term_callout",
+   "at": 2174,
+   "term": "PISTÓN",
+   "target": "piston"
+  },
+  {
+   "id": "e6_1",
+   "shot": "s6",
+   "kind": "term_callout",
+   "at": 2324,
+   "term": "VÁLVULA",
+   "target": "valve"
+  },
+  {
+   "id": "e6_2",
    "shot": "s6",
    "kind": "flow_chevrons",
    "at": 2413,
-   "term": ""
+   "term": "",
+   "target": ""
   },
   {
-   "id": "e7",
+   "id": "e7_0",
    "shot": "s7",
-   "kind": "damp",
-   "at": 2808,
-   "term": ""
+   "kind": "force_arrows",
+   "at": 2526,
+   "term": "",
+   "target": ""
   },
   {
-   "id": "e8",
+   "id": "e7_1",
+   "shot": "s7",
+   "kind": "flow_chevrons",
+   "at": 2606,
+   "term": "",
+   "target": ""
+  },
+  {
+   "id": "e7_2",
+   "shot": "s7",
+   "kind": "force_arrows",
+   "at": 2808,
+   "term": "",
+   "target": ""
+  },
+  {
+   "id": "e8_0",
    "shot": "s8",
    "kind": "term_callout",
    "at": 3021,
-   "term": "ACEITE"
+   "term": "ACEITE",
+   "target": "oil"
   },
   {
-   "id": "e9",
+   "id": "e8_1",
+   "shot": "s8",
+   "kind": "highlight",
+   "at": 3077,
+   "term": "",
+   "target": "damper"
+  },
+  {
+   "id": "e8_2",
+   "shot": "s8",
+   "kind": "force_arrows",
+   "at": 3235,
+   "term": "",
+   "target": ""
+  },
+  {
+   "id": "e9_0",
    "shot": "s9",
    "kind": "force_arrows",
-   "at": 3364,
-   "term": ""
+   "at": 3350,
+   "term": "",
+   "target": ""
   },
   {
-   "id": "e10",
+   "id": "e9_1",
+   "shot": "s9",
+   "kind": "highlight",
+   "at": 3470,
+   "term": "",
+   "target": "damper"
+  },
+  {
+   "id": "e9_2",
+   "shot": "s9",
+   "kind": "force_arrows",
+   "at": 3566,
+   "term": "",
+   "target": ""
+  },
+  {
+   "id": "e10_0",
    "shot": "s10",
    "kind": "force_arrows",
-   "at": 3666,
-   "term": ""
+   "at": 3842,
+   "term": "",
+   "target": ""
   },
   {
-   "id": "e11",
+   "id": "e10_1",
+   "shot": "s10",
+   "kind": "force_arrows",
+   "at": 4028,
+   "term": "",
+   "target": ""
+  },
+  {
+   "id": "e11_0",
+   "shot": "s11",
+   "kind": "highlight",
+   "at": 4193,
+   "term": "",
+   "target": "spring"
+  },
+  {
+   "id": "e11_1",
+   "shot": "s11",
+   "kind": "highlight",
+   "at": 4259,
+   "term": "",
+   "target": "oil"
+  },
+  {
+   "id": "e11_2",
    "shot": "s11",
    "kind": "flow_chevrons",
-   "at": 4277,
-   "term": ""
+   "at": 4291,
+   "term": "",
+   "target": ""
   }
  ],
  "stillFrames": [
+  17,
   92,
-  175,
   276,
   459,
+  484,
   641,
   643,
   827,
-  856,
+  929,
   1010,
   1194,
-  1334,
+  1225,
   1378,
-  1438,
+  1523,
   1562,
+  1657,
   1745,
-  1891,
+  1918,
   1929,
   2113,
+  2182,
   2296,
   2421,
   2480,
+  2614,
   2664,
-  2816,
   2847,
   3029,
   3031,
   3215,
-  3372,
+  3243,
   3399,
+  3478,
   3582,
-  3674,
   3766,
+  3850,
   3950,
   4133,
-  4285,
+  4201,
+  4299,
   4317
  ],
  "fluidityRuns": [

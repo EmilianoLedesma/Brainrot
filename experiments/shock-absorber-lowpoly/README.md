@@ -99,6 +99,17 @@ no-event cap, noun acknowledgement and `damp` exactly once written into the prom
 - `build_script.py` now folds one-word leftovers into a neighbour of the same sentence (the old merge produced "perfecto El problema
   viene después"). `final.mp4` was rendered before that fix, so its captions still contain the old merge; `script.json` is rebuilt.
 
+## Highlight round and final default-model render
+
+Follow-up to the comparison, on the default model (no `BRAINROT_CLAUDE_MODEL`): a neutral `highlight` event (pale blue pulse on a named
+part, `target` in spring, damper, piston, rod, valve, oil, cylinder, wheel, body, suspension) so naming a part no longer borrows red
+arrows; a code check that downgrades any `force_arrows` whose cue has no force or motion word; terms usable once in the whole video;
+events colliding within 0.8 s dropped; and `ShockAbsorber.tsx` now draws every event of a shot in its own timed window (`plan.json`,
+`plan-final.json`, `script.json`). Final plan: `force_arrows` 12 (was 19-21), `highlight` 11, 6 distinct callouts, 3 flow, 1 `damp` at
+53.1 s; longest stretch with no event 8.8 s; 11 of 11 nouns acknowledged. The load-time check caught a planner/renderer parts-list mismatch
+(`RUEDA`) on the first render attempt, which aborted before encoding. Remaining defects: cropped cutaway arrows, a small hero, three
+consecutive cutaway shots (33-70 s) that restart the camera at each cut, a plain grey hub block.
+
 ## Limits
 
 - Not watched in motion; only the two contact sheets (36 dense stills, three 12-frame runs at 6 fps) were inspected.

@@ -1,7 +1,7 @@
 [
  {
-  "name": "v2opus1",
-  "model": "claude-opus-5-5",
+  "name": "final",
+  "model": "CLI default",
   "blocks": 12,
   "block_seconds": [
    13.6,
@@ -18,25 +18,24 @@
    7.6
   ],
   "shots": {
-   "establishing": 5,
-   "cutaway": 5,
+   "establishing": 3,
+   "cutaway": 7,
    "insert": 2
   },
   "events": {
-   "force_arrows": 19,
-   "term_callout": 8,
+   "highlight": 11,
+   "term_callout": 6,
+   "force_arrows": 12,
    "damp": 1,
-   "flow_chevrons": 4
+   "flow_chevrons": 3
   },
   "terms": [
    "RUEDA",
    "AMORTIGUADOR",
    "CILINDRO",
-   "VARILLA",
-   "SUSPENSIÓN",
    "PISTÓN",
    "VÁLVULA",
-   "RESORTE"
+   "ACEITE"
   ],
   "phrases": 95,
   "phrase_length_violations": [],
@@ -44,7 +43,7 @@
   "accumulating_phrases": 0,
   "ambient_every_shot": true,
   "camera_moves_every_shot": true,
-  "consecutive_same_type_cuts": 1,
+  "consecutive_same_type_cuts": 2,
   "longest_no_change_s": 8.8,
   "longest_starts_at_s": 4.7,
   "gaps_over_cap": [],
@@ -76,60 +75,60 @@
    "válvulas"
   ],
   "nouns_unacknowledged": [],
-  "damp_at_s": 52.833333333333336,
+  "damp_at_s": 53.1,
   "first_amortiguador_s": 44.2,
   "event_list": [
    {
-    "at_s": 0.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s0",
-    "term": ""
-   },
-   {
-    "at_s": 0.1,
-    "kind": "force_arrows",
-    "color": "red",
+    "at_s": 0.3,
+    "kind": "highlight",
+    "color": "pale blue (neutral)",
     "shot": "s0",
     "term": ""
    },
    {
     "at_s": 4.7,
-    "kind": "force_arrows",
-    "color": "red",
+    "kind": "highlight",
+    "color": "pale blue (neutral)",
     "shot": "s0",
     "term": ""
    },
    {
-    "at_s": 15.6,
+    "at_s": 15.9,
     "kind": "term_callout",
     "color": "yellow",
     "shot": "s1",
     "term": "RUEDA"
    },
    {
-    "at_s": 20.4,
+    "at_s": 17.8,
     "kind": "force_arrows",
     "color": "red",
     "shot": "s1",
     "term": ""
    },
    {
-    "at_s": 28.1,
+    "at_s": 21.1,
+    "kind": "force_arrows",
+    "color": "red",
+    "shot": "s1",
+    "term": ""
+   },
+   {
+    "at_s": 28.3,
+    "kind": "highlight",
+    "color": "pale blue (neutral)",
+    "shot": "s2",
+    "term": ""
+   },
+   {
+    "at_s": 30.7,
     "kind": "force_arrows",
     "color": "red",
     "shot": "s2",
     "term": ""
    },
    {
-    "at_s": 31.2,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s2",
-    "term": ""
-   },
-   {
-    "at_s": 33.4,
+    "at_s": 33.8,
     "kind": "force_arrows",
     "color": "red",
     "shot": "s3",
@@ -143,21 +142,21 @@
     "term": ""
    },
    {
-    "at_s": 44.1,
+    "at_s": 44.2,
     "kind": "term_callout",
     "color": "yellow",
     "shot": "s3",
     "term": "AMORTIGUADOR"
    },
    {
-    "at_s": 47.7,
-    "kind": "force_arrows",
-    "color": "red",
+    "at_s": 50.5,
+    "kind": "highlight",
+    "color": "pale blue (neutral)",
     "shot": "s4",
     "term": ""
    },
    {
-    "at_s": 52.8,
+    "at_s": 53.1,
     "kind": "damp",
     "color": "none (state change)",
     "shot": "s4",
@@ -165,8 +164,8 @@
    },
    {
     "at_s": 55.0,
-    "kind": "force_arrows",
-    "color": "red",
+    "kind": "highlight",
+    "color": "pale blue (neutral)",
     "shot": "s4",
     "term": ""
    },
@@ -179,27 +178,27 @@
    },
    {
     "at_s": 63.7,
-    "kind": "term_callout",
-    "color": "yellow",
+    "kind": "highlight",
+    "color": "pale blue (neutral)",
     "shot": "s5",
-    "term": "VARILLA"
+    "term": ""
    },
    {
-    "at_s": 68.3,
-    "kind": "term_callout",
-    "color": "yellow",
+    "at_s": 68.4,
+    "kind": "highlight",
+    "color": "pale blue (neutral)",
     "shot": "s5",
-    "term": "SUSPENSIÓN"
+    "term": ""
    },
    {
-    "at_s": 72.3,
+    "at_s": 72.5,
     "kind": "term_callout",
     "color": "yellow",
     "shot": "s6",
     "term": "PISTÓN"
    },
    {
-    "at_s": 77.2,
+    "at_s": 77.5,
     "kind": "term_callout",
     "color": "yellow",
     "shot": "s6",
@@ -227,1524 +226,6 @@
     "term": ""
    },
    {
-    "at_s": 91.5,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s7",
-    "term": ""
-   },
-   {
-    "at_s": 100.5,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s8",
-    "term": ""
-   },
-   {
-    "at_s": 107.7,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s8",
-    "term": ""
-   },
-   {
-    "at_s": 112.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s9",
-    "term": ""
-   },
-   {
-    "at_s": 115.5,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s9",
-    "term": ""
-   },
-   {
-    "at_s": 118.9,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s9",
-    "term": ""
-   },
-   {
-    "at_s": 121.5,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s10",
-    "term": ""
-   },
-   {
-    "at_s": 128.0,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s10",
-    "term": ""
-   },
-   {
-    "at_s": 134.3,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s10",
-    "term": ""
-   },
-   {
-    "at_s": 139.7,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s11",
-    "term": "RESORTE"
-   },
-   {
-    "at_s": 141.9,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s11",
-    "term": ""
-   }
-  ],
-  "model_cues": [
-   {
-    "block": 0,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "El resorte",
-     "el resorte",
-     "resortes cada bache"
-    ],
-    "why": "Opens on the whole suspension bouncing over bumps on springs alone."
-   },
-   {
-    "block": 1,
-    "shot": "cutaway",
-    "event": [
-     "term_callout",
-     "force_arrows"
-    ],
-    "cue": [
-     "cada rueda",
-     "un bache"
-    ],
-    "why": "Shows the coil spring beside the wheel compressing as it takes the bump."
-   },
-   {
-    "block": 2,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "Un resorte apretado",
-     "se pasa de"
-    ],
-    "why": "Shows the compressed spring pushing back and overshooting."
-   },
-   {
-    "block": 3,
-    "shot": "cutaway",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "term_callout"
-    ],
-    "cue": [
-     "vuelve a bajar",
-     "subiendo y",
-     "el amortiguador"
-    ],
-    "why": "Shows the spring oscillating, then introduces the damper next to it."
-   },
-   {
-    "block": 4,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "damp",
-     "force_arrows"
-    ],
-    "cue": [
-     "del peso",
-     "solo controla",
-     "suspensión"
-    ],
-    "why": "The spring carries the weight while the damper controls the motion, so the ringing becomes damped."
-   },
-   {
-    "block": 5,
-    "shot": "cutaway",
-    "event": [
-     "term_callout",
-     "term_callout",
-     "term_callout"
-    ],
-    "cue": [
-     "cilindro sellado",
-     "una varilla",
-     "la suspensión"
-    ],
-    "why": "Cross-section names the cylinder, the rod and their mounts."
-   },
-   {
-    "block": 6,
-    "shot": "insert",
-    "event": [
-     "term_callout",
-     "term_callout",
-     "flow_chevrons"
-    ],
-    "cue": [
-     "el pistón",
-     "unas válvulas",
-     "empujar el aceite"
-    ],
-    "why": "Close-up of the piston face with oil squeezing through the valve passages."
-   },
-   {
-    "block": 7,
-    "shot": "cutaway",
-    "event": [
-     "force_arrows",
-     "flow_chevrons",
-     "force_arrows"
-    ],
-    "cue": [
-     "cuesta fuerza",
-     "miel espesa",
-     "resiste"
-    ],
-    "why": "Shows the piston fighting the oil's resistance as the rod moves."
-   },
-   {
-    "block": 8,
-    "shot": "insert",
-    "event": [
-     "flow_chevrons",
-     "force_arrows"
-    ],
-    "cue": [
-     "del aceite",
-     "al comprimirse"
-    ],
-    "why": "Close-up of oil heating as it is forced through the passages, which resist differently in each direction."
-   },
-   {
-    "block": 9,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "el bache",
-     "el amortiguador",
-     "rebotando después"
-    ],
-    "why": "The car settles over the bump, compared with what happens when the damper is worn out."
-   },
-   {
-    "block": 10,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "Las llantas",
-     "a frenar",
-     "un bache"
-    ],
-    "why": "Shows the tires losing contact with the road, which hurts braking and steering."
-   },
-   {
-    "block": 11,
-    "shot": "cutaway",
-    "event": [
-     "term_callout",
-     "flow_chevrons"
-    ],
-    "cue": [
-     "al resorte",
-     "de aceite"
-    ],
-    "why": "Closes on the cross-section: the oil tube, not the spring, gets the credit."
-   }
-  ],
-  "validator_notes": []
- },
- {
-  "name": "v2opus2",
-  "model": "claude-opus-5-5",
-  "blocks": 12,
-  "block_seconds": [
-   13.6,
-   10.0,
-   9.4,
-   12.8,
-   12.7,
-   11.9,
-   13.2,
-   11.8,
-   15.3,
-   10.6,
-   17.8,
-   7.6
-  ],
-  "shots": {
-   "establishing": 5,
-   "cutaway": 5,
-   "insert": 2
-  },
-  "events": {
-   "force_arrows": 21,
-   "term_callout": 9,
-   "damp": 1,
-   "flow_chevrons": 4
-  },
-  "terms": [
-   "RUEDA",
-   "AMORTIGUADOR",
-   "ACEITE",
-   "VARILLA",
-   "SUSPENSIÓN",
-   "PISTÓN",
-   "VÁLVULA",
-   "AMORTIGUADOR",
-   "RESORTE"
-  ],
-  "phrases": 95,
-  "phrase_length_violations": [],
-  "cross_sentence_phrases": [],
-  "accumulating_phrases": 0,
-  "ambient_every_shot": true,
-  "camera_moves_every_shot": true,
-  "consecutive_same_type_cuts": 1,
-  "longest_no_change_s": 8.8,
-  "longest_starts_at_s": 4.7,
-  "gaps_over_cap": [],
-  "seconds_in_gaps_over_cap": 0,
-  "nouns_mentioned": [
-   "aceite",
-   "amortiguador",
-   "carrocería",
-   "cilindro",
-   "llantas",
-   "pistón",
-   "resorte",
-   "rueda",
-   "suspensión",
-   "varilla",
-   "válvulas"
-  ],
-  "nouns_acknowledged": [
-   "aceite",
-   "amortiguador",
-   "carrocería",
-   "cilindro",
-   "llantas",
-   "pistón",
-   "resorte",
-   "rueda",
-   "suspensión",
-   "varilla",
-   "válvulas"
-  ],
-  "nouns_unacknowledged": [],
-  "damp_at_s": 52.833333333333336,
-  "first_amortiguador_s": 44.2,
-  "event_list": [
-   {
-    "at_s": 0.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s0",
-    "term": ""
-   },
-   {
-    "at_s": 0.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s0",
-    "term": ""
-   },
-   {
-    "at_s": 4.7,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s0",
-    "term": ""
-   },
-   {
-    "at_s": 15.6,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s1",
-    "term": "RUEDA"
-   },
-   {
-    "at_s": 20.4,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s1",
-    "term": ""
-   },
-   {
-    "at_s": 22.3,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s1",
-    "term": ""
-   },
-   {
-    "at_s": 28.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s2",
-    "term": ""
-   },
-   {
-    "at_s": 29.2,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s2",
-    "term": ""
-   },
-   {
-    "at_s": 31.8,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s2",
-    "term": ""
-   },
-   {
-    "at_s": 33.4,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s3",
-    "term": ""
-   },
-   {
-    "at_s": 40.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s3",
-    "term": ""
-   },
-   {
-    "at_s": 44.1,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s3",
-    "term": "AMORTIGUADOR"
-   },
-   {
-    "at_s": 50.3,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s4",
-    "term": ""
-   },
-   {
-    "at_s": 52.8,
-    "kind": "damp",
-    "color": "none (state change)",
-    "shot": "s4",
-    "term": ""
-   },
-   {
-    "at_s": 55.0,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s4",
-    "term": ""
-   },
-   {
-    "at_s": 60.5,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s5",
-    "term": "ACEITE"
-   },
-   {
-    "at_s": 65.2,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s5",
-    "term": "VARILLA"
-   },
-   {
-    "at_s": 68.4,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s5",
-    "term": "SUSPENSIÓN"
-   },
-   {
-    "at_s": 73.8,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s6",
-    "term": "PISTÓN"
-   },
-   {
-    "at_s": 77.2,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s6",
-    "term": "VÁLVULA"
-   },
-   {
-    "at_s": 80.9,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s6",
-    "term": ""
-   },
-   {
-    "at_s": 84.2,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s7",
-    "term": ""
-   },
-   {
-    "at_s": 89.6,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s7",
-    "term": ""
-   },
-   {
-    "at_s": 93.6,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s7",
-    "term": ""
-   },
-   {
-    "at_s": 99.0,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s8",
-    "term": ""
-   },
-   {
-    "at_s": 102.4,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s8",
-    "term": "AMORTIGUADOR"
-   },
-   {
-    "at_s": 107.7,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s8",
-    "term": ""
-   },
-   {
-    "at_s": 112.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s9",
-    "term": ""
-   },
-   {
-    "at_s": 115.5,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s9",
-    "term": ""
-   },
-   {
-    "at_s": 118.5,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s9",
-    "term": ""
-   },
-   {
-    "at_s": 121.5,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s10",
-    "term": ""
-   },
-   {
-    "at_s": 126.5,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s10",
-    "term": ""
-   },
-   {
-    "at_s": 134.3,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s10",
-    "term": ""
-   },
-   {
-    "at_s": 139.7,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s11",
-    "term": "RESORTE"
-   },
-   {
-    "at_s": 142.6,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s11",
-    "term": ""
-   }
-  ],
-  "model_cues": [
-   {
-    "block": 0,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "El resorte",
-     "el resorte",
-     "resortes"
-    ],
-    "why": "Open on the whole suspension, which keeps bouncing on its spring."
-   },
-   {
-    "block": 1,
-    "shot": "cutaway",
-    "event": [
-     "term_callout",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "cada rueda",
-     "un bache",
-     "el golpe"
-    ],
-    "why": "The spring sits beside the wheel and gets squeezed by the bump."
-   },
-   {
-    "block": 2,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "Un resorte",
-     "quiere regresar",
-     "largo"
-    ],
-    "why": "Show the spring rebounding too far, in context."
-   },
-   {
-    "block": 3,
-    "shot": "cutaway",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "term_callout"
-    ],
-    "cue": [
-     "vuelve a bajar",
-     "seguiría subiendo",
-     "el amortiguador"
-    ],
-    "why": "Endless oscillation, then the damper is introduced."
-   },
-   {
-    "block": 4,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "damp",
-     "force_arrows"
-    ],
-    "cue": [
-     "del resorte",
-     "solo controla",
-     "suspensión"
-    ],
-    "why": "First mention of the damper controlling motion; the ringing becomes damped."
-   },
-   {
-    "block": 5,
-    "shot": "cutaway",
-    "event": [
-     "term_callout",
-     "term_callout",
-     "term_callout"
-    ],
-    "cue": [
-     "aceite",
-     "La varilla",
-     "suspensión"
-    ],
-    "why": "Cross-section that names the cylinder, oil, piston, rod and mounts."
-   },
-   {
-    "block": 6,
-    "shot": "insert",
-    "event": [
-     "term_callout",
-     "term_callout",
-     "flow_chevrons"
-    ],
-    "cue": [
-     "aceite Ese pistón",
-     "unas válvulas",
-     "el aceite"
-    ],
-    "why": "Close-up of the piston face, with oil squeezing through the valves."
-   },
-   {
-    "block": 7,
-    "shot": "cutaway",
-    "event": [
-     "force_arrows",
-     "flow_chevrons",
-     "force_arrows"
-    ],
-    "cue": [
-     "cuesta fuerza",
-     "más rápido",
-     "frena cada rebote"
-    ],
-    "why": "Resistance from the forced oil flow slows the rod."
-   },
-   {
-    "block": 8,
-    "shot": "insert",
-    "event": [
-     "flow_chevrons",
-     "term_callout",
-     "force_arrows"
-    ],
-    "cue": [
-     "Se convierte",
-     "un amortiguador",
-     "al comprimirse"
-    ],
-    "why": "Oil flow turns motion into heat; compression and rebound are handled differently."
-   },
-   {
-    "block": 9,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "el bache",
-     "el amortiguador",
-     "sigue"
-    ],
-    "why": "The car absorbs the bump in context, compared with a worn damper."
-   },
-   {
-    "block": 10,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "Las llantas",
-     "no toca",
-     "un bache"
-    ],
-    "why": "Tire contact with the road is what matters."
-   },
-   {
-    "block": 11,
-    "shot": "cutaway",
-    "event": [
-     "term_callout",
-     "flow_chevrons"
-    ],
-    "cue": [
-     "al resorte",
-     "agujeros diminutos"
-    ],
-    "why": "Close on the oil tube and its tiny holes, which turn each bounce into heat."
-   }
-  ],
-  "validator_notes": []
- },
- {
-  "name": "v2default1",
-  "model": "CLI default",
-  "blocks": 12,
-  "block_seconds": [
-   13.6,
-   10.0,
-   9.4,
-   12.8,
-   12.7,
-   11.9,
-   13.2,
-   11.8,
-   15.3,
-   10.6,
-   17.8,
-   7.6
-  ],
-  "shots": {
-   "establishing": 4,
-   "cutaway": 6,
-   "insert": 2
-  },
-  "events": {
-   "force_arrows": 19,
-   "term_callout": 10,
-   "damp": 1,
-   "flow_chevrons": 6
-  },
-  "terms": [
-   "RUEDA",
-   "AMORTIGUADOR",
-   "CILINDRO",
-   "VARILLA",
-   "SUSPENSIÓN",
-   "PISTÓN",
-   "VÁLVULAS",
-   "ACEITE",
-   "AMORTIGUADOR",
-   "RESORTE"
-  ],
-  "phrases": 95,
-  "phrase_length_violations": [],
-  "cross_sentence_phrases": [],
-  "accumulating_phrases": 0,
-  "ambient_every_shot": true,
-  "camera_moves_every_shot": true,
-  "consecutive_same_type_cuts": 0,
-  "longest_no_change_s": 8.8,
-  "longest_starts_at_s": 4.7,
-  "gaps_over_cap": [],
-  "seconds_in_gaps_over_cap": 0,
-  "nouns_mentioned": [
-   "aceite",
-   "amortiguador",
-   "carrocería",
-   "cilindro",
-   "llantas",
-   "pistón",
-   "resorte",
-   "rueda",
-   "suspensión",
-   "varilla",
-   "válvulas"
-  ],
-  "nouns_acknowledged": [
-   "aceite",
-   "amortiguador",
-   "carrocería",
-   "cilindro",
-   "llantas",
-   "pistón",
-   "resorte",
-   "rueda",
-   "suspensión",
-   "varilla",
-   "válvulas"
-  ],
-  "nouns_unacknowledged": [],
-  "damp_at_s": 53.1,
-  "first_amortiguador_s": 44.2,
-  "event_list": [
-   {
-    "at_s": 0.3,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s0",
-    "term": ""
-   },
-   {
-    "at_s": 0.3,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s0",
-    "term": ""
-   },
-   {
-    "at_s": 4.7,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s0",
-    "term": ""
-   },
-   {
-    "at_s": 15.9,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s1",
-    "term": "RUEDA"
-   },
-   {
-    "at_s": 17.9,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s1",
-    "term": ""
-   },
-   {
-    "at_s": 22.3,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s1",
-    "term": ""
-   },
-   {
-    "at_s": 28.3,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s2",
-    "term": ""
-   },
-   {
-    "at_s": 30.7,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s2",
-    "term": ""
-   },
-   {
-    "at_s": 31.8,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s2",
-    "term": ""
-   },
-   {
-    "at_s": 35.5,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s3",
-    "term": ""
-   },
-   {
-    "at_s": 41.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s3",
-    "term": ""
-   },
-   {
-    "at_s": 44.2,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s3",
-    "term": "AMORTIGUADOR"
-   },
-   {
-    "at_s": 52.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s4",
-    "term": ""
-   },
-   {
-    "at_s": 53.1,
-    "kind": "damp",
-    "color": "none (state change)",
-    "shot": "s4",
-    "term": ""
-   },
-   {
-    "at_s": 55.0,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s4",
-    "term": ""
-   },
-   {
-    "at_s": 58.9,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s5",
-    "term": "CILINDRO"
-   },
-   {
-    "at_s": 63.9,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s5",
-    "term": "VARILLA"
-   },
-   {
-    "at_s": 68.4,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s5",
-    "term": "SUSPENSIÓN"
-   },
-   {
-    "at_s": 72.5,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s6",
-    "term": "PISTÓN"
-   },
-   {
-    "at_s": 73.8,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s6",
-    "term": ""
-   },
-   {
-    "at_s": 77.5,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s6",
-    "term": "VÁLVULAS"
-   },
-   {
-    "at_s": 84.6,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s7",
-    "term": ""
-   },
-   {
-    "at_s": 87.9,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s7",
-    "term": ""
-   },
-   {
-    "at_s": 92.9,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s7",
-    "term": ""
-   },
-   {
-    "at_s": 100.7,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s8",
-    "term": "ACEITE"
-   },
-   {
-    "at_s": 107.8,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s8",
-    "term": ""
-   },
-   {
-    "at_s": 108.8,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s8",
-    "term": ""
-   },
-   {
-    "at_s": 112.2,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s9",
-    "term": ""
-   },
-   {
-    "at_s": 115.7,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s9",
-    "term": "AMORTIGUADOR"
-   },
-   {
-    "at_s": 118.9,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s9",
-    "term": ""
-   },
-   {
-    "at_s": 121.8,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s10",
-    "term": ""
-   },
-   {
-    "at_s": 125.6,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s10",
-    "term": ""
-   },
-   {
-    "at_s": 131.8,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s10",
-    "term": ""
-   },
-   {
-    "at_s": 139.8,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s11",
-    "term": "RESORTE"
-   },
-   {
-    "at_s": 142.0,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s11",
-    "term": ""
-   },
-   {
-    "at_s": 146.0,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s11",
-    "term": ""
-   }
-  ],
-  "model_cues": [
-   {
-    "block": 0,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "resorte",
-     "resorte",
-     "resortes"
-    ],
-    "why": "Car bouncing on springs alone, shown in full context."
-   },
-   {
-    "block": 1,
-    "shot": "cutaway",
-    "event": [
-     "term_callout",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "rueda",
-     "peso",
-     "golpe"
-    ],
-    "why": "Spring carrying load and compressing on the bump."
-   },
-   {
-    "block": 2,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "resorte",
-     "regresa",
-     "largo"
-    ],
-    "why": "Whole car overshooting as the spring rebounds."
-   },
-   {
-    "block": 3,
-    "shot": "cutaway",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "term_callout"
-    ],
-    "cue": [
-     "subir",
-     "bajando",
-     "amortiguador"
-    ],
-    "why": "Show endless oscillation, then introduce the damper in section."
-   },
-   {
-    "block": 4,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "damp",
-     "force_arrows"
-    ],
-    "cue": [
-     "amortiguador",
-     "controla",
-     "suspensión"
-    ],
-    "why": "Damp switch where the damper first controls the motion."
-   },
-   {
-    "block": 5,
-    "shot": "cutaway",
-    "event": [
-     "term_callout",
-     "term_callout",
-     "term_callout"
-    ],
-    "cue": [
-     "cilindro",
-     "varilla",
-     "suspensión"
-    ],
-    "why": "Cross-section naming the parts and mounts."
-   },
-   {
-    "block": 6,
-    "shot": "insert",
-    "event": [
-     "term_callout",
-     "flow_chevrons",
-     "term_callout"
-    ],
-    "cue": [
-     "pistón",
-     "aceite",
-     "válvulas"
-    ],
-    "why": "Close-up of piston face, valve passages and oil flow."
-   },
-   {
-    "block": 7,
-    "shot": "cutaway",
-    "event": [
-     "force_arrows",
-     "flow_chevrons",
-     "force_arrows"
-    ],
-    "cue": [
-     "fuerza",
-     "popote",
-     "resistencia"
-    ],
-    "why": "Resistance to oil flow brakes the piston motion."
-   },
-   {
-    "block": 8,
-    "shot": "insert",
-    "event": [
-     "term_callout",
-     "flow_chevrons",
-     "flow_chevrons"
-    ],
-    "cue": [
-     "aceite",
-     "comprimirse",
-     "estirarse"
-    ],
-    "why": "Oil heating and different flow on compression versus rebound."
-   },
-   {
-    "block": 9,
-    "shot": "cutaway",
-    "event": [
-     "force_arrows",
-     "term_callout",
-     "force_arrows"
-    ],
-    "cue": [
-     "bache",
-     "amortiguador",
-     "rebotando"
-    ],
-    "why": "Healthy versus worn damper inside the cutaway."
-   },
-   {
-    "block": 10,
-    "shot": "establishing",
-    "event": [
-     "force_arrows",
-     "force_arrows",
-     "force_arrows"
-    ],
-    "cue": [
-     "llantas",
-     "llanta",
-     "importa"
-    ],
-    "why": "Tires losing road contact seen in full context."
-   },
-   {
-    "block": 11,
-    "shot": "cutaway",
-    "event": [
-     "term_callout",
-     "flow_chevrons",
-     "flow_chevrons"
-    ],
-    "cue": [
-     "resorte",
-     "aceite",
-     "calor"
-    ],
-    "why": "Closing on the oil-filled damper turning motion into heat."
-   }
-  ],
-  "validator_notes": []
- },
- {
-  "name": "v2default2",
-  "model": "CLI default",
-  "blocks": 12,
-  "block_seconds": [
-   13.6,
-   10.0,
-   9.4,
-   12.8,
-   12.7,
-   11.9,
-   13.2,
-   11.8,
-   15.3,
-   10.6,
-   17.8,
-   7.6
-  ],
-  "shots": {
-   "establishing": 4,
-   "cutaway": 6,
-   "insert": 2
-  },
-  "events": {
-   "force_arrows": 19,
-   "term_callout": 10,
-   "damp": 1,
-   "flow_chevrons": 5
-  },
-  "terms": [
-   "RUEDA",
-   "AMORTIGUADOR",
-   "ACEITE",
-   "VARILLA",
-   "SUSPENSIÓN",
-   "PISTÓN",
-   "VÁLVULA",
-   "ACEITE",
-   "AMORTIGUADOR",
-   "ACEITE"
-  ],
-  "phrases": 95,
-  "phrase_length_violations": [],
-  "cross_sentence_phrases": [],
-  "accumulating_phrases": 0,
-  "ambient_every_shot": true,
-  "camera_moves_every_shot": true,
-  "consecutive_same_type_cuts": 0,
-  "longest_no_change_s": 8.8,
-  "longest_starts_at_s": 4.7,
-  "gaps_over_cap": [],
-  "seconds_in_gaps_over_cap": 0,
-  "nouns_mentioned": [
-   "aceite",
-   "amortiguador",
-   "carrocería",
-   "cilindro",
-   "llantas",
-   "pistón",
-   "resorte",
-   "rueda",
-   "suspensión",
-   "varilla",
-   "válvulas"
-  ],
-  "nouns_acknowledged": [
-   "aceite",
-   "amortiguador",
-   "carrocería",
-   "cilindro",
-   "llantas",
-   "pistón",
-   "resorte",
-   "rueda",
-   "suspensión",
-   "varilla",
-   "válvulas"
-  ],
-  "nouns_unacknowledged": [],
-  "damp_at_s": 53.1,
-  "first_amortiguador_s": 44.2,
-  "event_list": [
-   {
-    "at_s": 0.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s0",
-    "term": ""
-   },
-   {
-    "at_s": 0.3,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s0",
-    "term": ""
-   },
-   {
-    "at_s": 4.7,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s0",
-    "term": ""
-   },
-   {
-    "at_s": 15.9,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s1",
-    "term": "RUEDA"
-   },
-   {
-    "at_s": 17.9,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s1",
-    "term": ""
-   },
-   {
-    "at_s": 21.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s1",
-    "term": ""
-   },
-   {
-    "at_s": 28.3,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s2",
-    "term": ""
-   },
-   {
-    "at_s": 31.2,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s2",
-    "term": ""
-   },
-   {
-    "at_s": 35.5,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s3",
-    "term": ""
-   },
-   {
-    "at_s": 41.1,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s3",
-    "term": ""
-   },
-   {
-    "at_s": 44.2,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s3",
-    "term": "AMORTIGUADOR"
-   },
-   {
-    "at_s": 50.5,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s4",
-    "term": ""
-   },
-   {
-    "at_s": 53.1,
-    "kind": "damp",
-    "color": "none (state change)",
-    "shot": "s4",
-    "term": ""
-   },
-   {
-    "at_s": 55.0,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s4",
-    "term": ""
-   },
-   {
-    "at_s": 60.5,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s5",
-    "term": "ACEITE"
-   },
-   {
-    "at_s": 65.2,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s5",
-    "term": "VARILLA"
-   },
-   {
-    "at_s": 68.4,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s5",
-    "term": "SUSPENSIÓN"
-   },
-   {
-    "at_s": 72.5,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s6",
-    "term": "PISTÓN"
-   },
-   {
-    "at_s": 73.8,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s6",
-    "term": ""
-   },
-   {
-    "at_s": 77.5,
-    "kind": "term_callout",
-    "color": "yellow",
-    "shot": "s6",
-    "term": "VÁLVULA"
-   },
-   {
-    "at_s": 84.2,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s7",
-    "term": ""
-   },
-   {
-    "at_s": 89.6,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
-    "shot": "s7",
-    "term": ""
-   },
-   {
     "at_s": 93.6,
     "kind": "force_arrows",
     "color": "red",
@@ -1759,16 +240,16 @@
     "term": "ACEITE"
    },
    {
-    "at_s": 107.8,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
+    "at_s": 102.6,
+    "kind": "highlight",
+    "color": "pale blue (neutral)",
     "shot": "s8",
     "term": ""
    },
    {
-    "at_s": 108.8,
-    "kind": "flow_chevrons",
-    "color": "gray/white",
+    "at_s": 107.8,
+    "kind": "force_arrows",
+    "color": "red",
     "shot": "s8",
     "term": ""
    },
@@ -1781,10 +262,10 @@
    },
    {
     "at_s": 115.7,
-    "kind": "term_callout",
-    "color": "yellow",
+    "kind": "highlight",
+    "color": "pale blue (neutral)",
     "shot": "s9",
-    "term": "AMORTIGUADOR"
+    "term": ""
    },
    {
     "at_s": 118.9,
@@ -1794,21 +275,14 @@
     "term": ""
    },
    {
-    "at_s": 121.8,
+    "at_s": 128.1,
     "kind": "force_arrows",
     "color": "red",
     "shot": "s10",
     "term": ""
    },
    {
-    "at_s": 125.6,
-    "kind": "force_arrows",
-    "color": "red",
-    "shot": "s10",
-    "term": ""
-   },
-   {
-    "at_s": 133.3,
+    "at_s": 134.3,
     "kind": "force_arrows",
     "color": "red",
     "shot": "s10",
@@ -1816,20 +290,20 @@
    },
    {
     "at_s": 139.8,
-    "kind": "force_arrows",
-    "color": "red",
+    "kind": "highlight",
+    "color": "pale blue (neutral)",
     "shot": "s11",
     "term": ""
    },
    {
     "at_s": 142.0,
-    "kind": "term_callout",
-    "color": "yellow",
+    "kind": "highlight",
+    "color": "pale blue (neutral)",
     "shot": "s11",
-    "term": "ACEITE"
+    "term": ""
    },
    {
-    "at_s": 144.0,
+    "at_s": 143.0,
     "kind": "flow_chevrons",
     "color": "gray/white",
     "shot": "s11",
@@ -1841,16 +315,14 @@
     "block": 0,
     "shot": "establishing",
     "event": [
-     "force_arrows",
-     "force_arrows",
-     "force_arrows"
+     "highlight",
+     "highlight"
     ],
     "cue": [
-     "el resorte",
      "resorte",
      "resortes"
     ],
-    "why": "Whole car bouncing on springs opens the video."
+    "why": "Open on the whole suspension; spring named, no force, so neutral pulses."
    },
    {
     "block": 1,
@@ -1862,23 +334,23 @@
     ],
     "cue": [
      "rueda",
-     "peso del coche",
+     "el peso",
      "se aprieta"
     ],
-    "why": "Cross-section shows the spring carrying weight and compressing."
+    "why": "Spring carries weight and is pressed by the bump."
    },
    {
     "block": 2,
     "shot": "establishing",
     "event": [
-     "force_arrows",
+     "highlight",
      "force_arrows"
     ],
     "cue": [
-     "resorte apretado",
-     "se pasa de"
+     "resorte",
+     "regresa"
     ],
-    "why": "Context view of the spring pushing back and overshooting."
+    "why": "Return to context to show the spring overshooting."
    },
    {
     "block": 3,
@@ -1889,56 +361,56 @@
      "term_callout"
     ],
     "cue": [
-     "subir otra vez",
-     "bajando",
+     "bajar",
+     "subiendo y bajando",
      "amortiguador"
     ],
-    "why": "Endless bouncing, then the damper is introduced."
+    "why": "Endless bobbing, then introduce the damper."
    },
    {
     "block": 4,
-    "shot": "establishing",
+    "shot": "cutaway",
     "event": [
-     "force_arrows",
+     "highlight",
      "damp",
-     "force_arrows"
+     "highlight"
     ],
     "cue": [
-     "resorte El amortiguador",
+     "resorte",
      "controla",
      "suspensión"
     ],
-    "why": "Damp fires where the damper first controls the motion; whole suspension settles."
+    "why": "Damper first controls the bouncing here, so damp once."
    },
    {
     "block": 5,
     "shot": "cutaway",
     "event": [
      "term_callout",
-     "term_callout",
-     "term_callout"
+     "highlight",
+     "highlight"
     ],
     "cue": [
-     "aceite",
-     "La varilla",
-     "suspensión"
+     "cilindro",
+     "una varilla",
+     "suspensión de la"
     ],
-    "why": "Cross-section naming the damper's parts and mounts."
+    "why": "Anatomy of the damper and its mounts."
    },
    {
     "block": 6,
     "shot": "insert",
     "event": [
      "term_callout",
-     "flow_chevrons",
-     "term_callout"
+     "term_callout",
+     "flow_chevrons"
     ],
     "cue": [
      "pistón",
-     "aceite",
-     "válvulas"
+     "válvulas",
+     "empujar el aceite"
     ],
-    "why": "Close-up of the piston face and valve passages."
+    "why": "Close-up of piston face, valves and oil squeezing through."
    },
    {
     "block": 7,
@@ -1950,32 +422,32 @@
     ],
     "cue": [
      "cuesta fuerza",
-     "más rápido",
+     "miel espesa",
      "frena cada rebote"
     ],
-    "why": "Resistance to fast oil flow shown in the cross-section."
+    "why": "Resistance to oil flow brakes each rebound."
    },
    {
     "block": 8,
     "shot": "insert",
     "event": [
      "term_callout",
-     "flow_chevrons",
-     "flow_chevrons"
+     "highlight",
+     "force_arrows"
     ],
     "cue": [
      "aceite",
-     "comprimirse",
-     "estirarse"
+     "amortiguador",
+     "comprimirse"
     ],
-    "why": "Close-up of oil heating and flowing differently each direction."
+    "why": "Close-up on oil heating; compression is a real motion."
    },
    {
     "block": 9,
     "shot": "cutaway",
     "event": [
      "force_arrows",
-     "term_callout",
+     "highlight",
      "force_arrows"
     ],
     "cue": [
@@ -1983,39 +455,40 @@
      "amortiguador",
      "rebotando"
     ],
-    "why": "Damper working versus worn out, in the cross-section."
+    "why": "Good damper versus worn one bouncing."
    },
    {
     "block": 10,
     "shot": "establishing",
     "event": [
      "force_arrows",
-     "force_arrows",
      "force_arrows"
     ],
     "cue": [
-     "llantas",
-     "llanta",
-     "la próxima vez"
+     "frenar",
+     "un bache"
     ],
-    "why": "Wheel and road context for tire contact."
+    "why": "Tyre contact with the road in the full suspension context."
    },
    {
     "block": 11,
     "shot": "cutaway",
     "event": [
-     "force_arrows",
-     "term_callout",
+     "highlight",
+     "highlight",
      "flow_chevrons"
     ],
     "cue": [
      "resorte",
      "aceite",
-     "convierte cada salto"
+     "diminutos"
     ],
-    "why": "Final recap on the damper's oil and holes."
+    "why": "Closing recap on oil and tiny holes."
    }
   ],
-  "validator_notes": []
+  "validator_notes": [
+   "block 0: highlight at 0.3s dropped: collides with another event",
+   "block 10: force_arrows on 'piso más fácil' has no force or motion word; dropped"
+  ]
  }
 ]

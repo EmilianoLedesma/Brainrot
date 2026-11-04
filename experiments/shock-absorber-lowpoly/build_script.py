@@ -118,12 +118,12 @@ def main() -> None:
         for k, e in enumerate(s.get("events") or [s["event"]]):
             if e["kind"] == "none":
                 continue
-            events.append({"id": f"e{n}_{k}", "shot": shot["id"], "kind": e["kind"], "at": frames(e["at"]), "term": e.get("term", "")})
+            events.append({"id": f"e{n}_{k}", "shot": shot["id"], "kind": e["kind"], "at": frames(e["at"]), "term": e.get("term", ""), "target": e.get("target", "")})
             if e["kind"] == "term_callout":
                 at = frames(e["at"])
                 phrase_until = max((c["until"] for c in captions if c["style"] == "phrase" and c["at"] <= at < c["until"]), default=at + 30)
                 captions.append({"id": f"t{n}_{k}", "at": at, "until": min(phrase_until + 30, shot["end"] - 1), "style": "term", "text": e["term"]})  # holds a beat longer
-    cut = [e["at"] for e in events]
+    cut = [e["at"] for e in events][::max(1, len(events) // 12)]  # a dozen event frames at most
     stills = sorted(set([round(total * (i + .5) / 24) for i in range(24)] + [min(total - 1, a + 8) for a in cut]))
     runs = []
     for kind in ("establishing", "cutaway", "insert"):

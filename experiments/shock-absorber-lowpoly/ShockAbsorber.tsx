@@ -13,10 +13,11 @@ import {EZ,FPS,H,W,clip,ez} from '../remotion-explainer/coffee-sci/kit';
 export const SHOCK_FRAMES=script.durationFrames;
 const FONT='Inter, "Segoe UI", Arial, sans-serif';
 const K={bg:'#8FD9D2',road:'#4A5560',mark:'#F2F5F8',tire:'#2D3640',steel:'#C9D3DC',steelMid:'#9AA7B3',steelDark:'#6B7886',rod:'#E3EAF0',body:'#E3E8EE',cabin:'#D5DCE5',
-  glass:'#3A4452',oil:'#F28C38',slot:'#2B323B',flow:'#EDEFF2',red:'#E5333B',term:'#FFD23F',white:'#FFFFFF'};
+  glass:'#3A4452',oil:'#F28C38',slot:'#2B323B',flow:'#EDEFF2',red:'#E5333B',term:'#FFD23F',white:'#FFFFFF',hl:'#BEE3FF'};
 type V3=[number,number,number];
 const AMBIENT=['damper-cycle','valve-cycle'];
-const PARTS=['PISTÓN','VÁLVULA','VÁLVULAS','AMORTIGUADOR','RESORTE','ACEITE','CILINDRO','VARILLA','SUSPENSIÓN'];
+const TARGETS=['spring','damper','piston','rod','valve','oil','cylinder','wheel','body','suspension'];
+const PARTS=['PISTÓN','VÁLVULA','VÁLVULAS','AMORTIGUADOR','RESORTE','ACEITE','CILINDRO','VARILLA','SUSPENSIÓN','CARROCERÍA','RUEDA','LLANTAS','LLANTA'];
 
 (function validate(){
   for(const s of script.shots){
@@ -29,6 +30,7 @@ const PARTS=['PISTÓN','VÁLVULA','VÁLVULAS','AMORTIGUADOR','RESORTE','ACEITE',
     if(c.text.split(' ').length>5)throw new Error(`caption ${c.id}: a phrase is at most five words`);
     if(i&&c.text.toLowerCase().startsWith(phrases[i-1].text.toLowerCase()))throw new Error(`caption ${c.id} accumulates on the previous phrase`);
   });
+  script.events.filter(e=>e.kind==='highlight').forEach(e=>{if(!TARGETS.includes(e.target))throw new Error(`event ${e.id}: highlight needs a valid target`);});
   script.captions.filter(c=>c.style==='term').forEach(c=>{if(!PARTS.includes(c.text))throw new Error(`term ${c.id}: "${c.text}" is not a real part name`);});
 })();
 
@@ -81,11 +83,28 @@ const evAt=(sid:string,kind:string)=>script.events.find(e=>e.shot===sid&&e.kind=
 // The suspension rings (spring alone) until the first `damp` event anywhere in the video, then settles quickly in every shot.
 const DAMP=script.events.find(e=>e.kind==='damp')?.at??null;
 
+// ---- events: every event of a shot is drawn in its own timed window (arrow 1.5 s, highlight 1.3 s, flow 3 s) --------------------
+type Ev={kind:string,at:number,target:string};
+const shotEvents=(sid:string):Ev[]=>script.events.filter(e=>e.shot===sid);
+const win=(gf:number,at:number,dur:number)=>{const t=gf-at;return t<0||t>dur?0:Math.min(1,t/6)*Math.min(1,(dur-t)/12);};
+const act=(evs:Ev[],gf:number,kind:string,dur:number)=>Math.max(0,...evs.filter(e=>e.kind===kind).map(e=>win(gf,e.at,dur)));
+type Glow={pos:V3,size:V3,rot?:number};
+// A brief neutral pulse on a named part: pale blue, so it never reads as force (red), term (yellow) or flow (grey/white).
+function Glows({evs,gf,map}:{evs:Ev[],gf:number,map:Record<string,Glow>}){
+  return <>{evs.filter(e=>e.kind==='highlight'&&map[e.target]).map((e,i)=>{
+    const a=win(gf,e.at,40),g=map[e.target];
+    return a>0?<mesh key={i} position={g.pos} rotation-z={g.rot??0} renderOrder={5}><boxGeometry args={g.size}/>
+      <meshStandardMaterial color={K.hl} emissive={K.hl} emissiveIntensity={.8} flatShading transparent opacity={.55*a*(.75+.25*Math.sin(gf*.45))} depthWrite={false}/></mesh>:null;})}</>;
+}
+
 // ---- establishing: wheel, suspension arm, chassis, road and the coil spring + damper strut -------------------------
 function Establishing({gf,s}:{gf:number,s:typeof script.shots[number]}){
-  const P=s.ambient.period,c=cyc(gf,P,DAMP),arrows=evAt(s.id,'force_arrows'),lift=.14*c.pulse,b=.2*c.s,wy=.5+lift;
+  const P=s.ambient.period,c=cyc(gf,P,DAMP),evs=shotEvents(s.id),aA=act(evs,gf,'force_arrows',45),lift=.14*c.pulse,b=.2*c.s,wy=.5+lift;
   const u=((c.t+P/2)%P)-P/2,bx=-.1*u*(60/P);  // the bump reaches the wheel at the start of each cycle
   const piv:V3=[-1.35,1.25+b,0],arm=new THREE.Vector3(piv[0],piv[1]-wy,0),k=.3/1.35,lowY=wy+(piv[1]-wy)*k,upY=1.52+b,sx=-.3;
+  const strut:Glow={pos:[sx,(lowY+upY)/2,0],size:[.5,upY-lowY+.1,.5]};
+  const map:Record<string,Glow>={spring:strut,damper:strut,piston:strut,rod:strut,valve:strut,oil:strut,cylinder:strut,
+    wheel:{pos:[0,wy,0],size:[1.25,1.25,.6]},body:{pos:[-.4,1.9+b,0],size:[3.5,1.1,1.7]},suspension:{pos:[piv[0]/2,(piv[1]+wy)/2,0],size:[arm.length()+.25,.32,.4],rot:Math.atan2(arm.y,arm.x)}};
   return <>
     <Box size={[16,.2,3]} pos={[0,-.1,0]} color={K.road}/>
     {Array.from({length:14}).map((_,i)=><Box key={i} size={[.6,.02,.12]} pos={[((i*1.5-gf*.06)%21+21)%21-10.5,.012,.95]} color={K.mark}/>)}
@@ -102,15 +121,20 @@ function Establishing({gf,s}:{gf:number,s:typeof script.shots[number]}){
     {Array.from({length:8}).map((_,i)=><mesh key={i} position={[sx,lowY+.1+(upY-lowY-.2)*(i+.5)/8,0]} rotation-x={Math.PI/2}><torusGeometry args={[.17,.035,6,10]}/><meshStandardMaterial color={K.steel} flatShading/></mesh>)}
     <mesh position={[sx,lowY+.22,0]}><cylinderGeometry args={[.075,.075,.44,8]}/><meshStandardMaterial color={K.steelDark} flatShading/></mesh>
     <mesh position={[sx,(lowY+.44+upY)/2,0]}><cylinderGeometry args={[.04,.04,Math.max(upY-lowY-.44,.01),8]}/><meshStandardMaterial color={K.rod} flatShading/></mesh>
-    {arrows!==null&&gf>=arrows&&<Arrow from={[.8,.05,.25]} dir={[0,1,0]} len={.75} s={c.pulse}/>}
+    {aA>0&&<Arrow from={[.8,.05,.25]} dir={[0,1,0]} len={.75} s={aA}/>}
+    <Glows evs={evs} gf={gf} map={map}/>
   </>;
 }
 
 // ---- cutaway / insert: the damper in section. Piston strokes through the oil; ports let oil through (flow chevrons) ------------
 const PORTS=[-.36,-.18,.18,.36];
 function Damper({gf,s,env}:{gf:number,s:typeof script.shots[number],env:boolean}){
-  const P=s.ambient.period,c=cyc(gf,P,DAMP),flow=evAt(s.id,'flow_chevrons'),arrows=evAt(s.id,'force_arrows');
+  const P=s.ambient.period,c=cyc(gf,P,DAMP),evs=shotEvents(s.id),aF=act(evs,gf,'flow_chevrons',90),aA=act(evs,gf,'force_arrows',45);
   const yP=1.2+.45*c.s,yTop=yP+1.9,dir=-Math.sign(c.v)||1,mag=clip(Math.abs(c.v)*14);
+  const tube:Glow={pos:[0,1.3,0],size:[1.3,2.4,.8]};
+  const map:Record<string,Glow>={piston:{pos:[0,yP,0],size:[1.15,.4,.5]},valve:{pos:[0,yP,0],size:[.95,.45,.5]},rod:{pos:[0,(yP+yTop)/2,0],size:[.3,yTop-yP,.35]},
+    oil:{pos:[0,1.3,0],size:[1.15,2.2,.6]},cylinder:tube,damper:tube,...(env?{spring:{pos:[0,(.3+yTop)/2,-.1],size:[1.95,yTop-.3,1.0]},body:{pos:[0,yTop+.3,-.1],size:[2.9,.55,1.6]},
+      wheel:{pos:[0,-.05,-.1],size:[2.3,.5,1.2]},suspension:{pos:[0,-.05,-.1],size:[2.3,.5,1.2]}}:{})};
   return <>
     <HalfSolid r={.5} h={2.1} y={1.3} color={K.oil} z={-.02} opacity={.85}/>
     <mesh position-y={1.3} castShadow><cylinderGeometry args={[.56,.56,2.2,14,1,true,Math.PI/2,Math.PI]}/><meshStandardMaterial color={K.steelMid} flatShading side={THREE.DoubleSide}/></mesh>
@@ -126,10 +150,11 @@ function Damper({gf,s,env}:{gf:number,s:typeof script.shots[number],env:boolean}
       <Box size={[2.0,.3,1.0]} pos={[0,-.05,-.1]} color={K.steelMid}/>{[-.7,.7].map(x=><mesh key={x} position={[x,.14,.2]}><cylinderGeometry args={[.07,.07,.12,6]}/><meshStandardMaterial color={K.steelDark} flatShading/></mesh>)}
       {Array.from({length:9}).map((_,i)=><mesh key={i} position-y={.35+(yTop-.4)*(i+.5)/9} rotation-x={-Math.PI/2}><torusGeometry args={[.85,.045,6,12,Math.PI]}/><meshStandardMaterial color={K.steel} flatShading/></mesh>)}
     </>}
-    {flow!==null&&gf>=flow&&PORTS.map((x,pi)=>[0,1,2].map(kk=>{
+    {aF>0&&PORTS.map((x,pi)=>[0,1,2].map(kk=>{
       const ph=(gf*.025+kk/3+pi*.13)%1;
-      return <mesh key={pi+'-'+kk} position={[x,yP+dir*(-.3+ph*.6),.1]} rotation-z={dir>0?0:Math.PI} scale={mag*Math.sin(Math.PI*ph)+.001}><coneGeometry args={[.06,.16,4]}/><meshStandardMaterial color={K.flow} flatShading/></mesh>;}))}
-    {arrows!==null&&gf>=arrows&&(c.v<0?<Arrow from={[.8,yTop+1.0,.3]} dir={[0,-1,0]} len={.8} s={clip(Math.abs(c.v)*12)}/>:<Arrow from={[.8,yTop+.3,.3]} dir={[0,1,0]} len={.8} s={clip(Math.abs(c.v)*12)}/>)}
+      return <mesh key={pi+'-'+kk} position={[x,yP+dir*(-.3+ph*.6),.1]} rotation-z={dir>0?0:Math.PI} scale={mag*aF*Math.sin(Math.PI*ph)+.001}><coneGeometry args={[.06,.16,4]}/><meshStandardMaterial color={K.flow} flatShading/></mesh>;}))}
+    {aA>0&&(c.v<0?<Arrow from={[.8,yTop+1.0,.3]} dir={[0,-1,0]} len={.8} s={aA}/>:<Arrow from={[.8,yTop+.3,.3]} dir={[0,1,0]} len={.8} s={aA}/>)}
+    <Glows evs={evs} gf={gf} map={map}/>
   </>;
 }
 function Scene({i,gf}:{i:number,gf:number}){

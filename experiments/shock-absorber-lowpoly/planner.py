@@ -139,11 +139,24 @@ def finalize(scenes: list[dict], words: list[dict]) -> None:
 
 
 # ---- v2: several events per block, with the recipe's hold cap and noun-acknowledgement rules stated in the prompt -------------------
+TARGETS = ["spring", "damper", "piston", "rod", "valve", "oil", "cylinder", "wheel", "body", "suspension"]
+NOUN_TARGET = {"resorte": "spring", "amortiguador": "damper", "pistón": "piston", "varilla": "rod", "válvula": "valve", "válvulas": "valve",
+               "aceite": "oil", "cilindro": "cylinder", "suspensión": "suspension", "carrocería": "body", "rueda": "wheel", "llantas": "wheel", "llanta": "wheel"}
+# A red arrow needs a real force, push, load or motion in its cue; otherwise it is only naming a part and becomes a highlight.
+FORCE_STEMS = ("fuerz", "golp", "bache", "tope", "empuj", "apriet", "comprim", "estir", "peso", "carg", "rebot", "brinc", "salt", "sub", "baj",
+               "regres", "fren", "resist", "contact", "pierd", "presion", "cuest")
+
 GUIDANCE2 = GUIDANCE.split("Events (each locked")[0] + """Events (each locked to one spoken word; a scene may have up to three):
-- force_arrows: thin red arrows for a force or a direction of push (the bump hitting the wheel, the rod being pushed).
-- flow_chevrons: small grey/white chevrons showing oil flowing through the valve passages. Only on a cutaway or insert.
+- force_arrows: thin red arrows. ONLY when the narration at that word describes an actual force, push, load or motion: a bump hitting
+  the wheel, the spring being pressed, weight resting on the spring, the car going up or down, rebound, braking, the tyre pressing on
+  or losing the road. A word such as "importa" or "largo" is not a force. Never use force_arrows just to name a part.
+- highlight: a brief neutral pulse on ONE named part, with no force colour and no flow colour. Use it whenever the narration names a part
+  but nothing is being pushed and nothing is flowing. Give it a target from: spring, damper, piston, rod, valve, oil, cylinder, wheel,
+  body, suspension.
+- flow_chevrons: small grey/white chevrons showing oil flowing through the valve passages (oil moving). Only on a cutaway or insert.
 - term_callout: a yellow technical term. Only on a cutaway or insert. The term must name a real part and be copied from the
-  narration: pistón, válvula, amortiguador, resorte, aceite, cilindro, varilla, suspensión, carrocería, rueda, llantas.
+  narration: pistón, válvula, amortiguador, resorte, aceite, cilindro, varilla, suspensión, carrocería, rueda, llantas. Each term may be
+  used AT MOST ONCE in the whole video; for a later mention of the same part use highlight instead.
 - damp: the suspension switches from ringing (bouncing for a long time) to damped (settling quickly). Use it exactly ONCE in the
   whole video, on the scene and word where the narration first says the damper stops or controls the bouncing. Only on
   establishing or cutaway.
@@ -152,20 +165,22 @@ HARD RULES for the whole plan (they are checked after you answer):
 1. No more than 9 seconds may pass without an event or a cut to a different shot type. The scenes below show each line's start
    time in seconds so you can space events. Put several events in a long scene.
 2. Every technical noun the narration says (amortiguador, resorte, pistón, varilla, carrocería, cilindro, aceite, válvula(s),
-   suspensión, rueda or llantas) must get an event whose cue is that word or sits within two seconds of it. Use term_callout for a
-   part shown in the cutaway or insert, force_arrows or flow_chevrons when a force or flow is being described.
+   suspensión, rueda or llantas) must get an event whose cue is that word or sits within two seconds of it. Prefer highlight for a
+   part that is only named, a term_callout the first time a part is introduced, force_arrows only for real forces.
 3. Never return an empty list for a scene and never use filler: every event needs a real cue copied from that scene.
-4. At most one term_callout may start within any 3 seconds. Do not repeat the same term twice in a row.
+4. At most one term_callout may start within any 3 seconds, and no two events may start within one second of each other.
 5. A cut to a different shot type counts as a change; prefer alternating establishing, cutaway and insert over many cutaways in a row.
 
 For every scene return: scene (the number), shot, events (a list; each with kind, cue = one to three consecutive words copied exactly
-from that scene's narration, and term only for term_callout, otherwise an empty string) and why (one short reason)."""
+from that scene's narration, term only for term_callout otherwise an empty string, and target only for highlight otherwise an empty
+string) and why (one short reason)."""
 
 
 class Ev(BaseModel):
-    kind: Literal["force_arrows", "flow_chevrons", "term_callout", "damp"]
+    kind: Literal["force_arrows", "flow_chevrons", "term_callout", "highlight", "damp"]
     cue: str
     term: str
+    target: str
 
 
 class Beat2(BaseModel):
@@ -184,12 +199,22 @@ def _timed(scene: dict, words: list[dict]) -> str:
     return "\n".join(f"[{ws[i]['start']:.1f}s] " + " ".join(w["text"] for w in ws[i:i + 6]) for i in range(0, len(ws), 6))
 
 
+def _noun_target(text: str) -> str:
+    for w in text.split():
+        t = NOUN_TARGET.get(w.lower().strip(".,;:!?¿¡"))
+        if t:
+            return t
+    return ""
+
+
 def design2(scenes: list[dict], words: list[dict]) -> None:
     prompt = "\n\n".join(f"Scene {i} ({s['start']:.1f}-{s['end']:.1f} s):\n{_timed(s, words)}" for i, s in enumerate(scenes))
     result = llm.generate(GUIDANCE2, prompt, ShotPlan2, max_tokens=6000, provider=PROVIDER, api_model=llm.API_MODEL)
     beats = {b.scene: b for b in result.beats if 0 <= b.scene < len(scenes)}
     damp_seen = False
     last_term_at = -99.0
+    used_terms: set[str] = set()
+    accepted: list[tuple[float, str]] = []  # (time, kind) of every event kept so far, across scenes
     for i, scene in enumerate(scenes):
         scene["notes"] = []
         b = beats.get(i)
@@ -206,10 +231,11 @@ def design2(scenes: list[dict], words: list[dict]) -> None:
         scene["shot"] = shot
         evs = []
         for e in (b.events if b else [])[:3]:
-            if e.kind in ("term_callout", "flow_chevrons") and shot not in ("cutaway", "insert"):
-                scene["notes"].append(f"{e.kind} dropped on {shot}")
+            kind, term, target = e.kind, e.term.strip().lower(), e.target.strip().lower()
+            if kind in ("term_callout", "flow_chevrons") and shot not in ("cutaway", "insert"):
+                scene["notes"].append(f"{kind} dropped on {shot}")
                 continue
-            if e.kind == "damp" and (shot == "insert" or damp_seen):
+            if kind == "damp" and (shot == "insert" or damp_seen):
                 scene["notes"].append("damp dropped (" + ("insert" if shot == "insert" else "already used") + ")")
                 continue
             hit = _find(e.cue, scene, words)
@@ -217,19 +243,40 @@ def design2(scenes: list[dict], words: list[dict]) -> None:
                 scene["notes"].append(f"cue {e.cue!r} not found in scene; event dropped")
                 continue
             at = round(hit[0]["start"], 2)
-            ev = {"kind": e.kind, "cue": e.cue, "at": at}
-            if e.kind == "term_callout":
-                term = e.term.strip().lower()
+            if any(abs(at - t) < 0.8 for t, _k in accepted) or any(abs(at - t) < 1.5 and k == kind for t, k in accepted):
+                scene["notes"].append(f"{kind} at {at}s dropped: collides with another event")
+                continue
+            if kind == "force_arrows" and not any(st in motion._norm(w) for w in e.cue.split() for st in FORCE_STEMS):
+                target = target if target in TARGETS else _noun_target(e.cue)
+                scene["notes"].append(f"force_arrows on {e.cue!r} has no force or motion word; " + (f"downgraded to highlight({target})" if target else "dropped"))
+                if not target:
+                    continue
+                kind = "highlight"
+            if kind == "term_callout":
                 if term not in GLOSSARY:
                     scene["notes"].append(f"term {term!r} is not a real part name; callout dropped")
                     continue
-                if at - last_term_at < 3:
-                    scene["notes"].append(f"term {term!r} dropped: another callout within 3 s")
+                if term in used_terms or at - last_term_at < 3:
+                    target = NOUN_TARGET.get(term, "")
+                    scene["notes"].append(f"term {term!r} " + ("already used" if term in used_terms else "within 3 s of another callout") + f"; downgraded to highlight({target})")
+                    if not target:
+                        continue
+                    kind = "highlight"
+                else:
+                    used_terms.add(term)
+                    last_term_at = at
+                    target = NOUN_TARGET.get(term, "")
+            if kind == "highlight":
+                target = target if target in TARGETS else _noun_target(e.cue)
+                if target not in TARGETS:
+                    scene["notes"].append(f"highlight on {e.cue!r} has no valid target; dropped")
                     continue
-                last_term_at = at
-                ev["term"] = term.upper()
-            if e.kind == "damp":
+            if kind == "damp":
                 damp_seen = True
+            ev = {"kind": kind, "cue": e.cue, "at": at, "target": target if kind in ("highlight", "term_callout") else ""}
+            if kind == "term_callout":
+                ev["term"] = term.upper()
+            accepted.append((at, kind))
             evs.append(ev)
         scene["events"] = sorted(evs, key=lambda x: x["at"])
         scene["event"] = scene["events"][0] if scene["events"] else {"kind": "none"}
