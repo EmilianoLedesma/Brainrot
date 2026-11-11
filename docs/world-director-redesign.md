@@ -128,6 +128,29 @@ Still worth measuring before treating Opus as settled: run the same sunglasses s
 design repairs, beats with the intended station and actions, time and tokens per call (the unchunked director took about 12 minutes on the experiments) and three stills. If the code-corrected
 direction stage shows no gain, keep `strong` only for design.
 
+## Pending feature: cover (portada) for every generated video
+
+Requested 2026-11-11. Decision: option "frame with title": one still frame of the video with the title on it, generated automatically after the render and attached when the video is published. The title already exists
+(`stories.title`, and the YouTube title from `brainrot/youtube_metadata.py`); no new model call is needed. No AI image generation, no paid API.
+
+Precise steps:
+
+1. **Cover composition.** Add a Remotion composition `Cover` next to `World` in `motion/index.tsx` (1080x1920, one frame). Props: `{title, frame source}`. Style: the captions look of the recipe (white bold sans, heavy navy stroke, no pill), the title in at most three lines,
+   auto-sized, inside the safe area (about 60 px side margins, away from the top 250 and bottom 400 px where feeds put their UI). Render with `remotion still` (the 3D smoke renders in this redesign use the same call).
+2. **Which frame.** 3D world edit: the renderer stills of the hero at its wide shot after the opening action has started (the first `sun_glare`-like action; take the frame at the action's midpoint from `script["actions"]`). Other edits: extract one frame with `ffmpeg -ss <t> -i video.mp4 -frames:v 1` at about 30% of the duration
+   (check that it is not black with a mean-brightness test, else try 50%), then composite the title over it as a Remotion `Img` background. Start with the 3D path and the ffmpeg path together; keep the frame choice in one function `cover.pick_frame(plan_or_video)`.
+3. **New module `brainrot/cover.py`:** `make(video_bytes, title, plan=None) -> bytes` (PNG, at most 2 MB; convert to JPEG quality 90 if over). Offline test with a tiny video made by ffmpeg `testsrc` and a stubbed Remotion call.
+4. **Storage (additive migration, do not edit existing ones).** Add `cover_path text` to `story_chapters` (migration `015_chapter_cover.sql`). Upload with `db.upload_job_media(job_id, "story_chapters", chapter_id, f"stories/{story_id}/{index:02d}.png", data, "image/png")`
+   so the deletion fence applies. Update the media-cleanup and delete functions of migrations 006 and 008 in the new migration (they enumerate `audio_path` and `video_path`; add `cover_path` to the same unions with `create or replace function`) and extend the SQL tests that cover deletion.
+5. **Pipeline.** In `brainrot/pipeline.py` add a stage `cover` after `render` and before `upload`, scope `chapter:N`; set `cover_path` in the same update that sets `video_path` and `status="ready"`. A retry reuses an existing cover for a ready chapter (the existing skip of ready chapters already does it). Add the stage name to `web/src/i18n.jsx` (EN/ES) and a failure must not fail the job when only the cover failed: log it and continue without a cover (a cover is optional, the video is not).
+6. **API and dashboard.** Return `cover_url` with the output gallery items and show the image in Output and in the video details view; a "Regenerate cover" button is optional, later.
+7. **Publication.** `brainrot/publish.py` `post_youtube` (and the manual upload path `brainrot/youtube.py` `upload_claimed`): after the video upload succeeds, call YouTube Data API `thumbnails.set` with the cover when the chapter has one. Before building this, check the current YouTube rules for custom thumbnails on Shorts and the
+   channel requirements (a verified channel may be needed; image size and format limits) and write what you find in `docs/integrations.md`. A thumbnail failure must not mark a published video as failed: record it in the publication's metadata and keep the video published. Instagram and TikTok are not connected yet; when they are, use the same
+   `cover_path` (Instagram accepts a cover image or a frame offset; TikTok a frame offset, check both APIs then).
+8. **Tests and docs.** Unit tests for `cover.make`, the pipeline stage order and the optional-failure behaviour, an SQL test for the migration and cleanup, a browser check that the cover appears in Output. Update `docs/architecture.md`, `docs/integrations.md`, the handoff and this list.
+
+Done means: a finished job shows a titled cover in Output, a deleted job removes its cover from storage, and a published YouTube video carries it (or the publication records why it did not), with the real YouTube behaviour checked by hand once on a private upload.
+
 ## Related pending items found in the same session
 
 - **Cancel button for active jobs.** Requested 2026-11-11. Today only pending jobs can be cancelled (`domain/jobs.py` allows `PENDING -> CANCELLED`; migrations 006 and 008 mark jobs cancelled

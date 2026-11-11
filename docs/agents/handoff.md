@@ -16,6 +16,7 @@ Plan and open items: [world-director-redesign](../world-director-redesign.md), w
   the browser checks after the stage-name change. Nobody has watched a video from this path. Quality of model-designed worlds is unknown beyond the listing above.
 - Known gaps: designed worlds have no protagonist subject with its own actions; presets are minimal (animals do not animate legs); the piece scale and framing rule were tuned on one fixture; `out/world-smoke/live_world.json` was saved in the
   Windows default encoding by a probe script (scratch only, ignored by git).
+- New pending (user, 2026-11-11): a titled cover for every video, attached on publication. Spec with exact steps in the pending doc, section "Pending feature: cover". Nothing built.
 - Unrelated open items, unchanged: the sunglasses job still fails in `tts` (`NoAudioReceived`, English voice on a Spanish script; a Spanish voice works), the cancel button for running jobs, tests for `/ideas`. All in the pending doc.
 
 ## Committed state, model tiers and video ideas — 2026-11-11
