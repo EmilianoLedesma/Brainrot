@@ -244,3 +244,14 @@ def test_api_refusal_remains_terminal(monkeypatch):
     monkeypatch.setattr(llm.anthropic, "Anthropic", lambda: SimpleNamespace(messages=SimpleNamespace(parse=parse)))
     with pytest.raises(PermanentError, match="declined"):
         script.write_story("topic", provider="anthropic")
+
+
+def test_only_the_strong_tier_uses_opus_and_untiered_calls_are_standard(monkeypatch):
+    for name in ("BRAINROT_CLAUDE_MODEL", "BRAINROT_CLAUDE_MODEL_STRONG", "BRAINROT_CLAUDE_MODEL_STANDARD", "BRAINROT_CODEX_MODEL", "BRAINROT_CODEX_MODEL_STRONG"):
+        monkeypatch.delenv(name, raising=False)
+    assert llm._model("claude-code", "strong") == "opus"
+    assert llm._model("claude-code", "standard") == llm._model("claude-code", None) == "sonnet"
+    assert llm._model("codex", None) == ""
+    monkeypatch.setenv("BRAINROT_CLAUDE_MODEL_STRONG", "opus-pinned")
+    monkeypatch.setenv("BRAINROT_CODEX_MODEL_STRONG", "gpt-pinned")
+    assert llm._model("claude-code", "strong") == "opus-pinned" and llm._model("codex", "strong") == "gpt-pinned"

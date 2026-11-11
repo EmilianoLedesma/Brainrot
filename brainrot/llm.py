@@ -166,7 +166,20 @@ def _schema(model: type[BaseModel]) -> dict:
     return schema
 
 
-def _local(provider, system, user, output: type[T], timeout: int | None = None, web: bool = False) -> T:
+_TIER_DEFAULTS = {"claude-code": {"strong": "opus", "standard": "sonnet"}}
+
+
+def _model(provider: str, tier: str | None) -> str:
+    """BRAINROT_<CLAUDE|CODEX>_MODEL pins every call; _STRONG / _STANDARD pin one tier; Claude has built-in tier aliases."""
+    prefix = "BRAINROT_CLAUDE_MODEL" if provider == "claude-code" else "BRAINROT_CODEX_MODEL"
+    tier = tier or "standard"  # a call that names no tier is a standard one: only the director asks for the strong model
+    tiered = os.getenv(f"{prefix}_{tier.upper()}", "").strip()
+    if tiered:
+        return tiered
+    return os.getenv(prefix, "").strip() or _TIER_DEFAULTS.get(provider, {}).get(tier, "")
+
+
+def _local(provider, system, user, output: type[T], timeout: int | None = None, web: bool = False, tier: str | None = None) -> T:
     try:
         timeout = int(os.getenv("BRAINROT_LLM_TIMEOUT_SECONDS", "180")) if timeout is None else int(timeout)
         if not 1 <= timeout <= 1800:
@@ -186,7 +199,7 @@ def _local(provider, system, user, output: type[T], timeout: int | None = None, 
                 "--strict-mcp-config", "--disable-slash-commands",
                 "--no-session-persistence", "--max-turns", "25" if web else "3",
             ]
-            model = os.getenv("BRAINROT_CLAUDE_MODEL", "").strip()
+            model = _model(provider, tier)
             if model:
                 arguments += ["--model", model]
             raw = _run([*command, *arguments], cwd=directory, env=env, timeout=timeout, prompt=user)
@@ -211,7 +224,7 @@ def _local(provider, system, user, output: type[T], timeout: int | None = None, 
                 "-c", "project_doc_max_bytes=0",
                 "--output-schema", str(schema_file), "--output-last-message", str(answer_file),
             ]
-            model = os.getenv("BRAINROT_CODEX_MODEL", "").strip()
+            model = _model(provider, tier)
             if model:
                 arguments += ["--model", model]
             _run([*command, *arguments, "-"], cwd=directory, env=env, timeout=timeout,
@@ -228,7 +241,7 @@ def _local(provider, system, user, output: type[T], timeout: int | None = None, 
 
 def generate(system: str, user: str, output: type[T], *, max_tokens: int,
              provider: str | None = None, api_model: str = API_MODEL,
-             timeout: int | None = None, web: bool = False) -> T:
+             timeout: int | None = None, web: bool = False, tier: str | None = None) -> T:
     """`timeout` overrides BRAINROT_LLM_TIMEOUT_SECONDS for one large call; `web` lets a local CLI search and read pages
     (research only). The API provider never researches: it would be a silent switch to a paid, different integration."""
     selected = provider if provider is not None else (
@@ -239,7 +252,7 @@ def generate(system: str, user: str, output: type[T], *, max_tokens: int,
     if web and selected == "anthropic":
         raise PermanentError("Research needs a signed-in Claude or Chat GPT CLI; the API provider does not browse")
     if selected != "anthropic":
-        return _local(selected, system, user, output, timeout=timeout, web=web)
+        return _local(selected, system, user, output, timeout=timeout, web=web, tier=tier)
     response = anthropic.Anthropic().messages.parse(
         model=api_model, max_tokens=max_tokens, system=system,
         messages=[{"role": "user", "content": user}], output_format=output,

@@ -6,6 +6,7 @@ import { userError } from "../errors.js";
 import Execution, { duration } from "./Execution.jsx";
 import Insights, { newInsightsSession } from "./Insights.jsx";
 import Research from "./Research.jsx";
+import Ideas from "./Ideas.jsx";
 import Library from "./Library.jsx";
 import VideoDetails from "./VideoDetails.jsx";
 import { INTEGRATIONS_COPY } from "../integrations-copy.js";
@@ -112,7 +113,7 @@ function NewJob({ onQueued, initialDraft }) {
   const [step, setStep] = useState(initialDraft ? 2 : 1);
   const [kind, setKind] = useState(initialDraft ? "brainrot" : null);
   const [value, setValue] = useState(initialDraft?.label || "");
-  const [reference, setReference] = useState(initialDraft || null);
+  const [reference, setReference] = useState(initialDraft?.id ? initialDraft : null);
   const [provider, setProvider] = useState("codex");
   const [brainrotLevel, setBrainrotLevel] = useState(DEFAULT_BRAINROT_LEVEL);
   const [motionGraphics, setMotionGraphics] = useState(false);
@@ -576,7 +577,7 @@ function Output({ insightSession, onInsightSessionChange, videoSessions, onVideo
   );
 }
 
-const SCREENS = { new: NewJob, queue: Queue, output: Output, research: Research, library: Library };
+const SCREENS = { new: NewJob, queue: Queue, output: Output, research: Research, library: Library, ideas: Ideas };
 
 export default function Workspace() {
   const t = useCopy().work;
@@ -601,7 +602,7 @@ export default function Workspace() {
           </button>
         ))}
       </div><div className="workspace-tools"><details><summary className="btn">{integrations.tools}</summary><div className="workspace-tool-menu">
-        {["research", "library"].map((id) => <button className="btn" key={id} onClick={(event) => { setTab(id); event.currentTarget.closest("details").removeAttribute("open"); }}>{integrations[id]}</button>)}
+        {["ideas", "research", "library"].map((id) => <button className="btn" key={id} onClick={(event) => { setTab(id); event.currentTarget.closest("details").removeAttribute("open"); }}>{integrations[id]}</button>)}
       </div></details></div></div>
 
       <Screen onQueued={() => { setTab("queue"); setDraft(null); }} initialDraft={draft}

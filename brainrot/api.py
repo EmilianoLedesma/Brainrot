@@ -23,7 +23,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response, FileResponse, HTMLResponse
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from . import db, retention, media, research, library, youtube, publish, youtube_metadata, youtube_sync, outputs
+from . import db, retention, media, research, library, youtube, publish, youtube_metadata, youtube_sync, outputs, ideas
 from .domain.jobs import PermanentError
 from .observability.metrics import APIMetricsMiddleware, render
 from .observability.logging import safe_text
@@ -282,6 +282,22 @@ def create_job(job: JobIn) -> dict:
             raise HTTPException(409, "Connect your YouTube channel before choosing automatic upload.")
         params["youtube_publishing"]["channel_id"] = status.get("channel_id")
     return {"id": db.create_job(job.kind, **params)}
+
+
+class IdeasIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    language: Literal["en", "es"] = "en"
+    avoid: list[str] = Field(default_factory=list, max_length=20)
+    llm_provider: Literal["claude-code", "codex"] | None = None
+
+
+@app.post("/ideas", dependencies=[Depends(require_key)])
+def topic_ideas(body: IdeasIn) -> dict:
+    try:
+        return {"topics": ideas.suggest(body.language, [a[:200] for a in body.avoid], body.llm_provider)}
+    except Exception:
+        logging.getLogger(__name__).exception("topic ideas failed")
+        raise HTTPException(502, "Could not generate ideas right now. Try again shortly.") from None
 
 
 @app.get("/research/search", dependencies=[Depends(require_key)])

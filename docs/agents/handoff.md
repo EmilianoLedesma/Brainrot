@@ -1,5 +1,25 @@
 # Handoff — 2026-11-11
 
+## Committed state, model tiers and video ideas — 2026-11-11
+
+- Everything from today is committed on `master` (not pushed): the continuous 3D world edit and web research, the Accounts hub, the world-director redesign plan, model tiers and the video-ideas tool.
+- **Model tiers**: the world director asks for `strong` (Claude: opus), every other call is `standard` (sonnet), including calls that name no tier (research, metadata, repurpose, motion design were
+  falling back to the CLI default before). Codex has no default: set `BRAINROT_CODEX_MODEL_STRONG` / `_STANDARD`. `BRAINROT_CLAUDE_MODEL` pins every call and disables the split. `tests/test_llm.py` covers it.
+  Whether Opus beats Sonnet for the director is unmeasured (plan in the pending doc).
+- **Video ideas** (user's work, committed as found): `POST /ideas` (`brainrot/ideas.py`, standard tier, five "how X works" / "what if" topics, avoid list, language, provider) and a Tools → "Video ideas" screen
+  (`web/src/pages/Ideas.jsx`, copy in `integrations-copy.js`) whose chosen topic opens New job with the topic filled in. It has no automated tests and no browser check yet, and I did not run it.
+- Validation run before the commit: `pytest tests` 486 passed, `npm run build --prefix web`, `npm run check --prefix motion`. Not run: Playwright checks after the ideas change, any live job.
+- Open work lives in [world-director-redesign](../world-director-redesign.md): design-then-direct redesign, Opus measurement, cancel button for running jobs, TTS voice by script language, fail-fast on a missing pack.
+
+## Pending: world director redesign — 2026-11-11
+
+- A real 3D-world job ("La invención de los lentes de sol", web research on) produced a good Spanish script, then failed in `tts` (`edge_tts.NoAudioReceived`, always English voice) and would have stopped at `direct`
+  anyway: the live pack choice returned `none` because only the zebra and birds packs exist. The sunglasses pack was started and discarded (manifest deleted, renderer never written) because the user pointed out
+  that the director, not hand-made packs, should decide scenes and content.
+- Full plan, decisions, work items, the Opus evaluation and the other open items (cancel button for running jobs, voice by script language, fail fast on missing pack): [world-director-redesign](../world-director-redesign.md).
+- Model tiers (user's work, verified and tightened 2026-11-11): the director asks for `strong` (Claude: opus), every other call is `standard` (sonnet), including calls that name no tier. Codex needs `BRAINROT_CODEX_MODEL_STRONG/_STANDARD` in `.env`. `tests/test_llm.py` covers it; whether Opus beats Sonnet for the director is still unmeasured.
+- Not committed. Nothing else changed in this step.
+
 ## Accounts hub — 2026-11-11
 
 - The Workspace (`#/console`) no longer has a YouTube button or screen. A new top-level view, Accounts (`#/accounts`, nav "Accounts"/"Cuentas", `web/src/pages/Accounts.jsx`), centralises

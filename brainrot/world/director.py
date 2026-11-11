@@ -109,7 +109,7 @@ def choose_pack(topic: str, text: str, provider: str | None = None) -> str:
 
     system = ("Choose the 3D scene pack whose world can illustrate this short video. Pick \"none\" when no pack's world fits the topic: a wrong pack is worse than none.\n\n"
               "Available packs:\n" + catalog.menu())
-    choice = llm.generate(system, f"Topic: {topic}\n\nNarration:\n{text[:3000]}", Choice, max_tokens=600, provider=provider, timeout=180)
+    choice = llm.generate(system, f"Topic: {topic}\n\nNarration:\n{text[:3000]}", Choice, max_tokens=600, provider=provider, timeout=180, tier="strong")
     if choice.pack == "none":
         raise PermanentError("The continuous 3D world has no scene pack for this topic yet. Turn that option off, or use the motion-graphics edit.")
     return choice.pack
@@ -127,7 +127,7 @@ def _ask(pack: dict, scenes: list[dict], words: list[dict], provider: str | None
         prompt = (f"Beats {n} to {n + len(chunk) - 1} of {len(scenes) - 1}.\n" + (f"Already directed (keep angle and height inside a station; do not repeat the same subject action over and over):\n{previous}\n\n" if previous else "\n")
                   + "\n\n".join(f"Beat {n + i} ({s['start']:.1f}-{s['end']:.1f} s, {s['end'] - s['start']:.1f} s long):\n{beats.timed(s, words)}" for i, s in enumerate(chunk)))
         out = llm.generate(guidance(pack, subject["id"] if subject else None), prompt, First if (n == 0 and has_subject) else Next, max_tokens=16000,
-                           provider=provider, timeout=CALL_TIMEOUT)
+                           provider=provider, timeout=CALL_TIMEOUT, tier="strong")
         if n == 0 and has_subject:
             subject = out.subject.model_dump()
         for b in out.beats:

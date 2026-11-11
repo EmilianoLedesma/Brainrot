@@ -136,7 +136,7 @@ def _generate(system: str, user: str, provider: str | None = None) -> Story:
     # CLIs are isolated from project discovery; pass the skill explicitly.
     guidance = STORYTELLING_SKILL.read_text(encoding="utf-8").split("---", 2)[-1].strip()
     return llm.generate(
-        system + "\n\n" + guidance, user, Story, max_tokens=4000, provider=provider, api_model=MODEL,
+        system + "\n\n" + guidance, user, Story, max_tokens=4000, provider=provider, api_model=MODEL, tier="standard",
     )
 
 

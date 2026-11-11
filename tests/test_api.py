@@ -176,3 +176,11 @@ def test_world_and_research_are_stored_only_when_chosen_and_never_with_motion(ht
     assert "world" not in db.get_job(plain.json()["id"])["params"] and params["world"] is True and params["web_research"] is True
     assert http.post("/jobs", json={"kind": "brainrot", "topic": "zebras", "world": True, "motion_graphics": True}).status_code == 422
     assert http.post("/jobs", json={"kind": "repurpose", "youtube_url": "https://youtu.be/example", "world": True}).status_code == 422
+
+
+def test_ideas_returns_topics_from_the_llm_and_hides_failures(http, monkeypatch):
+    from brainrot import ideas, llm
+    monkeypatch.setattr(llm, "generate", lambda *a, **k: ideas.Ideas(topics=["How to peel garlic fast", "how to peel garlic fast", "What if phones had no screens"]))
+    assert http.post("/ideas", json={"language": "en", "avoid": ["x"]}).json() == {"topics": ["How to peel garlic fast", "What if phones had no screens"]}
+    monkeypatch.setattr(llm, "generate", lambda *a, **k: 1 / 0)
+    assert http.post("/ideas", json={}).status_code == 502
