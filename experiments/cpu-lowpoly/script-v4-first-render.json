@@ -1,0 +1,1502 @@
+{
+ "title": "Dentro de tu procesador no hay inteligencia",
+ "fps": 30,
+ "durationFrames": 4847,
+ "flight": 36,
+ "installHeatsink": 4371,
+ "waypoints": [
+  {
+   "id": "w0",
+   "at": 0,
+   "start": 0,
+   "end": 107,
+   "focus": "chip",
+   "dist": "wide",
+   "show": "La cámara muestra el escritorio y el procesador sobre la placa base, quieto."
+  },
+  {
+   "id": "w1",
+   "at": 95,
+   "start": 107,
+   "end": 258,
+   "focus": "chip",
+   "dist": "medium",
+   "show": "El chip se acerca; íconos de foto, juego y letra flotan y se apagan sin significado."
+  },
+  {
+   "id": "w2",
+   "at": 246,
+   "start": 258,
+   "end": 337,
+   "focus": "chip",
+   "dist": "close",
+   "show": "Sobre el chip aparecen brevemente una imagen y un juego en pantalla."
+  },
+  {
+   "id": "w3",
+   "at": 325,
+   "start": 337,
+   "end": 476,
+   "focus": "chip",
+   "dist": "medium",
+   "show": "El chip se abre en corte y muestra una retícula de diminutos transistores."
+  },
+  {
+   "id": "w4",
+   "at": 464,
+   "start": 476,
+   "end": 590,
+   "focus": "transistor",
+   "dist": "medium",
+   "show": "Un transistor en el banco con una palanca, sin piezas móviles visibles."
+  },
+  {
+   "id": "w5",
+   "at": 578,
+   "start": 590,
+   "end": 717,
+   "focus": "transistor",
+   "dist": "close",
+   "show": "La palanca baja y la corriente fluye por el transistor; se enciende un 1."
+  },
+  {
+   "id": "w6",
+   "at": 705,
+   "start": 717,
+   "end": 818,
+   "focus": "transistor",
+   "dist": "wide",
+   "show": "La palanca sube, la corriente se corta y aparece un 0."
+  },
+  {
+   "id": "w7",
+   "at": 806,
+   "start": 818,
+   "end": 939,
+   "focus": "gate",
+   "dist": "wide",
+   "show": "Aparecen compuertas armadas con unos pocos transistores; la NOT invierte una señal."
+  },
+  {
+   "id": "w8",
+   "at": 927,
+   "start": 939,
+   "end": 1104,
+   "focus": "gate",
+   "dist": "close",
+   "show": "Las compuertas NOT, AND y OR se combinan y se forma un sumador al lado."
+  },
+  {
+   "id": "w9",
+   "at": 1092,
+   "start": 1104,
+   "end": 1271,
+   "focus": "alu",
+   "dist": "medium",
+   "show": "Varios sumadores se unen en un bloque: la ALU, con etiquetas de suma, resta y comparar."
+  },
+  {
+   "id": "w10",
+   "at": 1259,
+   "start": 1271,
+   "end": 1430,
+   "focus": "alu",
+   "dist": "wide",
+   "show": "La ALU resalta como el cerebro matemático; un signo de interrogación apunta al resto del banco."
+  },
+  {
+   "id": "w11",
+   "at": 1418,
+   "start": 1430,
+   "end": 1624,
+   "focus": "clock",
+   "dist": "medium",
+   "show": "Un generador de pulsos late; cada pulso avanza los circuitos un paso."
+  },
+  {
+   "id": "w12",
+   "at": 1612,
+   "start": 1624,
+   "end": 1818,
+   "focus": "clock",
+   "dist": "close",
+   "show": "Los pulsos se aceleran hasta ser una ráfaga constante, un gigahertz."
+  },
+  {
+   "id": "w13",
+   "at": 1806,
+   "start": 1818,
+   "end": 1983,
+   "focus": "control",
+   "dist": "medium",
+   "show": "El contador de programa apunta a una dirección en una columna de memoria."
+  },
+  {
+   "id": "w14",
+   "at": 1971,
+   "start": 1983,
+   "end": 2049,
+   "focus": "control",
+   "dist": "close",
+   "show": "Una flecha lee la instrucción de la dirección marcada."
+  },
+  {
+   "id": "w15",
+   "at": 2037,
+   "start": 2049,
+   "end": 2197,
+   "focus": "control",
+   "dist": "wide",
+   "show": "La unidad de control abre la instrucción y la interpreta."
+  },
+  {
+   "id": "w16",
+   "at": 2185,
+   "start": 2197,
+   "end": 2318,
+   "focus": "alu",
+   "dist": "medium",
+   "show": "La ALU recibe dos números y devuelve el resultado."
+  },
+  {
+   "id": "w17",
+   "at": 2306,
+   "start": 2318,
+   "end": 2487,
+   "focus": "register",
+   "dist": "close",
+   "show": "El resultado cae en una ranura diminuta, un registro."
+  },
+  {
+   "id": "w18",
+   "at": 2475,
+   "start": 2487,
+   "end": 2648,
+   "focus": "register",
+   "dist": "medium",
+   "show": "Una fila de registros diminutos brilla dentro del chip."
+  },
+  {
+   "id": "w19",
+   "at": 2636,
+   "start": 2648,
+   "end": 2746,
+   "focus": "ram",
+   "dist": "wide",
+   "show": "Unos módulos de RAM aparecen lejos del chip, con una señal lenta que viaja hasta ellos."
+  },
+  {
+   "id": "w20",
+   "at": 2734,
+   "start": 2746,
+   "end": 2931,
+   "focus": "cache",
+   "dist": "medium",
+   "show": "Tres capas apiladas, L1, L2 y L3, cerca del chip."
+  },
+  {
+   "id": "w21",
+   "at": 2919,
+   "start": 2931,
+   "end": 3026,
+   "focus": "pipeline",
+   "dist": "wide",
+   "show": "Una cinta transportadora con etapas aparece en el banco."
+  },
+  {
+   "id": "w22",
+   "at": 3014,
+   "start": 3026,
+   "end": 3177,
+   "focus": "pipeline",
+   "dist": "medium",
+   "show": "Las instrucciones avanzan por la línea de ensamblaje, etapa tras etapa."
+  },
+  {
+   "id": "w23",
+   "at": 3165,
+   "start": 3177,
+   "end": 3275,
+   "focus": "pipeline",
+   "dist": "close",
+   "show": "Tres instrucciones ocupan etapas distintas a la vez y avanzan juntas."
+  },
+  {
+   "id": "w24",
+   "at": 3263,
+   "start": 3275,
+   "end": 3407,
+   "focus": "pipeline",
+   "dist": "medium",
+   "show": "La cinta se bifurca en un if y el chip elige un camino."
+  },
+  {
+   "id": "w25",
+   "at": 3395,
+   "start": 3407,
+   "end": 3530,
+   "focus": "pipeline",
+   "dist": "close",
+   "show": "Se elige el camino equivocado: las instrucciones adelantadas se descartan."
+  },
+  {
+   "id": "w26",
+   "at": 3518,
+   "start": 3530,
+   "end": 3629,
+   "focus": "pipeline",
+   "dist": "wide",
+   "show": "El pipeline vuelve a llenarse tras la apuesta."
+  },
+  {
+   "id": "w27",
+   "at": 3617,
+   "start": 3629,
+   "end": 3764,
+   "focus": "core",
+   "dist": "wide",
+   "show": "Varios núcleos aparecen lado a lado."
+  },
+  {
+   "id": "w28",
+   "at": 3752,
+   "start": 3764,
+   "end": 3890,
+   "focus": "core",
+   "dist": "medium",
+   "show": "Cada núcleo muestra su propio hilo de instrucciones."
+  },
+  {
+   "id": "w29",
+   "at": 3878,
+   "start": 3890,
+   "end": 4020,
+   "focus": "transistor",
+   "dist": "close",
+   "show": "El transistor conmuta y desprende un brillo cálido."
+  },
+  {
+   "id": "w30",
+   "at": 4008,
+   "start": 4020,
+   "end": 4138,
+   "focus": "heatsink",
+   "dist": "wide",
+   "show": "El disipador y el ventilador esperan en el banco mientras el calor sube."
+  },
+  {
+   "id": "w31",
+   "at": 4126,
+   "start": 4138,
+   "end": 4229,
+   "focus": "heatsink",
+   "dist": "medium",
+   "show": "El ventilador gira y el calor sale por las aletas del disipador."
+  },
+  {
+   "id": "w32",
+   "at": 4217,
+   "start": 4229,
+   "end": 4383,
+   "focus": "heatsink",
+   "dist": "close",
+   "show": "Las aletas se ponen al rojo y el indicador de frecuencia baja."
+  },
+  {
+   "id": "w33",
+   "at": 4371,
+   "start": 4383,
+   "end": 4455,
+   "focus": "chip",
+   "dist": "wide",
+   "show": "El disipador se instala sobre el chip."
+  },
+  {
+   "id": "w34",
+   "at": 4443,
+   "start": 4455,
+   "end": 4567,
+   "focus": "chip",
+   "dist": "medium",
+   "show": "Millones de interruptores parpadean en el chip al ritmo de los pulsos."
+  },
+  {
+   "id": "w35",
+   "at": 4555,
+   "start": 4567,
+   "end": 4658,
+   "focus": "chip",
+   "dist": "close",
+   "show": "Instrucciones simples desfilan sobre la superficie del chip."
+  },
+  {
+   "id": "w36",
+   "at": 4646,
+   "start": 4658,
+   "end": 4847,
+   "focus": "chip",
+   "dist": "wide",
+   "show": "Ceros y unos corren por el chip y se funden en una imagen."
+  }
+ ],
+ "captions": [
+  {
+   "id": "c0",
+   "at": 3,
+   "until": 41,
+   "style": "phrase",
+   "text": "Dentro de tu procesador"
+  },
+  {
+   "id": "c1",
+   "at": 42,
+   "until": 102,
+   "style": "phrase",
+   "text": "no hay inteligencia"
+  },
+  {
+   "id": "c2",
+   "at": 107,
+   "until": 145,
+   "style": "phrase",
+   "text": "Tu procesador no sabe"
+  },
+  {
+   "id": "c3",
+   "at": 146,
+   "until": 179,
+   "style": "phrase",
+   "text": "qué es una foto"
+  },
+  {
+   "id": "c4",
+   "at": 180,
+   "until": 206,
+   "style": "phrase",
+   "text": "ni un juego"
+  },
+  {
+   "id": "c5",
+   "at": 207,
+   "until": 256,
+   "style": "phrase",
+   "text": "ni una letra"
+  },
+  {
+   "id": "c6",
+   "at": 258,
+   "until": 288,
+   "style": "phrase",
+   "text": "Y aun así"
+  },
+  {
+   "id": "c7",
+   "at": 289,
+   "until": 336,
+   "style": "phrase",
+   "text": "los muestra todos"
+  },
+  {
+   "id": "c8",
+   "at": 337,
+   "until": 368,
+   "style": "phrase",
+   "text": "Por dentro es un chip"
+  },
+  {
+   "id": "c9",
+   "at": 369,
+   "until": 403,
+   "style": "phrase",
+   "text": "de silicio con miles"
+  },
+  {
+   "id": "c10",
+   "at": 404,
+   "until": 474,
+   "style": "phrase",
+   "text": "de millones de transistores"
+  },
+  {
+   "id": "c11",
+   "at": 476,
+   "until": 505,
+   "style": "phrase",
+   "text": "Un transistor es un"
+  },
+  {
+   "id": "c12",
+   "at": 506,
+   "until": 589,
+   "style": "phrase",
+   "text": "interruptor sin partes móviles"
+  },
+  {
+   "id": "c13",
+   "at": 590,
+   "until": 621,
+   "style": "phrase",
+   "text": "Con voltaje"
+  },
+  {
+   "id": "c14",
+   "at": 622,
+   "until": 664,
+   "style": "phrase",
+   "text": "deja pasar corriente"
+  },
+  {
+   "id": "c15",
+   "at": 665,
+   "until": 715,
+   "style": "phrase",
+   "text": "eso es un uno"
+  },
+  {
+   "id": "c16",
+   "at": 717,
+   "until": 750,
+   "style": "phrase",
+   "text": "Sin voltaje"
+  },
+  {
+   "id": "c17",
+   "at": 751,
+   "until": 774,
+   "style": "phrase",
+   "text": "la corta"
+  },
+  {
+   "id": "c18",
+   "at": 775,
+   "until": 817,
+   "style": "phrase",
+   "text": "eso es un cero"
+  },
+  {
+   "id": "c19",
+   "at": 818,
+   "until": 864,
+   "style": "phrase",
+   "text": "Con unos pocos transistores"
+  },
+  {
+   "id": "c20",
+   "at": 865,
+   "until": 937,
+   "style": "phrase",
+   "text": "armas compuertas lógicas"
+  },
+  {
+   "id": "c21",
+   "at": 939,
+   "until": 1004,
+   "style": "phrase",
+   "text": "NOT AND OR"
+  },
+  {
+   "id": "c22",
+   "at": 1006,
+   "until": 1042,
+   "style": "phrase",
+   "text": "Combinas compuertas y"
+  },
+  {
+   "id": "c23",
+   "at": 1043,
+   "until": 1102,
+   "style": "phrase",
+   "text": "nacen los sumadores"
+  },
+  {
+   "id": "c24",
+   "at": 1104,
+   "until": 1178,
+   "style": "phrase",
+   "text": "Con sumadores construyes la ALU"
+  },
+  {
+   "id": "c25",
+   "at": 1179,
+   "until": 1215,
+   "style": "phrase",
+   "text": "la parte que suma"
+  },
+  {
+   "id": "c26",
+   "at": 1216,
+   "until": 1269,
+   "style": "phrase",
+   "text": "resta y compara"
+  },
+  {
+   "id": "c27",
+   "at": 1271,
+   "until": 1292,
+   "style": "phrase",
+   "text": "Eso es todo"
+  },
+  {
+   "id": "c28",
+   "at": 1293,
+   "until": 1344,
+   "style": "phrase",
+   "text": "el cerebro matemático"
+  },
+  {
+   "id": "c29",
+   "at": 1345,
+   "until": 1377,
+   "style": "phrase",
+   "text": "Ahora quién le"
+  },
+  {
+   "id": "c30",
+   "at": 1378,
+   "until": 1428,
+   "style": "phrase",
+   "text": "dice qué hacer"
+  },
+  {
+   "id": "c31",
+   "at": 1430,
+   "until": 1459,
+   "style": "phrase",
+   "text": "Un reloj interno"
+  },
+  {
+   "id": "c32",
+   "at": 1460,
+   "until": 1517,
+   "style": "phrase",
+   "text": "que marca pulsos"
+  },
+  {
+   "id": "c33",
+   "at": 1519,
+   "until": 1562,
+   "style": "phrase",
+   "text": "Cada pulso deja avanzar un"
+  },
+  {
+   "id": "c34",
+   "at": 1563,
+   "until": 1622,
+   "style": "phrase",
+   "text": "paso a los circuitos"
+  },
+  {
+   "id": "c35",
+   "at": 1624,
+   "until": 1671,
+   "style": "phrase",
+   "text": "Un gigahertz son mil millones"
+  },
+  {
+   "id": "c36",
+   "at": 1672,
+   "until": 1723,
+   "style": "phrase",
+   "text": "de pulsos por segundo"
+  },
+  {
+   "id": "c37",
+   "at": 1724,
+   "until": 1764,
+   "style": "phrase",
+   "text": "Y cada instrucción sigue"
+  },
+  {
+   "id": "c38",
+   "at": 1765,
+   "until": 1816,
+   "style": "phrase",
+   "text": "el mismo ciclo"
+  },
+  {
+   "id": "c39",
+   "at": 1818,
+   "until": 1881,
+   "style": "phrase",
+   "text": "Primero buscar"
+  },
+  {
+   "id": "c40",
+   "at": 1883,
+   "until": 1932,
+   "style": "phrase",
+   "text": "El contador de programa marca"
+  },
+  {
+   "id": "c41",
+   "at": 1933,
+   "until": 1982,
+   "style": "phrase",
+   "text": "una dirección de la memoria"
+  },
+  {
+   "id": "c42",
+   "at": 1983,
+   "until": 2047,
+   "style": "phrase",
+   "text": "y se lee la instrucción"
+  },
+  {
+   "id": "c43",
+   "at": 2049,
+   "until": 2105,
+   "style": "phrase",
+   "text": "Segundo decodificar"
+  },
+  {
+   "id": "c44",
+   "at": 2106,
+   "until": 2135,
+   "style": "phrase",
+   "text": "la unidad de control"
+  },
+  {
+   "id": "c45",
+   "at": 2136,
+   "until": 2195,
+   "style": "phrase",
+   "text": "entiende qué se pide"
+  },
+  {
+   "id": "c46",
+   "at": 2197,
+   "until": 2248,
+   "style": "phrase",
+   "text": "Tercero ejecutar"
+  },
+  {
+   "id": "c47",
+   "at": 2249,
+   "until": 2317,
+   "style": "phrase",
+   "text": "la ALU hace la operación"
+  },
+  {
+   "id": "c48",
+   "at": 2318,
+   "until": 2348,
+   "style": "phrase",
+   "text": "Y el resultado se"
+  },
+  {
+   "id": "c49",
+   "at": 2349,
+   "until": 2410,
+   "style": "phrase",
+   "text": "guarda en un registro"
+  },
+  {
+   "id": "c50",
+   "at": 2411,
+   "until": 2449,
+   "style": "phrase",
+   "text": "Luego el contador salta"
+  },
+  {
+   "id": "c51",
+   "at": 2450,
+   "until": 2486,
+   "style": "phrase",
+   "text": "a la siguiente"
+  },
+  {
+   "id": "c52",
+   "at": 2487,
+   "until": 2527,
+   "style": "phrase",
+   "text": "Los registros son memoria"
+  },
+  {
+   "id": "c53",
+   "at": 2528,
+   "until": 2575,
+   "style": "phrase",
+   "text": "diminuta dentro del chip"
+  },
+  {
+   "id": "c54",
+   "at": 2576,
+   "until": 2645,
+   "style": "phrase",
+   "text": "la más rápida que existe"
+  },
+  {
+   "id": "c55",
+   "at": 2647,
+   "until": 2685,
+   "style": "phrase",
+   "text": "La RAM está afuera y"
+  },
+  {
+   "id": "c56",
+   "at": 2686,
+   "until": 2744,
+   "style": "phrase",
+   "text": "es mucho más lenta"
+  },
+  {
+   "id": "c57",
+   "at": 2746,
+   "until": 2791,
+   "style": "phrase",
+   "text": "Por eso existe la caché"
+  },
+  {
+   "id": "c58",
+   "at": 2792,
+   "until": 2827,
+   "style": "phrase",
+   "text": "en tres niveles"
+  },
+  {
+   "id": "c59",
+   "at": 2828,
+   "until": 2869,
+   "style": "phrase",
+   "text": "que guarda cerca lo usado"
+  },
+  {
+   "id": "c60",
+   "at": 2870,
+   "until": 2930,
+   "style": "phrase",
+   "text": "hace poco para no esperar"
+  },
+  {
+   "id": "c61",
+   "at": 2931,
+   "until": 2976,
+   "style": "phrase",
+   "text": "Y para ir más rápido"
+  },
+  {
+   "id": "c62",
+   "at": 2977,
+   "until": 3024,
+   "style": "phrase",
+   "text": "hace trampa"
+  },
+  {
+   "id": "c63",
+   "at": 3026,
+   "until": 3065,
+   "style": "phrase",
+   "text": "El pipeline funciona como"
+  },
+  {
+   "id": "c64",
+   "at": 3066,
+   "until": 3115,
+   "style": "phrase",
+   "text": "una línea de ensamblaje"
+  },
+  {
+   "id": "c65",
+   "at": 3116,
+   "until": 3176,
+   "style": "phrase",
+   "text": "mientras una instrucción se ejecuta"
+  },
+  {
+   "id": "c66",
+   "at": 3177,
+   "until": 3219,
+   "style": "phrase",
+   "text": "la siguiente se decodifica"
+  },
+  {
+   "id": "c67",
+   "at": 3220,
+   "until": 3274,
+   "style": "phrase",
+   "text": "y otra se busca"
+  },
+  {
+   "id": "c68",
+   "at": 3275,
+   "until": 3309,
+   "style": "phrase",
+   "text": "Pero ante un if"
+  },
+  {
+   "id": "c69",
+   "at": 3310,
+   "until": 3352,
+   "style": "phrase",
+   "text": "el procesador adivina por"
+  },
+  {
+   "id": "c70",
+   "at": 3353,
+   "until": 3406,
+   "style": "phrase",
+   "text": "qué lado seguirá"
+  },
+  {
+   "id": "c71",
+   "at": 3407,
+   "until": 3444,
+   "style": "phrase",
+   "text": "Si se equivoca"
+  },
+  {
+   "id": "c72",
+   "at": 3445,
+   "until": 3485,
+   "style": "phrase",
+   "text": "tira el trabajo adelantado"
+  },
+  {
+   "id": "c73",
+   "at": 3486,
+   "until": 3529,
+   "style": "phrase",
+   "text": "y pierde tiempo"
+  },
+  {
+   "id": "c74",
+   "at": 3530,
+   "until": 3583,
+   "style": "phrase",
+   "text": "Sí tu chip apuesta"
+  },
+  {
+   "id": "c75",
+   "at": 3584,
+   "until": 3628,
+   "style": "phrase",
+   "text": "y a veces pierde"
+  },
+  {
+   "id": "c76",
+   "at": 3629,
+   "until": 3697,
+   "style": "phrase",
+   "text": "Además los procesadores modernos"
+  },
+  {
+   "id": "c77",
+   "at": 3698,
+   "until": 3762,
+   "style": "phrase",
+   "text": "tienen varios núcleos"
+  },
+  {
+   "id": "c78",
+   "at": 3764,
+   "until": 3788,
+   "style": "phrase",
+   "text": "Cada uno es una"
+  },
+  {
+   "id": "c79",
+   "at": 3789,
+   "until": 3824,
+   "style": "phrase",
+   "text": "unidad completa con su"
+  },
+  {
+   "id": "c80",
+   "at": 3825,
+   "until": 3889,
+   "style": "phrase",
+   "text": "propio hilo de instrucciones"
+  },
+  {
+   "id": "c81",
+   "at": 3890,
+   "until": 3954,
+   "style": "phrase",
+   "text": "El precio es el calor"
+  },
+  {
+   "id": "c82",
+   "at": 3956,
+   "until": 3973,
+   "style": "phrase",
+   "text": "Cada vez que"
+  },
+  {
+   "id": "c83",
+   "at": 3974,
+   "until": 4019,
+   "style": "phrase",
+   "text": "un transistor conmuta"
+  },
+  {
+   "id": "c84",
+   "at": 4020,
+   "until": 4054,
+   "style": "phrase",
+   "text": "gasta energía"
+  },
+  {
+   "id": "c85",
+   "at": 4055,
+   "until": 4080,
+   "style": "phrase",
+   "text": "y esa energía"
+  },
+  {
+   "id": "c86",
+   "at": 4081,
+   "until": 4136,
+   "style": "phrase",
+   "text": "acaba como calor"
+  },
+  {
+   "id": "c87",
+   "at": 4138,
+   "until": 4167,
+   "style": "phrase",
+   "text": "El disipador y el"
+  },
+  {
+   "id": "c88",
+   "at": 4168,
+   "until": 4228,
+   "style": "phrase",
+   "text": "ventilador lo sacan"
+  },
+  {
+   "id": "c89",
+   "at": 4229,
+   "until": 4250,
+   "style": "phrase",
+   "text": "Si aun así"
+  },
+  {
+   "id": "c90",
+   "at": 4251,
+   "until": 4294,
+   "style": "phrase",
+   "text": "se calienta demasiado"
+  },
+  {
+   "id": "c91",
+   "at": 4295,
+   "until": 4323,
+   "style": "phrase",
+   "text": "el chip baja su"
+  },
+  {
+   "id": "c92",
+   "at": 4324,
+   "until": 4382,
+   "style": "phrase",
+   "text": "frecuencia para protegerse"
+  },
+  {
+   "id": "c93",
+   "at": 4383,
+   "until": 4406,
+   "style": "phrase",
+   "text": "Así que esa"
+  },
+  {
+   "id": "c94",
+   "at": 4407,
+   "until": 4453,
+   "style": "phrase",
+   "text": "es la verdad"
+  },
+  {
+   "id": "c95",
+   "at": 4455,
+   "until": 4504,
+   "style": "phrase",
+   "text": "Millones de interruptores"
+  },
+  {
+   "id": "c96",
+   "at": 4505,
+   "until": 4526,
+   "style": "phrase",
+   "text": "mil millones de"
+  },
+  {
+   "id": "c97",
+   "at": 4527,
+   "until": 4566,
+   "style": "phrase",
+   "text": "pulsos por segundo"
+  },
+  {
+   "id": "c98",
+   "at": 4567,
+   "until": 4655,
+   "style": "phrase",
+   "text": "instrucciones absurdamente simples"
+  },
+  {
+   "id": "c99",
+   "at": 4657,
+   "until": 4678,
+   "style": "phrase",
+   "text": "Nada de eso"
+  },
+  {
+   "id": "c100",
+   "at": 4679,
+   "until": 4732,
+   "style": "phrase",
+   "text": "entiende tu foto"
+  },
+  {
+   "id": "c101",
+   "at": 4733,
+   "until": 4784,
+   "style": "phrase",
+   "text": "Solo mueve ceros y unos"
+  },
+  {
+   "id": "c102",
+   "at": 4785,
+   "until": 4846,
+   "style": "phrase",
+   "text": "tan rápido que parece magia"
+  },
+  {
+   "id": "te3_1",
+   "at": 424,
+   "until": 504,
+   "style": "term",
+   "text": "TRANSISTOR"
+  },
+  {
+   "id": "te7_0",
+   "at": 875,
+   "until": 967,
+   "style": "term",
+   "text": "COMPUERTAS"
+  },
+  {
+   "id": "te9_1",
+   "at": 1151,
+   "until": 1208,
+   "style": "term",
+   "text": "ALU"
+  },
+  {
+   "id": "te11_0",
+   "at": 1435,
+   "until": 1489,
+   "style": "term",
+   "text": "RELOJ"
+  },
+  {
+   "id": "te19_0",
+   "at": 2653,
+   "until": 2715,
+   "style": "term",
+   "text": "RAM"
+  },
+  {
+   "id": "te20_0",
+   "at": 2773,
+   "until": 2821,
+   "style": "term",
+   "text": "CACHÉ"
+  },
+  {
+   "id": "te22_0",
+   "at": 3032,
+   "until": 3095,
+   "style": "term",
+   "text": "PIPELINE"
+  },
+  {
+   "id": "te27_0",
+   "at": 3721,
+   "until": 3792,
+   "style": "term",
+   "text": "NÚCLEOS"
+  },
+  {
+   "id": "te31_0",
+   "at": 4144,
+   "until": 4197,
+   "style": "term",
+   "text": "DISIPADOR"
+  }
+ ],
+ "events": [
+  {
+   "id": "e0_0",
+   "kind": "highlight",
+   "at": 23,
+   "term": "",
+   "target": "chip"
+  },
+  {
+   "id": "e1_0",
+   "kind": "highlight",
+   "at": 111,
+   "term": "",
+   "target": "chip"
+  },
+  {
+   "id": "e3_0",
+   "kind": "highlight",
+   "at": 361,
+   "term": "",
+   "target": "chip"
+  },
+  {
+   "id": "e3_1",
+   "kind": "term_callout",
+   "at": 424,
+   "term": "TRANSISTOR",
+   "target": "transistor"
+  },
+  {
+   "id": "e4_0",
+   "kind": "highlight",
+   "at": 481,
+   "term": "",
+   "target": "transistor"
+  },
+  {
+   "id": "e5_0",
+   "kind": "force_arrows",
+   "at": 640,
+   "term": "",
+   "target": "transistor"
+  },
+  {
+   "id": "e6_0",
+   "kind": "force_arrows",
+   "at": 754,
+   "term": "",
+   "target": "transistor"
+  },
+  {
+   "id": "e7_0",
+   "kind": "term_callout",
+   "at": 875,
+   "term": "COMPUERTAS",
+   "target": "gate"
+  },
+  {
+   "id": "e8_0",
+   "kind": "highlight",
+   "at": 1021,
+   "term": "",
+   "target": "gate"
+  },
+  {
+   "id": "e8_1",
+   "kind": "highlight",
+   "at": 1057,
+   "term": "",
+   "target": "adder"
+  },
+  {
+   "id": "e9_0",
+   "kind": "highlight",
+   "at": 1110,
+   "term": "",
+   "target": "adder"
+  },
+  {
+   "id": "e9_1",
+   "kind": "term_callout",
+   "at": 1151,
+   "term": "ALU",
+   "target": "alu"
+  },
+  {
+   "id": "e10_0",
+   "kind": "highlight",
+   "at": 1296,
+   "term": "",
+   "target": "alu"
+  },
+  {
+   "id": "e11_0",
+   "kind": "term_callout",
+   "at": 1435,
+   "term": "RELOJ",
+   "target": "clock"
+  },
+  {
+   "id": "e11_1",
+   "kind": "highlight",
+   "at": 1527,
+   "term": "",
+   "target": "clock"
+  },
+  {
+   "id": "e12_0",
+   "kind": "highlight",
+   "at": 1675,
+   "term": "",
+   "target": "clock"
+  },
+  {
+   "id": "e13_0",
+   "kind": "highlight",
+   "at": 1889,
+   "term": "",
+   "target": "control"
+  },
+  {
+   "id": "e13_1",
+   "kind": "force_arrows",
+   "at": 1921,
+   "term": "",
+   "target": "control"
+  },
+  {
+   "id": "e14_0",
+   "kind": "force_arrows",
+   "at": 1991,
+   "term": "",
+   "target": "control"
+  },
+  {
+   "id": "e15_0",
+   "kind": "highlight",
+   "at": 2123,
+   "term": "",
+   "target": "control"
+  },
+  {
+   "id": "e16_0",
+   "kind": "highlight",
+   "at": 2254,
+   "term": "",
+   "target": "alu"
+  },
+  {
+   "id": "e17_0",
+   "kind": "force_arrows",
+   "at": 2349,
+   "term": "",
+   "target": "register"
+  },
+  {
+   "id": "e18_0",
+   "kind": "highlight",
+   "at": 2495,
+   "term": "",
+   "target": "register"
+  },
+  {
+   "id": "e19_0",
+   "kind": "term_callout",
+   "at": 2653,
+   "term": "RAM",
+   "target": "ram"
+  },
+  {
+   "id": "e20_0",
+   "kind": "term_callout",
+   "at": 2773,
+   "term": "CACHÉ",
+   "target": "cache"
+  },
+  {
+   "id": "e20_1",
+   "kind": "highlight",
+   "at": 2858,
+   "term": "",
+   "target": "cache"
+  },
+  {
+   "id": "e22_0",
+   "kind": "term_callout",
+   "at": 3032,
+   "term": "PIPELINE",
+   "target": "pipeline"
+  },
+  {
+   "id": "e22_1",
+   "kind": "highlight",
+   "at": 3087,
+   "term": "",
+   "target": "pipeline"
+  },
+  {
+   "id": "e23_0",
+   "kind": "force_arrows",
+   "at": 3200,
+   "term": "",
+   "target": "pipeline"
+  },
+  {
+   "id": "e24_0",
+   "kind": "force_arrows",
+   "at": 3333,
+   "term": "",
+   "target": "pipeline"
+  },
+  {
+   "id": "e25_0",
+   "kind": "highlight",
+   "at": 3419,
+   "term": "",
+   "target": "pipeline"
+  },
+  {
+   "id": "e26_0",
+   "kind": "force_arrows",
+   "at": 3561,
+   "term": "",
+   "target": "pipeline"
+  },
+  {
+   "id": "e27_0",
+   "kind": "term_callout",
+   "at": 3721,
+   "term": "NÚCLEOS",
+   "target": "core"
+  },
+  {
+   "id": "e28_0",
+   "kind": "highlight",
+   "at": 3789,
+   "term": "",
+   "target": "core"
+  },
+  {
+   "id": "e29_0",
+   "kind": "highlight",
+   "at": 3978,
+   "term": "",
+   "target": "transistor"
+  },
+  {
+   "id": "e30_0",
+   "kind": "highlight",
+   "at": 4100,
+   "term": "",
+   "target": "heatsink"
+  },
+  {
+   "id": "e31_0",
+   "kind": "term_callout",
+   "at": 4144,
+   "term": "DISIPADOR",
+   "target": "heatsink"
+  },
+  {
+   "id": "e31_1",
+   "kind": "force_arrows",
+   "at": 4189,
+   "term": "",
+   "target": "heatsink"
+  },
+  {
+   "id": "e32_0",
+   "kind": "highlight",
+   "at": 4256,
+   "term": "",
+   "target": "heatsink"
+  },
+  {
+   "id": "e33_0",
+   "kind": "highlight",
+   "at": 4414,
+   "term": "",
+   "target": "chip"
+  },
+  {
+   "id": "e34_0",
+   "kind": "highlight",
+   "at": 4527,
+   "term": "",
+   "target": "chip"
+  },
+  {
+   "id": "e35_0",
+   "kind": "highlight",
+   "at": 4567,
+   "term": "",
+   "target": "chip"
+  },
+  {
+   "id": "e36_0",
+   "kind": "highlight",
+   "at": 4752,
+   "term": "",
+   "target": "chip"
+  }
+ ],
+ "stillFrames": [
+  53,
+  182,
+  297,
+  406,
+  533,
+  653,
+  767,
+  878,
+  1021,
+  1187,
+  1350,
+  1527,
+  1721,
+  1900,
+  2016,
+  2123,
+  2257,
+  2402,
+  2567,
+  2697,
+  2838,
+  2978,
+  3101,
+  3226,
+  3341,
+  3468,
+  3579,
+  3696,
+  3827,
+  3955,
+  4079,
+  4183,
+  4306,
+  4419,
+  4511,
+  4612,
+  4752
+ ],
+ "fluidityRuns": [
+  {
+   "label": "flight into transistor",
+   "shot": "w4",
+   "start": 458,
+   "step": 5,
+   "count": 12
+  },
+  {
+   "label": "flight into clock",
+   "shot": "w11",
+   "start": 1412,
+   "step": 5,
+   "count": 12
+  },
+  {
+   "label": "flight into pipeline",
+   "shot": "w21",
+   "start": 2913,
+   "step": 5,
+   "count": 12
+  },
+  {
+   "label": "flight back to chip",
+   "shot": "w33",
+   "start": 4365,
+   "step": 5,
+   "count": 12
+  }
+ ],
+ "sources": [],
+ "note": "Generated from plan.json, words.json and story.json by build_script.py. One continuous world, no cuts; captions are independent 2-5 word phrases."
+}

@@ -1,4 +1,27 @@
-# Handoff — 2026-11-04
+# Handoff — 2026-11-11
+
+## CPU low-poly, one continuous world — 2026-11-11
+
+Nothing here is wired into the main Brainrot flow; it lives in `experiments/cpu-lowpoly/` and `docs/motion-graphics-recipe-lowpoly.md`.
+
+- User asked for a processor explainer in the style of a microwave reference (`@stupydoo`), with a director planning the scenes instead of
+  letting them generate themselves, and asked whether to combine low-poly 3D with HyperFrames. Recommendation given, not tested: keep one
+  engine (Remotion + `@remotion/three`); HyperFrames only has an 8 s test in the repo and no check that it renders a 3D canvas.
+- ffmpeg scene detection on the reference (164 s): no hard cut. The user chose to redesign the plan as one continuous world instead of 13
+  hard-cut shots. New section "Alternative grammar: one continuous world" in the low-poly recipe; the cut grammar remains documented.
+- Built: script (`write_story`, claude-code, default model, level 30, 367 words), timing (161.08 s), planner with beats instead of shots and
+  `split_long()`, `build_script.py` (waypoint camera), `Cpu.tsx` (one scene, 12 stations, 37 waypoints) and `verify.py`.
+  Render: 161.57 s, 1080×1920, 30 fps, 74.4 MB, no audio, 0 black frames, 0 identical consecutive frames of 4847.
+- Second pass after the user chose "corregir": planner `--revalidate` (no model call) and `snap_boundaries()`, callouts no longer collide
+  with on-part effects (TRANSISTOR now lands on its part, REGISTRO restored), lower camera pitch and closer `wide`, desk props, a branch-
+  prediction fork in the pipeline, an orange heat state. The first render's plan and script are kept as `*-v4-first-render.json`.
+- Validation actually run: `tsc --noEmit`, two full renders (output timestamp checked before reading sheets), `verify.py` on each, test
+  stills before each render, and contact sheets inspected by hand (37 dense stills, four 6 fps runs around flights). Not run: the
+  repository tests, any live Brainrot job, and nobody has watched the video in motion.
+- Remaining defects (details in the experiment README): some wide/medium frames still show a lot of desk, heatsink `close` fills the frame,
+  highlight boxes are large and flat, the wrong-guess cube is small in wide shots, script flags ("miles de millones" versus "millones de
+  interruptores"; the closing 1 GHz line; fixing them means regenerating script, timing and plan).
+- Not committed. `story.json`, `words.json`, `plan*.json`, `script.json` are untracked data files; renders are in the ignored `out/cpu-lowpoly/`.
 
 ## Low-poly 3D experiments, planner and recipe — 2026-11-04
 

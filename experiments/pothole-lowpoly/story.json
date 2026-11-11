@@ -1,0 +1,12 @@
+{
+ "title": "El bache nace bajo el asfalto",
+ "script": "Ese hoyo que acabas de esquivar no empezó en la superficie. Empezó abajo, donde nadie mira.\n\nUna carretera de asfalto es un sándwich. Arriba, el concreto asfáltico. Debajo, una base de roca angulosa. Y más abajo, el suelo natural, que se llama subrasante.\n\nTráfico, sol, lluvia y frío desgastan esa capa de arriba. Lo primero que aparece son grietas. A veces forman un patrón que se llama piel de cocodrilo. Es señal de que el pavimento se flexiona y se fatiga bajo las ruedas.\n\nY aquí viene el problema. Las grietas son el talón de Aquiles del pavimento. Dejan entrar el agua. El agua se junta sobre la subrasante, empapa el suelo y lo ablanda.\n\nAhora imagina un punto blando. El asfalto es flexible, no reparte la carga en una zona amplia. Cada llanta que pasa empuja el agua hacia afuera, y esa agua arrastra partículas de suelo.\n\nCada poquito de suelo que se va deja más espacio. Entonces el tráfico bombea más agua, dentro y fuera. Eso erosiona más suelo. El pavimento pierde apoyo y se rompe.\n\nLos trozos de asfalto que quedan entre las grietas se aflojan. Las ruedas los arrancan o los expulsan. Ahí nace el bache. Puede medir varios pies de ancho, pero suele tener solo unas pocas pulgadas de profundidad.\n\nEl frío lo empeora. El agua se expande con mucha fuerza al congelarse. Forma lentes de hielo bajo el pavimento, y al derretirse dejan huecos. El suelo de abajo sigue congelado y atrapa esa agua. Por eso hay más baches en primavera.\n\nPero el hielo no es la causa raíz. También hay baches donde nunca se congela, con mal subsuelo y mucha agua subterránea.\n\nY los parches son como una venda. Si no arreglas el agua ni el suelo de abajo, el bache suele volver al mismo lugar.\n\nPrevenir sale mejor: sellar grietas, drenar bien y poner pavimento más grueso. Aunque eso cuesta muchísimo.\n\nAsí que un bache es, low-key, una grieta que dejó pasar el agua.",
+ "generator": "brainrot.script.write_story(provider=claude-code, BRAINROT_CLAUDE_MODEL unset = CLI default model, brainrot_level=30, factual, reference_context from reference.json)",
+ "words": 332,
+ "sources": [
+  "https://practical.engineering/blog/2020/8/31/how-do-potholes-work",
+  "https://en.wikipedia.org/wiki/Pothole",
+  "https://www.tensarcorp.com/resources/articles/what-causes-potholes-1",
+  "https://www.fhwa.dot.gov/publications/research/infrastructure/pavements/ltpp/16078"
+ ]
+}

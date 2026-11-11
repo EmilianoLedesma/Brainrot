@@ -1,0 +1,30 @@
+{
+ "topic": "Cómo se hacen los baches en las carreteras",
+ "researched": "2026-11-11",
+ "method": "WebSearch (3 queries) plus two pages read in full through the web-fetch agent (Practical Engineering, Wikipedia). Facts are paraphrased; 'single' marks a fact that rests on one source.",
+ "sources": [
+  {"id": "pe", "title": "How Do Potholes Work? (Practical Engineering, Wesley Crump, 2020)", "url": "https://practical.engineering/blog/2020/8/31/how-do-potholes-work", "read": "full page"},
+  {"id": "wp", "title": "Pothole (Wikipedia)", "url": "https://en.wikipedia.org/wiki/Pothole", "read": "about 40k of 73.7k characters; the unread tail is references"},
+  {"id": "tensar", "title": "What causes potholes? (Tensar)", "url": "https://www.tensarcorp.com/resources/articles/what-causes-potholes-1", "read": "search summary only; industry source"},
+  {"id": "fhwa", "title": "FHWA LTPP technical summary on environmental effects on pavement distress", "url": "https://www.fhwa.dot.gov/publications/research/infrastructure/pavements/ltpp/16078", "read": "search summary only; about pavement distress in general, not potholes"}
+ ],
+ "facts": [
+  {"text": "Una carretera de asfalto tiene capas: arriba el concreto asfáltico, debajo una base de roca angulosa, y debajo el suelo natural, que se llama subrasante.", "sources": ["pe", "tensar"]},
+  {"text": "El tráfico, el sol, la lluvia y el frío desgastan el asfalto. Lo primero que se ve son grietas.", "sources": ["pe"]},
+  {"text": "Cuando las capas son demasiado delgadas o débiles para el tráfico, el pavimento se flexiona bajo las ruedas y se fatiga. Eso produce un patrón de grietas llamado piel de cocodrilo (alligator cracking).", "sources": ["wp", "tensar"]},
+  {"text": "Las grietas dejan entrar el agua. El agua se junta sobre la subrasante, empapa el suelo y lo ablanda. Las grietas son el talón de Aquiles del pavimento.", "sources": ["pe", "wp", "tensar"]},
+  {"text": "El asfalto es un pavimento flexible: no reparte la carga en una zona amplia. Cada llanta que pasa sobre el punto blando empuja el agua hacia afuera y ésta arrastra partículas de suelo.", "sources": ["pe"]},
+  {"text": "Cada poco de suelo erosionado deja más espacio libre para que el tráfico bombee agua dentro y fuera, y eso erosiona más suelo. El pavimento pierde apoyo, se rompe y se desmorona.", "sources": ["pe"]},
+  {"text": "El agua se expande con mucha fuerza al congelarse. Capas delgadas de agua entre el pavimento y la base forman lentes de hielo; al derretirse dejan huecos. El suelo de abajo sigue congelado y atrapa el agua derretida, lo que acelera la erosión. Por eso hay más baches en primavera.", "sources": ["pe", "wp"]},
+  {"text": "Los trozos de asfalto que quedan entre las grietas se aflojan y las ruedas los arrancan o los expulsan. Así empieza el bache.", "sources": ["wp"]},
+  {"text": "Un bache puede medir varios pies de ancho, pero suele tener solo unas pocas pulgadas de profundidad.", "sources": ["wp"]},
+  {"text": "También hay baches donde no hay ciclos de congelamiento, por ejemplo con un subsuelo malo y un nivel freático alto. El congelamiento acelera el daño, pero no es la causa raíz.", "sources": ["tensar"], "note": "single, industry source"},
+  {"text": "Causas que enumera Wikipedia: pavimento insuficientemente grueso, drenaje insuficiente, fallas en zanjas de servicios y tapas, y grietas sin sellar que dejan pasar humedad.", "sources": ["wp"]},
+  {"text": "Los baches dañan llantas, rines y suspensión. Practical Engineering habla de miles de millones de dólares en daños a vehículos.", "sources": ["pe", "wp"]},
+  {"text": "Reparación con 'throw and roll': se echa el material, se compacta con el camión y se deja un pequeño abultamiento. Es rápida y a veces la única opción en invierno.", "sources": ["wp"]},
+  {"text": "Reparación semipermanente: se quita el agua y los escombros, se cortan bordes verticales limpios, se pone mezcla, se compacta y se usa una capa de liga. Dura más y cuesta más trabajo.", "sources": ["wp"]},
+  {"text": "Inyección por aspersión: se sopla el agua y los escombros del hueco, se rocía el aglutinante y se sopla asfalto con agregado; no necesita compactar. Requiere equipo especial.", "sources": ["wp"]},
+  {"text": "Un parche es como una venda: si no se arregla el agua ni el suelo de abajo, el bache suele volver al mismo lugar.", "sources": ["pe"]},
+  {"text": "Prevención: sellar las grietas para que no entre agua, buen drenaje y pavimento más grueso. Lo más grueso cuesta mucho: un centímetro más puede significar millones de toneladas de asfalto en una zona grande.", "sources": ["pe", "wp"]}
+ ]
+}

@@ -435,6 +435,37 @@ simplification of it.
     color) so repetition doesn't read as a looped asset. Low cost, confirmed
     useful in the bridge reference.
 
+## Alternative grammar: one continuous world (no cuts)
+
+The shot grammar above (hard cuts between separate `<Sequence>`s, one camera rig per shot type) is not the only valid one, and for a
+long script it produces few, long shots (the approved 13-shot plan for the CPU test averaged 12 s per shot). A microwave explainer
+(`@stupydoo`, 164 s) was checked with ffmpeg scene detection at thresholds 0.15, 0.3 and 0.5: no hard cut at all (three weak changes at
+the lowest threshold plus the end card). A 2 fps run shows a fixed isometric angle, a camera that only pans and zooms between parts
+(flights of about one second), and one world that persists: the same floor, wall and mug throughout, parts placed once and left there.
+
+Use this mode when the script introduces many parts in sequence:
+
+- **One scene, one camera path.** The whole video is a single `<ThreeCanvas>`. The script holds `waypoints` (focus station + distance
+  class `wide|medium|close`), one per beat of roughly 3-6 s. The camera leaves a few frames before the beat's first word, flies for
+  about 1.2 s with an ease, and then drifts. Drift is a global function of the frame (small yaw and breathing), never reset per beat,
+  so there is no jump at a waypoint.
+- **Stations in narration order.** Parts sit in a row on a workbench, in the order the narration names them, with the hero (the chip)
+  behind it. The camera walks along the row; neighbours stay partly visible, which is what gives continuity.
+- **Parts accumulate.** A part flies in once (arc, rotation, spring) when the camera first heads for it, or shortly before its first
+  event, and stays. A late beat can move a part to the hero (the heatsink flies onto the chip).
+- **Every part runs a repeating work cycle** from the moment it arrives (lever toggling and current pulses, a stepping pointer,
+  conveyor cubes, a spinning fan). This replaces the per-shot `ambient` field.
+- **Planner:** beats instead of shots. `motion.plan()` only cuts on sentence ends, so split any beat longer than 6.5 s at the longest
+  pause near its middle. The model returns `focus`, `dist`, a one-line `show` and up to three events (`highlight`, `force_arrows`,
+  `term_callout`); there is no `attach`, `pushin` or `assembly`, because arrival and zoom are now the grammar itself. Code enforces:
+  first beat chip/wide, last beat chip, one term per callout, red arrows only on a flow or motion word, the 9 s hold cap (a change of
+  focus or distance counts as a change), and one flight of lead time between waypoints.
+- **Colours:** unchanged. Current and "on" states use one saturated content colour (lime) on neutral parts; red, yellow and the
+  colourless highlight keep their meanings.
+
+Not yet settled: the CPU test is the first render of this mode (see `experiments/cpu-lowpoly/README.md` for what was and was not
+checked). Fast flights across the whole bench can read as a blur; `close` on a station wider than the frame shows only part of it.
+
 ## Gotchas to test for
 
 - `InstancedMesh` for granular fill (coffee grounds, chickpeas) needs a fixed

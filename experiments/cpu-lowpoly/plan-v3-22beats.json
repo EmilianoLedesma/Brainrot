@@ -1,0 +1,1021 @@
+{
+ "duration": 161.58,
+ "voice": "es-MX-JorgeNeural",
+ "rate": "+0%",
+ "provider": "claude-code",
+ "model_env": null,
+ "scenes": [
+  {
+   "start": 0.0,
+   "end": 8.6,
+   "text": "Dentro de tu procesador no hay inteligencia Tu procesador no sabe qué es una foto ni un juego ni una letra",
+   "notes": [],
+   "index": 0,
+   "model": {
+    "focus": "chip",
+    "dist": "wide",
+    "show": "Vista general del escritorio con la placa y el chip; el chip pulsa suavemente mientras se dice que no hay inteligencia.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "procesador",
+      "term": "",
+      "target": "chip"
+     },
+     {
+      "kind": "highlight",
+      "cue": "foto",
+      "term": "",
+      "target": "chip"
+     }
+    ],
+    "why": "Abre con el chip entero y lo marca al nombrarlo."
+   },
+   "focus": "chip",
+   "dist": "wide",
+   "show": "Vista general del escritorio con la placa y el chip; el chip pulsa suavemente mientras se dice que no hay inteligencia.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "procesador",
+     "at": 0.76,
+     "target": "chip"
+    },
+    {
+     "kind": "highlight",
+     "cue": "foto",
+     "at": 5.34,
+     "target": "chip"
+    }
+   ]
+  },
+  {
+   "start": 8.6,
+   "end": 15.86,
+   "text": "Y aun así los muestra todos Por dentro es un chip de silicio con miles de millones de transistores",
+   "notes": [],
+   "index": 1,
+   "model": {
+    "focus": "chip",
+    "dist": "medium",
+    "show": "La cámara se acerca al chip de silicio, que brilla como un bloque lleno de diminutos puntos.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "chip",
+      "term": "",
+      "target": "chip"
+     }
+    ],
+    "why": "Se habla del chip como un todo."
+   },
+   "focus": "chip",
+   "dist": "medium",
+   "show": "La cámara se acerca al chip de silicio, que brilla como un bloque lleno de diminutos puntos.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "chip",
+     "at": 12.04,
+     "target": "chip"
+    }
+   ]
+  },
+  {
+   "start": 15.86,
+   "end": 23.89,
+   "text": "Un transistor es un interruptor sin partes móviles Con voltaje deja pasar corriente eso es un uno",
+   "notes": [],
+   "index": 2,
+   "model": {
+    "focus": "transistor",
+    "dist": "medium",
+    "show": "Aparece un transistor con su palanca; al subirla, fluye corriente por él.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "transistor",
+      "term": "transistor",
+      "target": "transistor"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "corriente",
+      "term": "",
+      "target": "transistor"
+     }
+    ],
+    "why": "Introduce el transistor y la corriente que pasa."
+   },
+   "focus": "transistor",
+   "dist": "medium",
+   "show": "Aparece un transistor con su palanca; al subirla, fluye corriente por él.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "transistor",
+     "at": 16.02,
+     "target": "transistor",
+     "term": "TRANSISTOR"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "corriente",
+     "at": 21.33,
+     "target": "transistor"
+    }
+   ]
+  },
+  {
+   "start": 23.89,
+   "end": 31.3,
+   "text": "Sin voltaje la corta eso es un cero Con unos pocos transistores armas compuertas lógicas",
+   "notes": [],
+   "index": 3,
+   "model": {
+    "focus": "gate",
+    "dist": "medium",
+    "show": "Del transistor se pasa a las compuertas lógicas, formadas con unos pocos interruptores.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "transistores",
+      "term": "",
+      "target": "transistor"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "compuertas",
+      "term": "compuertas",
+      "target": "gate"
+     }
+    ],
+    "why": "Se nombran los transistores y se introducen las compuertas."
+   },
+   "focus": "gate",
+   "dist": "medium",
+   "show": "Del transistor se pasa a las compuertas lógicas, formadas con unos pocos interruptores.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "transistores",
+     "at": 28.07,
+     "target": "transistor"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "compuertas",
+     "at": 29.16,
+     "target": "gate",
+     "term": "COMPUERTAS"
+    }
+   ]
+  },
+  {
+   "start": 31.3,
+   "end": 36.81,
+   "text": "NOT AND OR Combinas compuertas y nacen los sumadores",
+   "notes": [],
+   "index": 4,
+   "model": {
+    "focus": "adder",
+    "dist": "close",
+    "show": "Las compuertas se combinan y forman un sumador que se enciende al final.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "AND",
+      "term": "",
+      "target": "gate"
+     },
+     {
+      "kind": "highlight",
+      "cue": "sumadores",
+      "term": "",
+      "target": "adder"
+     }
+    ],
+    "why": "Marca las compuertas y luego el sumador."
+   },
+   "focus": "adder",
+   "dist": "close",
+   "show": "Las compuertas se combinan y forman un sumador que se enciende al final.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "AND",
+     "at": 31.91,
+     "target": "gate"
+    },
+    {
+     "kind": "highlight",
+     "cue": "sumadores",
+     "at": 35.24,
+     "target": "adder"
+    }
+   ]
+  },
+  {
+   "start": 36.81,
+   "end": 42.36,
+   "text": "Con sumadores construyes la ALU la parte que suma resta y compara",
+   "notes": [],
+   "index": 5,
+   "model": {
+    "focus": "alu",
+    "dist": "medium",
+    "show": "Varios sumadores se agrupan en el bloque de la ALU, que muestra suma, resta y comparación.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "ALU",
+      "term": "ALU",
+      "target": "alu"
+     }
+    ],
+    "why": "Introduce la ALU."
+   },
+   "focus": "alu",
+   "dist": "medium",
+   "show": "Varios sumadores se agrupan en el bloque de la ALU, que muestra suma, resta y comparación.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "ALU",
+     "at": 38.38,
+     "target": "alu",
+     "term": "ALU"
+    }
+   ]
+  },
+  {
+   "start": 42.36,
+   "end": 47.66,
+   "text": "Eso es todo el cerebro matemático Ahora quién le dice qué hacer",
+   "notes": [],
+   "index": 6,
+   "model": {
+    "focus": "alu",
+    "dist": "wide",
+    "show": "Plano abierto de la ALU como cerebro matemático, con el banco vacío al lado esperando órdenes.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "cerebro",
+      "term": "",
+      "target": "alu"
+     }
+    ],
+    "why": "La ALU se resume como cerebro matemático."
+   },
+   "focus": "alu",
+   "dist": "wide",
+   "show": "Plano abierto de la ALU como cerebro matemático, con el banco vacío al lado esperando órdenes.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "cerebro",
+     "at": 43.2,
+     "target": "alu"
+    }
+   ]
+  },
+  {
+   "start": 47.66,
+   "end": 54.15,
+   "text": "Un reloj interno que marca pulsos Cada pulso deja avanzar un paso a los circuitos",
+   "notes": [
+    "force_arrows on 'pulso' has no flow or motion word; downgraded to highlight(clock)"
+   ],
+   "index": 7,
+   "model": {
+    "focus": "clock",
+    "dist": "medium",
+    "show": "Un reloj genera pulsos regulares que avanzan paso a paso.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "reloj",
+      "term": "reloj",
+      "target": "clock"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "pulso",
+      "term": "",
+      "target": "clock"
+     }
+    ],
+    "why": "Introduce el reloj y sus pulsos."
+   },
+   "focus": "clock",
+   "dist": "medium",
+   "show": "Un reloj genera pulsos regulares que avanzan paso a paso.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "reloj",
+     "at": 47.82,
+     "target": "clock",
+     "term": "RELOJ"
+    },
+    {
+     "kind": "highlight",
+     "cue": "pulso",
+     "at": 50.91,
+     "target": "clock"
+    }
+   ]
+  },
+  {
+   "start": 54.15,
+   "end": 60.61,
+   "text": "Un gigahertz son mil millones de pulsos por segundo Y cada instrucción sigue el mismo ciclo",
+   "notes": [
+    "force_arrows on 'pulsos' has no flow or motion word; downgraded to highlight(clock)"
+   ],
+   "index": 8,
+   "model": {
+    "focus": "clock",
+    "dist": "close",
+    "show": "Detalle del pulso del reloj que late muy rápido, un ciclo tras otro.",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "pulsos",
+      "term": "",
+      "target": "clock"
+     },
+     {
+      "kind": "highlight",
+      "cue": "ciclo",
+      "term": "",
+      "target": "clock"
+     }
+    ],
+    "why": "Los pulsos avanzan; se nombra el ciclo."
+   },
+   "focus": "clock",
+   "dist": "close",
+   "show": "Detalle del pulso del reloj que late muy rápido, un ciclo tras otro.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "pulsos",
+     "at": 55.82,
+     "target": "clock"
+    },
+    {
+     "kind": "highlight",
+     "cue": "ciclo",
+     "at": 59.3,
+     "target": "clock"
+    }
+   ]
+  },
+  {
+   "start": 60.61,
+   "end": 68.31,
+   "text": "Primero buscar El contador de programa marca una dirección de la memoria y se lee la instrucción",
+   "notes": [
+    "force_arrows on 'dirección' has no flow or motion word; downgraded to highlight(control)"
+   ],
+   "index": 9,
+   "model": {
+    "focus": "control",
+    "dist": "medium",
+    "show": "La unidad de control con el contador de programa que señala una dirección de memoria y lee la instrucción.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "contador",
+      "term": "",
+      "target": "control"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "dirección",
+      "term": "",
+      "target": "control"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "lee",
+      "term": "",
+      "target": "control"
+     }
+    ],
+    "why": "El contador apunta y lee una dirección."
+   },
+   "focus": "control",
+   "dist": "medium",
+   "show": "La unidad de control con el contador de programa que señala una dirección de memoria y lee la instrucción.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "contador",
+     "at": 62.97,
+     "target": "control"
+    },
+    {
+     "kind": "highlight",
+     "cue": "dirección",
+     "at": 64.63,
+     "target": "control"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "lee",
+     "at": 66.37,
+     "target": "control"
+    }
+   ]
+  },
+  {
+   "start": 68.31,
+   "end": 73.22,
+   "text": "Segundo decodificar la unidad de control entiende qué se pide",
+   "notes": [],
+   "index": 10,
+   "model": {
+    "focus": "control",
+    "dist": "close",
+    "show": "Detalle de la unidad de control que descifra la instrucción.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "control",
+      "term": "",
+      "target": "control"
+     }
+    ],
+    "why": "Se nombra la unidad de control al decodificar."
+   },
+   "focus": "control",
+   "dist": "close",
+   "show": "Detalle de la unidad de control que descifra la instrucción.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "control",
+     "at": 70.77,
+     "target": "control"
+    }
+   ]
+  },
+  {
+   "start": 73.22,
+   "end": 80.38,
+   "text": "Tercero ejecutar la ALU hace la operación Y el resultado se guarda en un registro",
+   "notes": [],
+   "index": 11,
+   "model": {
+    "focus": "alu",
+    "dist": "medium",
+    "show": "La ALU ejecuta la operación y el resultado sale hacia un registro.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "ALU",
+      "term": "",
+      "target": "alu"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "guarda",
+      "term": "",
+      "target": "alu"
+     }
+    ],
+    "why": "La ALU opera y el resultado se guarda."
+   },
+   "focus": "alu",
+   "dist": "medium",
+   "show": "La ALU ejecuta la operación y el resultado sale hacia un registro.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "ALU",
+     "at": 75.12,
+     "target": "alu"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "guarda",
+     "at": 78.31,
+     "target": "alu"
+    }
+   ]
+  },
+  {
+   "start": 80.38,
+   "end": 88.25,
+   "text": "Luego el contador salta a la siguiente Los registros son memoria diminuta dentro del chip la más rápida que existe",
+   "notes": [],
+   "index": 12,
+   "model": {
+    "focus": "register",
+    "dist": "wide",
+    "show": "El contador salta a la siguiente dirección y aparecen los registros, diminutos y muy rápidos, dentro del chip.",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "salta",
+      "term": "",
+      "target": "control"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "registros",
+      "term": "registro",
+      "target": "register"
+     },
+     {
+      "kind": "highlight",
+      "cue": "rápida",
+      "term": "",
+      "target": "register"
+     }
+    ],
+    "why": "El contador salta; se introducen los registros."
+   },
+   "focus": "register",
+   "dist": "wide",
+   "show": "El contador salta a la siguiente dirección y aparecen los registros, diminutos y muy rápidos, dentro del chip.",
+   "events": [
+    {
+     "kind": "force_arrows",
+     "cue": "salta",
+     "at": 81.26,
+     "target": "control"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "registros",
+     "at": 83.16,
+     "target": "register",
+     "term": "REGISTRO"
+    },
+    {
+     "kind": "highlight",
+     "cue": "rápida",
+     "at": 86.31,
+     "target": "register"
+    }
+   ]
+  },
+  {
+   "start": 88.25,
+   "end": 97.71,
+   "text": "La RAM está afuera y es mucho más lenta Por eso existe la caché en tres niveles que guarda cerca lo usado hace poco para no esperar",
+   "notes": [],
+   "index": 13,
+   "model": {
+    "focus": "cache",
+    "dist": "wide",
+    "show": "Vista amplia: la RAM queda lejos del chip y la caché aparece cerca en tres capas apiladas.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "RAM",
+      "term": "RAM",
+      "target": "ram"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "caché",
+      "term": "caché",
+      "target": "cache"
+     },
+     {
+      "kind": "highlight",
+      "cue": "usado",
+      "term": "",
+      "target": "cache"
+     }
+    ],
+    "why": "Contrasta la RAM lejana con la caché cercana."
+   },
+   "focus": "cache",
+   "dist": "wide",
+   "show": "Vista amplia: la RAM queda lejos del chip y la caché aparece cerca en tres capas apiladas.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "RAM",
+     "at": 88.44,
+     "target": "ram",
+     "term": "RAM"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "caché",
+     "at": 92.42,
+     "target": "cache",
+     "term": "CACHÉ"
+    },
+    {
+     "kind": "highlight",
+     "cue": "usado",
+     "at": 95.25,
+     "target": "cache"
+    }
+   ]
+  },
+  {
+   "start": 97.71,
+   "end": 109.18,
+   "text": "Y para ir más rápido hace trampa El pipeline funciona como una línea de ensamblaje mientras una instrucción se ejecuta la siguiente se decodifica y otra se busca",
+   "notes": [],
+   "index": 14,
+   "model": {
+    "focus": "pipeline",
+    "dist": "medium",
+    "show": "Una cinta transportadora lleva instrucciones por etapas; varias avanzan a la vez.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "pipeline",
+      "term": "pipeline",
+      "target": "pipeline"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "ejecuta",
+      "term": "",
+      "target": "pipeline"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "busca",
+      "term": "",
+      "target": "pipeline"
+     }
+    ],
+    "why": "Introduce el pipeline y su flujo."
+   },
+   "focus": "pipeline",
+   "dist": "medium",
+   "show": "Una cinta transportadora lleva instrucciones por etapas; varias avanzan a la vez.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "pipeline",
+     "at": 101.08,
+     "target": "pipeline",
+     "term": "PIPELINE"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "ejecuta",
+     "at": 105.08,
+     "target": "pipeline"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "busca",
+     "at": 107.88,
+     "target": "pipeline"
+    }
+   ]
+  },
+  {
+   "start": 109.18,
+   "end": 117.66,
+   "text": "Pero ante un if el procesador adivina por qué lado seguirá Si se equivoca tira el trabajo adelantado y pierde tiempo",
+   "notes": [],
+   "index": 15,
+   "model": {
+    "focus": "pipeline",
+    "dist": "close",
+    "show": "Detalle de una bifurcación en la cinta: el procesador elige un lado y descarta el trabajo si se equivoca.",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "adivina",
+      "term": "",
+      "target": "pipeline"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "tira",
+      "term": "",
+      "target": "pipeline"
+     }
+    ],
+    "why": "Predicción de salto y descarte del trabajo."
+   },
+   "focus": "pipeline",
+   "dist": "close",
+   "show": "Detalle de una bifurcación en la cinta: el procesador elige un lado y descarta el trabajo si se equivoca.",
+   "events": [
+    {
+     "kind": "force_arrows",
+     "cue": "adivina",
+     "at": 111.09,
+     "target": "pipeline"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "tira",
+     "at": 114.82,
+     "target": "pipeline"
+    }
+   ]
+  },
+  {
+   "start": 117.66,
+   "end": 125.47,
+   "text": "Sí tu chip apuesta y a veces pierde Además los procesadores modernos tienen varios núcleos",
+   "notes": [],
+   "index": 16,
+   "model": {
+    "focus": "core",
+    "dist": "wide",
+    "show": "Varios núcleos aparecen alineados lado a lado.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "Además",
+      "term": "",
+      "target": "core"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "núcleos",
+      "term": "núcleos",
+      "target": "core"
+     }
+    ],
+    "why": "Introduce los núcleos."
+   },
+   "focus": "core",
+   "dist": "wide",
+   "show": "Varios núcleos aparecen alineados lado a lado.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "Además",
+     "at": 120.97,
+     "target": "core"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "núcleos",
+     "at": 124.03,
+     "target": "core",
+     "term": "NÚCLEOS"
+    }
+   ]
+  },
+  {
+   "start": 125.47,
+   "end": 131.86,
+   "text": "Cada uno es una unidad completa con su propio hilo de instrucciones El precio es el calor",
+   "notes": [
+    "force_arrows on 'hilo' has no flow or motion word; downgraded to highlight(core)"
+   ],
+   "index": 17,
+   "model": {
+    "focus": "core",
+    "dist": "medium",
+    "show": "Cada núcleo se ilumina como unidad completa con su propio hilo de instrucciones.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "unidad",
+      "term": "",
+      "target": "core"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "hilo",
+      "term": "",
+      "target": "core"
+     }
+    ],
+    "why": "Cada núcleo tiene su hilo."
+   },
+   "focus": "core",
+   "dist": "medium",
+   "show": "Cada núcleo se ilumina como unidad completa con su propio hilo de instrucciones.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "unidad",
+     "at": 126.31,
+     "target": "core"
+    },
+    {
+     "kind": "highlight",
+     "cue": "hilo",
+     "at": 127.94,
+     "target": "core"
+    }
+   ]
+  },
+  {
+   "start": 131.86,
+   "end": 137.94,
+   "text": "Cada vez que un transistor conmuta gasta energía y esa energía acaba como calor",
+   "notes": [],
+   "index": 18,
+   "model": {
+    "focus": "heatsink",
+    "dist": "wide",
+    "show": "El disipador espera junto al chip, que se calienta cuando los transistores conmutan.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "transistor",
+      "term": "",
+      "target": "transistor"
+     },
+     {
+      "kind": "highlight",
+      "cue": "calor",
+      "term": "",
+      "target": "heatsink"
+     }
+    ],
+    "why": "Se nombra el transistor y llega el calor."
+   },
+   "focus": "heatsink",
+   "dist": "wide",
+   "show": "El disipador espera junto al chip, que se calienta cuando los transistores conmutan.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "transistor",
+     "at": 132.59,
+     "target": "transistor"
+    },
+    {
+     "kind": "highlight",
+     "cue": "calor",
+     "at": 136.65,
+     "target": "heatsink"
+    }
+   ]
+  },
+  {
+   "start": 137.94,
+   "end": 146.09,
+   "text": "El disipador y el ventilador lo sacan Si aun así se calienta demasiado el chip baja su frecuencia para protegerse",
+   "notes": [],
+   "index": 19,
+   "model": {
+    "focus": "heatsink",
+    "dist": "medium",
+    "show": "El disipador se instala sobre el chip y el ventilador gira sacando el calor.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "disipador",
+      "term": "disipador",
+      "target": "heatsink"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "sacan",
+      "term": "",
+      "target": "heatsink"
+     },
+     {
+      "kind": "highlight",
+      "cue": "chip",
+      "term": "",
+      "target": "chip"
+     }
+    ],
+    "why": "El calor sale; el chip baja frecuencia."
+   },
+   "focus": "heatsink",
+   "dist": "medium",
+   "show": "El disipador se instala sobre el chip y el ventilador gira sacando el calor.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "disipador",
+     "at": 138.13,
+     "target": "heatsink",
+     "term": "DISIPADOR"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "sacan",
+     "at": 139.62,
+     "target": "heatsink"
+    },
+    {
+     "kind": "highlight",
+     "cue": "chip",
+     "at": 143.36,
+     "target": "chip"
+    }
+   ]
+  },
+  {
+   "start": 146.09,
+   "end": 155.25,
+   "text": "Así que esa es la verdad Millones de interruptores mil millones de pulsos por segundo instrucciones absurdamente simples",
+   "notes": [
+    "force_arrows on 'pulsos' has no flow or motion word; downgraded to highlight(clock)"
+   ],
+   "index": 20,
+   "model": {
+    "focus": "chip",
+    "dist": "wide",
+    "show": "Plano general de todo el banco: interruptores, pulsos e instrucciones simples.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "interruptores",
+      "term": "",
+      "target": "transistor"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "pulsos",
+      "term": "",
+      "target": "clock"
+     },
+     {
+      "kind": "highlight",
+      "cue": "instrucciones",
+      "term": "",
+      "target": "chip"
+     }
+    ],
+    "why": "Resumen del chip completo."
+   },
+   "focus": "chip",
+   "dist": "wide",
+   "show": "Plano general de todo el banco: interruptores, pulsos e instrucciones simples.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "interruptores",
+     "at": 149.08,
+     "target": "transistor"
+    },
+    {
+     "kind": "highlight",
+     "cue": "pulsos",
+     "at": 150.91,
+     "target": "clock"
+    },
+    {
+     "kind": "highlight",
+     "cue": "instrucciones",
+     "at": 152.22,
+     "target": "chip"
+    }
+   ]
+  },
+  {
+   "start": 155.25,
+   "end": 161.58,
+   "text": "Nada de eso entiende tu foto Solo mueve ceros y unos tan rápido que parece magia",
+   "notes": [],
+   "index": 21,
+   "model": {
+    "focus": "chip",
+    "dist": "medium",
+    "show": "El chip con el ventilador instalado mueve ceros y unos muy rápido.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "foto",
+      "term": "",
+      "target": "chip"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "mueve",
+      "term": "",
+      "target": "chip"
+     }
+    ],
+    "why": "Cierre con el chip entero."
+   },
+   "focus": "chip",
+   "dist": "medium",
+   "show": "El chip con el ventilador instalado mueve ceros y unos muy rápido.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "foto",
+     "at": 156.53,
+     "target": "chip"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "mueve",
+     "at": 158.15,
+     "target": "chip"
+    }
+   ]
+  }
+ ]
+}

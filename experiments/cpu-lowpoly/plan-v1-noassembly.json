@@ -1,0 +1,907 @@
+{
+ "duration": 161.58,
+ "voice": "es-MX-JorgeNeural",
+ "rate": "+0%",
+ "provider": "claude-code",
+ "model_env": null,
+ "scenes": [
+  {
+   "start": 0.0,
+   "end": 15.86,
+   "text": "Dentro de tu procesador no hay inteligencia Tu procesador no sabe qué es una foto ni un juego ni una letra Y aun así los muestra todos Por dentro es un chip de silicio con miles de millones de transistores",
+   "notes": [],
+   "model": {
+    "shot": "establishing",
+    "sustain": "camera",
+    "camera": "push_in",
+    "show": "The whole chip sits on the motherboard on the desk; the camera drifts closer while parts glow as named.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "inteligencia",
+      "term": "",
+      "target": "core"
+     },
+     {
+      "kind": "highlight",
+      "cue": "aun así",
+      "term": "",
+      "target": "core"
+     },
+     {
+      "kind": "highlight",
+      "cue": "silicio",
+      "term": "",
+      "target": "core"
+     },
+     {
+      "kind": "highlight",
+      "cue": "transistores",
+      "term": "",
+      "target": "transistor"
+     }
+    ],
+    "why": "Open outside the chip, then hint at the transistors inside."
+   },
+   "shot": "establishing",
+   "sustain": "camera",
+   "camera": "push_in",
+   "show": "The whole chip sits on the motherboard on the desk; the camera drifts closer while parts glow as named.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "inteligencia",
+     "at": 1.77,
+     "target": "core"
+    },
+    {
+     "kind": "highlight",
+     "cue": "aun así",
+     "at": 8.78,
+     "target": "core"
+    },
+    {
+     "kind": "highlight",
+     "cue": "silicio",
+     "at": 12.41,
+     "target": "core"
+    },
+    {
+     "kind": "highlight",
+     "cue": "transistores",
+     "at": 14.13,
+     "target": "transistor"
+    }
+   ],
+   "index": 0,
+   "event": {
+    "kind": "highlight",
+    "cue": "inteligencia",
+    "at": 1.77,
+    "target": "core"
+   }
+  },
+  {
+   "start": 15.86,
+   "end": 31.3,
+   "text": "Un transistor es un interruptor sin partes móviles Con voltaje deja pasar corriente eso es un uno Sin voltaje la corta eso es un cero Con unos pocos transistores armas compuertas lógicas",
+   "notes": [],
+   "model": {
+    "shot": "insert",
+    "sustain": "camera",
+    "camera": "push_in",
+    "show": "A single transistor on an empty background; current passes when on and is cut when off.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "transistor",
+      "term": "transistor",
+      "target": ""
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "deja pasar",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "la corta",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "highlight",
+      "cue": "transistores",
+      "term": "",
+      "target": "transistor"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "compuertas",
+      "term": "compuertas",
+      "target": ""
+     }
+    ],
+    "why": "One tiny switch is the smallest piece, ideal for an extreme close-up."
+   },
+   "shot": "insert",
+   "sustain": "camera",
+   "camera": "push_in",
+   "show": "A single transistor on an empty background; current passes when on and is cut when off.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "transistor",
+     "at": 16.02,
+     "target": "transistor",
+     "term": "TRANSISTOR"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "deja pasar",
+     "at": 20.72,
+     "target": ""
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "la corta",
+     "at": 25.03,
+     "target": ""
+    },
+    {
+     "kind": "highlight",
+     "cue": "transistores",
+     "at": 28.07,
+     "target": "transistor"
+    }
+   ],
+   "index": 1,
+   "event": {
+    "kind": "term_callout",
+    "cue": "transistor",
+    "at": 16.02,
+    "target": "transistor",
+    "term": "TRANSISTOR"
+   }
+  },
+  {
+   "start": 31.3,
+   "end": 42.36,
+   "text": "NOT AND OR Combinas compuertas y nacen los sumadores Con sumadores construyes la ALU la parte que suma resta y compara",
+   "notes": [
+    "attach at 35.24s dropped: collides with another event",
+    "assembly shot has fewer than three distinct attach events; sustain set to camera and attach events dropped",
+    "camera 'locked' outside an assembly shot; set to orbit"
+   ],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "assembly",
+    "camera": "locked",
+    "show": "Transistors, gates and then the ALU fly in and settle one after another.",
+    "events": [
+     {
+      "kind": "attach",
+      "cue": "NOT",
+      "term": "",
+      "target": "transistor"
+     },
+     {
+      "kind": "attach",
+      "cue": "compuertas",
+      "term": "",
+      "target": "gate"
+     },
+     {
+      "kind": "attach",
+      "cue": "sumadores",
+      "term": "",
+      "target": "alu"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "ALU",
+      "term": "ALU",
+      "target": ""
+     }
+    ],
+    "why": "Narration introduces the parts one by one, so the circuit is built on screen."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "camera": "orbit",
+   "show": "Transistors, gates and then the ALU fly in and settle one after another.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "ALU",
+     "at": 38.38,
+     "target": "alu",
+     "term": "ALU"
+    }
+   ],
+   "index": 2,
+   "event": {
+    "kind": "term_callout",
+    "cue": "ALU",
+    "at": 38.38,
+    "target": "alu",
+    "term": "ALU"
+   }
+  },
+  {
+   "start": 42.36,
+   "end": 54.15,
+   "text": "Eso es todo el cerebro matemático Ahora quién le dice qué hacer Un reloj interno que marca pulsos Cada pulso deja avanzar un paso a los circuitos",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "camera": "follow",
+    "show": "The ALU glows, then a clock pulse travels and lets circuits advance one step.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "cerebro matemático",
+      "term": "",
+      "target": "alu"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "reloj",
+      "term": "reloj",
+      "target": ""
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "deja avanzar",
+      "term": "",
+      "target": ""
+     }
+    ],
+    "why": "The pulse moving a step is real directed motion, so follow it."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "camera": "follow",
+   "show": "The ALU glows, then a clock pulse travels and lets circuits advance one step.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "cerebro matemático",
+     "at": 43.2,
+     "target": "alu"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "reloj",
+     "at": 47.82,
+     "target": "clock",
+     "term": "RELOJ"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "deja avanzar",
+     "at": 51.24,
+     "target": ""
+    }
+   ],
+   "index": 3,
+   "event": {
+    "kind": "highlight",
+    "cue": "cerebro matemático",
+    "at": 43.2,
+    "target": "alu"
+   }
+  },
+  {
+   "start": 54.15,
+   "end": 68.31,
+   "text": "Un gigahertz son mil millones de pulsos por segundo Y cada instrucción sigue el mismo ciclo Primero buscar El contador de programa marca una dirección de la memoria y se lee la instrucción",
+   "notes": [
+    "force_arrows on 'pulsos por segundo' has no flow or motion word; downgraded to highlight(clock)"
+   ],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "camera": "follow",
+    "show": "Clock ticks rush by; the program counter points to an address and the instruction is read.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "gigahertz",
+      "term": "",
+      "target": "clock"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "pulsos por segundo",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "highlight",
+      "cue": "contador de programa",
+      "term": "",
+      "target": "control"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "lee la instrucción",
+      "term": "",
+      "target": ""
+     }
+    ],
+    "why": "Fetch step: pulses and the instruction being read are flow."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "camera": "follow",
+   "show": "Clock ticks rush by; the program counter points to an address and the instruction is read.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "gigahertz",
+     "at": 54.32,
+     "target": "clock"
+    },
+    {
+     "kind": "highlight",
+     "cue": "pulsos por segundo",
+     "at": 55.82,
+     "target": "clock"
+    },
+    {
+     "kind": "highlight",
+     "cue": "contador de programa",
+     "at": 62.97,
+     "target": "control"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "lee la instrucción",
+     "at": 66.37,
+     "target": ""
+    }
+   ],
+   "index": 4,
+   "event": {
+    "kind": "highlight",
+    "cue": "gigahertz",
+    "at": 54.32,
+    "target": "clock"
+   }
+  },
+  {
+   "start": 68.31,
+   "end": 80.38,
+   "text": "Segundo decodificar la unidad de control entiende qué se pide Tercero ejecutar la ALU hace la operación Y el resultado se guarda en un registro",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "camera": "pan",
+    "show": "The camera slides from the control unit to the ALU, then the result is saved into a register.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "unidad de control",
+      "term": "",
+      "target": "control"
+     },
+     {
+      "kind": "highlight",
+      "cue": "ALU",
+      "term": "",
+      "target": "alu"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "resultado se guarda",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "term_callout",
+      "cue": "registro",
+      "term": "registro",
+      "target": ""
+     }
+    ],
+    "why": "Decode and execute pass between parts; saving is a real flow."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "camera": "pan",
+   "show": "The camera slides from the control unit to the ALU, then the result is saved into a register.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "unidad de control",
+     "at": 70.3,
+     "target": "control"
+    },
+    {
+     "kind": "highlight",
+     "cue": "ALU",
+     "at": 75.12,
+     "target": "alu"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "resultado se guarda",
+     "at": 77.57,
+     "target": ""
+    },
+    {
+     "kind": "term_callout",
+     "cue": "registro",
+     "at": 78.92,
+     "target": "register",
+     "term": "REGISTRO"
+    }
+   ],
+   "index": 5,
+   "event": {
+    "kind": "highlight",
+    "cue": "unidad de control",
+    "at": 70.3,
+    "target": "control"
+   }
+  },
+  {
+   "start": 80.38,
+   "end": 91.55,
+   "text": "Luego el contador salta a la siguiente Los registros son memoria diminuta dentro del chip la más rápida que existe La RAM está afuera y es mucho más lenta",
+   "notes": [],
+   "model": {
+    "shot": "establishing",
+    "sustain": "camera",
+    "camera": "pull_out",
+    "show": "Back outside the chip: the counter jumps on, registers pulse inside, and RAM sits on the board.",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "salta",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "highlight",
+      "cue": "registros",
+      "term": "",
+      "target": "register"
+     },
+     {
+      "kind": "highlight",
+      "cue": "RAM",
+      "term": "",
+      "target": "ram"
+     }
+    ],
+    "why": "RAM is outside the chip, so the external view shows the distance."
+   },
+   "shot": "establishing",
+   "sustain": "camera",
+   "camera": "pull_out",
+   "show": "Back outside the chip: the counter jumps on, registers pulse inside, and RAM sits on the board.",
+   "events": [
+    {
+     "kind": "force_arrows",
+     "cue": "salta",
+     "at": 81.26,
+     "target": ""
+    },
+    {
+     "kind": "highlight",
+     "cue": "registros",
+     "at": 83.16,
+     "target": "register"
+    },
+    {
+     "kind": "highlight",
+     "cue": "RAM",
+     "at": 88.44,
+     "target": "ram"
+    }
+   ],
+   "index": 6,
+   "event": {
+    "kind": "force_arrows",
+    "cue": "salta",
+    "at": 81.26,
+    "target": ""
+   }
+  },
+  {
+   "start": 91.55,
+   "end": 100.87,
+   "text": "Por eso existe la caché en tres niveles que guarda cerca lo usado hace poco para no esperar Y para ir más rápido hace trampa",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "camera": "orbit",
+    "show": "Three cache levels sit near the core and keep recently used data close.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "caché",
+      "term": "caché",
+      "target": ""
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "guarda cerca",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "highlight",
+      "cue": "no esperar",
+      "term": "",
+      "target": "cache"
+     }
+    ],
+    "why": "Orbit shows the cache layers next to the core."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "camera": "orbit",
+   "show": "Three cache levels sit near the core and keep recently used data close.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "caché",
+     "at": 92.42,
+     "target": "cache",
+     "term": "CACHÉ"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "guarda cerca",
+     "at": 94.39,
+     "target": ""
+    },
+    {
+     "kind": "highlight",
+     "cue": "no esperar",
+     "at": 96.51,
+     "target": "cache"
+    }
+   ],
+   "index": 7,
+   "event": {
+    "kind": "term_callout",
+    "cue": "caché",
+    "at": 92.42,
+    "target": "cache",
+    "term": "CACHÉ"
+   }
+  },
+  {
+   "start": 100.87,
+   "end": 113.58,
+   "text": "El pipeline funciona como una línea de ensamblaje mientras una instrucción se ejecuta la siguiente se decodifica y otra se busca Pero ante un if el procesador adivina por qué lado seguirá",
+   "notes": [
+    "force_arrows on 'una instrucción' has no flow or motion word; dropped",
+    "gap of 10.0 s with no event: validator added highlight(core) on 'busca' at 107.9s"
+   ],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "camera": "follow",
+    "show": "Instructions move along an assembly line of stages; at an if the chip guesses a path.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "pipeline",
+      "term": "pipeline",
+      "target": ""
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "una instrucción",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "adivina",
+      "term": "",
+      "target": ""
+     }
+    ],
+    "why": "Following instructions down the line shows the pipeline; guessing is directed flow."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "camera": "follow",
+   "show": "Instructions move along an assembly line of stages; at an if the chip guesses a path.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "pipeline",
+     "at": 101.08,
+     "target": "core",
+     "term": "PIPELINE"
+    },
+    {
+     "kind": "highlight",
+     "cue": "busca",
+     "at": 107.88,
+     "target": "core"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "adivina",
+     "at": 111.09,
+     "target": ""
+    }
+   ],
+   "index": 8,
+   "event": {
+    "kind": "term_callout",
+    "cue": "pipeline",
+    "at": 101.08,
+    "target": "core",
+    "term": "PIPELINE"
+   }
+  },
+  {
+   "start": 113.58,
+   "end": 125.47,
+   "text": "Si se equivoca tira el trabajo adelantado y pierde tiempo Sí tu chip apuesta y a veces pierde Además los procesadores modernos tienen varios núcleos",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "camera": "pan",
+    "show": "Wrong-guess work is thrown out, then the view slides across several cores.",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "tira el trabajo",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "highlight",
+      "cue": "apuesta",
+      "term": "",
+      "target": "core"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "núcleos",
+      "term": "núcleos",
+      "target": ""
+     }
+    ],
+    "why": "Discarded work is motion; then multiple cores are introduced."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "camera": "pan",
+   "show": "Wrong-guess work is thrown out, then the view slides across several cores.",
+   "events": [
+    {
+     "kind": "force_arrows",
+     "cue": "tira el trabajo",
+     "at": 114.82,
+     "target": ""
+    },
+    {
+     "kind": "highlight",
+     "cue": "apuesta",
+     "at": 118.69,
+     "target": "core"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "núcleos",
+     "at": 124.03,
+     "target": "core",
+     "term": "NÚCLEOS"
+    }
+   ],
+   "index": 9,
+   "event": {
+    "kind": "force_arrows",
+    "cue": "tira el trabajo",
+    "at": 114.82,
+    "target": ""
+   }
+  },
+  {
+   "start": 125.47,
+   "end": 137.94,
+   "text": "Cada uno es una unidad completa con su propio hilo de instrucciones El precio es el calor Cada vez que un transistor conmuta gasta energía y esa energía acaba como calor",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "camera": "orbit",
+    "show": "One complete core, then the camera pushes onto a transistor switching and giving off heat.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "unidad completa",
+      "term": "",
+      "target": "core"
+     },
+     {
+      "kind": "pushin",
+      "cue": "transistor",
+      "term": "",
+      "target": "transistor"
+     }
+    ],
+    "why": "A push-in onto the transistor ties switching to heat without cutting."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "camera": "orbit",
+   "show": "One complete core, then the camera pushes onto a transistor switching and giving off heat.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "unidad completa",
+     "at": 126.31,
+     "target": "core"
+    },
+    {
+     "kind": "pushin",
+     "cue": "transistor",
+     "at": 132.59,
+     "target": "transistor"
+    }
+   ],
+   "index": 10,
+   "event": {
+    "kind": "highlight",
+    "cue": "unidad completa",
+    "at": 126.31,
+    "target": "core"
+   }
+  },
+  {
+   "start": 137.94,
+   "end": 148.51,
+   "text": "El disipador y el ventilador lo sacan Si aun así se calienta demasiado el chip baja su frecuencia para protegerse Así que esa es la verdad",
+   "notes": [],
+   "model": {
+    "shot": "cutaway",
+    "sustain": "camera",
+    "camera": "pull_out",
+    "show": "The heatsink and fan carry heat away; the clock slows when the chip overheats.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "disipador",
+      "term": "disipador",
+      "target": ""
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "lo sacan",
+      "term": "",
+      "target": ""
+     },
+     {
+      "kind": "highlight",
+      "cue": "baja su frecuencia",
+      "term": "",
+      "target": "clock"
+     }
+    ],
+    "why": "Heat leaving is real flow; pulling out shows the cooling hardware."
+   },
+   "shot": "cutaway",
+   "sustain": "camera",
+   "camera": "pull_out",
+   "show": "The heatsink and fan carry heat away; the clock slows when the chip overheats.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "disipador",
+     "at": 138.13,
+     "target": "heatsink",
+     "term": "DISIPADOR"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "lo sacan",
+     "at": 139.53,
+     "target": ""
+    },
+    {
+     "kind": "highlight",
+     "cue": "baja su frecuencia",
+     "at": 143.65,
+     "target": "clock"
+    }
+   ],
+   "index": 11,
+   "event": {
+    "kind": "term_callout",
+    "cue": "disipador",
+    "at": 138.13,
+    "target": "heatsink",
+    "term": "DISIPADOR"
+   }
+  },
+  {
+   "start": 148.51,
+   "end": 161.58,
+   "text": "Millones de interruptores mil millones de pulsos por segundo instrucciones absurdamente simples Nada de eso entiende tu foto Solo mueve ceros y unos tan rápido que parece magia",
+   "notes": [
+    "highlight at 152.22s dropped: collides with another event"
+   ],
+   "model": {
+    "shot": "establishing",
+    "sustain": "camera",
+    "camera": "pull_out",
+    "show": "The whole chip on the desk again as the camera backs away, parts pulsing as recapped.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "interruptores",
+      "term": "",
+      "target": "transistor"
+     },
+     {
+      "kind": "highlight",
+      "cue": "pulsos por segundo",
+      "term": "",
+      "target": "clock"
+     },
+     {
+      "kind": "highlight",
+      "cue": "instrucciones absurdamente",
+      "term": "",
+      "target": "control"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "mueve ceros",
+      "term": "",
+      "target": ""
+     }
+    ],
+    "why": "Close on the outside view for the recap."
+   },
+   "shot": "establishing",
+   "sustain": "camera",
+   "camera": "pull_out",
+   "show": "The whole chip on the desk again as the camera backs away, parts pulsing as recapped.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "interruptores",
+     "at": 149.08,
+     "target": "transistor"
+    },
+    {
+     "kind": "highlight",
+     "cue": "pulsos por segundo",
+     "at": 150.91,
+     "target": "clock"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "mueve ceros",
+     "at": 158.15,
+     "target": ""
+    }
+   ],
+   "index": 12,
+   "event": {
+    "kind": "highlight",
+    "cue": "interruptores",
+    "at": 149.08,
+    "target": "transistor"
+   }
+  }
+ ]
+}
