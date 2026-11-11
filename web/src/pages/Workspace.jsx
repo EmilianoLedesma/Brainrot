@@ -7,7 +7,6 @@ import Execution, { duration } from "./Execution.jsx";
 import Insights, { newInsightsSession } from "./Insights.jsx";
 import Research from "./Research.jsx";
 import Library from "./Library.jsx";
-import YouTube from "./YouTube.jsx";
 import VideoDetails from "./VideoDetails.jsx";
 import { INTEGRATIONS_COPY } from "../integrations-copy.js";
 import { useLang } from "../i18n.jsx";
@@ -266,7 +265,7 @@ function NewJob({ onQueued, initialDraft }) {
             </>}
             <fieldset className="job-youtube">
               <legend>{yt.jobPublishing}</legend>
-              <p className="muted">{youtubeStatus === null ? yt.jobChecking : youtubeStatus.unavailable ? yt.error : youtubeStatus.connected ? `${yt.connected}: ${youtubeStatus.channel_title || "YouTube"}` : yt.jobNotConnected}</p>
+              <p className="muted">{youtubeStatus === null ? yt.jobChecking : youtubeStatus.unavailable ? yt.error : youtubeStatus.connected ? `${yt.connected}: ${youtubeStatus.channel_title || "YouTube"}` : yt.jobNotConnected} <a href="#/accounts">{yt.openAccounts}</a></p>
               <label><span className="label">{yt.jobAfterGeneration}</span>
                 <select aria-label={yt.jobAfterGeneration} value={youtubeMode} onChange={(event) => setYoutubeMode(event.target.value)}>
                   <option value="review">{yt.jobReview}</option>
@@ -577,7 +576,7 @@ function Output({ insightSession, onInsightSessionChange, videoSessions, onVideo
   );
 }
 
-const SCREENS = { new: NewJob, queue: Queue, output: Output, research: Research, library: Library, youtube: YouTube };
+const SCREENS = { new: NewJob, queue: Queue, output: Output, research: Research, library: Library };
 
 export default function Workspace() {
   const t = useCopy().work;
@@ -603,11 +602,10 @@ export default function Workspace() {
         ))}
       </div><div className="workspace-tools"><details><summary className="btn">{integrations.tools}</summary><div className="workspace-tool-menu">
         {["research", "library"].map((id) => <button className="btn" key={id} onClick={(event) => { setTab(id); event.currentTarget.closest("details").removeAttribute("open"); }}>{integrations[id]}</button>)}
-      </div></details><button className="btn" aria-current={tab === "youtube"} onClick={() => setTab("youtube")}>YouTube</button></div></div>
+      </div></details></div></div>
 
       <Screen onQueued={() => { setTab("queue"); setDraft(null); }} initialDraft={draft}
         onReference={(item) => { setDraft(item); setTab("new"); }}
-        onRetention={(report, title) => { setInsightSession({ ...newInsightsSession(), report, csvName: `YouTube · ${title}`, step: 2 }); setTab("output"); }}
         videoSessions={videoSessions} onVideoSessionsChange={setVideoSessions}
         insightSession={insightSession} onInsightSessionChange={setInsightSession} />
     </div>

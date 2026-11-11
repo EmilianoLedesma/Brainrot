@@ -1,5 +1,18 @@
 # Handoff — 2026-11-11
 
+## Accounts hub — 2026-11-11
+
+- The Workspace (`#/console`) no longer has a YouTube button or screen. A new top-level view, Accounts (`#/accounts`, nav "Accounts"/"Cuentas", `web/src/pages/Accounts.jsx`), centralises
+  connected accounts and per-platform performance. `pages/YouTube.jsx` is now the YouTube part of that hub: a compact connection card (status badge, connect/disconnect, collapsed
+  Google setup; refresh only appears after starting Connect), a "Performance by platform" table with an All/YouTube/Instagram/TikTok filter, then the existing automation settings,
+  upload steps, upload activity and channel retention. Retention now opens in the hub (Insights below the page) instead of switching the Workspace to Output.
+- Instagram and TikTok are disabled "Coming soon" cards and empty filter states only; no backend, no routes, no credentials. Their connection, publishing and metrics are not built.
+- The New job form's YouTube section links to Accounts when the channel is not connected. New copy lives in `integrations-copy.js` (EN/ES).
+- Validation run: `npm run build --prefix web`, and the Playwright checks `check_integrations.py` (updated for the hub), `check_workspace.py` and `check_video_details.py`, all passing against a
+  local Vite server with simulated API responses; the hub was also read in the browser against the live API (Spanish text, connected channel, four performance rows). Not run: Python tests
+  (no backend change), a real Google connect, a real upload.
+- Not committed. A Vite dev server I started on port 5173 for the checks may still be running.
+
 ## Continuous 3D world edit integrated into the main flow — 2026-11-11
 
 The researcher, the director and the continuous-world recipe from the hand-built films are now runtime features (details: [world mode](../world-mode.md)). The sections below

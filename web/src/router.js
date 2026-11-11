@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 /* Hash routing, because the dev server and any static host will serve this from
    one file and a real router is a dependency for four pages. */
 
-export const ROUTES = ["home", "docs", "faq", "console"];
+export const ROUTES = ["home", "docs", "faq", "console", "accounts"];
 
 function current() {
   const raw = window.location.hash.replace(/^#\/?/, "").split("/")[0];

@@ -5,7 +5,7 @@ import { INTEGRATIONS_COPY } from "../integrations-copy.js";
 
 function today(offset = 0) { const date = new Date(); date.setDate(date.getDate() + offset); return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`; }
 
-export default function YouTube({ onRetention }) {
+export default function YouTube({ onRetention, children }) {
   const { lang } = useLang(); const t = INTEGRATIONS_COPY[lang];
   const [connection, setConnection] = useState(null); const [output, setOutput] = useState([]); const [uploads, setUploads] = useState([]);
   const [step, setStep] = useState(1); const [selected, setSelected] = useState(null);
@@ -14,7 +14,7 @@ export default function YouTube({ onRetention }) {
   const [busy, setBusy] = useState(""); const [error, setError] = useState(""); const [message, setMessage] = useState("");
   const [authUrl, setAuthUrl] = useState(""); const [videos, setVideos] = useState(null); const [videoId, setVideoId] = useState("");
   const [start, setStart] = useState(today(-28)); const [end, setEnd] = useState(today());
-  const [performance, setPerformance] = useState([]);
+  const [performance, setPerformance] = useState([]); const [platform, setPlatform] = useState("all");
   const [autoPublish, setAutoPublish] = useState(false); const [autoPrivacy, setAutoPrivacy] = useState("private"); const [includeQueued, setIncludeQueued] = useState(false);
   async function refresh() {
     const [status, rows] = await Promise.all([api("/youtube/status"), api("/youtube/uploads")]);
@@ -49,19 +49,40 @@ export default function YouTube({ onRetention }) {
       setMessage(t.uploadStarted); setStep(1); setSelected(null); await refresh();
     });
   }
-  return <section><p className="muted">{t.youtubeIntro}</p>
+  const connected = !!connection?.connected, uploading = uploads.some((row) => row.status === "uploading");
+  return <section>
     {error && <p role="alert" className="alarm-text">{error}</p>}{message && <p role="status">{message}</p>}
-    <div className="panel"><span className="panel-label">{t.youtube}</span><div className="panel-body">
-      <p><strong>{connection?.connected ? `${t.connected}: ${connection.channel_title || connection.channel_id || "YouTube"}` : connection?.configured ? t.configured : t.missing}</strong></p>
-      <div className="job-actions"><button className="btn" disabled={!!busy} onClick={() => action("refresh", refresh)}>{t.refresh}</button>
-        {connection?.connected ? <button className="btn" disabled={!!busy || uploads.some((row) => row.status === "uploading")} onClick={() => action("disconnect", async () => { await api("/youtube/connection", { method: "DELETE" }); setOutput([]); setVideos(null); await refresh(); })}>{t.disconnect}</button>
-          : <button className="btn btn-primary" disabled={!!busy || !connection?.configured} onClick={() => action("connect", async () => { const response = await api("/youtube/connect", { method: "POST" }); setAuthUrl(response.url); })}>{t.connect}</button>}
-        {authUrl && !connection?.connected && <a className="btn" href={authUrl} target="_blank" rel="noreferrer">{t.connecting}</a>}</div>
-      {authUrl && !connection?.connected && <p>{t.waiting}</p>}
-      {!connection?.connected && <details open={!connection?.configured}><summary>{t.setup}</summary><p>{t.setupLead}</p>
-        <ol>{t.setupSteps.map((text, index) => <li key={text}>{text}{index === 2 && <pre className="redirect-uri">{connection?.redirect_uri || "http://127.0.0.1:8001/youtube/callback"}</pre>}</li>)}</ol>
-        <a href="https://console.cloud.google.com/apis/dashboard" target="_blank" rel="noreferrer">{t.cloud}</a></details>}
-      <p className="muted">{t.privateNote}</p>
+    <div className="account-grid">
+      <div className="panel account-card"><div className="panel-body">
+        <div className="account-head"><h2>YouTube</h2><span className={`badge ${connected ? "badge-on" : ""}`}>{connected ? t.statusConnected : connection?.configured ? t.statusReady : t.statusSetup}</span></div>
+        <p className="muted">{connected ? (connection.channel_title || connection.channel_id || "YouTube") : t.youtubeCardHint}</p>
+        <div className="job-actions">
+          {connected ? <button className="btn" disabled={!!busy || uploading} onClick={() => action("disconnect", async () => { await api("/youtube/connection", { method: "DELETE" }); setOutput([]); setVideos(null); setPerformance([]); await refresh(); })}>{t.disconnect}</button>
+            : <button className="btn btn-primary" disabled={!!busy || !connection?.configured} onClick={() => action("connect", async () => { const response = await api("/youtube/connect", { method: "POST" }); setAuthUrl(response.url); })}>{t.connect}</button>}
+          {authUrl && !connected && <a className="btn" href={authUrl} target="_blank" rel="noreferrer">{t.connecting}</a>}
+          {authUrl && !connected && <button className="btn" disabled={!!busy} onClick={() => action("refresh", refresh)}>{t.refresh}</button>}
+        </div>
+        {authUrl && !connected && <p>{t.waiting}</p>}
+        {!connected && <details open={!connection?.configured}><summary>{t.setup}</summary><p>{t.setupLead}</p>
+          <ol>{t.setupSteps.map((text, index) => <li key={text}>{text}{index === 2 && <pre className="redirect-uri">{connection?.redirect_uri || "http://127.0.0.1:8001/youtube/callback"}</pre>}</li>)}</ol>
+          <a href="https://console.cloud.google.com/apis/dashboard" target="_blank" rel="noreferrer">{t.cloud}</a></details>}
+      </div></div>
+      {children}
+    </div>
+    <div className="panel"><span className="panel-label">{t.perfByPlatform}</span><div className="panel-body">
+      <div className="segmented" role="group" aria-label={t.perfByPlatform}>{["all", "youtube", "instagram", "tiktok"].map((id) => <button key={id} aria-current={platform === id} onClick={() => setPlatform(id)}>{t.platforms[id]}</button>)}</div>
+      {["instagram", "tiktok"].includes(platform) ? <p>{t.platformSoon}</p> : <>
+        <p className="muted">{t.performanceHint}</p>
+        {connected && <button className="btn" disabled={!!busy} onClick={() => action("sync", async () => {
+          const result = await api("/youtube/sync", { method: "POST", timeoutMs: 360000 });
+          setPerformance(await api("/youtube/performance")); setMessage(`${t.syncResult}: ${result.updated} · ${t.waitingData}: ${result.waiting} · ${t.syncFailed}: ${result.failed}`);
+        })}>{busy === "sync" ? t.syncing : t.syncMetrics}</button>}
+        {performance.length > 0 ? <div className="table-wrap"><table><thead><tr><th>{t.title}</th><th>{t.platformColumn}</th><th>{t.views}</th><th>{t.engagedViews}</th><th>{t.averageWatched}</th><th>{t.likes}</th><th>{t.comments}</th></tr></thead>
+          <tbody>{performance.map((item) => <tr key={item.id}><td>{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.title}</a> : item.title}</td><td>YouTube</td>
+            <td>{item.metrics.views ?? "—"}</td><td>{item.metrics.engagedViews ?? "—"}</td><td>{item.metrics.averageViewPercentage == null ? t.waitingData : `${Number(item.metrics.averageViewPercentage).toFixed(1)}%`}</td><td>{item.metrics.likes ?? "—"}</td><td>{item.metrics.comments ?? "—"}</td></tr>)}</tbody></table></div>
+          : <p>{connected ? t.noPerformance : t.connectForPerformance}</p>}
+        {platform === "all" && <p className="muted">{t.otherPlatformsSoon}</p>}
+      </>}
     </div></div>
     {connection?.connected && <>
       <div className="panel"><span className="panel-label">{t.automation}</span><div className="panel-body">
@@ -78,7 +99,7 @@ export default function YouTube({ onRetention }) {
       </div></div>
       <div className="stepper">{t.uploadSteps.map((label, index) => <div className={`step ${step === index + 1 ? "step-now" : step > index + 1 ? "step-done" : ""}`} key={label}>
         <span className="step-dot">{index + 1}</span><span className="step-name">{label}</span></div>)}</div>
-      {step === 1 && <><h2 className="retention-heading">{t.selectVideo}</h2>{!output.length && <p>{t.noOutput}</p>}
+      {step === 1 && <><p className="muted">{t.privateNote}</p><h2 className="retention-heading">{t.selectVideo}</h2>{!output.length && <p>{t.noOutput}</p>}
         <div className="gallery">{output.map((item) => <figure key={item.source + item.id}><video src={item.url} controls preload="metadata" />
           <figcaption><b>{item.title}</b><div className="job-actions"><button className="btn" disabled={!!busy} onClick={() => choose(item)}>{t.next}</button></div></figcaption></figure>)}</div></>}
       {step === 2 && selected && <div className="panel panel-narrow"><span className="panel-label">{t.details}</span><div className="panel-body">
@@ -106,14 +127,6 @@ export default function YouTube({ onRetention }) {
       <h2 className="retention-heading">{t.uploads}</h2>{uploads.length ? <div className="table-wrap"><table><tbody>{uploads.map((row) => <tr key={row.id}>
         <td>{row.title || row.id.slice(0, 8)}</td><td>{row.status}</td><td>{row.error || (row.url && <a href={row.url} target="_blank" rel="noreferrer">{t.openVideo}</a>)}</td></tr>)}</tbody></table></div> : <p>{t.emptyUploads}</p>}
       <div className="panel"><span className="panel-label">{t.analytics}</span><div className="panel-body">
-        <p className="muted">{t.performanceHint}</p>
-        <button className="btn" disabled={!!busy} onClick={() => action("sync", async () => {
-          const result = await api("/youtube/sync", { method: "POST", timeoutMs: 360000 });
-          setPerformance(await api("/youtube/performance")); setMessage(`${t.syncResult}: ${result.updated} · ${t.waitingData}: ${result.waiting} · ${t.syncFailed}: ${result.failed}`);
-        })}>{busy === "sync" ? t.syncing : t.syncMetrics}</button>
-        {performance.length > 0 && <div className="table-wrap"><table><thead><tr><th>{t.title}</th><th>{t.views}</th><th>{t.engagedViews}</th><th>{t.averageWatched}</th><th>{t.likes}</th><th>{t.comments}</th></tr></thead>
-          <tbody>{performance.map((item) => <tr key={item.id}><td>{item.url ? <a href={item.url} target="_blank" rel="noreferrer">{item.title}</a> : item.title}</td>
-            <td>{item.metrics.views ?? "—"}</td><td>{item.metrics.engagedViews ?? "—"}</td><td>{item.metrics.averageViewPercentage == null ? t.waitingData : `${Number(item.metrics.averageViewPercentage).toFixed(1)}%`}</td><td>{item.metrics.likes ?? "—"}</td><td>{item.metrics.comments ?? "—"}</td></tr>)}</tbody></table></div>}
         <button className="btn" disabled={!!busy} onClick={() => action("videos", async () => { const rows = await api("/youtube/videos"); setVideos(rows); setVideoId(rows[0]?.id || ""); })}>{t.loadVideos}</button>
         {videos?.length === 0 && <p>{t.noVideos}</p>}
         {!!videos?.length && <form onSubmit={(event) => { event.preventDefault(); action("analytics", async () => {

@@ -5,12 +5,14 @@ import Home from "./pages/Home.jsx";
 import Docs from "./pages/Docs.jsx";
 import Faq from "./pages/Faq.jsx";
 import Workspace from "./pages/Workspace.jsx";
+import Accounts from "./pages/Accounts.jsx";
 
 const PAGES = {
   home: Home,
   docs: Docs,
   faq: Faq,
   console: Workspace,
+  accounts: Accounts,
 };
 
 const STACK = ["FastAPI", "Supabase", "ffmpeg", "Claude", "edge-tts", "OpenCV"];
@@ -39,6 +41,7 @@ function Footer() {
           <h4>{t.footer.product}</h4>
           <button onClick={() => go("home")}>{t.footer.overview}</button>
           <button onClick={() => go("console")}>{t.footer.workspace}</button>
+          <button onClick={() => go("accounts")}>{t.nav.accounts}</button>
         </nav>
 
         <nav className="footer-col">
@@ -86,6 +89,9 @@ function Shell() {
           </button>
           <button aria-current={route === "faq"} onClick={() => go("faq")}>
             {t.nav.faq}
+          </button>
+          <button aria-current={route === "accounts"} onClick={() => go("accounts")}>
+            {t.nav.accounts}
           </button>
           <LangToggle />
           <button

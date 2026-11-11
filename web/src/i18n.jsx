@@ -11,7 +11,7 @@ export const COPY = {
     langButton: "Hablar español",
     langFlag: "ES",
     langTitle: "Yes, the whole site speaks Spanish too",
-    nav: { home: "Home", docs: "Docs", faq: "FAQ", workspace: "Workspace" },
+    nav: { home: "Home", docs: "Docs", faq: "FAQ", accounts: "Accounts", workspace: "Workspace" },
 
     footer: {
       blurb:
@@ -326,7 +326,7 @@ export const COPY = {
     langButton: "Hablar gringo",
     langFlag: "EN",
     langTitle: "Volver al inglés, por si lo extrañabas",
-    nav: { home: "Inicio", docs: "Docs", faq: "Dudas", workspace: "Taller" },
+    nav: { home: "Inicio", docs: "Docs", faq: "Dudas", accounts: "Cuentas", workspace: "Taller" },
 
     footer: {
       blurb:

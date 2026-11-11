@@ -1552,3 +1552,49 @@ pre.code code {
 @media (max-width: 640px) { .video-detail-layout { grid-template-columns: minmax(0, 1fr); } .detail-player { max-height: 420px; } }
 .output-inspection { scroll-margin-top: 110px; }
 @media (max-width: 640px) { .output-inspection { scroll-margin-top: 220px; } }
+
+/* Accounts hub */
+.account-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+  margin: 18px 0 30px;
+}
+
+.account-card .panel-body {
+  padding: 24px 22px;
+}
+
+.account-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.account-head h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.badge {
+  padding: 3px 12px;
+  border: var(--rule-thin);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--paper-2);
+  color: var(--ink-soft);
+}
+
+.badge-on {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+.account-card-soon {
+  box-shadow: var(--pop-sm);
+  opacity: 0.85;
+}

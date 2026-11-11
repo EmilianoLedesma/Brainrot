@@ -72,7 +72,7 @@ Pexels attribution is displayed in the app. Copy the media folder to retain prov
 
 ## YouTube: guided setup
 
-Workspace → YouTube contains the setup steps and the exact callback URI. The app
+Accounts (top navigation, `#/accounts`) is the hub for connected accounts; its YouTube card contains the setup steps and the exact callback URI. The app
 does not request your Google password.
 
 1. Open [Google Cloud Console](https://console.cloud.google.com/apis/dashboard)
@@ -85,7 +85,7 @@ does not request your Google password.
    URI in Google and set `YOUTUBE_REDIRECT_URI` to the same value.
 5. Put `YOUTUBE_CLIENT_ID` and `YOUTUBE_CLIENT_SECRET` in the project's `.env`,
    then restart the API. Never commit them or paste them into chat.
-6. In YouTube, refresh status, select Connect YouTube, then open Google sign-in.
+6. In Accounts, select Connect YouTube, open Google sign-in, then return and refresh status.
    Choose your channel-owning account and grant upload, read, and analytics access.
 7. Return to the app and refresh status. The connected channel's name is shown.
 
@@ -131,7 +131,7 @@ never creates an upload claim. Automatic publishing uses the same generator
 when an upload has no reviewed title and saves its metadata before transmission;
 reviewed fields are preserved. Connecting a channel still leaves automation off.
 
-In YouTube, choose a finished output, edit title/description/tags/visibility and
+In Accounts, under the YouTube upload steps, choose a finished output, edit title/description/tags/visibility and
 the audience/synthetic-content declarations, review
 the video and channel, then upload. Metadata choices are saved before transmission.
 The existing publication claim prevents the worker or a second click from uploading
@@ -151,7 +151,7 @@ and [Shorts eligibility](https://support.google.com/youtube/answer/15424877).
 
 ### Channel retention
 
-The YouTube page also shows performance for videos published by this app: views,
+Accounts also shows, under Performance by platform, the results of videos published by this app (a platform filter with All, YouTube, Instagram and TikTok): views,
 engaged views, likes, comments, and average percentage watched. **Sync video
 performance** requests eligible updates. The worker checks hourly, with each
 publication eligible once every six hours. Each pass processes at most ten
