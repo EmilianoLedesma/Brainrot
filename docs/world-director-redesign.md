@@ -3,6 +3,56 @@
 Status: first slice implemented 2026-11-11 (items 1 to 6 below, see the handoff for what ran and what did not); quality of model-designed worlds and the Opus comparison are still open.
 Read [world mode](world-mode.md) first; it describes what exists today.
 
+## How to continue (start here)
+
+Everything below is ordered; do not skip ahead. Rules from `AGENTS.md` apply (stay on `master`, no new PR, no secrets in diagnostics, no public uploads, update handoff and index, commit and push only when asked).
+
+**1. Baseline (5 minutes).** Pull, then `npm ci --prefix motion`. Run `uv run --locked python -m pytest tests -q`, `npm run check --prefix motion`, `npm run build --prefix web`. Expect 490 tests passing. Confirm in `.env` that
+`BRAINROT_CLAUDE_MODEL` is empty (it pins every call and disables the strong/standard split) and that the Claude CLI is signed in. Do not start a second worker if one is running (`doctor --check-media`).
+
+**2. Make a design to work with.** The model-designed world of the sunglasses story was a scratch file (`out/world-smoke/live_world.json`, git-ignored, may not exist on your computer). Recreate it, about 7 minutes, with the
+story of job `8650e624-78c1-4ad6-bd91-e83882f073bc` (script in the `stories` table; read it, do not print credentials):
+
+```python
+# run from the repo root: uv run --locked python out/design_probe.py   (create the file; out/ is ignored)
+import json
+from brainrot import db, llm
+from brainrot.world import design
+j = "8650e624-78c1-4ad6-bd91-e83882f073bc"
+r = db.client().table("stories").select("topic,script").eq("job_id", j).execute().data[0]
+with llm.using_provider(db.get_job(j)["params"].get("llm_provider") or "claude-code"):
+    w = design.design(r["topic"], r["script"])
+open("out/world-smoke/live_world.json", "w", encoding="utf-8").write(w.model_dump_json())   # utf-8: the first probe forgot this and broke the next step
+```
+
+**3. Direct it live (this was interrupted).** With the world loaded (`spec.World.model_validate_json(...)`), build word timings from the script (about 0.38 s per word plus pauses; 336 words is about 149 s), then
+`plan = director.direct(topic, script, words, seconds, world=world)` inside `llm.using_provider(...)`. Expect 3 chunked strong-tier calls of up to 900 s each; the result is cached in `out/world-plans/`. Print `director.summary(plan)` and
+every `scene["notes"]` line: each note is a rule the model broke and code corrected. Many notes on the same rule means the skill text (`skills/world-direction/SKILL.md`) needs to say it more plainly. Then `script.build(plan, title, text, words)` and
+`script.problems(...)` must be empty.
+
+**4. Look at it.** Render stills of the generic renderer at the first frame of each station beat: write `{"pack": "generic", "script": <script>}` to a JSON file and run, from `motion/`,
+`node node_modules/@remotion/cli/remotion-cli.js still index.tsx World ../out/world-smoke/s.png --props=../out/world-smoke/live_props.json --frame=<N> --gl=angle`. Check against the low-poly recipe, one list item per defect you find:
+pieces readable at the camera distance, nothing overlapping or hidden, one saturated content colour, no red or yellow except arrows and callouts, rays end where the story says they end, hero shows the whole idea. Fix in this order of preference:
+(a) the wording of `skills/world-design/SKILL.md`, (b) limits and rules in `brainrot/world/spec.py` plus a test, (c) the renderer `motion/world/packs/generic.tsx`. Re-run steps 2 to 4 after each change; the cache is keyed by the script and the world, so delete
+`out/world-designs/` and `out/world-plans/` when the skill text changes.
+
+**5. A full render, then watch it.** Make a silent narration of the right length (`ffmpeg -f lavfi -i anullsrc=r=24000:cl=mono -t <seconds> -c:a libmp3lame narration.mp3`) and call
+`brainrot.world.render.render_video(audio_bytes, words, title, text, plan)`; it returns mp4 bytes (expect tens of minutes; `BRAINROT_WORLD_GL=angle` is the default). Watch the whole video in motion: calm camera, actions on the right words, stages entering and leaving.
+Record the result (what looked good, what did not, timings) in the handoff.
+
+**6. Fix narration for Spanish scripts, then run a real job.** `brainrot/tts.py` always uses `en-US-AndrewNeural`; the sunglasses job failed with `NoAudioReceived` on a Spanish sentence with that voice while `es-MX-JorgeNeural` produced it.
+Choose the voice from the script language (a small detector in `tts.narrate`, an explicit voice override stays possible), add a test, then create a job from the dashboard with "Continuous 3D world" (and optionally "Research the web first") on a short topic.
+Expected stages: `script`, `chaptering`, `design`, `tts`, `direct`, `render`, `upload`, `schedule`. On a retry the design and the plan come from the caches, so nothing is paid twice if the narration is identical.
+
+**7. Decide the model question with data.** Repeat steps 2 and 3 on the same script with `BRAINROT_CLAUDE_MODEL_STRONG=sonnet` set for the process only, then with the default (opus). Compare for each: `scene["notes"]` count, design repair rounds (look for the log line
+"world design needs a repair"), stations and actions actually used, wall time, and two stills. Write the table in this document and set the default tiers (`llm._TIER_DEFAULTS`, `.env.example`) accordingly; keep `strong` for design if direction shows no gain.
+
+**8. Then the remaining features, one per commit.** (a) Subject-first direction for designed worlds: let the design name a protagonist piece with its own actions and make `spec.to_pack` return the `subject` block the director already understands (`director.models`, `design`).
+(b) Richer presets and effects as real designs ask (animals that move their legs only during an action, a label-free bar or pie preset). (c) Cancel button for running jobs (below). (d) Tests for `POST /ideas`. (e) When the generic path matches the curated packs,
+remove `director.choose_pack`, `catalog.menu` and the pack choice text.
+
+**Done means:** a job with the 3D world on finishes from the dashboard on a topic that has no hand-built pack, the video was watched, `pytest`, `tsc`, the web build and the browser checks pass, and the handoff states what was and was not verified.
+
 ## The problem
 
 The continuous 3D world edit works end to end offline, but the director only chooses among scenes that a developer built by hand. A pack

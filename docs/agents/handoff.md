@@ -3,7 +3,7 @@
 ## World director redesign, first slice — 2026-11-11
 
 The director no longer needs hand-built packs. After the script exists and before narration, a new `design` stage asks the strong-tier model to design the world as data; the director and a generic renderer work from it.
-Plan and open items: [world-director-redesign](../world-director-redesign.md); behaviour: [world mode](../world-mode.md).
+Plan and open items: [world-director-redesign](../world-director-redesign.md), whose first section, "How to continue", is the step-by-step list for the next session; behaviour: [world mode](../world-mode.md).
 
 - Done: `brainrot/world/spec.py` (World spec: stations, presets and primitive parts, effects; `check` incl. a framing rule, at most three grounds, no red or yellow rays per the low-poly recipe; `to_pack` gives the director its manifest),
   `brainrot/world/design.py` + `skills/world-design/SKILL.md` (one repair round, friendly failure, cache `out/world-designs/`), pipeline order `design` → `tts` → `direct` → `render` (stage names in the dashboard EN/ES),
