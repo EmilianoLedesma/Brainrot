@@ -12,5 +12,5 @@ export type Cap={id:string,at:number,until:number,style:string,text:string};
 export type Ev={id:string,kind:string,at:number,term:string,target:string};
 export type Act={id:string,target:string,name:string,at:number};
 export type SAct={id:string,name:string,at:number};
-export type Script={title:string,fps:number,durationFrames:number,flight:number,subject:string|null,waypoints:Wp[],actions:Act[],subjectActions:SAct[],events:Ev[],captions:Cap[]};
+export type Script={title:string,fps:number,durationFrames:number,flight:number,subject:string|null,waypoints:Wp[],actions:Act[],subjectActions:SAct[],events:Ev[],captions:Cap[],world?:any};
 export type Pack=()=>React.ReactElement;

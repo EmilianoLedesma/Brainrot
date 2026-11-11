@@ -1,6 +1,7 @@
-# Pending: a director that designs the world, not only directs it
+# World director redesign: the director designs the world
 
-Status: not started. Written 2026-11-11 so the work can be picked up later. Read [world mode](world-mode.md) first; it describes what exists today.
+Status: first slice implemented 2026-11-11 (items 1 to 6 below, see the handoff for what ran and what did not); quality of model-designed worlds and the Opus comparison are still open.
+Read [world mode](world-mode.md) first; it describes what exists today.
 
 ## The problem
 
@@ -46,13 +47,24 @@ topic -> (web research) -> script -> DESIGN -> narration (TTS) -> DIRECTION -> r
 
 ## Work items
 
-1. World spec schema and validator (Python, plus a TypeScript type in `motion/world/kit.ts`); convert the zebra and birds manifests into specs as the first test cases.
-2. Design stage: prompt (`skills/world-design/SKILL.md`), typed model answer, repair-once loop, code validation, plan cache keyed by script hash (like `out/world-plans/`).
-3. Move the design call before TTS in `pipeline.produce`, as its own stage named `design`; add it to the stage names in `web/src/i18n.jsx` (EN/ES).
-4. Generic renderer: pieces from specs, library parts, generic actions, stage lifetimes and the calm camera reused from the current packs.
-5. Adapt `director.plan` to read a spec; keep the pack path working until the generic path is as good.
-6. Tests: spec validation (accept and reject cases), design defaults, director on a spec, pipeline stage order with fake models, a still-render smoke per example spec.
-7. Docs: update `world-mode.md`, architecture, the handoff; remove the "scene packs" limitation wording once the generic path ships.
+Done (offline, with a hand-written fixture; see the handoff for any live check):
+
+1. World spec schema, validator and mapping to the director's manifest: `brainrot/world/spec.py` (presets, primitive parts, effects, framing rule, recipe rules: soft palette, reserved red and yellow).
+2. Design stage: `brainrot/skills/world-design/SKILL.md`, `brainrot/world/design.py` (strong tier, one repair round, friendly failure, cache in `out/world-designs/`).
+3. Pipeline order: stage `design` runs before `tts`; `direct` receives the designed world; stage names added to the dashboard (EN/ES).
+4. Generic renderer `motion/world/packs/generic.tsx` (pieces from specs, effects, rays, stage lifetimes, shared calm camera) registered as pack `generic`.
+5. `director.plan` and `director.direct` accept a designed world; the script carries it (`script["world"]`).
+6. Tests in `tests/test_world.py` with `tests/world_fixture.py` (validation accept and reject, director on a spec, design repair and cache, stage order).
+
+Live result so far: the design stage on the sunglasses script returned a valid world in 405 s (hero plus seven stages, rules satisfied). The live director and any render of that world were not run.
+
+Still to do:
+
+- Run the director live on the designed sunglasses world (script and timings: `out/direct_live.py` was a scratch probe; rebuild it) and render it fully; then the same for one factual and one fictional topic. Run the design and direction stages live on more than one topic (factual and fictional) and look at full renders, not stills; tune the skill and the presets from what the model actually produces.
+- More presets and effects as real designs ask for them (animals with legs that move only during an action, a subject with its own actions as in the birds film, text-free labels, bars and pies).
+- Subject-first direction for designed worlds (the curated birds pack had it; `spec.to_pack` sets `subject: null`).
+- The Opus comparison below, with the same script through both models.
+- Remove or demote the curated packs once the generic path matches them; delete `director.choose_pack` then.
 
 ## Model tiers: strong for the director, standard for the rest
 
@@ -71,7 +83,6 @@ direction stage shows no gain, keep `strong` only for design.
 - **Cancel button for active jobs.** Requested 2026-11-11. Today only pending jobs can be cancelled (`domain/jobs.py` allows `PENDING -> CANCELLED`; migrations 006 and 008 mark jobs cancelled
   when deleting). A running job needs: an API route, a SQL function that marks the lease owner's job cancelled without breaking lease ownership, idempotency and deletion guards (additive migration
   only), a cooperative check in the worker between stages, killing of long subprocesses (Remotion, the model CLI), and a Cancel button in the queue with a confirmation. Not started.
-- **Fail fast when no pack fits** (only until the redesign lands): choose the pack right after the script, before narration.
 - **Narration voice follows the script language.** `tts.VOICE` is always `en-US-AndrewNeural`, even for Spanish scripts. On the sunglasses job one short sentence returned `NoAudioReceived`
   with that voice while `es-MX-JorgeNeural` synthesised it. The job kept failing in `tts`. Left untouched on request; a language-aware voice choice is the likely fix.
 - **Video ideas has no tests.** Add an API test for `POST /ideas` (dedupe, avoid list, 502 on failure) and a browser check for Tools → Video ideas → Use this topic.

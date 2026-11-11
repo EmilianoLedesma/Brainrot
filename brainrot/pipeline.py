@@ -10,7 +10,7 @@ import re
 from typing import Callable
 
 from . import db, investigate, motion, render, scheduler, script, tts, media
-from .world import director as world_director, render as world_render
+from .world import design as world_design, director as world_director, render as world_render
 from .application.stages import stage
 from .domain.jobs import PermanentError
 
@@ -120,12 +120,16 @@ def produce(job_id: str, write: Callable[[], script.Story], motion_graphics: boo
             with stage("background"):
                 background = pick_background(story_id)
         scope = f"chapter:{index}"
+        spec = None
+        if world:  # the world is designed from the script before narration: a topic it cannot represent fails here, not after TTS
+            with stage("design", scope):
+                spec = world_design.cached(story.get("topic") or story.get("title") or "The story", text)
         with stage("tts", scope):
             audio, words = tts.narrate(text, title=story.get("title") or story.get("topic") or "The story")
         title = story.get("title") or story.get("topic") or "The story"
         if world:
             with stage("direct", scope):
-                plan = world_director.direct(story.get("topic") or title, text, words, world_render.seconds(audio))
+                plan = world_director.direct(story.get("topic") or title, text, words, world_render.seconds(audio), world=spec)
         with stage("render", scope):
             if world:
                 video = world_render.render_video(audio, words, title, text, plan)

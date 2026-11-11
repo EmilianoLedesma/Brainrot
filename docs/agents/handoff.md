@@ -1,5 +1,23 @@
 # Handoff — 2026-11-11
 
+## World director redesign, first slice — 2026-11-11
+
+The director no longer needs hand-built packs. After the script exists and before narration, a new `design` stage asks the strong-tier model to design the world as data; the director and a generic renderer work from it.
+Plan and open items: [world-director-redesign](../world-director-redesign.md); behaviour: [world mode](../world-mode.md).
+
+- Done: `brainrot/world/spec.py` (World spec: stations, presets and primitive parts, effects; `check` incl. a framing rule, at most three grounds, no red or yellow rays per the low-poly recipe; `to_pack` gives the director its manifest),
+  `brainrot/world/design.py` + `skills/world-design/SKILL.md` (one repair round, friendly failure, cache `out/world-designs/`), pipeline order `design` → `tts` → `direct` → `render` (stage names in the dashboard EN/ES),
+  `motion/world/packs/generic.tsx` (draws any spec on the shared calm-camera engine; registered as pack `generic`), `director.plan/direct` accept a world and the script carries it. Curated zebra and birds packs remain, unused by the pipeline.
+- Validation run: `pytest tests` 490 passed (new tests in `tests/test_world.py` with `tests/world_fixture.py`), `npm run check --prefix motion`, `npm run build --prefix web`, stills of the generic renderer from a hand-written fixture
+  (hero, a stage with a ray; looked right apart from small pieces, which led to the framing rule).
+- Live check that ran: the design stage on the saved sunglasses script (job 8650e624…, Claude Opus tier) returned a valid world in 405 s: hero boardwalk plus seven stages (inuit, china, ayscough, uv_block, foster_stand, aviator_sky, life_stats),
+  all validator rules satisfied; the pieces and actions looked coherent when listed (giant glasses, walrus, quartz, tinted lenses, UV block, sales stand, plane with polarising filter, pie of need versus style). Not seen rendered.
+- NOT run: the live director on that world (started, then stopped on request, nothing recorded), any full render of a model-designed world, a complete pipeline job (the job's narration still fails, see below), the Opus-versus-Sonnet comparison,
+  the browser checks after the stage-name change. Nobody has watched a video from this path. Quality of model-designed worlds is unknown beyond the listing above.
+- Known gaps: designed worlds have no protagonist subject with its own actions; presets are minimal (animals do not animate legs); the piece scale and framing rule were tuned on one fixture; `out/world-smoke/live_world.json` was saved in the
+  Windows default encoding by a probe script (scratch only, ignored by git).
+- Unrelated open items, unchanged: the sunglasses job still fails in `tts` (`NoAudioReceived`, English voice on a Spanish script; a Spanish voice works), the cancel button for running jobs, tests for `/ideas`. All in the pending doc.
+
 ## Committed state, model tiers and video ideas — 2026-11-11
 
 - Everything from today is committed on `master` (not pushed): the continuous 3D world edit and web research, the Accounts hub, the world-director redesign plan, model tiers and the video-ideas tool.

@@ -28,6 +28,7 @@ brainrot/skills/                 guidance explicitly loaded during generation
   motion-graphics/SKILL.md
   research/SKILL.md
   world-direction/SKILL.md
+  world-design/SKILL.md
 ```
 
 Start with the latest user request, inspect branch/status, then read the handoff.

@@ -15,7 +15,7 @@ from pydantic import BaseModel
 from .. import llm
 from ..config import PROJECT_ROOT
 from ..domain.jobs import PermanentError
-from . import beats, catalog
+from . import beats, catalog, spec
 
 CACHE = PROJECT_ROOT / "out" / "world-plans"
 SKILL = Path(__file__).parent.parent / "skills" / "world-direction" / "SKILL.md"
@@ -136,16 +136,19 @@ def _ask(pack: dict, scenes: list[dict], words: list[dict], provider: str | None
     return subject, chosen
 
 
-def plan(words: list[dict], seconds: float, pack_id: str, provider: str | None = None, *, asked=None) -> dict:
-    """Direct the narration. `asked` (subject, beat models) replaces the model calls, for tests and for re-validating a saved answer."""
-    pack = catalog.get(pack_id)
+def plan(words: list[dict], seconds: float, pack_id: "str | dict", provider: str | None = None, *, asked=None, world: dict | None = None) -> dict:
+    """Direct the narration with a curated pack (an id) or a designed world's manifest (a dict, with `world` embedded in the plan for the renderer).
+
+    `asked` (subject, beat models) replaces the model calls, for tests and for re-validating a saved answer."""
+    pack = pack_id if isinstance(pack_id, dict) else catalog.get(pack_id)
     scenes = beats.split_long(beats.group(words, seconds), words, pack["beat_limit"])
     subject, chosen = asked if asked is not None else _ask(pack, scenes, words, provider)
     design(scenes, words, pack, subject, chosen)
     beats.snap_boundaries(scenes, pack["hero"])
     nouns = {beats.plain(k): v for k, v in pack["nouns"].items()}
     beats.fill_gaps(scenes, words, seconds, nouns, cap=pack["hold_cap"])
-    return {"duration": round(seconds + 0.5, 2), "pack": pack_id, "subject": subject["id"] if subject else None, "subject_model": subject, "scenes": scenes}
+    return {"duration": round(seconds + 0.5, 2), "pack": pack["id"], "subject": subject["id"] if subject else None, "subject_model": subject, "scenes": scenes,
+            **({"world": world} if world else {})}
 
 
 def design(scenes: list[dict], words: list[dict], pack: dict, subject: dict | None, chosen: dict) -> None:
@@ -311,20 +314,20 @@ def summary(plan_: dict) -> dict:
             "cutaways": sum(s["nature"] == "cutaway" for s in scenes), "moves": sum(s["shot"]["move"] != "hold" for s in scenes), "arrows": count("arrow")}
 
 
-def direct(topic: str, text: str, words: list[dict], seconds: float, provider: str | None = None) -> dict:
-    """Choose the pack and direct the narration, reusing the plan an earlier attempt of the same narration saved (the director call takes minutes).
+def direct(topic: str, text: str, words: list[dict], seconds: float, provider: str | None = None, world: "spec.World | None" = None) -> dict:
+    """Direct the narration of a designed `world` (or, without one, of the curated pack the model picks), reusing the plan an earlier attempt saved (the call takes minutes).
 
-    The cache lives on this computer under out/ and is keyed by the narrated words and their timings, so a retry that re-narrates identically costs nothing.
+    The cache lives on this computer under out/ and is keyed by the narrated words, their timings and the world, so a retry that re-narrates identically costs nothing.
     """
-    key = hashlib.sha256(json.dumps([[w["text"], round(w["start"], 2)] for w in words] + [round(seconds, 2)]).encode()).hexdigest()[:24]
+    key = hashlib.sha256(json.dumps([[w["text"], round(w["start"], 2)] for w in words] + [round(seconds, 2), world.model_dump_json() if world else ""]).encode()).hexdigest()[:24]
     file = CACHE / f"{key}.json"
     try:
         cached = json.loads(file.read_text(encoding="utf-8"))
-        if cached.get("pack") in catalog.packs():
+        if cached.get("pack") in catalog.packs() or (world and cached.get("pack") == "generic" and cached.get("world")):
             return cached
     except (OSError, ValueError):
         pass
-    result = plan(words, seconds, choose_pack(topic, text, provider), provider)
+    result = plan(words, seconds, spec.to_pack(world) if world else choose_pack(topic, text, provider), provider, world=world.model_dump() if world else None)
     log.info("world plan: %s", json.dumps(summary(result)))
     try:
         CACHE.mkdir(parents=True, exist_ok=True)

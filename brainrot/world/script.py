@@ -111,7 +111,7 @@ def build(plan: dict, title: str, text: str, words: list[dict]) -> dict:
             phrase_until = max((c["until"] for c in captions if c["style"] == "phrase" and c["at"] <= e["at"] < c["until"]), default=e["at"] + 30)
             captions.append({"id": "t" + e["id"], "at": e["at"], "until": min(phrase_until + 30, total - 1), "style": "term", "text": e["term"]})
     return {"title": title, "fps": FPS, "durationFrames": total, "flight": FLIGHT, "subject": plan.get("subject"), "waypoints": waypoints, "actions": actions,
-            "subjectActions": subject_actions, "events": events, "captions": captions}
+            "subjectActions": subject_actions, "events": events, "captions": captions, "world": plan.get("world")}
 
 
 def problems(script: dict) -> list[str]:

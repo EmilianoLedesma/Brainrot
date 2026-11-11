@@ -1,4 +1,9 @@
+import sys
+from pathlib import Path
+
 import pytest
+
+sys.path.insert(0, str(Path(__file__).parent))  # the shared world fixture lives beside the tests
 
 from brainrot import pipeline, render, script as story_script, tts
 from brainrot.domain.jobs import PermanentError
@@ -66,14 +71,19 @@ def test_unknown_pack_and_cue_misses_are_noted_not_fatal():
     assert "not found in beat" in notes and "needs dist medium" in notes and len(scenes) == len(plan["scenes"])
 
 
-def test_world_job_skips_background_directs_and_renders_the_world(fake_db, narration, monkeypatch):
+def test_world_job_designs_before_narration_then_directs_and_renders(fake_db, monkeypatch):
+    from world_fixture import world as fixture_world
+    order = []
     monkeypatch.setattr(story_script, "write_story", lambda topic: story_script.Story(title="T", script="Short. Story."))
     monkeypatch.setattr(pipeline, "pick_background", lambda story_id: pytest.fail("no background for the world edit"))
     monkeypatch.setattr(render, "render", lambda *a: pytest.fail("main render must not run"))
+    monkeypatch.setattr(tts, "narrate", lambda text, *, title: order.append("tts") or (b"mp3", [{"text": "w", "start": 0, "end": 1}]))
+    monkeypatch.setattr(pipeline.world_design, "cached", lambda topic, text, *a: order.append("design") or fixture_world())
     monkeypatch.setattr(world_render, "seconds", lambda audio: 12.0)
-    monkeypatch.setattr(pipeline.world_director, "direct", lambda topic, text, words, seconds: {"pack": "zebra"})
-    monkeypatch.setattr(world_render, "render_video", lambda audio, words, title, text, plan: b"world-" + plan["pack"].encode())
+    monkeypatch.setattr(pipeline.world_director, "direct", lambda topic, text, words, seconds, provider=None, world=None: order.append("direct") or {"pack": "generic", "world": world.model_dump()})
+    monkeypatch.setattr(world_render, "render_video", lambda audio, words, title, text, plan: order.append("render") or b"world-" + plan["pack"].encode())
     pipeline.run_brainrot({"id": "job-world", "kind": "brainrot", "params": {"topic": "t", "world": True}})
+    assert order == ["design", "tts", "direct", "render"]
     assert fake_db.rows("story_chapters")[0]["status"] == "ready"
 
 
@@ -93,3 +103,59 @@ def test_web_research_feeds_the_writer_once(fake_db, narration, monkeypatch):
     pipeline.run_brainrot({"id": "job-research", "kind": "brainrot", "params": {"topic": "t", "web_research": True}})
     assert "Facts researched on the web" in seen["reference_context"]
 
+
+
+# ---- the designed world (spec, design stage, director on a spec) ----------------------------------------------------------------------------------------
+
+def fixture():
+    from world_fixture import world
+    return world()
+
+
+def test_the_fixture_world_is_valid_and_maps_to_a_director_manifest():
+    from brainrot.world import spec
+    w = fixture()
+    assert spec.check(w) == []
+    pack = spec.to_pack(w)
+    assert pack["hero"] == "boardwalk" and pack["stations"][0] == "boardwalk" and pack["opening"] == {"station_action": "sun_glare"}
+    assert pack["nouns"]["inuit"] == "snow" and set(pack["cutaway_stations"]) == {"snow", "quartz", "uv"} and pack["subject"] is None
+
+
+def test_spec_rejects_what_the_renderer_or_the_recipe_cannot_use():
+    from brainrot.world import spec
+    w = fixture()
+    w.stations[3].actions[0].effects[0].color = "#E5333B"                 # a red ray: red is reserved for arrows
+    w.stations[1].actions[0].effects.append(spec.Effect(type="move", piece="ghost", vec=[1, 0, 0]))
+    w.stations[3].pieces[1].hidden, w.stations[3].actions[1].effects = True, [spec.Effect(type="glow", piece="lens")]  # hidden but never appears
+    w.stations[2].ground, w.stations[4].ground = "grass", "water"        # four grounds
+    w.stations[0].pieces = [p for p in w.stations[0].pieces if p.id == "walker"]; w.stations[0].pieces[0].scale = 1   # a hero made of one tiny person
+    problems = " | ".join(spec.check(w))
+    for expected in ("reserved", "unknown piece", "no action makes it appear", "at most three different grounds", "nothing readable"):
+        assert expected in problems, expected
+
+
+def test_director_directs_a_designed_world_and_the_script_carries_it():
+    from brainrot.world import spec
+    w = fixture()
+    words = spoken()
+    plan = director.plan(words, words[-1]["end"] + .4, spec.to_pack(w), asked=(None, {}), world=w.model_dump())
+    built = script.build(plan, "Titulo", " ".join(x["text"] for x in words), words)
+    assert plan["pack"] == "generic" and built["world"]["hero"] == "boardwalk" and script.problems(built) == []
+    assert {a["target"] for a in built["actions"]} <= {s.id for s in w.stations}
+
+
+def test_design_repairs_once_and_then_gives_up_with_a_friendly_error(monkeypatch, tmp_path):
+    from brainrot import llm
+    from brainrot.world import design, spec
+    good, bad = fixture(), fixture()
+    bad.hero = "nowhere"
+    answers, prompts = [bad, good], []
+    monkeypatch.setattr(llm, "generate", lambda system, user, output, **kw: prompts.append((user, kw)) or answers.pop(0))
+    assert design.design("t", "text").hero == "boardwalk"
+    assert len(prompts) == 2 and "hero 'nowhere'" in prompts[1][0] and all(kw["tier"] == "strong" for _, kw in prompts)
+    answers[:] = [bad, bad]
+    with pytest.raises(PermanentError, match="could not be designed"):
+        design.design("t", "text")
+    monkeypatch.setattr(design, "CACHE", tmp_path)
+    answers[:] = [good]
+    assert design.cached("t", "text").hero == "boardwalk" and design.cached("t", "text").hero == "boardwalk" and not answers  # the second call reads the cache
