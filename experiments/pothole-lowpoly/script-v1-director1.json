@@ -1,0 +1,1442 @@
+{
+ "title": "El bache nace bajo el asfalto",
+ "fps": 30,
+ "durationFrames": 4086,
+ "flight": 36,
+ "patchRoad": 3541,
+ "waypoints": [
+  {
+   "id": "w0",
+   "at": 0,
+   "start": 0,
+   "end": 84,
+   "focus": "road",
+   "dist": "wide",
+   "show": "La calle con el coche que esquiva el bache, las casas y los árboles."
+  },
+  {
+   "id": "w1",
+   "at": 72,
+   "start": 84,
+   "end": 204,
+   "focus": "road",
+   "dist": "medium",
+   "show": "El coche pasa junto al hoyo y lo esquiva."
+  },
+  {
+   "id": "w2",
+   "at": 192,
+   "start": 204,
+   "end": 372,
+   "focus": "layers",
+   "dist": "medium",
+   "show": "El corte de carretera aparece como un sándwich de capas."
+  },
+  {
+   "id": "w3",
+   "at": 360,
+   "start": 372,
+   "end": 557,
+   "focus": "layers",
+   "dist": "close",
+   "show": "La capa negra de asfalto arriba y la base de roca angulosa debajo."
+  },
+  {
+   "id": "w4",
+   "at": 545,
+   "start": 557,
+   "end": 682,
+   "focus": "layers",
+   "dist": "medium",
+   "show": "Más abajo se resalta el suelo natural bajo la base."
+  },
+  {
+   "id": "w5",
+   "at": 670,
+   "start": 682,
+   "end": 823,
+   "focus": "layers",
+   "dist": "wide",
+   "show": "El tráfico y el clima desgastan la capa superior."
+  },
+  {
+   "id": "w6",
+   "at": 811,
+   "start": 823,
+   "end": 910,
+   "focus": "cracks",
+   "dist": "medium",
+   "show": "Vista desde arriba, aparecen grietas en la superficie."
+  },
+  {
+   "id": "w7",
+   "at": 898,
+   "start": 910,
+   "end": 1027,
+   "focus": "cracks",
+   "dist": "close",
+   "show": "Las grietas forman un patrón de piel de cocodrilo."
+  },
+  {
+   "id": "w8",
+   "at": 1015,
+   "start": 1027,
+   "end": 1153,
+   "focus": "cracks",
+   "dist": "medium",
+   "show": "Una rueda flexiona la superficie agrietada una y otra vez."
+  },
+  {
+   "id": "w9",
+   "at": 1141,
+   "start": 1153,
+   "end": 1325,
+   "focus": "cracks",
+   "dist": "close",
+   "show": "Se resaltan las grietas como punto débil del pavimento."
+  },
+  {
+   "id": "w10",
+   "at": 1313,
+   "start": 1325,
+   "end": 1426,
+   "focus": "water",
+   "dist": "medium",
+   "show": "La lluvia cae en las grietas y el agua se acumula."
+  },
+  {
+   "id": "w11",
+   "at": 1414,
+   "start": 1426,
+   "end": 1523,
+   "focus": "water",
+   "dist": "close",
+   "show": "El agua empapa la subrasante y la ablanda."
+  },
+  {
+   "id": "w12",
+   "at": 1511,
+   "start": 1523,
+   "end": 1604,
+   "focus": "traffic",
+   "dist": "wide",
+   "show": "Aparece el bloque con un punto blando bajo el asfalto."
+  },
+  {
+   "id": "w13",
+   "at": 1592,
+   "start": 1604,
+   "end": 1742,
+   "focus": "traffic",
+   "dist": "medium",
+   "show": "Una rueda presiona el asfalto flexible sobre el punto blando."
+  },
+  {
+   "id": "w14",
+   "at": 1730,
+   "start": 1742,
+   "end": 1907,
+   "focus": "traffic",
+   "dist": "close",
+   "show": "La llanta empuja el agua y el suelo sale con ella."
+  },
+  {
+   "id": "w15",
+   "at": 1895,
+   "start": 1907,
+   "end": 2014,
+   "focus": "traffic",
+   "dist": "medium",
+   "show": "El vacío bajo el asfalto crece con cada partícula perdida."
+  },
+  {
+   "id": "w16",
+   "at": 2002,
+   "start": 2014,
+   "end": 2134,
+   "focus": "traffic",
+   "dist": "close",
+   "show": "Cada rueda bombea agua hacia dentro y fuera del vacío."
+  },
+  {
+   "id": "w17",
+   "at": 2122,
+   "start": 2134,
+   "end": 2280,
+   "focus": "traffic",
+   "dist": "medium",
+   "show": "Se erosiona más suelo y el pavimento pierde apoyo."
+  },
+  {
+   "id": "w18",
+   "at": 2268,
+   "start": 2280,
+   "end": 2402,
+   "focus": "pothole",
+   "dist": "medium",
+   "show": "Los trozos de asfalto entre las grietas se aflojan."
+  },
+  {
+   "id": "w19",
+   "at": 2390,
+   "start": 2402,
+   "end": 2554,
+   "focus": "pothole",
+   "dist": "close",
+   "show": "Las ruedas arrancan los trozos y dejan un hoyo."
+  },
+  {
+   "id": "w20",
+   "at": 2542,
+   "start": 2554,
+   "end": 2725,
+   "focus": "pothole",
+   "dist": "wide",
+   "show": "El bache es ancho pero poco profundo."
+  },
+  {
+   "id": "w21",
+   "at": 2713,
+   "start": 2725,
+   "end": 2894,
+   "focus": "ice",
+   "dist": "medium",
+   "show": "El agua entre asfalto y base se congela y se expande."
+  },
+  {
+   "id": "w22",
+   "at": 2882,
+   "start": 2894,
+   "end": 3045,
+   "focus": "ice",
+   "dist": "close",
+   "show": "Crecen lentes de hielo y al derretirse dejan huecos."
+  },
+  {
+   "id": "w23",
+   "at": 3033,
+   "start": 3045,
+   "end": 3164,
+   "focus": "ice",
+   "dist": "medium",
+   "show": "El suelo congelado atrapa el agua derretida."
+  },
+  {
+   "id": "w24",
+   "at": 3152,
+   "start": 3164,
+   "end": 3320,
+   "focus": "ice",
+   "dist": "wide",
+   "show": "El ciclo de hielo se repite en primavera, pero no es la causa raíz."
+  },
+  {
+   "id": "w25",
+   "at": 3308,
+   "start": 3320,
+   "end": 3481,
+   "focus": "water",
+   "dist": "wide",
+   "show": "El agua se acumula sobre un subsuelo malo, sin hielo."
+  },
+  {
+   "id": "w26",
+   "at": 3469,
+   "start": 3481,
+   "end": 3561,
+   "focus": "repair",
+   "dist": "medium",
+   "show": "Un parche cae en el hoyo y se compacta como una venda."
+  },
+  {
+   "id": "w27",
+   "at": 3549,
+   "start": 3561,
+   "end": 3718,
+   "focus": "repair",
+   "dist": "close",
+   "show": "Bajo el parche el agua y el suelo siguen igual."
+  },
+  {
+   "id": "w28",
+   "at": 3706,
+   "start": 3718,
+   "end": 3890,
+   "focus": "prevent",
+   "dist": "medium",
+   "show": "Se sellan las grietas, un drenaje saca el agua y el pavimento es más grueso."
+  },
+  {
+   "id": "w29",
+   "at": 3878,
+   "start": 3890,
+   "end": 3996,
+   "focus": "prevent",
+   "dist": "close",
+   "show": "Las medidas de prevención quedan juntas en el bloque."
+  },
+  {
+   "id": "w30",
+   "at": 3984,
+   "start": 3996,
+   "end": 4086,
+   "focus": "road",
+   "dist": "wide",
+   "show": "La calle parchada con el coche pasando tranquilo."
+  }
+ ],
+ "captions": [
+  {
+   "id": "c0",
+   "at": 3,
+   "until": 28,
+   "style": "phrase",
+   "text": "El bache nace"
+  },
+  {
+   "id": "c1",
+   "at": 29,
+   "until": 79,
+   "style": "phrase",
+   "text": "bajo el asfalto"
+  },
+  {
+   "id": "c2",
+   "at": 84,
+   "until": 117,
+   "style": "phrase",
+   "text": "Ese hoyo que acabas"
+  },
+  {
+   "id": "c3",
+   "at": 118,
+   "until": 151,
+   "style": "phrase",
+   "text": "de esquivar no empezó"
+  },
+  {
+   "id": "c4",
+   "at": 152,
+   "until": 202,
+   "style": "phrase",
+   "text": "en la superficie"
+  },
+  {
+   "id": "c5",
+   "at": 204,
+   "until": 237,
+   "style": "phrase",
+   "text": "Empezó abajo"
+  },
+  {
+   "id": "c6",
+   "at": 238,
+   "until": 279,
+   "style": "phrase",
+   "text": "donde nadie mira"
+  },
+  {
+   "id": "c7",
+   "at": 280,
+   "until": 320,
+   "style": "phrase",
+   "text": "Una carretera de asfalto"
+  },
+  {
+   "id": "c8",
+   "at": 321,
+   "until": 370,
+   "style": "phrase",
+   "text": "es un sándwich"
+  },
+  {
+   "id": "c9",
+   "at": 372,
+   "until": 458,
+   "style": "phrase",
+   "text": "Arriba el concreto asfáltico"
+  },
+  {
+   "id": "c10",
+   "at": 460,
+   "until": 499,
+   "style": "phrase",
+   "text": "Debajo una base"
+  },
+  {
+   "id": "c11",
+   "at": 500,
+   "until": 556,
+   "style": "phrase",
+   "text": "de roca angulosa"
+  },
+  {
+   "id": "c12",
+   "at": 557,
+   "until": 588,
+   "style": "phrase",
+   "text": "Y más abajo"
+  },
+  {
+   "id": "c13",
+   "at": 589,
+   "until": 625,
+   "style": "phrase",
+   "text": "el suelo natural"
+  },
+  {
+   "id": "c14",
+   "at": 626,
+   "until": 681,
+   "style": "phrase",
+   "text": "que se llama subrasante"
+  },
+  {
+   "id": "c15",
+   "at": 682,
+   "until": 723,
+   "style": "phrase",
+   "text": "Tráfico sol"
+  },
+  {
+   "id": "c16",
+   "at": 724,
+   "until": 763,
+   "style": "phrase",
+   "text": "lluvia y frío desgastan"
+  },
+  {
+   "id": "c17",
+   "at": 764,
+   "until": 821,
+   "style": "phrase",
+   "text": "esa capa de arriba"
+  },
+  {
+   "id": "c18",
+   "at": 823,
+   "until": 844,
+   "style": "phrase",
+   "text": "Lo primero que"
+  },
+  {
+   "id": "c19",
+   "at": 845,
+   "until": 908,
+   "style": "phrase",
+   "text": "aparece son grietas"
+  },
+  {
+   "id": "c20",
+   "at": 910,
+   "until": 940,
+   "style": "phrase",
+   "text": "A veces forman un"
+  },
+  {
+   "id": "c21",
+   "at": 941,
+   "until": 969,
+   "style": "phrase",
+   "text": "patrón que se llama"
+  },
+  {
+   "id": "c22",
+   "at": 970,
+   "until": 1025,
+   "style": "phrase",
+   "text": "piel de cocodrilo"
+  },
+  {
+   "id": "c23",
+   "at": 1027,
+   "until": 1053,
+   "style": "phrase",
+   "text": "Es señal de que el"
+  },
+  {
+   "id": "c24",
+   "at": 1054,
+   "until": 1095,
+   "style": "phrase",
+   "text": "pavimento se flexiona y se"
+  },
+  {
+   "id": "c25",
+   "at": 1096,
+   "until": 1152,
+   "style": "phrase",
+   "text": "fatiga bajo las ruedas"
+  },
+  {
+   "id": "c26",
+   "at": 1153,
+   "until": 1219,
+   "style": "phrase",
+   "text": "Y aquí viene el problema"
+  },
+  {
+   "id": "c27",
+   "at": 1221,
+   "until": 1260,
+   "style": "phrase",
+   "text": "Las grietas son el talón"
+  },
+  {
+   "id": "c28",
+   "at": 1261,
+   "until": 1323,
+   "style": "phrase",
+   "text": "de Aquiles del pavimento"
+  },
+  {
+   "id": "c29",
+   "at": 1325,
+   "until": 1388,
+   "style": "phrase",
+   "text": "Dejan entrar el agua"
+  },
+  {
+   "id": "c30",
+   "at": 1390,
+   "until": 1416,
+   "style": "phrase",
+   "text": "El agua se junta"
+  },
+  {
+   "id": "c31",
+   "at": 1417,
+   "until": 1458,
+   "style": "phrase",
+   "text": "sobre la subrasante"
+  },
+  {
+   "id": "c32",
+   "at": 1459,
+   "until": 1487,
+   "style": "phrase",
+   "text": "empapa el suelo"
+  },
+  {
+   "id": "c33",
+   "at": 1488,
+   "until": 1522,
+   "style": "phrase",
+   "text": "y lo ablanda"
+  },
+  {
+   "id": "c34",
+   "at": 1523,
+   "until": 1601,
+   "style": "phrase",
+   "text": "Ahora imagina un punto blando"
+  },
+  {
+   "id": "c35",
+   "at": 1603,
+   "until": 1651,
+   "style": "phrase",
+   "text": "El asfalto es flexible"
+  },
+  {
+   "id": "c36",
+   "at": 1652,
+   "until": 1683,
+   "style": "phrase",
+   "text": "no reparte la carga"
+  },
+  {
+   "id": "c37",
+   "at": 1684,
+   "until": 1740,
+   "style": "phrase",
+   "text": "en una zona amplia"
+  },
+  {
+   "id": "c38",
+   "at": 1742,
+   "until": 1785,
+   "style": "phrase",
+   "text": "Cada llanta que pasa empuja"
+  },
+  {
+   "id": "c39",
+   "at": 1786,
+   "until": 1822,
+   "style": "phrase",
+   "text": "el agua hacia afuera"
+  },
+  {
+   "id": "c40",
+   "at": 1823,
+   "until": 1856,
+   "style": "phrase",
+   "text": "y esa agua arrastra"
+  },
+  {
+   "id": "c41",
+   "at": 1857,
+   "until": 1906,
+   "style": "phrase",
+   "text": "partículas de suelo"
+  },
+  {
+   "id": "c42",
+   "at": 1907,
+   "until": 1945,
+   "style": "phrase",
+   "text": "Cada poquito de suelo que"
+  },
+  {
+   "id": "c43",
+   "at": 1946,
+   "until": 2012,
+   "style": "phrase",
+   "text": "se va deja más espacio"
+  },
+  {
+   "id": "c44",
+   "at": 2014,
+   "until": 2048,
+   "style": "phrase",
+   "text": "Entonces el tráfico"
+  },
+  {
+   "id": "c45",
+   "at": 2049,
+   "until": 2085,
+   "style": "phrase",
+   "text": "bombea más agua"
+  },
+  {
+   "id": "c46",
+   "at": 2086,
+   "until": 2132,
+   "style": "phrase",
+   "text": "dentro y fuera"
+  },
+  {
+   "id": "c47",
+   "at": 2134,
+   "until": 2199,
+   "style": "phrase",
+   "text": "Eso erosiona más suelo"
+  },
+  {
+   "id": "c48",
+   "at": 2201,
+   "until": 2244,
+   "style": "phrase",
+   "text": "El pavimento pierde apoyo"
+  },
+  {
+   "id": "c49",
+   "at": 2245,
+   "until": 2279,
+   "style": "phrase",
+   "text": "y se rompe"
+  },
+  {
+   "id": "c50",
+   "at": 2280,
+   "until": 2313,
+   "style": "phrase",
+   "text": "Los trozos de asfalto"
+  },
+  {
+   "id": "c51",
+   "at": 2314,
+   "until": 2343,
+   "style": "phrase",
+   "text": "que quedan entre las"
+  },
+  {
+   "id": "c52",
+   "at": 2344,
+   "until": 2399,
+   "style": "phrase",
+   "text": "grietas se aflojan"
+  },
+  {
+   "id": "c53",
+   "at": 2401,
+   "until": 2438,
+   "style": "phrase",
+   "text": "Las ruedas los arrancan"
+  },
+  {
+   "id": "c54",
+   "at": 2439,
+   "until": 2491,
+   "style": "phrase",
+   "text": "o los expulsan"
+  },
+  {
+   "id": "c55",
+   "at": 2493,
+   "until": 2552,
+   "style": "phrase",
+   "text": "Ahí nace el bache"
+  },
+  {
+   "id": "c56",
+   "at": 2554,
+   "until": 2581,
+   "style": "phrase",
+   "text": "Puede medir varios"
+  },
+  {
+   "id": "c57",
+   "at": 2582,
+   "until": 2612,
+   "style": "phrase",
+   "text": "pies de ancho"
+  },
+  {
+   "id": "c58",
+   "at": 2613,
+   "until": 2657,
+   "style": "phrase",
+   "text": "pero suele tener solo unas"
+  },
+  {
+   "id": "c59",
+   "at": 2658,
+   "until": 2724,
+   "style": "phrase",
+   "text": "pocas pulgadas de profundidad"
+  },
+  {
+   "id": "c60",
+   "at": 2725,
+   "until": 2783,
+   "style": "phrase",
+   "text": "El frío lo empeora"
+  },
+  {
+   "id": "c61",
+   "at": 2785,
+   "until": 2821,
+   "style": "phrase",
+   "text": "El agua se expande con"
+  },
+  {
+   "id": "c62",
+   "at": 2822,
+   "until": 2892,
+   "style": "phrase",
+   "text": "mucha fuerza al congelarse"
+  },
+  {
+   "id": "c63",
+   "at": 2894,
+   "until": 2929,
+   "style": "phrase",
+   "text": "Forma lentes de hielo"
+  },
+  {
+   "id": "c64",
+   "at": 2930,
+   "until": 2965,
+   "style": "phrase",
+   "text": "bajo el pavimento"
+  },
+  {
+   "id": "c65",
+   "at": 2966,
+   "until": 3043,
+   "style": "phrase",
+   "text": "y al derretirse dejan huecos"
+  },
+  {
+   "id": "c66",
+   "at": 3045,
+   "until": 3081,
+   "style": "phrase",
+   "text": "El suelo de abajo sigue"
+  },
+  {
+   "id": "c67",
+   "at": 3082,
+   "until": 3163,
+   "style": "phrase",
+   "text": "congelado y atrapa esa agua"
+  },
+  {
+   "id": "c68",
+   "at": 3164,
+   "until": 3186,
+   "style": "phrase",
+   "text": "Por eso hay más"
+  },
+  {
+   "id": "c69",
+   "at": 3187,
+   "until": 3233,
+   "style": "phrase",
+   "text": "baches en primavera"
+  },
+  {
+   "id": "c70",
+   "at": 3234,
+   "until": 3258,
+   "style": "phrase",
+   "text": "Pero el hielo no"
+  },
+  {
+   "id": "c71",
+   "at": 3259,
+   "until": 3318,
+   "style": "phrase",
+   "text": "es la causa raíz"
+  },
+  {
+   "id": "c72",
+   "at": 3320,
+   "until": 3354,
+   "style": "phrase",
+   "text": "También hay baches donde"
+  },
+  {
+   "id": "c73",
+   "at": 3355,
+   "until": 3390,
+   "style": "phrase",
+   "text": "nunca se congela"
+  },
+  {
+   "id": "c74",
+   "at": 3391,
+   "until": 3423,
+   "style": "phrase",
+   "text": "con mal subsuelo y"
+  },
+  {
+   "id": "c75",
+   "at": 3424,
+   "until": 3480,
+   "style": "phrase",
+   "text": "mucha agua subterránea"
+  },
+  {
+   "id": "c76",
+   "at": 3481,
+   "until": 3508,
+   "style": "phrase",
+   "text": "Y los parches son"
+  },
+  {
+   "id": "c77",
+   "at": 3509,
+   "until": 3559,
+   "style": "phrase",
+   "text": "como una venda"
+  },
+  {
+   "id": "c78",
+   "at": 3561,
+   "until": 3600,
+   "style": "phrase",
+   "text": "Si no arreglas el agua"
+  },
+  {
+   "id": "c79",
+   "at": 3601,
+   "until": 3639,
+   "style": "phrase",
+   "text": "ni el suelo de abajo"
+  },
+  {
+   "id": "c80",
+   "at": 3640,
+   "until": 3673,
+   "style": "phrase",
+   "text": "el bache suele volver"
+  },
+  {
+   "id": "c81",
+   "at": 3674,
+   "until": 3717,
+   "style": "phrase",
+   "text": "al mismo lugar"
+  },
+  {
+   "id": "c82",
+   "at": 3718,
+   "until": 3758,
+   "style": "phrase",
+   "text": "Prevenir sale mejor"
+  },
+  {
+   "id": "c83",
+   "at": 3759,
+   "until": 3793,
+   "style": "phrase",
+   "text": "sellar grietas"
+  },
+  {
+   "id": "c84",
+   "at": 3794,
+   "until": 3826,
+   "style": "phrase",
+   "text": "drenar bien y poner"
+  },
+  {
+   "id": "c85",
+   "at": 3827,
+   "until": 3888,
+   "style": "phrase",
+   "text": "pavimento más grueso"
+  },
+  {
+   "id": "c86",
+   "at": 3890,
+   "until": 3951,
+   "style": "phrase",
+   "text": "Aunque eso cuesta muchísimo"
+  },
+  {
+   "id": "c87",
+   "at": 3952,
+   "until": 3995,
+   "style": "phrase",
+   "text": "Así que un bache es"
+  },
+  {
+   "id": "c88",
+   "at": 3996,
+   "until": 4036,
+   "style": "phrase",
+   "text": "low-key una grieta que"
+  },
+  {
+   "id": "c89",
+   "at": 4037,
+   "until": 4085,
+   "style": "phrase",
+   "text": "dejó pasar el agua"
+  },
+  {
+   "id": "te0_0",
+   "at": 9,
+   "until": 58,
+   "style": "term",
+   "text": "BACHE"
+  },
+  {
+   "id": "te2_0",
+   "at": 306,
+   "until": 350,
+   "style": "term",
+   "text": "ASFALTO"
+  },
+  {
+   "id": "te3_1",
+   "at": 491,
+   "until": 529,
+   "style": "term",
+   "text": "BASE"
+  },
+  {
+   "id": "te4_1",
+   "at": 644,
+   "until": 711,
+   "style": "term",
+   "text": "SUBRASANTE"
+  },
+  {
+   "id": "te6_0",
+   "at": 865,
+   "until": 938,
+   "style": "term",
+   "text": "GRIETAS"
+  },
+  {
+   "id": "te7_0",
+   "at": 982,
+   "until": 1055,
+   "style": "term",
+   "text": "COCODRILO"
+  },
+  {
+   "id": "te10_0",
+   "at": 1354,
+   "until": 1418,
+   "style": "term",
+   "text": "AGUA"
+  },
+  {
+   "id": "te22_0",
+   "at": 2905,
+   "until": 2959,
+   "style": "term",
+   "text": "LENTES"
+  },
+  {
+   "id": "te26_0",
+   "at": 3491,
+   "until": 3538,
+   "style": "term",
+   "text": "PARCHE"
+  },
+  {
+   "id": "te28_0",
+   "at": 3759,
+   "until": 3823,
+   "style": "term",
+   "text": "SELLAR"
+  }
+ ],
+ "events": [
+  {
+   "id": "e0_0",
+   "kind": "term_callout",
+   "at": 9,
+   "term": "BACHE",
+   "target": "pothole"
+  },
+  {
+   "id": "e0_1",
+   "kind": "highlight",
+   "at": 39,
+   "term": "",
+   "target": "road"
+  },
+  {
+   "id": "e1_0",
+   "kind": "highlight",
+   "at": 94,
+   "term": "",
+   "target": "road"
+  },
+  {
+   "id": "e2_0",
+   "kind": "term_callout",
+   "at": 306,
+   "term": "ASFALTO",
+   "target": "layers"
+  },
+  {
+   "id": "e3_0",
+   "kind": "highlight",
+   "at": 415,
+   "term": "",
+   "target": "layers"
+  },
+  {
+   "id": "e3_1",
+   "kind": "term_callout",
+   "at": 491,
+   "term": "BASE",
+   "target": "layers"
+  },
+  {
+   "id": "e4_0",
+   "kind": "highlight",
+   "at": 594,
+   "term": "",
+   "target": "layers"
+  },
+  {
+   "id": "e4_1",
+   "kind": "term_callout",
+   "at": 644,
+   "term": "SUBRASANTE",
+   "target": "layers"
+  },
+  {
+   "id": "e5_0",
+   "kind": "highlight",
+   "at": 682,
+   "term": "",
+   "target": "layers"
+  },
+  {
+   "id": "e5_1",
+   "kind": "highlight",
+   "at": 771,
+   "term": "",
+   "target": "layers"
+  },
+  {
+   "id": "e6_0",
+   "kind": "term_callout",
+   "at": 865,
+   "term": "GRIETAS",
+   "target": "cracks"
+  },
+  {
+   "id": "e7_0",
+   "kind": "term_callout",
+   "at": 982,
+   "term": "COCODRILO",
+   "target": "cracks"
+  },
+  {
+   "id": "e8_0",
+   "kind": "force_arrows",
+   "at": 1073,
+   "term": "",
+   "target": "cracks"
+  },
+  {
+   "id": "e8_1",
+   "kind": "highlight",
+   "at": 1124,
+   "term": "",
+   "target": "cracks"
+  },
+  {
+   "id": "e9_0",
+   "kind": "highlight",
+   "at": 1229,
+   "term": "",
+   "target": "cracks"
+  },
+  {
+   "id": "e10_0",
+   "kind": "term_callout",
+   "at": 1354,
+   "term": "AGUA",
+   "target": "water"
+  },
+  {
+   "id": "e10_1",
+   "kind": "highlight",
+   "at": 1406,
+   "term": "",
+   "target": "water"
+  },
+  {
+   "id": "e11_0",
+   "kind": "highlight",
+   "at": 1493,
+   "term": "",
+   "target": "water"
+  },
+  {
+   "id": "e12_0",
+   "kind": "highlight",
+   "at": 1553,
+   "term": "",
+   "target": "traffic"
+  },
+  {
+   "id": "e13_0",
+   "kind": "highlight",
+   "at": 1610,
+   "term": "",
+   "target": "traffic"
+  },
+  {
+   "id": "e13_1",
+   "kind": "highlight",
+   "at": 1674,
+   "term": "",
+   "target": "traffic"
+  },
+  {
+   "id": "e14_0",
+   "kind": "highlight",
+   "at": 1750,
+   "term": "",
+   "target": "traffic"
+  },
+  {
+   "id": "e14_1",
+   "kind": "force_arrows",
+   "at": 1844,
+   "term": "",
+   "target": "traffic"
+  },
+  {
+   "id": "e15_0",
+   "kind": "highlight",
+   "at": 1972,
+   "term": "",
+   "target": "traffic"
+  },
+  {
+   "id": "e16_0",
+   "kind": "force_arrows",
+   "at": 2049,
+   "term": "",
+   "target": "traffic"
+  },
+  {
+   "id": "e17_0",
+   "kind": "highlight",
+   "at": 2142,
+   "term": "",
+   "target": "traffic"
+  },
+  {
+   "id": "e17_1",
+   "kind": "highlight",
+   "at": 2222,
+   "term": "",
+   "target": "traffic"
+  },
+  {
+   "id": "e18_0",
+   "kind": "highlight",
+   "at": 2300,
+   "term": "",
+   "target": "pothole"
+  },
+  {
+   "id": "e18_1",
+   "kind": "highlight",
+   "at": 2344,
+   "term": "",
+   "target": "cracks"
+  },
+  {
+   "id": "e19_0",
+   "kind": "highlight",
+   "at": 2409,
+   "term": "",
+   "target": "pothole"
+  },
+  {
+   "id": "e19_1",
+   "kind": "force_arrows",
+   "at": 2447,
+   "term": "",
+   "target": "pothole"
+  },
+  {
+   "id": "e19_2",
+   "kind": "highlight",
+   "at": 2515,
+   "term": "",
+   "target": "pothole"
+  },
+  {
+   "id": "e20_0",
+   "kind": "highlight",
+   "at": 2592,
+   "term": "",
+   "target": "pothole"
+  },
+  {
+   "id": "e20_1",
+   "kind": "highlight",
+   "at": 2687,
+   "term": "",
+   "target": "pothole"
+  },
+  {
+   "id": "e21_0",
+   "kind": "highlight",
+   "at": 2732,
+   "term": "",
+   "target": "ice"
+  },
+  {
+   "id": "e21_1",
+   "kind": "force_arrows",
+   "at": 2802,
+   "term": "",
+   "target": "ice"
+  },
+  {
+   "id": "e22_0",
+   "kind": "term_callout",
+   "at": 2905,
+   "term": "LENTES",
+   "target": "ice"
+  },
+  {
+   "id": "e22_1",
+   "kind": "highlight",
+   "at": 3004,
+   "term": "",
+   "target": "ice"
+  },
+  {
+   "id": "e23_0",
+   "kind": "highlight",
+   "at": 3051,
+   "term": "",
+   "target": "ice"
+  },
+  {
+   "id": "e23_1",
+   "kind": "highlight",
+   "at": 3129,
+   "term": "",
+   "target": "ice"
+  },
+  {
+   "id": "e24_0",
+   "kind": "highlight",
+   "at": 3188,
+   "term": "",
+   "target": "pothole"
+  },
+  {
+   "id": "e24_1",
+   "kind": "highlight",
+   "at": 3244,
+   "term": "",
+   "target": "ice"
+  },
+  {
+   "id": "e25_0",
+   "kind": "highlight",
+   "at": 3337,
+   "term": "",
+   "target": "pothole"
+  },
+  {
+   "id": "e25_1",
+   "kind": "highlight",
+   "at": 3403,
+   "term": "",
+   "target": "water"
+  },
+  {
+   "id": "e25_2",
+   "kind": "highlight",
+   "at": 3436,
+   "term": "",
+   "target": "water"
+  },
+  {
+   "id": "e26_0",
+   "kind": "term_callout",
+   "at": 3491,
+   "term": "PARCHE",
+   "target": "repair"
+  },
+  {
+   "id": "e27_0",
+   "kind": "highlight",
+   "at": 3594,
+   "term": "",
+   "target": "repair"
+  },
+  {
+   "id": "e27_1",
+   "kind": "highlight",
+   "at": 3645,
+   "term": "",
+   "target": "pothole"
+  },
+  {
+   "id": "e28_0",
+   "kind": "term_callout",
+   "at": 3759,
+   "term": "SELLAR",
+   "target": "prevent"
+  },
+  {
+   "id": "e28_1",
+   "kind": "highlight",
+   "at": 3794,
+   "term": "",
+   "target": "prevent"
+  },
+  {
+   "id": "e28_2",
+   "kind": "highlight",
+   "at": 3851,
+   "term": "",
+   "target": "prevent"
+  },
+  {
+   "id": "e29_0",
+   "kind": "highlight",
+   "at": 3908,
+   "term": "",
+   "target": "prevent"
+  },
+  {
+   "id": "e29_1",
+   "kind": "highlight",
+   "at": 3970,
+   "term": "",
+   "target": "road"
+  },
+  {
+   "id": "e30_0",
+   "kind": "highlight",
+   "at": 4021,
+   "term": "",
+   "target": "cracks"
+  },
+  {
+   "id": "e30_1",
+   "kind": "highlight",
+   "at": 4061,
+   "term": "",
+   "target": "water"
+  }
+ ],
+ "stillFrames": [
+  42,
+  144,
+  288,
+  464,
+  619,
+  752,
+  866,
+  968,
+  1090,
+  1239,
+  1375,
+  1474,
+  1563,
+  1673,
+  1824,
+  1960,
+  2074,
+  2207,
+  2341,
+  2478,
+  2639,
+  2809,
+  2969,
+  3104,
+  3242,
+  3400,
+  3521,
+  3639,
+  3804,
+  3943,
+  4041
+ ],
+ "fluidityRuns": [
+  {
+   "label": "flight into layers",
+   "shot": "w2",
+   "start": 186,
+   "step": 5,
+   "count": 12
+  },
+  {
+   "label": "flight into water",
+   "shot": "w10",
+   "start": 1307,
+   "step": 5,
+   "count": 12
+  },
+  {
+   "label": "flight into ice",
+   "shot": "w21",
+   "start": 2707,
+   "step": 5,
+   "count": 12
+  },
+  {
+   "label": "flight back to road",
+   "shot": "w30",
+   "start": 3978,
+   "step": 5,
+   "count": 12
+  }
+ ],
+ "sources": [],
+ "note": "Generated from plan.json, words.json and story.json by build_script.py. One continuous world, no cuts; captions are independent 2-5 word phrases."
+}

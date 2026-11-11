@@ -463,6 +463,23 @@ Use this mode when the script introduces many parts in sequence:
 - **Colours:** unchanged. Current and "on" states use one saturated content colour (lime) on neutral parts; red, yellow and the
   colourless highlight keep their meanings.
 
+**Director v2 (pothole test).** A first director that only picks focus and distance gives scenes that look alike and elements on loops. The stricter one
+(`experiments/pothole-lowpoly/director.py`) asks the model for, per beat: the **nature** of the scene (`context` = the world as a whole, `exhibit` = an object
+performing the idea, `cutaway` = the object cut open to show its parts and how it works), a full camera **shot** (distance, azimuth, height, and a move inside
+the beat: push/pull, orbit, pan, crane, drift) and **actions** locked to cue words. Elements move only through those actions, never on a loop or spin, and
+rest otherwise. Code enforces: nature vs distance, a minimum of cutaways spread over stations, actions per beat length, no repeated camera pose, angle
+variety, a cap on drift, rare arrows (a global limit, only on a flow word), and first and last beat. The renderer opens a cutaway by sliding the block's front
+half away and showing interior detail, eased in and out. Look: rounded boxes, hemisphere light, soft shadows, fog, a gentler palette. Arrows are optional;
+the first pothole render had few useful ones, so the default is none.
+
+**Director v3 (zebra test), after feedback on the pothole film.** A camera that moves at almost every beat reads as busy; the fix is a hard rule in code
+(`experiments/zebra-lowpoly/director.py`): at most 30% of the beats use a move other than a near-still hold, never two moves in a row, and within a station the
+angle and height stay fixed. Framing needs margin: with a 24 degree lens, 88 units for a `medium` shot kept a stage's subjects at about 75% of the frame width; the pothole
+film's 34 units filled it. Actions get a fixed duration and may not overlap on a station, so elements never move on top of each other. A stage should leave the set
+(shrink away) 30 frames after its beat, or earlier stages pile up in front of the hero at the wide shots. Subjects should not all be blocks: smooth ellipsoids,
+tapered limbs, cones and spheres with vertex colours (stripes painted per vertex) read as animals, and an animal's legs, a fly's wings and a lion's walk should move only
+while the action that needs them runs.
+
 Not yet settled: the CPU test is the first render of this mode (see `experiments/cpu-lowpoly/README.md` for what was and was not
 checked). Fast flights across the whole bench can read as a blur; `close` on a station wider than the frame shows only part of it.
 

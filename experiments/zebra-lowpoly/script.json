@@ -1,0 +1,1607 @@
+{
+ "title": "Las rayas que estrellan moscas",
+ "fps": 30,
+ "durationFrames": 4422,
+ "flight": 45,
+ "waypoints": [
+  {
+   "id": "w0",
+   "at": 0,
+   "start": 0,
+   "end": 87,
+   "focus": "savanna",
+   "dist": "wide",
+   "nature": "context",
+   "shot": {
+    "dist": "wide",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "La sabana abierta con la manada: una mosca se lanza y rebota en las rayas de una cebra."
+  },
+  {
+   "id": "w1",
+   "at": 72,
+   "start": 87,
+   "end": 247,
+   "focus": "landing",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Dos moscas vuelan hacia un caballo y una cebra a la misma velocidad."
+  },
+  {
+   "id": "w2",
+   "at": 232,
+   "start": 247,
+   "end": 387,
+   "focus": "landing",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "La mosca no frena, choca con la cebra y se va."
+  },
+  {
+   "id": "w3",
+   "at": 372,
+   "start": 387,
+   "end": 455,
+   "focus": "coat",
+   "dist": "close",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "right",
+    "height": "mid",
+    "move": "push_in"
+   },
+   "show": "Las rayas de la cebra se iluminan una tras otra como una huella digital."
+  },
+  {
+   "id": "w4",
+   "at": 440,
+   "start": 455,
+   "end": 575,
+   "focus": "savanna",
+   "dist": "wide",
+   "nature": "context",
+   "shot": {
+    "dist": "wide",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "La manada camina hacia la charca mientras se nombran los sospechosos."
+  },
+  {
+   "id": "w5",
+   "at": 560,
+   "start": 575,
+   "end": 756,
+   "focus": "predators",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Un león se arrastra por la hierba hacia las cebras mientras aparecen los términos depredadores y calor."
+  },
+  {
+   "id": "w6",
+   "at": 741,
+   "start": 756,
+   "end": 947,
+   "focus": "predators",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Una neblina se alza entre el león y las cebras: a distancia no se ven las rayas."
+  },
+  {
+   "id": "w7",
+   "at": 932,
+   "start": 947,
+   "end": 1125,
+   "focus": "coat",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Una segunda cebra llega junto a la primera con un patrón distinto."
+  },
+  {
+   "id": "w8",
+   "at": 1110,
+   "start": 1125,
+   "end": 1193,
+   "focus": "heat",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "El sol sale sobre tres barriles vestidos con piel de caballo, cebra y vaca."
+  },
+  {
+   "id": "w9",
+   "at": 1178,
+   "start": 1193,
+   "end": 1343,
+   "focus": "heat",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Los tres termómetros suben al mismo nivel: sin efecto térmico."
+  },
+  {
+   "id": "w10",
+   "at": 1328,
+   "start": 1343,
+   "end": 1491,
+   "focus": "savanna",
+   "dist": "wide",
+   "nature": "context",
+   "shot": {
+    "dist": "wide",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "En la sabana una mosca pica y rebota contra una cebra de la manada."
+  },
+  {
+   "id": "w11",
+   "at": 1476,
+   "start": 1491,
+   "end": 1571,
+   "focus": "savanna",
+   "dist": "wide",
+   "nature": "context",
+   "shot": {
+    "dist": "wide",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Se destaca el término tábanos sobre la sabana quieta."
+  },
+  {
+   "id": "w12",
+   "at": 1556,
+   "start": 1571,
+   "end": 1706,
+   "focus": "savanna",
+   "dist": "wide",
+   "nature": "context",
+   "shot": {
+    "dist": "wide",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "La manada avanza hacia la charca mientras se plantea que tiene sentido."
+  },
+  {
+   "id": "w13",
+   "at": 1691,
+   "start": 1706,
+   "end": 1814,
+   "focus": "hair",
+   "dist": "close",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "front",
+    "height": "mid",
+    "move": "push_in"
+   },
+   "show": "Sobre la piel ampliada con pelo corto, una mosca aterriza."
+  },
+  {
+   "id": "w14",
+   "at": 1799,
+   "start": 1814,
+   "end": 1919,
+   "focus": "hair",
+   "dist": "medium",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "medium",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "La boca de la mosca es más larga que el pelo y llega a la piel."
+  },
+  {
+   "id": "w15",
+   "at": 1904,
+   "start": 1919,
+   "end": 2030,
+   "focus": "landing",
+   "dist": "close",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Se resalta el escenario donde se filmó el estudio de las moscas."
+  },
+  {
+   "id": "w16",
+   "at": 2015,
+   "start": 2030,
+   "end": 2145,
+   "focus": "landing",
+   "dist": "close",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Dos moscas se acercan a un caballo y a una cebra."
+  },
+  {
+   "id": "w17",
+   "at": 2130,
+   "start": 2145,
+   "end": 2247,
+   "focus": "landing",
+   "dist": "close",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Se resalta a los animales mientras las moscas se acercan casi igual."
+  },
+  {
+   "id": "w18",
+   "at": 2232,
+   "start": 2247,
+   "end": 2360,
+   "focus": "landing",
+   "dist": "close",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "La mosca frena, se posa en el caballo y sondea."
+  },
+  {
+   "id": "w19",
+   "at": 2345,
+   "start": 2360,
+   "end": 2529,
+   "focus": "landing",
+   "dist": "close",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "La otra mosca no frena, choca con la cebra y se marcha."
+  },
+  {
+   "id": "w20",
+   "at": 2514,
+   "start": 2529,
+   "end": 2660,
+   "focus": "landing",
+   "dist": "close",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Las moscas vuelven a acercarse sin conseguir picar a la cebra."
+  },
+  {
+   "id": "w21",
+   "at": 2645,
+   "start": 2660,
+   "end": 2769,
+   "focus": "landing",
+   "dist": "close",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Una mosca se posa en el caballo y prueba la piel."
+  },
+  {
+   "id": "w22",
+   "at": 2754,
+   "start": 2769,
+   "end": 2924,
+   "focus": "coats",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Tres caballos reciben cobertores negro, blanco y a rayas."
+  },
+  {
+   "id": "w23",
+   "at": 2909,
+   "start": 2924,
+   "end": 3035,
+   "focus": "coats",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Las moscas aterrizan en negro y blanco, pero evitan el caballo a rayas."
+  },
+  {
+   "id": "w24",
+   "at": 3020,
+   "start": 3035,
+   "end": 3140,
+   "focus": "coats",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Las moscas se posan en la cabeza descubierta del caballo rayado."
+  },
+  {
+   "id": "w25",
+   "at": 3125,
+   "start": 3140,
+   "end": 3229,
+   "focus": "landing",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "De cerca, la mosca choca contra la cebra y se aleja."
+  },
+  {
+   "id": "w26",
+   "at": 3214,
+   "start": 3229,
+   "end": 3362,
+   "focus": "landing",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Un anillo de unos dos metros aparece alrededor de la cebra."
+  },
+  {
+   "id": "w27",
+   "at": 3347,
+   "start": 3362,
+   "end": 3436,
+   "focus": "cows",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Un pincel pinta rayas blancas y negras sobre una vaca."
+  },
+  {
+   "id": "w28",
+   "at": 3421,
+   "start": 3436,
+   "end": 3576,
+   "focus": "cows",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Las moscas se juntan: casi la mitad en la vaca rayada."
+  },
+  {
+   "id": "w29",
+   "at": 3561,
+   "start": 3576,
+   "end": 3693,
+   "focus": "cows",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Se resalta la vaca con solo rayas negras, igual que la no pintada."
+  },
+  {
+   "id": "w30",
+   "at": 3678,
+   "start": 3693,
+   "end": 3864,
+   "focus": "cows",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "La pintura de las vacas se desvanece con los días."
+  },
+  {
+   "id": "w31",
+   "at": 3849,
+   "start": 3864,
+   "end": 3972,
+   "focus": "hair",
+   "dist": "close",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Se resalta la piel ampliada y la mosca: nadie sabe qué ven."
+  },
+  {
+   "id": "w32",
+   "at": 3957,
+   "start": 3972,
+   "end": 4113,
+   "focus": "savanna",
+   "dist": "wide",
+   "nature": "context",
+   "shot": {
+    "dist": "wide",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "La manada camina hacia la charca mientras se cita la revisión."
+  },
+  {
+   "id": "w33",
+   "at": 4098,
+   "start": 4113,
+   "end": 4244,
+   "focus": "coat",
+   "dist": "medium",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "show": "Las rayas de la cebra se iluminan una a una."
+  },
+  {
+   "id": "w34",
+   "at": 4229,
+   "start": 4244,
+   "end": 4422,
+   "focus": "savanna",
+   "dist": "wide",
+   "nature": "context",
+   "shot": {
+    "dist": "wide",
+    "angle": "front",
+    "height": "mid",
+    "move": "pull_out"
+   },
+   "show": "Una mosca se estrella contra las rayas de una cebra y rebota."
+  }
+ ],
+ "actions": [
+  {
+   "id": "a0_0",
+   "target": "savanna",
+   "name": "fly_strike",
+   "at": 3
+  },
+  {
+   "id": "a1_0",
+   "target": "landing",
+   "name": "approach",
+   "at": 87
+  },
+  {
+   "id": "a2_0",
+   "target": "landing",
+   "name": "zebra_bump",
+   "at": 270
+  },
+  {
+   "id": "a3_0",
+   "target": "coat",
+   "name": "pattern_trace",
+   "at": 387
+  },
+  {
+   "id": "a4_0",
+   "target": "savanna",
+   "name": "herd_move",
+   "at": 554
+  },
+  {
+   "id": "a5_1",
+   "target": "predators",
+   "name": "lion_stalk",
+   "at": 611
+  },
+  {
+   "id": "a6_1",
+   "target": "predators",
+   "name": "haze",
+   "at": 902
+  },
+  {
+   "id": "a7_0",
+   "target": "coat",
+   "name": "pair_in",
+   "at": 1008
+  },
+  {
+   "id": "a8_0",
+   "target": "heat",
+   "name": "sun_up",
+   "at": 1134
+  },
+  {
+   "id": "a9_0",
+   "target": "heat",
+   "name": "temps_read",
+   "at": 1288
+  },
+  {
+   "id": "a10_0",
+   "target": "savanna",
+   "name": "fly_strike",
+   "at": 1455
+  },
+  {
+   "id": "a12_0",
+   "target": "savanna",
+   "name": "herd_move",
+   "at": 1654
+  },
+  {
+   "id": "a13_0",
+   "target": "hair",
+   "name": "fly_land",
+   "at": 1706
+  },
+  {
+   "id": "a14_0",
+   "target": "hair",
+   "name": "bite",
+   "at": 1827
+  },
+  {
+   "id": "a16_0",
+   "target": "landing",
+   "name": "approach",
+   "at": 2045
+  },
+  {
+   "id": "a18_0",
+   "target": "landing",
+   "name": "horse_land",
+   "at": 2254
+  },
+  {
+   "id": "a19_0",
+   "target": "landing",
+   "name": "zebra_bump",
+   "at": 2404
+  },
+  {
+   "id": "a20_0",
+   "target": "landing",
+   "name": "approach",
+   "at": 2535
+  },
+  {
+   "id": "a21_0",
+   "target": "landing",
+   "name": "horse_land",
+   "at": 2706
+  },
+  {
+   "id": "a22_0",
+   "target": "coats",
+   "name": "coats_on",
+   "at": 2779
+  },
+  {
+   "id": "a23_0",
+   "target": "coats",
+   "name": "flies_test",
+   "at": 2924
+  },
+  {
+   "id": "a24_0",
+   "target": "coats",
+   "name": "head_test",
+   "at": 3094
+  },
+  {
+   "id": "a25_0",
+   "target": "landing",
+   "name": "zebra_bump",
+   "at": 3170
+  },
+  {
+   "id": "a26_0",
+   "target": "landing",
+   "name": "ring",
+   "at": 3325
+  },
+  {
+   "id": "a27_0",
+   "target": "cows",
+   "name": "paint",
+   "at": 3362
+  },
+  {
+   "id": "a28_0",
+   "target": "cows",
+   "name": "swarm",
+   "at": 3515
+  },
+  {
+   "id": "a30_1",
+   "target": "cows",
+   "name": "fade",
+   "at": 3808
+  },
+  {
+   "id": "a32_0",
+   "target": "savanna",
+   "name": "herd_move",
+   "at": 3982
+  },
+  {
+   "id": "a33_0",
+   "target": "coat",
+   "name": "pattern_trace",
+   "at": 4196
+  },
+  {
+   "id": "a34_0",
+   "target": "savanna",
+   "name": "fly_strike",
+   "at": 4368
+  }
+ ],
+ "captions": [
+  {
+   "id": "c0",
+   "at": 3,
+   "until": 82,
+   "style": "phrase",
+   "text": "Las rayas que estrellan moscas"
+  },
+  {
+   "id": "c1",
+   "at": 87,
+   "until": 129,
+   "style": "phrase",
+   "text": "Una mosca se lanza contra"
+  },
+  {
+   "id": "c2",
+   "at": 130,
+   "until": 182,
+   "style": "phrase",
+   "text": "una cebra a toda velocidad"
+  },
+  {
+   "id": "c3",
+   "at": 183,
+   "until": 245,
+   "style": "phrase",
+   "text": "y no logra aterrizar"
+  },
+  {
+   "id": "c4",
+   "at": 247,
+   "until": 311,
+   "style": "phrase",
+   "text": "Simplemente choca y se va"
+  },
+  {
+   "id": "c5",
+   "at": 312,
+   "until": 342,
+   "style": "phrase",
+   "text": "Cada cebra tiene un"
+  },
+  {
+   "id": "c6",
+   "at": 343,
+   "until": 386,
+   "style": "phrase",
+   "text": "patrón de rayas único"
+  },
+  {
+   "id": "c7",
+   "at": 387,
+   "until": 454,
+   "style": "phrase",
+   "text": "como una huella digital"
+  },
+  {
+   "id": "c8",
+   "at": 455,
+   "until": 511,
+   "style": "phrase",
+   "text": "Pero para qué sirve"
+  },
+  {
+   "id": "c9",
+   "at": 513,
+   "until": 583,
+   "style": "phrase",
+   "text": "Durante años hubo varios sospechosos"
+  },
+  {
+   "id": "c10",
+   "at": 584,
+   "until": 662,
+   "style": "phrase",
+   "text": "camuflaje confundir a los depredadores"
+  },
+  {
+   "id": "c11",
+   "at": 663,
+   "until": 692,
+   "style": "phrase",
+   "text": "regular el calor y"
+  },
+  {
+   "id": "c12",
+   "at": 693,
+   "until": 755,
+   "style": "phrase",
+   "text": "reconocerse entre cebras"
+  },
+  {
+   "id": "c13",
+   "at": 756,
+   "until": 817,
+   "style": "phrase",
+   "text": "Casi todos fallaron"
+  },
+  {
+   "id": "c14",
+   "at": 819,
+   "until": 866,
+   "style": "phrase",
+   "text": "Leones y hienas no parecen"
+  },
+  {
+   "id": "c15",
+   "at": 867,
+   "until": 945,
+   "style": "phrase",
+   "text": "distinguir las rayas a distancia"
+  },
+  {
+   "id": "c16",
+   "at": 947,
+   "until": 979,
+   "style": "phrase",
+   "text": "Un estudio de dos mil"
+  },
+  {
+   "id": "c17",
+   "at": 980,
+   "until": 1021,
+   "style": "phrase",
+   "text": "catorce no halló relación"
+  },
+  {
+   "id": "c18",
+   "at": 1022,
+   "until": 1050,
+   "style": "phrase",
+   "text": "entre las rayas y"
+  },
+  {
+   "id": "c19",
+   "at": 1051,
+   "until": 1123,
+   "style": "phrase",
+   "text": "la cantidad de depredadores"
+  },
+  {
+   "id": "c20",
+   "at": 1125,
+   "until": 1156,
+   "style": "phrase",
+   "text": "Y un experimento de"
+  },
+  {
+   "id": "c21",
+   "at": 1157,
+   "until": 1192,
+   "style": "phrase",
+   "text": "dos mil dieciocho"
+  },
+  {
+   "id": "c22",
+   "at": 1193,
+   "until": 1223,
+   "style": "phrase",
+   "text": "con barriles de agua"
+  },
+  {
+   "id": "c23",
+   "at": 1224,
+   "until": 1266,
+   "style": "phrase",
+   "text": "cubiertos con pieles"
+  },
+  {
+   "id": "c24",
+   "at": 1267,
+   "until": 1342,
+   "style": "phrase",
+   "text": "no encontró ningún efecto térmico"
+  },
+  {
+   "id": "c25",
+   "at": 1343,
+   "until": 1369,
+   "style": "phrase",
+   "text": "Plot twist"
+  },
+  {
+   "id": "c26",
+   "at": 1370,
+   "until": 1407,
+   "style": "phrase",
+   "text": "lo que mejor coincidía con"
+  },
+  {
+   "id": "c27",
+   "at": 1408,
+   "until": 1446,
+   "style": "phrase",
+   "text": "las rayas era dónde viven"
+  },
+  {
+   "id": "c28",
+   "at": 1447,
+   "until": 1490,
+   "style": "phrase",
+   "text": "más moscas que pican"
+  },
+  {
+   "id": "c29",
+   "at": 1491,
+   "until": 1517,
+   "style": "phrase",
+   "text": "como las tsetsé"
+  },
+  {
+   "id": "c30",
+   "at": 1518,
+   "until": 1570,
+   "style": "phrase",
+   "text": "y los tábanos"
+  },
+  {
+   "id": "c31",
+   "at": 1571,
+   "until": 1645,
+   "style": "phrase",
+   "text": "Eso es solo una correlación"
+  },
+  {
+   "id": "c32",
+   "at": 1647,
+   "until": 1705,
+   "style": "phrase",
+   "text": "Pero tiene sentido"
+  },
+  {
+   "id": "c33",
+   "at": 1706,
+   "until": 1738,
+   "style": "phrase",
+   "text": "El pelo de la cebra"
+  },
+  {
+   "id": "c34",
+   "at": 1739,
+   "until": 1767,
+   "style": "phrase",
+   "text": "es más corto que la"
+  },
+  {
+   "id": "c35",
+   "at": 1768,
+   "until": 1813,
+   "style": "phrase",
+   "text": "boca de esas moscas"
+  },
+  {
+   "id": "c36",
+   "at": 1814,
+   "until": 1866,
+   "style": "phrase",
+   "text": "y ellas transmiten enfermedades"
+  },
+  {
+   "id": "c37",
+   "at": 1867,
+   "until": 1918,
+   "style": "phrase",
+   "text": "graves a los équidos"
+  },
+  {
+   "id": "c38",
+   "at": 1919,
+   "until": 1963,
+   "style": "phrase",
+   "text": "En dos mil diecinueve"
+  },
+  {
+   "id": "c39",
+   "at": 1964,
+   "until": 1985,
+   "style": "phrase",
+   "text": "un estudio en un"
+  },
+  {
+   "id": "c40",
+   "at": 1986,
+   "until": 2029,
+   "style": "phrase",
+   "text": "establo de Inglaterra filmó"
+  },
+  {
+   "id": "c41",
+   "at": 2030,
+   "until": 2073,
+   "style": "phrase",
+   "text": "tábanos alrededor de tres"
+  },
+  {
+   "id": "c42",
+   "at": 2074,
+   "until": 2143,
+   "style": "phrase",
+   "text": "cebras y nueve caballos"
+  },
+  {
+   "id": "c43",
+   "at": 2145,
+   "until": 2183,
+   "style": "phrase",
+   "text": "Las moscas se acercaban"
+  },
+  {
+   "id": "c44",
+   "at": 2184,
+   "until": 2245,
+   "style": "phrase",
+   "text": "casi igual a todos"
+  },
+  {
+   "id": "c45",
+   "at": 2247,
+   "until": 2282,
+   "style": "phrase",
+   "text": "Pero se posaban cerca"
+  },
+  {
+   "id": "c46",
+   "at": 2283,
+   "until": 2312,
+   "style": "phrase",
+   "text": "de un tercio menos"
+  },
+  {
+   "id": "c47",
+   "at": 2313,
+   "until": 2359,
+   "style": "phrase",
+   "text": "en las cebras"
+  },
+  {
+   "id": "c48",
+   "at": 2360,
+   "until": 2403,
+   "style": "phrase",
+   "text": "Llegaban más rápido"
+  },
+  {
+   "id": "c49",
+   "at": 2404,
+   "until": 2461,
+   "style": "phrase",
+   "text": "sin frenar de forma controlada"
+  },
+  {
+   "id": "c50",
+   "at": 2462,
+   "until": 2528,
+   "style": "phrase",
+   "text": "y muchas simplemente chocaban"
+  },
+  {
+   "id": "c51",
+   "at": 2529,
+   "until": 2574,
+   "style": "phrase",
+   "text": "En cinco horas con cebras"
+  },
+  {
+   "id": "c52",
+   "at": 2575,
+   "until": 2595,
+   "style": "phrase",
+   "text": "no se vio ni"
+  },
+  {
+   "id": "c53",
+   "at": 2596,
+   "until": 2658,
+   "style": "phrase",
+   "text": "una sonda de picadura"
+  },
+  {
+   "id": "c54",
+   "at": 2660,
+   "until": 2688,
+   "style": "phrase",
+   "text": "En caballos"
+  },
+  {
+   "id": "c55",
+   "at": 2689,
+   "until": 2725,
+   "style": "phrase",
+   "text": "doscientas treinta y nueve"
+  },
+  {
+   "id": "c56",
+   "at": 2726,
+   "until": 2768,
+   "style": "phrase",
+   "text": "en once horas"
+  },
+  {
+   "id": "c57",
+   "at": 2769,
+   "until": 2837,
+   "style": "phrase",
+   "text": "Luego probaron cobertores en caballos"
+  },
+  {
+   "id": "c58",
+   "at": 2838,
+   "until": 2922,
+   "style": "phrase",
+   "text": "negros blancos y a rayas"
+  },
+  {
+   "id": "c59",
+   "at": 2924,
+   "until": 2957,
+   "style": "phrase",
+   "text": "El de rayas recibió"
+  },
+  {
+   "id": "c60",
+   "at": 2958,
+   "until": 3034,
+   "style": "phrase",
+   "text": "muchos menos aterrizajes"
+  },
+  {
+   "id": "c61",
+   "at": 3035,
+   "until": 3081,
+   "style": "phrase",
+   "text": "La cabeza descubierta"
+  },
+  {
+   "id": "c62",
+   "at": 3082,
+   "until": 3139,
+   "style": "phrase",
+   "text": "ninguna diferencia"
+  },
+  {
+   "id": "c63",
+   "at": 3140,
+   "until": 3169,
+   "style": "phrase",
+   "text": "Así que las rayas"
+  },
+  {
+   "id": "c64",
+   "at": 3170,
+   "until": 3227,
+   "style": "phrase",
+   "text": "funcionan de cerca"
+  },
+  {
+   "id": "c65",
+   "at": 3229,
+   "until": 3273,
+   "style": "phrase",
+   "text": "Los autores calculan que las"
+  },
+  {
+   "id": "c66",
+   "at": 3274,
+   "until": 3312,
+   "style": "phrase",
+   "text": "moscas solo las distinguen"
+  },
+  {
+   "id": "c67",
+   "at": 3313,
+   "until": 3361,
+   "style": "phrase",
+   "text": "a unos dos metros"
+  },
+  {
+   "id": "c68",
+   "at": 3362,
+   "until": 3434,
+   "style": "phrase",
+   "text": "En Japón pintaron vacas"
+  },
+  {
+   "id": "c69",
+   "at": 3436,
+   "until": 3489,
+   "style": "phrase",
+   "text": "Con rayas blancas y negras"
+  },
+  {
+   "id": "c70",
+   "at": 3490,
+   "until": 3517,
+   "style": "phrase",
+   "text": "tuvieron casi la"
+  },
+  {
+   "id": "c71",
+   "at": 3518,
+   "until": 3574,
+   "style": "phrase",
+   "text": "mitad de moscas"
+  },
+  {
+   "id": "c72",
+   "at": 3576,
+   "until": 3624,
+   "style": "phrase",
+   "text": "Solo con rayas negras"
+  },
+  {
+   "id": "c73",
+   "at": 3625,
+   "until": 3691,
+   "style": "phrase",
+   "text": "lo mismo que sin pintar"
+  },
+  {
+   "id": "c74",
+   "at": 3693,
+   "until": 3749,
+   "style": "phrase",
+   "text": "Low-key muy convincente"
+  },
+  {
+   "id": "c75",
+   "at": 3750,
+   "until": 3788,
+   "style": "phrase",
+   "text": "aunque fueron seis vacas"
+  },
+  {
+   "id": "c76",
+   "at": 3789,
+   "until": 3812,
+   "style": "phrase",
+   "text": "y la pintura se"
+  },
+  {
+   "id": "c77",
+   "at": 3813,
+   "until": 3863,
+   "style": "phrase",
+   "text": "desvanece en días"
+  },
+  {
+   "id": "c78",
+   "at": 3864,
+   "until": 3893,
+   "style": "phrase",
+   "text": "Nadie sabe aún qué"
+  },
+  {
+   "id": "c79",
+   "at": 3894,
+   "until": 3970,
+   "style": "phrase",
+   "text": "ven exactamente las moscas"
+  },
+  {
+   "id": "c80",
+   "at": 3972,
+   "until": 4005,
+   "style": "phrase",
+   "text": "Y una revisión de dos"
+  },
+  {
+   "id": "c81",
+   "at": 4006,
+   "until": 4054,
+   "style": "phrase",
+   "text": "mil veinticinco considera esta"
+  },
+  {
+   "id": "c82",
+   "at": 4055,
+   "until": 4112,
+   "style": "phrase",
+   "text": "hipótesis la mejor respaldada"
+  },
+  {
+   "id": "c83",
+   "at": 4113,
+   "until": 4146,
+   "style": "phrase",
+   "text": "aunque no explica por"
+  },
+  {
+   "id": "c84",
+   "at": 4147,
+   "until": 4195,
+   "style": "phrase",
+   "text": "qué otros herbívoros africanos"
+  },
+  {
+   "id": "c85",
+   "at": 4196,
+   "until": 4243,
+   "style": "phrase",
+   "text": "no tienen rayas"
+  },
+  {
+   "id": "c86",
+   "at": 4244,
+   "until": 4284,
+   "style": "phrase",
+   "text": "Así que quizá las rayas"
+  },
+  {
+   "id": "c87",
+   "at": 4285,
+   "until": 4346,
+   "style": "phrase",
+   "text": "no esconden a la cebra"
+  },
+  {
+   "id": "c88",
+   "at": 4348,
+   "until": 4421,
+   "style": "phrase",
+   "text": "Quizá solo arruinan el aterrizaje"
+  },
+  {
+   "id": "te3_1",
+   "at": 402,
+   "until": 484,
+   "style": "term",
+   "text": "HUELLA"
+  },
+  {
+   "id": "te5_0",
+   "at": 584,
+   "until": 692,
+   "style": "term",
+   "text": "CAMUFLAJE"
+  },
+  {
+   "id": "te5_2",
+   "at": 680,
+   "until": 722,
+   "style": "term",
+   "text": "CALOR"
+  },
+  {
+   "id": "te11_0",
+   "at": 1528,
+   "until": 1600,
+   "style": "term",
+   "text": "TÁBANOS"
+  },
+  {
+   "id": "te13_1",
+   "at": 1713,
+   "until": 1768,
+   "style": "term",
+   "text": "PELO"
+  },
+  {
+   "id": "te16_1",
+   "at": 2099,
+   "until": 2173,
+   "style": "term",
+   "text": "CABALLOS"
+  },
+  {
+   "id": "te22_1",
+   "at": 2792,
+   "until": 2867,
+   "style": "term",
+   "text": "COBERTORES"
+  },
+  {
+   "id": "te27_1",
+   "at": 3394,
+   "until": 3464,
+   "style": "term",
+   "text": "VACAS"
+  },
+  {
+   "id": "te30_0",
+   "at": 3794,
+   "until": 3842,
+   "style": "term",
+   "text": "PINTURA"
+  }
+ ],
+ "events": [
+  {
+   "id": "e3_1",
+   "kind": "term_callout",
+   "at": 402,
+   "term": "HUELLA",
+   "target": "coat"
+  },
+  {
+   "id": "e5_0",
+   "kind": "term_callout",
+   "at": 584,
+   "term": "CAMUFLAJE",
+   "target": "predators"
+  },
+  {
+   "id": "e5_2",
+   "kind": "term_callout",
+   "at": 680,
+   "term": "CALOR",
+   "target": "heat"
+  },
+  {
+   "id": "e6_0",
+   "kind": "highlight",
+   "at": 837,
+   "term": "",
+   "target": "predators"
+  },
+  {
+   "id": "e11_0",
+   "kind": "term_callout",
+   "at": 1528,
+   "term": "TÁBANOS",
+   "target": "landing"
+  },
+  {
+   "id": "e13_1",
+   "kind": "term_callout",
+   "at": 1713,
+   "term": "PELO",
+   "target": "hair"
+  },
+  {
+   "id": "e15_0",
+   "kind": "highlight",
+   "at": 1967,
+   "term": "",
+   "target": "landing"
+  },
+  {
+   "id": "e16_1",
+   "kind": "term_callout",
+   "at": 2099,
+   "term": "CABALLOS",
+   "target": "landing"
+  },
+  {
+   "id": "e17_0",
+   "kind": "highlight",
+   "at": 2184,
+   "term": "",
+   "target": "landing"
+  },
+  {
+   "id": "e22_1",
+   "kind": "term_callout",
+   "at": 2792,
+   "term": "COBERTORES",
+   "target": "coats"
+  },
+  {
+   "id": "e27_1",
+   "kind": "term_callout",
+   "at": 3394,
+   "term": "VACAS",
+   "target": "cows"
+  },
+  {
+   "id": "e29_0",
+   "kind": "highlight",
+   "at": 3593,
+   "term": "",
+   "target": "cows"
+  },
+  {
+   "id": "e30_0",
+   "kind": "term_callout",
+   "at": 3794,
+   "term": "PINTURA",
+   "target": "cows"
+  },
+  {
+   "id": "e31_0",
+   "kind": "highlight",
+   "at": 3890,
+   "term": "",
+   "target": "hair"
+  }
+ ],
+ "stillFrames": [
+  43,
+  167,
+  317,
+  421,
+  515,
+  665,
+  851,
+  1036,
+  1159,
+  1268,
+  1417,
+  1531,
+  1638,
+  1760,
+  1866,
+  1974,
+  2087,
+  2196,
+  2303,
+  2444,
+  2594,
+  2714,
+  2846,
+  2979,
+  3087,
+  3184,
+  3295,
+  3399,
+  3506,
+  3634,
+  3778,
+  3918,
+  4042,
+  4178,
+  4333
+ ],
+ "fluidityRuns": [
+  {
+   "label": "flight into coat",
+   "shot": "w3",
+   "start": 366,
+   "step": 5,
+   "count": 12
+  },
+  {
+   "label": "flight into hair",
+   "shot": "w13",
+   "start": 1685,
+   "step": 5,
+   "count": 12
+  },
+  {
+   "label": "flight into landing",
+   "shot": "w1",
+   "start": 66,
+   "step": 5,
+   "count": 12
+  },
+  {
+   "label": "flight back to savanna",
+   "shot": "w4",
+   "start": 434,
+   "step": 5,
+   "count": 12
+  }
+ ],
+ "sources": [],
+ "note": "Generated from plan.json, words.json and story.json by build_script.py. One continuous world, no cuts; captions are independent 2-5 word phrases."
+}

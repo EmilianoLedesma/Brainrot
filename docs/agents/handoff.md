@@ -1,5 +1,69 @@
 # Handoff — 2026-11-11
 
+## Zebra stripes: calm camera, organic models, researched facts — 2026-11-11
+
+Nothing here is wired into the main Brainrot flow; it lives in `experiments/zebra-lowpoly/` and the recipe section "Alternative grammar".
+
+- User asked for a new topic (not the CPU again): "why do zebras have stripes", with a calmer camera than the pothole film, less tight framing, no elements that
+  obstruct or overlap each other, no needless element motion, and organic low-poly shapes rather than only blocks.
+- Research: 4 WebSearch queries plus Caro 2019, Kojima 2019 and Wikipedia read through the fetch agent. Caro 2014 (Nature Communications) was behind a login
+  redirect: its claims rest on search summaries and are marked so in `reference.json`. 17 paraphrased facts with source ids; the script is grounded on them.
+- Built `director.py` (v3: calm camera cap, fixed angle and height per station, no action overlaps, rare arrows), `Zebra.tsx` (savanna, organic animals with
+  per-vertex stripes, an animated fly, eight stages that enter and leave with their beats, distances 112/88/62), `build_script.py` (45-frame flights) and `verify.py`.
+- Result: 35 beats (nature 7/17/11), 30 actions (20 distinct), 32 holds, 2 push-ins, 1 pull-out, 0 arrows. Render 147.4 s, 1080×1920, 30 fps, 65.0 MB, no audio,
+  0 black frames, 0 identical consecutive frames of 4422.
+- Validation actually run: `tsc --noEmit`, 22 test stills before the renders (fixed zig-zag stripes, cropped stages, tiny hero, stage pile-up), three full renders
+  (timestamps checked), `verify.py`, 37 dense stills and four 6 fps runs inspected by hand. Not run: the repository tests, any live Brainrot job; nobody has watched
+  the video in motion. The CPU video was not touched, as asked.
+- Remaining defects (README): flights between far stages cross empty grass, the director used only `mid` height and mostly the right angle, the hair patch and the cow
+  read weakly, many beats are under 4 s.
+- Integration into H2 is still not started; this film adds evidence that the director rules can be made topic-independent, but the stages, animals and actions are
+  still hand-written per topic.
+- Not committed.
+
+## Potholes polish: director v2, softer look, cutaways — 2026-11-11
+
+Nothing here is wired into the main Brainrot flow; it lives in `experiments/pothole-lowpoly/` and the recipe section "Alternative grammar".
+
+- User feedback on the first render: keep low-poly but softer, too little variation (asked whether the director even ran: it did, but it only chose focus
+  and distance), arrows add nothing so they must not always appear, wanted a harder and more specific director demanding more elements and more camera and
+  element motion tied to the script (no decorative spinning), and then asked the director to decide the NATURE of each scene (detail explanations as close
+  cutaways that open objects to explain parts and how they work).
+- Built `director.py` (v2): per beat a nature (context/exhibit/cutaway), a shot (distance, azimuth, height, move) and events (`action` locked to cue words,
+  `highlight`, `term_callout`, rare `arrow`), with code rules (cutaway count, actions per beat length, camera variety, drift cap, arrow cap, hold cap, first
+  and last beat). `build_script.py` now writes `waypoints` with shot and nature, plus `actions`. `Pothole.tsx` rewritten: rounded boxes, soft light, camera
+  poses and moves, action-driven exhibits (nothing loops), cutaway interiors. First director's plan and script kept as `*-v1-director1.json`.
+- Result: 37 beats, nature 5/17/15, 31 actions (23 distinct), all 9 camera moves, 0 arrows. Render 136.2 s, 1080×1920, 30 fps, 90.8 MB, no audio, 0 black
+  frames, 0 identical consecutive frames of 4086.
+- Validation actually run: `tsc --noEmit`, 12 test stills (fixed a washed-out image, floating cracks in cutaways, z-fighting), one full render (timestamp
+  checked), `verify.py`, 37 dense stills and four 6 fps runs inspected by hand. Not run: the repository tests, any live Brainrot job; nobody has watched the video
+  in motion. The CPU video was not re-rendered with the softer look or director v2.
+- Remaining defects (README): the patched street shows only for the last ~2 s, tight cutaways crop the exhibit, some actions are subtle.
+- Integration: still not started; see the notes in the section below. Director v2's rules would live in code that validates a model-produced film spec.
+- Not committed.
+
+## Potholes, researched facts in the continuous world — 2026-11-11
+
+Nothing here is wired into the main Brainrot flow; it lives in `experiments/pothole-lowpoly/`.
+
+- The user asked whether the script is researched; it is not in the normal flow (model knowledge only; `research.py` is an optional Wikidata reference
+  picked in the dashboard). They asked for real research on a new topic, "how potholes form", with a director and the continuous style, one scene
+  with a car, roads, houses and surroundings, and said that if the result is convincing and visually consistent they want this flow integrated into H2.
+- Built: research (3 WebSearch queries, two pages read in full, 17 paraphrased facts with source ids in `reference.json`), script from those facts
+  (332 words), timing (135.71 s), a topic wrapper over the CPU planner (`HERO` constant added there), `build_script.py`, `Pothole.tsx` (a town, a
+  swerving car, 8 cutaway exhibits) and `verify.py`. Render: 136.2 s, 1080×1920, 30 fps, 64.8 MB, no audio, 0 black frames, 0 identical consecutive
+  frames of 4086.
+- Validation actually run: `tsc --noEmit`, 13 test stills before the render (two defects fixed), one full render (timestamp checked), `verify.py`, 37
+  dense stills, four 6 fps runs and three late frames inspected by hand. Not run: the repository tests, any live Brainrot job, and nobody has watched the
+  video in motion.
+- Remaining defects (details in the experiment README): the final beat is crowded and the patched street is low contrast, the car is seen mostly in the
+  hook, no moment where the car hits the pothole (the writer omitted it).
+- Integration, not started: the pieces that are manual today are (1) research, which needs a tool-enabled stage because `llm.py` runs with tools and MCP
+  disabled; (2) the world: stations, exhibits and the town were written by hand per topic, so an automated flow needs either a reusable library of
+  exhibit primitives that the director composes, or a model-written scene per topic; (3) per-topic planner vocabulary, which would become a model-produced
+  spec validated in code; (4) retries and the job lease around a 6-8 minute Remotion render, which `brainrot/motion.py` already handles for the card mode.
+- Not committed.
+
 ## CPU low-poly, one continuous world — 2026-11-11
 
 Nothing here is wired into the main Brainrot flow; it lives in `experiments/cpu-lowpoly/` and `docs/motion-graphics-recipe-lowpoly.md`.

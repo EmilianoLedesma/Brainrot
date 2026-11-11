@@ -1,0 +1,1327 @@
+{
+ "duration": 136.21,
+ "voice": "es-MX-JorgeNeural",
+ "rate": "+0%",
+ "provider": "claude-code",
+ "model_env": null,
+ "scenes": [
+  {
+   "start": 0.0,
+   "end": 2.81,
+   "text": "El bache nace bajo el asfalto",
+   "notes": [],
+   "index": 0,
+   "model": {
+    "focus": "road",
+    "dist": "wide",
+    "show": "La calle con el coche que esquiva el bache, las casas y los árboles.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "bache",
+      "term": "bache",
+      "target": "road"
+     },
+     {
+      "kind": "highlight",
+      "cue": "asfalto",
+      "term": "",
+      "target": "road"
+     }
+    ],
+    "why": "Presenta el bache y nombra el asfalto."
+   },
+   "focus": "road",
+   "dist": "wide",
+   "show": "La calle con el coche que esquiva el bache, las casas y los árboles.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "bache",
+     "at": 0.31,
+     "target": "pothole",
+     "term": "BACHE"
+    },
+    {
+     "kind": "highlight",
+     "cue": "asfalto",
+     "at": 1.3,
+     "target": "road"
+    }
+   ]
+  },
+  {
+   "start": 2.81,
+   "end": 6.81,
+   "text": "Ese hoyo que acabas de esquivar no empezó en la superficie Empezó",
+   "notes": [],
+   "index": 1,
+   "model": {
+    "focus": "road",
+    "dist": "medium",
+    "show": "El coche pasa junto al hoyo y lo esquiva.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "hoyo",
+      "term": "",
+      "target": "road"
+     }
+    ],
+    "why": "Señala el hoyo esquivado."
+   },
+   "focus": "road",
+   "dist": "medium",
+   "show": "El coche pasa junto al hoyo y lo esquiva.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "hoyo",
+     "at": 3.12,
+     "target": "road"
+    }
+   ]
+  },
+  {
+   "start": 6.81,
+   "end": 12.41,
+   "text": "Empezó abajo donde nadie mira Una carretera de asfalto es un sándwich",
+   "notes": [],
+   "index": 2,
+   "model": {
+    "focus": "layers",
+    "dist": "medium",
+    "show": "El corte de carretera aparece como un sándwich de capas.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "asfalto",
+      "term": "asfalto",
+      "target": "layers"
+     }
+    ],
+    "why": "Introduce el asfalto."
+   },
+   "focus": "layers",
+   "dist": "medium",
+   "show": "El corte de carretera aparece como un sándwich de capas.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "asfalto",
+     "at": 10.2,
+     "target": "layers",
+     "term": "ASFALTO"
+    }
+   ]
+  },
+  {
+   "start": 12.41,
+   "end": 18.58,
+   "text": "Arriba el concreto asfáltico Debajo una base de roca angulosa",
+   "notes": [],
+   "index": 3,
+   "model": {
+    "focus": "layers",
+    "dist": "close",
+    "show": "La capa negra de asfalto arriba y la base de roca angulosa debajo.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "asfáltico",
+      "term": "",
+      "target": "layers"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "base",
+      "term": "base",
+      "target": "layers"
+     }
+    ],
+    "why": "Nombra asfalto y base."
+   },
+   "focus": "layers",
+   "dist": "close",
+   "show": "La capa negra de asfalto arriba y la base de roca angulosa debajo.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "asfáltico",
+     "at": 13.83,
+     "target": "layers"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "base",
+     "at": 16.36,
+     "target": "layers",
+     "term": "BASE"
+    }
+   ]
+  },
+  {
+   "start": 18.58,
+   "end": 22.75,
+   "text": "Y más abajo el suelo natural que se llama subrasante",
+   "notes": [],
+   "index": 4,
+   "model": {
+    "focus": "layers",
+    "dist": "medium",
+    "show": "Más abajo se resalta el suelo natural bajo la base.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "suelo",
+      "term": "",
+      "target": "layers"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "subrasante",
+      "term": "subrasante",
+      "target": "layers"
+     }
+    ],
+    "why": "Introduce la subrasante."
+   },
+   "focus": "layers",
+   "dist": "medium",
+   "show": "Más abajo se resalta el suelo natural bajo la base.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "suelo",
+     "at": 19.8,
+     "target": "layers"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "subrasante",
+     "at": 21.45,
+     "target": "layers",
+     "term": "SUBRASANTE"
+    }
+   ]
+  },
+  {
+   "start": 22.75,
+   "end": 27.42,
+   "text": "Tráfico sol lluvia y frío desgastan esa capa de arriba",
+   "notes": [
+    "force_arrows on 'Tráfico' has no flow or motion word; downgraded to highlight(layers)"
+   ],
+   "index": 5,
+   "model": {
+    "focus": "layers",
+    "dist": "wide",
+    "show": "El tráfico y el clima desgastan la capa superior.",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "Tráfico",
+      "term": "",
+      "target": "layers"
+     },
+     {
+      "kind": "highlight",
+      "cue": "capa",
+      "term": "",
+      "target": "layers"
+     }
+    ],
+    "why": "El tráfico es una carga real sobre la capa."
+   },
+   "focus": "layers",
+   "dist": "wide",
+   "show": "El tráfico y el clima desgastan la capa superior.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "Tráfico",
+     "at": 22.75,
+     "target": "layers"
+    },
+    {
+     "kind": "highlight",
+     "cue": "capa",
+     "at": 25.7,
+     "target": "layers"
+    }
+   ]
+  },
+  {
+   "start": 27.42,
+   "end": 30.33,
+   "text": "Lo primero que aparece son grietas",
+   "notes": [],
+   "index": 6,
+   "model": {
+    "focus": "cracks",
+    "dist": "medium",
+    "show": "Vista desde arriba, aparecen grietas en la superficie.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "grietas",
+      "term": "grietas",
+      "target": "cracks"
+     }
+    ],
+    "why": "Introduce las grietas."
+   },
+   "focus": "cracks",
+   "dist": "medium",
+   "show": "Vista desde arriba, aparecen grietas en la superficie.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "grietas",
+     "at": 28.84,
+     "target": "cracks",
+     "term": "GRIETAS"
+    }
+   ]
+  },
+  {
+   "start": 30.33,
+   "end": 34.24,
+   "text": "A veces forman un patrón que se llama piel de cocodrilo",
+   "notes": [],
+   "index": 7,
+   "model": {
+    "focus": "cracks",
+    "dist": "close",
+    "show": "Las grietas forman un patrón de piel de cocodrilo.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "cocodrilo",
+      "term": "cocodrilo",
+      "target": "cracks"
+     }
+    ],
+    "why": "Nombra el patrón cocodrilo."
+   },
+   "focus": "cracks",
+   "dist": "close",
+   "show": "Las grietas forman un patrón de piel de cocodrilo.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "cocodrilo",
+     "at": 32.72,
+     "target": "cracks",
+     "term": "COCODRILO"
+    }
+   ]
+  },
+  {
+   "start": 34.24,
+   "end": 38.43,
+   "text": "Es señal de que el pavimento se flexiona y se fatiga bajo las ruedas",
+   "notes": [
+    "force_arrows on 'ruedas' has no flow or motion word; downgraded to highlight(cracks)"
+   ],
+   "index": 8,
+   "model": {
+    "focus": "cracks",
+    "dist": "medium",
+    "show": "Una rueda flexiona la superficie agrietada una y otra vez.",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "flexiona",
+      "term": "",
+      "target": "cracks"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "ruedas",
+      "term": "",
+      "target": "cracks"
+     }
+    ],
+    "why": "La rueda empuja y flexiona el pavimento."
+   },
+   "focus": "cracks",
+   "dist": "medium",
+   "show": "Una rueda flexiona la superficie agrietada una y otra vez.",
+   "events": [
+    {
+     "kind": "force_arrows",
+     "cue": "flexiona",
+     "at": 35.78,
+     "target": "cracks"
+    },
+    {
+     "kind": "highlight",
+     "cue": "ruedas",
+     "at": 37.45,
+     "target": "cracks"
+    }
+   ]
+  },
+  {
+   "start": 38.43,
+   "end": 44.16,
+   "text": "Y aquí viene el problema Las grietas son el talón de Aquiles del pavimento",
+   "notes": [],
+   "index": 9,
+   "model": {
+    "focus": "cracks",
+    "dist": "close",
+    "show": "Se resaltan las grietas como punto débil del pavimento.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "grietas",
+      "term": "",
+      "target": "cracks"
+     }
+    ],
+    "why": "Nombra las grietas sin movimiento."
+   },
+   "focus": "cracks",
+   "dist": "close",
+   "show": "Se resaltan las grietas como punto débil del pavimento.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "grietas",
+     "at": 40.96,
+     "target": "cracks"
+    }
+   ]
+  },
+  {
+   "start": 44.16,
+   "end": 47.55,
+   "text": "Dejan entrar el agua El agua se junta sobre",
+   "notes": [],
+   "index": 10,
+   "model": {
+    "focus": "water",
+    "dist": "medium",
+    "show": "La lluvia cae en las grietas y el agua se acumula.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "agua",
+      "term": "agua",
+      "target": "water"
+     },
+     {
+      "kind": "highlight",
+      "cue": "junta",
+      "term": "",
+      "target": "water"
+     }
+    ],
+    "why": "Introduce el agua."
+   },
+   "focus": "water",
+   "dist": "medium",
+   "show": "La lluvia cae en las grietas y el agua se acumula.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "agua",
+     "at": 45.12,
+     "target": "water",
+     "term": "AGUA"
+    },
+    {
+     "kind": "highlight",
+     "cue": "junta",
+     "at": 46.88,
+     "target": "water"
+    }
+   ]
+  },
+  {
+   "start": 47.55,
+   "end": 50.78,
+   "text": "la subrasante empapa el suelo y lo ablanda",
+   "notes": [
+    "highlight at 47.65s dropped: collides with another event"
+   ],
+   "index": 11,
+   "model": {
+    "focus": "water",
+    "dist": "close",
+    "show": "El agua empapa la subrasante y la ablanda.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "subrasante",
+      "term": "",
+      "target": "water"
+     },
+     {
+      "kind": "highlight",
+      "cue": "ablanda",
+      "term": "",
+      "target": "water"
+     }
+    ],
+    "why": "Nombra la subrasante y el suelo blando."
+   },
+   "focus": "water",
+   "dist": "close",
+   "show": "El agua empapa la subrasante y la ablanda.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "ablanda",
+     "at": 49.78,
+     "target": "water"
+    }
+   ]
+  },
+  {
+   "start": 50.78,
+   "end": 53.45,
+   "text": "Ahora imagina un punto blando",
+   "notes": [],
+   "index": 12,
+   "model": {
+    "focus": "traffic",
+    "dist": "wide",
+    "show": "Aparece el bloque con un punto blando bajo el asfalto.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "punto",
+      "term": "",
+      "target": "traffic"
+     }
+    ],
+    "why": "Señala el punto blando."
+   },
+   "focus": "traffic",
+   "dist": "wide",
+   "show": "Aparece el bloque con un punto blando bajo el asfalto.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "punto",
+     "at": 51.78,
+     "target": "traffic"
+    }
+   ]
+  },
+  {
+   "start": 53.45,
+   "end": 58.07,
+   "text": "El asfalto es flexible no reparte la carga en una zona amplia",
+   "notes": [
+    "force_arrows on 'carga' has no flow or motion word; downgraded to highlight(traffic)"
+   ],
+   "index": 13,
+   "model": {
+    "focus": "traffic",
+    "dist": "medium",
+    "show": "Una rueda presiona el asfalto flexible sobre el punto blando.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "asfalto",
+      "term": "",
+      "target": "traffic"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "carga",
+      "term": "",
+      "target": "traffic"
+     }
+    ],
+    "why": "La carga se concentra en un punto."
+   },
+   "focus": "traffic",
+   "dist": "medium",
+   "show": "Una rueda presiona el asfalto flexible sobre el punto blando.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "asfalto",
+     "at": 53.65,
+     "target": "traffic"
+    },
+    {
+     "kind": "highlight",
+     "cue": "carga",
+     "at": 55.8,
+     "target": "traffic"
+    }
+   ]
+  },
+  {
+   "start": 58.07,
+   "end": 63.56,
+   "text": "Cada llanta que pasa empuja el agua hacia afuera y esa agua arrastra partículas de suelo",
+   "notes": [
+    "force_arrows on 'llanta' has no flow or motion word; downgraded to highlight(traffic)"
+   ],
+   "index": 14,
+   "model": {
+    "focus": "traffic",
+    "dist": "close",
+    "show": "La llanta empuja el agua y el suelo sale con ella.",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "llanta",
+      "term": "",
+      "target": "traffic"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "arrastra",
+      "term": "",
+      "target": "traffic"
+     }
+    ],
+    "why": "Empuje de la llanta y arrastre de suelo."
+   },
+   "focus": "traffic",
+   "dist": "close",
+   "show": "La llanta empuja el agua y el suelo sale con ella.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "llanta",
+     "at": 58.33,
+     "target": "traffic"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "arrastra",
+     "at": 61.45,
+     "target": "traffic"
+    }
+   ]
+  },
+  {
+   "start": 63.56,
+   "end": 67.12,
+   "text": "Cada poquito de suelo que se va deja más espacio",
+   "notes": [],
+   "index": 15,
+   "model": {
+    "focus": "traffic",
+    "dist": "medium",
+    "show": "El vacío bajo el asfalto crece con cada partícula perdida.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "espacio",
+      "term": "",
+      "target": "traffic"
+     }
+    ],
+    "why": "Muestra el espacio que crece."
+   },
+   "focus": "traffic",
+   "dist": "medium",
+   "show": "El vacío bajo el asfalto crece con cada partícula perdida.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "espacio",
+     "at": 65.72,
+     "target": "traffic"
+    }
+   ]
+  },
+  {
+   "start": 67.12,
+   "end": 71.13,
+   "text": "Entonces el tráfico bombea más agua dentro y fuera",
+   "notes": [
+    "highlight at 68.97s dropped: collides with another event"
+   ],
+   "index": 16,
+   "model": {
+    "focus": "traffic",
+    "dist": "close",
+    "show": "Cada rueda bombea agua hacia dentro y fuera del vacío.",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "bombea",
+      "term": "",
+      "target": "traffic"
+     },
+     {
+      "kind": "highlight",
+      "cue": "agua",
+      "term": "",
+      "target": "traffic"
+     }
+    ],
+    "why": "Bombeo de agua por el tráfico."
+   },
+   "focus": "traffic",
+   "dist": "close",
+   "show": "Cada rueda bombea agua hacia dentro y fuera del vacío.",
+   "events": [
+    {
+     "kind": "force_arrows",
+     "cue": "bombea",
+     "at": 68.31,
+     "target": "traffic"
+    }
+   ]
+  },
+  {
+   "start": 71.13,
+   "end": 76.01,
+   "text": "Eso erosiona más suelo El pavimento pierde apoyo y se rompe",
+   "notes": [
+    "force_arrows on 'erosiona' has no flow or motion word; downgraded to highlight(traffic)"
+   ],
+   "index": 17,
+   "model": {
+    "focus": "traffic",
+    "dist": "medium",
+    "show": "Se erosiona más suelo y el pavimento pierde apoyo.",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "erosiona",
+      "term": "",
+      "target": "traffic"
+     },
+     {
+      "kind": "highlight",
+      "cue": "pierde",
+      "term": "",
+      "target": "traffic"
+     }
+    ],
+    "why": "Erosión real y pérdida de apoyo."
+   },
+   "focus": "traffic",
+   "dist": "medium",
+   "show": "Se erosiona más suelo y el pavimento pierde apoyo.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "erosiona",
+     "at": 71.41,
+     "target": "traffic"
+    },
+    {
+     "kind": "highlight",
+     "cue": "pierde",
+     "at": 74.08,
+     "target": "traffic"
+    }
+   ]
+  },
+  {
+   "start": 76.01,
+   "end": 80.05,
+   "text": "Los trozos de asfalto que quedan entre las grietas se aflojan",
+   "notes": [],
+   "index": 18,
+   "model": {
+    "focus": "pothole",
+    "dist": "medium",
+    "show": "Los trozos de asfalto entre las grietas se aflojan.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "asfalto",
+      "term": "",
+      "target": "pothole"
+     },
+     {
+      "kind": "highlight",
+      "cue": "grietas",
+      "term": "",
+      "target": "cracks"
+     }
+    ],
+    "why": "Nombra asfalto y grietas."
+   },
+   "focus": "pothole",
+   "dist": "medium",
+   "show": "Los trozos de asfalto entre las grietas se aflojan.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "asfalto",
+     "at": 76.67,
+     "target": "pothole"
+    },
+    {
+     "kind": "highlight",
+     "cue": "grietas",
+     "at": 78.13,
+     "target": "cracks"
+    }
+   ]
+  },
+  {
+   "start": 80.05,
+   "end": 85.12,
+   "text": "Las ruedas los arrancan o los expulsan Ahí nace el bache",
+   "notes": [
+    "force_arrows on 'ruedas' has no flow or motion word; downgraded to highlight(pothole)"
+   ],
+   "index": 19,
+   "model": {
+    "focus": "pothole",
+    "dist": "close",
+    "show": "Las ruedas arrancan los trozos y dejan un hoyo.",
+    "events": [
+     {
+      "kind": "force_arrows",
+      "cue": "ruedas",
+      "term": "",
+      "target": "pothole"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "expulsan",
+      "term": "",
+      "target": "pothole"
+     },
+     {
+      "kind": "highlight",
+      "cue": "bache",
+      "term": "",
+      "target": "pothole"
+     }
+    ],
+    "why": "Los trozos salen por la fuerza de las ruedas."
+   },
+   "focus": "pothole",
+   "dist": "close",
+   "show": "Las ruedas arrancan los trozos y dejan un hoyo.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "ruedas",
+     "at": 80.31,
+     "target": "pothole"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "expulsan",
+     "at": 81.56,
+     "target": "pothole"
+    },
+    {
+     "kind": "highlight",
+     "cue": "bache",
+     "at": 83.84,
+     "target": "pothole"
+    }
+   ]
+  },
+  {
+   "start": 85.12,
+   "end": 90.83,
+   "text": "Puede medir varios pies de ancho pero suele tener solo unas pocas pulgadas de profundidad",
+   "notes": [],
+   "index": 20,
+   "model": {
+    "focus": "pothole",
+    "dist": "wide",
+    "show": "El bache es ancho pero poco profundo.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "ancho",
+      "term": "",
+      "target": "pothole"
+     },
+     {
+      "kind": "highlight",
+      "cue": "profundidad",
+      "term": "",
+      "target": "pothole"
+     }
+    ],
+    "why": "Resalta sus medidas."
+   },
+   "focus": "pothole",
+   "dist": "wide",
+   "show": "El bache es ancho pero poco profundo.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "ancho",
+     "at": 86.41,
+     "target": "pothole"
+    },
+    {
+     "kind": "highlight",
+     "cue": "profundidad",
+     "at": 89.58,
+     "target": "pothole"
+    }
+   ]
+  },
+  {
+   "start": 90.83,
+   "end": 96.46,
+   "text": "El frío lo empeora El agua se expande con mucha fuerza al congelarse",
+   "notes": [],
+   "index": 21,
+   "model": {
+    "focus": "ice",
+    "dist": "medium",
+    "show": "El agua entre asfalto y base se congela y se expande.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "frío",
+      "term": "",
+      "target": "ice"
+     },
+     {
+      "kind": "force_arrows",
+      "cue": "expande",
+      "term": "",
+      "target": "ice"
+     }
+    ],
+    "why": "El hielo se expande con fuerza."
+   },
+   "focus": "ice",
+   "dist": "medium",
+   "show": "El agua entre asfalto y base se congela y se expande.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "frío",
+     "at": 91.05,
+     "target": "ice"
+    },
+    {
+     "kind": "force_arrows",
+     "cue": "expande",
+     "at": 93.39,
+     "target": "ice"
+    }
+   ]
+  },
+  {
+   "start": 96.46,
+   "end": 101.51,
+   "text": "Forma lentes de hielo bajo el pavimento y al derretirse dejan huecos",
+   "notes": [],
+   "index": 22,
+   "model": {
+    "focus": "ice",
+    "dist": "close",
+    "show": "Crecen lentes de hielo y al derretirse dejan huecos.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "lentes",
+      "term": "lentes",
+      "target": "ice"
+     },
+     {
+      "kind": "highlight",
+      "cue": "huecos",
+      "term": "",
+      "target": "ice"
+     }
+    ],
+    "why": "Introduce los lentes y los huecos."
+   },
+   "focus": "ice",
+   "dist": "close",
+   "show": "Crecen lentes de hielo y al derretirse dejan huecos.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "lentes",
+     "at": 96.83,
+     "target": "ice",
+     "term": "LENTES"
+    },
+    {
+     "kind": "highlight",
+     "cue": "huecos",
+     "at": 100.12,
+     "target": "ice"
+    }
+   ]
+  },
+  {
+   "start": 101.51,
+   "end": 105.48,
+   "text": "El suelo de abajo sigue congelado y atrapa esa agua",
+   "notes": [],
+   "index": 23,
+   "model": {
+    "focus": "ice",
+    "dist": "medium",
+    "show": "El suelo congelado atrapa el agua derretida.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "suelo",
+      "term": "",
+      "target": "ice"
+     },
+     {
+      "kind": "highlight",
+      "cue": "agua",
+      "term": "",
+      "target": "ice"
+     }
+    ],
+    "why": "Nombra suelo y agua."
+   },
+   "focus": "ice",
+   "dist": "medium",
+   "show": "El suelo congelado atrapa el agua derretida.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "suelo",
+     "at": 101.71,
+     "target": "ice"
+    },
+    {
+     "kind": "highlight",
+     "cue": "agua",
+     "at": 104.3,
+     "target": "ice"
+    }
+   ]
+  },
+  {
+   "start": 105.48,
+   "end": 110.67,
+   "text": "Por eso hay más baches en primavera Pero el hielo no es la causa raíz",
+   "notes": [],
+   "index": 24,
+   "model": {
+    "focus": "ice",
+    "dist": "wide",
+    "show": "El ciclo de hielo se repite en primavera, pero no es la causa raíz.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "baches",
+      "term": "",
+      "target": "pothole"
+     },
+     {
+      "kind": "highlight",
+      "cue": "hielo",
+      "term": "",
+      "target": "ice"
+     }
+    ],
+    "why": "Nombra baches y hielo."
+   },
+   "focus": "ice",
+   "dist": "wide",
+   "show": "El ciclo de hielo se repite en primavera, pero no es la causa raíz.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "baches",
+     "at": 106.25,
+     "target": "pothole"
+    },
+    {
+     "kind": "highlight",
+     "cue": "hielo",
+     "at": 108.12,
+     "target": "ice"
+    }
+   ]
+  },
+  {
+   "start": 110.67,
+   "end": 116.02,
+   "text": "También hay baches donde nunca se congela con mal subsuelo y mucha agua subterránea",
+   "notes": [],
+   "index": 25,
+   "model": {
+    "focus": "water",
+    "dist": "wide",
+    "show": "El agua se acumula sobre un subsuelo malo, sin hielo.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "baches",
+      "term": "",
+      "target": "pothole"
+     },
+     {
+      "kind": "highlight",
+      "cue": "subsuelo",
+      "term": "",
+      "target": "water"
+     },
+     {
+      "kind": "highlight",
+      "cue": "agua",
+      "term": "",
+      "target": "water"
+     }
+    ],
+    "why": "Otra causa: subsuelo y agua."
+   },
+   "focus": "water",
+   "dist": "wide",
+   "show": "El agua se acumula sobre un subsuelo malo, sin hielo.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "baches",
+     "at": 111.22,
+     "target": "pothole"
+    },
+    {
+     "kind": "highlight",
+     "cue": "subsuelo",
+     "at": 113.42,
+     "target": "water"
+    },
+    {
+     "kind": "highlight",
+     "cue": "agua",
+     "at": 114.55,
+     "target": "water"
+    }
+   ]
+  },
+  {
+   "start": 116.02,
+   "end": 118.71,
+   "text": "Y los parches son como una venda",
+   "notes": [],
+   "index": 26,
+   "model": {
+    "focus": "repair",
+    "dist": "medium",
+    "show": "Un parche cae en el hoyo y se compacta como una venda.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "parches",
+      "term": "parche",
+      "target": "repair"
+     }
+    ],
+    "why": "Introduce el parche."
+   },
+   "focus": "repair",
+   "dist": "medium",
+   "show": "Un parche cae en el hoyo y se compacta como una venda.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "parches",
+     "at": 116.37,
+     "target": "repair",
+     "term": "PARCHE"
+    }
+   ]
+  },
+  {
+   "start": 118.71,
+   "end": 123.93,
+   "text": "Si no arreglas el agua ni el suelo de abajo el bache suele volver al mismo lugar",
+   "notes": [],
+   "index": 27,
+   "model": {
+    "focus": "repair",
+    "dist": "close",
+    "show": "Bajo el parche el agua y el suelo siguen igual.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "agua",
+      "term": "",
+      "target": "repair"
+     },
+     {
+      "kind": "highlight",
+      "cue": "bache",
+      "term": "",
+      "target": "pothole"
+     }
+    ],
+    "why": "Nombra agua y bache."
+   },
+   "focus": "repair",
+   "dist": "close",
+   "show": "Bajo el parche el agua y el suelo siguen igual.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "agua",
+     "at": 119.8,
+     "target": "repair"
+    },
+    {
+     "kind": "highlight",
+     "cue": "bache",
+     "at": 121.51,
+     "target": "pothole"
+    }
+   ]
+  },
+  {
+   "start": 123.93,
+   "end": 129.67,
+   "text": "Prevenir sale mejor sellar grietas drenar bien y poner pavimento más grueso",
+   "notes": [],
+   "index": 28,
+   "model": {
+    "focus": "prevent",
+    "dist": "medium",
+    "show": "Se sellan las grietas, un drenaje saca el agua y el pavimento es más grueso.",
+    "events": [
+     {
+      "kind": "term_callout",
+      "cue": "sellar",
+      "term": "sellar",
+      "target": "prevent"
+     },
+     {
+      "kind": "highlight",
+      "cue": "drenar",
+      "term": "",
+      "target": "prevent"
+     },
+     {
+      "kind": "highlight",
+      "cue": "grueso",
+      "term": "",
+      "target": "prevent"
+     }
+    ],
+    "why": "Medidas de prevención."
+   },
+   "focus": "prevent",
+   "dist": "medium",
+   "show": "Se sellan las grietas, un drenaje saca el agua y el pavimento es más grueso.",
+   "events": [
+    {
+     "kind": "term_callout",
+     "cue": "sellar",
+     "at": 125.3,
+     "target": "prevent",
+     "term": "SELLAR"
+    },
+    {
+     "kind": "highlight",
+     "cue": "drenar",
+     "at": 126.47,
+     "target": "prevent"
+    },
+    {
+     "kind": "highlight",
+     "cue": "grueso",
+     "at": 128.37,
+     "target": "prevent"
+    }
+   ]
+  },
+  {
+   "start": 129.67,
+   "end": 133.19,
+   "text": "Aunque eso cuesta muchísimo Así que un bache es",
+   "notes": [],
+   "index": 29,
+   "model": {
+    "focus": "prevent",
+    "dist": "close",
+    "show": "Las medidas de prevención quedan juntas en el bloque.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "cuesta",
+      "term": "",
+      "target": "prevent"
+     },
+     {
+      "kind": "highlight",
+      "cue": "bache",
+      "term": "",
+      "target": "road"
+     }
+    ],
+    "why": "Cierra con el costo y nombra el bache."
+   },
+   "focus": "prevent",
+   "dist": "close",
+   "show": "Las medidas de prevención quedan juntas en el bloque.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "cuesta",
+     "at": 130.26,
+     "target": "prevent"
+    },
+    {
+     "kind": "highlight",
+     "cue": "bache",
+     "at": 132.34,
+     "target": "road"
+    }
+   ]
+  },
+  {
+   "start": 133.19,
+   "end": 136.21,
+   "text": "low-key una grieta que dejó pasar el agua",
+   "notes": [],
+   "index": 30,
+   "model": {
+    "focus": "road",
+    "dist": "wide",
+    "show": "La calle parchada con el coche pasando tranquilo.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "grieta",
+      "term": "",
+      "target": "cracks"
+     },
+     {
+      "kind": "highlight",
+      "cue": "agua",
+      "term": "",
+      "target": "water"
+     }
+    ],
+    "why": "Resume: grieta y agua."
+   },
+   "focus": "road",
+   "dist": "wide",
+   "show": "La calle parchada con el coche pasando tranquilo.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "grieta",
+     "at": 134.04,
+     "target": "cracks"
+    },
+    {
+     "kind": "highlight",
+     "cue": "agua",
+     "at": 135.37,
+     "target": "water"
+    }
+   ]
+  }
+ ]
+}
