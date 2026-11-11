@@ -480,6 +480,12 @@ film's 34 units filled it. Actions get a fixed duration and may not overlap on a
 tapered limbs, cones and spheres with vertex colours (stripes painted per vertex) read as animals, and an animal's legs, a fly's wings and a lion's walk should move only
 while the action that needs them runs.
 
+**Subject-first direction (birds test).** Before planning scenes the director should identify the SUBJECT of the film, the one character the story is about
+(`experiments/birds-lowpoly/director.py` asks for `subject` and its `why` in the same answer and saves it). The subject then gets more of everything: the most detailed model, the
+only saturated colour in an otherwise pastel scene, presence on every stage and in the hero, and its own vocabulary of actions (looks, tilts its head, grips the wire, ruffles its
+feathers, lands, takes off) locked to narration words, at least one in every beat of 3 s or more. Those actions must be tied to meaning, never idle, never overlapping each other. In the
+birds film 28 of 29 beats carried a subject action; the weakness was variety (five distinct actions, `look_around` in most beats), so a cap on repeats is the next rule.
+
 Not yet settled: the CPU test is the first render of this mode (see `experiments/cpu-lowpoly/README.md` for what was and was not
 checked). Fast flights across the whole bench can read as a blur; `close` on a station wider than the frame shows only part of it.
 

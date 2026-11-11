@@ -1,0 +1,260 @@
+{
+ "id": "birds",
+ "title": "Electricity and wires (power-line stages)",
+ "summary": "Explainers about electricity, voltage, circuits, power lines, birds or animals on wires, safety around electrical equipment.",
+ "world": "a country road with a line of poles and wires (the hero) and, in front of it, one round grassy stage per idea, each with a short pole and wires",
+ "hero": "line",
+ "stations": [
+  "line",
+  "difference",
+  "feet",
+  "path",
+  "circuit",
+  "bridge",
+  "spacing",
+  "pole",
+  "fixes",
+  "lineman"
+ ],
+ "station_notes": {
+  "line": "the hero: the road, the poles and the live wires; always context",
+  "difference": "two wires at different voltages",
+  "feet": "the bird's two feet on one wire",
+  "path": "the wire as an easy road for the current, the body as a hard one",
+  "circuit": "a loop that is open or closed",
+  "bridge": "a big bird touching two wires",
+  "spacing": "wingspan against the spacing of the wires",
+  "pole": "a pole where birds land, take off or perch in numbers",
+  "fixes": "covers, a longer crossarm, perch guards",
+  "lineman": "a lineman working on a live wire"
+ },
+ "nouns": {
+  "cable": "line",
+  "cables": "line",
+  "voltaje": "difference",
+  "voltajes": "difference",
+  "diferencia": "difference",
+  "potencial": "difference",
+  "pies": "feet",
+  "pie": "feet",
+  "patas": "path",
+  "resistencia": "path",
+  "circuito": "circuit",
+  "corriente": "circuit",
+  "alas": "bridge",
+  "tierra": "bridge",
+  "electrocuta": "bridge",
+  "puente": "bridge",
+  "águilas": "spacing",
+  "gavilanes": "spacing",
+  "envergadura": "spacing",
+  "separan": "spacing",
+  "postes": "pole",
+  "aterriza": "pole",
+  "despega": "pole",
+  "balancear": "pole",
+  "aislante": "fixes",
+  "protectores": "fixes",
+  "percha": "fixes",
+  "cubren": "fixes",
+  "linieros": "lineman",
+  "varita": "lineman"
+ },
+ "glossary": [
+  "voltaje",
+  "diferencia",
+  "circuito",
+  "resistencia",
+  "envergadura",
+  "aislante",
+  "percha",
+  "potencial"
+ ],
+ "force_stems": [
+  "empuj",
+  "estira",
+  "toca",
+  "pasa",
+  "circul",
+  "balance",
+  "aterriz",
+  "despeg",
+  "separ",
+  "cubr",
+  "igual"
+ ],
+ "actions": {
+  "line": {
+   "power_on": [
+    150,
+    "current pulses run along the wire for a moment, so the viewer sees it is live"
+   ],
+   "sway": [
+    110,
+    "the wire sways a little when something lands on it"
+   ]
+  },
+  "difference": {
+   "show_levels": [
+    110,
+    "two wires take two colours: a violet one (higher voltage) and a teal one (lower)"
+   ],
+   "push": [
+    110,
+    "pulses are pushed from the violet wire to the teal one through a gap between them"
+   ]
+  },
+  "feet": {
+   "equal": [
+    90,
+    "two small rings light up at the bird's two feet in the same colour: same voltage"
+   ],
+   "no_push": [
+    110,
+    "pulses run along the wire under the feet and none enters the bird"
+   ]
+  },
+  "path": {
+   "bypass": [
+    130,
+    "pulses flow along the wire, past the legs, instead of through the body"
+   ],
+   "compare": [
+    110,
+    "a short thick road (wire) and a long thin one (body) are drawn side by side"
+   ]
+  },
+  "circuit": {
+   "open": [
+    110,
+    "a loop with a gap: the pulses stop at the gap"
+   ],
+   "close": [
+    110,
+    "a second contact closes the loop and the pulses start to circulate"
+   ]
+  },
+  "bridge": {
+   "eagle_in": [
+    100,
+    "a big bird flies in and perches on the top wire"
+   ],
+   "eagle_reach": [
+    90,
+    "the big bird spreads its wings toward the second wire"
+   ],
+   "flash": [
+    60,
+    "a spark flashes where the wing touches the second wire, and the bird is thrown off"
+   ]
+  },
+  "spacing": {
+   "measure": [
+    80,
+    "a bracket measures the eagle's wingspan across the two wires"
+   ],
+   "wires_apart": [
+    100,
+    "the wires move apart until the bracket can no longer reach both"
+   ]
+  },
+  "pole": {
+   "land_pole": [
+    100,
+    "a large bird comes in to land on the crossarm of a pole, wires close together"
+   ],
+   "flock": [
+    150,
+    "several birds land together, the line sags and sways until the wires touch"
+   ]
+  },
+  "fixes": {
+   "cover": [
+    100,
+    "insulating covers slide over the insulators and exposed parts"
+   ],
+   "space_arm": [
+    90,
+    "the crossarm is extended so the wires are farther apart"
+   ],
+   "perch_guard": [
+    90,
+    "a perch guard rises over the crossarm"
+   ]
+  },
+  "lineman": {
+   "bond": [
+    120,
+    "a lineman touches the wire with a bonding wand and takes the wire's colour"
+   ],
+   "work": [
+    100,
+    "the lineman then works on the wire safely"
+   ]
+  }
+ },
+ "subject": {
+  "candidates": [
+   "bird",
+   "eagle"
+  ],
+  "description": "the small bird perched on the wire, or the big bird that is at risk",
+  "actions": {
+   "look_around": [
+    70,
+    "turns its head left and right, looking at what is being described"
+   ],
+   "tilt": [
+    45,
+    "tilts its head, curious"
+   ],
+   "grip": [
+    60,
+    "its toes tighten around the wire"
+   ],
+   "fluff": [
+    60,
+    "ruffles its feathers once, relaxed"
+   ],
+   "hop": [
+    60,
+    "a short hop along the wire"
+   ],
+   "land": [
+    100,
+    "flies in and lands on the wire"
+   ],
+   "take_off": [
+    90,
+    "flaps its wings and flies off"
+   ]
+  },
+  "defaults": {
+   "line": "fluff",
+   "difference": "look_around",
+   "feet": "grip",
+   "path": "tilt",
+   "circuit": "look_around",
+   "bridge": "look_around",
+   "spacing": "tilt",
+   "pole": "look_around",
+   "fixes": "look_around",
+   "lineman": "tilt"
+  }
+ },
+ "cutaway_stations": [
+  "feet",
+  "path",
+  "circuit",
+  "spacing"
+ ],
+ "min_cutaways": 3,
+ "opening": {
+  "subject_action": "land"
+ },
+ "max_arrows": 2,
+ "hold_cap": 7.0,
+ "beat_limit": 6.5,
+ "max_move_share": 0.3,
+ "term_help": "voltaje, diferencia, circuito, resistencia, envergadura, aislante, percha, potencial (copied from the narration; only terms that appear)"
+}

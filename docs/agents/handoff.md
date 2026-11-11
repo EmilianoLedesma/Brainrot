@@ -1,5 +1,48 @@
 # Handoff — 2026-11-11
 
+## Continuous 3D world edit integrated into the main flow — 2026-11-11
+
+The researcher, the director and the continuous-world recipe from the hand-built films are now runtime features (details: [world mode](../world-mode.md)). The sections below
+describe the experiments and say "not wired"; that was true when they were written and is superseded here.
+
+- Done: `llm.generate(..., web=True, timeout=...)` (research-only browsing through the local CLIs; the API provider is refused); `brainrot/investigate.py` plus `skills/research`
+  (validated facts with caveats feed the writer); `brainrot/world/` (pack manifests for zebra and birds, `catalog`, `beats`, `director` with chunked calls and code-enforced rules,
+  `script`, `render`, plan cache under `out/world-plans/`); `skills/world-direction`; `motion/world/` (shared kit, `WorldVideo`, both packs refactored into `make<Pack>(script)`
+  factories so the script arrives as a prop, `World` composition, three.js dependencies pinned in `motion/package.json` and the lock).
+- Wired: job params `world` and `web_research` (API validation: world excludes motion_graphics and is brainrot-only; `_safe_row`), pipeline stages `direct` and `render`
+  (world skips the background clip, reuses the saved story), research inside the `script` stage, dashboard checkboxes and EN/ES copy, the browser-check payload.
+- Validation actually run: `pytest tests` 484 passed (SQL tests included, none skipped in this run), `scripts.checks.pipeline`, `npm run check --prefix motion`, `npm run build --prefix web`,
+  and one still render per pack from runtime props with synthetic narration and a defaults-only plan (the birds still was inspected: bird, wires, caption render correctly).
+- NOT run: any live model call (research, pack choice or director), a full video render through the pipeline, the Playwright browser check, any live job or upload. The director prompt
+  and the typed answers were exercised only through guidance building and model construction, so the first real run may need prompt or chunking adjustments (the experiments needed about
+  12 minutes of director time unchunked). Nobody has watched a runtime-rendered video.
+- Limits and next work: only two packs (zebra, birds), so most topics get a friendly "no scene pack" stop; the plan cache is per computer; chapters render independently; birds pack
+  still has few distinct subject actions and thin danger stations; no per-stage progress inside the long render; the GL flag may need `BRAINROT_WORLD_GL=swangle` on headless Linux.
+  A new topic family needs a manifest plus a renderer (see world-mode).
+- Not committed.
+
+## Birds on power lines: subject-first director v4 — 2026-11-11
+
+Nothing here is wired into the main Brainrot flow; it lives in `experiments/birds-lowpoly/` and the recipe section "Alternative grammar".
+
+- User asked for another topic to test format consistency ("why can birds perch on power lines without being electrocuted") and, mid-task, that the director must identify the
+  main subject of the video and give it more detail (animations, movement, etc.) so it is the protagonist.
+- Research: 3 WebSearch queries plus Science Focus, ScienceABC (model-extracted) and the US Fish & Wildlife Service page read through the fetch agent. APLIC, the forum threads and vendor
+  pages came only from search summaries and are marked so in `reference.json`; 12 paraphrased facts.
+- Built `director.py` v4: the model must return `subject` (bird or eagle) and `why`; the subject has its own vocabulary of actions locked to words (code requires one per beat of 3 s or
+  more and two from 5.5 s) plus the calm-camera rules of the zebra film; `Birds.tsx`: a detailed bird and eagle from one builder, poses driven by the subject actions, ten stages (countryside
+  hero plus nine stages with poles and wires), potential colours violet and teal, flights 45 frames; `build_script.py` carries `subject` and `subjectActions`.
+- Result: subject bird, 29 beats, 39 subject actions in 28 of 29 beats, 23 station actions (19 distinct), 26 holds, 0 arrows. Render 134.8 s, 1080×1920, 30 fps, 64.5 MB, no audio, 0 black
+  frames, 0 identical consecutive frames of 4045.
+- Validation actually run: `tsc --noEmit`, 11 test stills before the render (fixed a grey breast and an oversized hero bird), one full render (timestamp checked), `verify.py`, 37 dense stills
+  and four 6 fps runs inspected by hand. Not run: the repository tests, any live Brainrot job; nobody has watched the video in motion. The first director call timed out at the default 180 s;
+  it succeeded with `BRAINROT_LLM_TIMEOUT_SECONDS=900` set for the process only (no `.env` change), in about 12 minutes.
+- Remaining defects (README): only five distinct subject actions (`look_around` dominates, `hop` and `take_off` unused), the danger stations are less dramatic than the narration, small
+  lineman and covers, a one-word caption.
+- Integration into H2 is still not started. This film shows the director rules (nature, calm camera, subject, actions with durations) are topic-independent in code, while stages, animals and
+  actions are still hand-written per topic, and the director call is slow (about 12 minutes) so a production flow would need chunked calls.
+- Not committed.
+
 ## Zebra stripes: calm camera, organic models, researched facts — 2026-11-11
 
 Nothing here is wired into the main Brainrot flow; it lives in `experiments/zebra-lowpoly/` and the recipe section "Alternative grammar".

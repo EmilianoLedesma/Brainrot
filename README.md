@@ -37,6 +37,7 @@ range. Generated scripts aim for **280–380 words** at a natural pace.
 | **Control the tone** | Move through Grounded, Playful, Chaotic, Unhinged, and Max brainrot. Factual topics stay factual; explicit fiction stays inside its premise. |
 | **Create captioned videos** | Combine natural narration, timed captions, and rotating background clips. |
 | **Try motion graphics** | Choose an experimental Remotion edit for generated stories, with keyword animations and narration-based visual devices. |
+| **Try the 3D world** | Experimental: one directed, cut-free 3D scene per chapter with its own camera and actions locked to the narration, optionally after researching the web. See [world mode](docs/world-mode.md). |
 | **Follow every job** | Inspect stages, timing, errors, saved narration, and finished videos. Retry from saved progress. |
 | **Control YouTube publishing** | Choose review, automatic publishing, or off, with a selected channel and privacy settings. |
 | **Review performance** | Explore available YouTube metrics and retention reports alongside the video. Import retention CSVs and timed subtitles for local analysis. |

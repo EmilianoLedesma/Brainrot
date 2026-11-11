@@ -236,6 +236,8 @@ class JobIn(BaseModel):
     brainrot_level: int | None = Field(default=None, ge=0, le=100, strict=True)
     reference_entity: str | None = Field(default=None, pattern=r"^Q[1-9]\d{0,11}$")
     motion_graphics: bool = False
+    world: bool = False
+    web_research: bool = False
     youtube_publishing: JobYouTubeIn | None = None
 
     @model_validator(mode="after")
@@ -248,13 +250,15 @@ class JobIn(BaseModel):
             raise ValueError("repurpose needs youtube_url")
         if self.kind == "brainrot" and not self.topic:
             raise ValueError("brainrot needs topic")
+        if self.motion_graphics and self.world:
+            raise ValueError("Choose the motion-graphics edit or the 3D world, not both")
         if self.kind == "repurpose":
             if self.reference_entity is not None:
                 raise ValueError("References apply to generated stories only")
             if self.brainrot_level is not None:
                 raise ValueError("brainrot_level applies to generated scripts only")
-            if self.motion_graphics:
-                raise ValueError("motion_graphics applies to generated stories only")
+            if self.motion_graphics or self.world or self.web_research:
+                raise ValueError("motion_graphics, world and web_research apply to generated stories only")
             parsed = urlsplit(self.youtube_url)
             hosts = {"youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com", "youtu.be", "www.youtu.be"}
             video_path = (parsed.hostname in {"youtu.be", "www.youtu.be"} and bool(parsed.path.strip("/"))) or (
@@ -341,7 +345,7 @@ def _job_view(row: dict) -> dict:
         "id", "kind", "status", "attempts", "max_attempts", "run_after", "error_kind",
         "created_at", "started_at", "finished_at", "duration_seconds",
     ))
-    result["params"] = _safe_row(row.get("params") or {}, ("topic", "youtube_url", "title", "subreddit", "llm_provider", "brainrot_level", "motion_graphics"))
+    result["params"] = _safe_row(row.get("params") or {}, ("topic", "youtube_url", "title", "subreddit", "llm_provider", "brainrot_level", "motion_graphics", "world", "web_research"))
     publishing = (row.get("params") or {}).get("youtube_publishing")
     if isinstance(publishing, dict):
         result["params"]["youtube_publishing"] = _safe_row(publishing, ("mode", "privacy_status", "made_for_kids", "contains_synthetic_media"))

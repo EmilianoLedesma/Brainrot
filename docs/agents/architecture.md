@@ -18,6 +18,7 @@ it does not run the local generation worker or store durable videos.
 | Topic and Reddit stories | `brainrot/script.py`, `brainrot/pipeline.py`, `brainrot/reddit.py` |
 | Speech and compositing | `brainrot/tts.py`, `brainrot/render.py`, `brainrot/assets/fonts/` |
 | Motion-graphics edit | `brainrot/motion.py`, Remotion project in `motion/` |
+| Continuous 3D world edit | `brainrot/world/` (director, script, render, scene packs), `brainrot/investigate.py`, `motion/world/` |
 | Repurposing | `brainrot/repurpose.py`, `brainrot/models.py` |
 | Publishing and pacing | `brainrot/scheduler.py`, `brainrot/publish.py` |
 | YouTube | `brainrot/youtube.py`, `youtube_metadata.py`, `youtube_sync.py`, `web/src/pages/YouTube.jsx` |
@@ -71,6 +72,11 @@ keywords each, then one extra call to the job's selected provider (`skills/motio
 loaded explicitly) picks at most one device per scene (stat, compare, checklist, steps, stamp, alert)
 from the narration alone. Output is validated in code; if the call fails the render continues with
 keyword punches only (logged). The result then gets the same loudness and `render.check_video`
-checks. Script, TTS, chapters, upload, publication and insights are unchanged. The
+checks. Script, TTS, chapters, upload, publication and insights are unchanged.
+A job with `params.world` (exclusive with `motion_graphics`) instead runs the continuous 3D world edit:
+after narration a `direct` stage chooses a scene pack and directs every beat (`brainrot/world/director.py`, guidance in
+`skills/world-direction/SKILL.md` plus the pack manifest, rules enforced in code), then `render` builds the script in code and renders the `World` composition
+(`brainrot/world/render.py`, `motion/world/`). `params.web_research` runs `brainrot/investigate.py` inside the `script` stage so the saved story carries the
+research. Plans are cached under `out/world-plans/`. Details: [world-mode](../world-mode.md). The
 `experiments/` folder holds the hand-built prototypes this was derived from; runtime code
 must not depend on it.

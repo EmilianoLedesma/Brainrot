@@ -1,0 +1,13 @@
+{
+ "title": "Por qué las aves no se electrocutan en cables",
+ "script": "Un cable puede llevar treinta y cinco mil voltios, y el pájaro encima ni se despeina. ¿Cómo?\n\nPrimero, una idea que cambia todo. Lo que hace daño no es el voltaje solo. Es la diferencia de voltaje. Esa diferencia es lo que empuja la corriente a través de un cuerpo.\n\nAhora mira al pájaro. Tiene los dos pies en el mismo cable. Los dos están al mismo voltaje. Entre un pie y el otro no hay diferencia, así que nada empuja la corriente a pasar por él.\n\nHay otro detalle. Sus patas están muy juntas. Entre ellas, el cable casi no pierde voltaje. Y el cuerpo del ave opone mucha más resistencia que ese pedacito de metal. Así que la electricidad sigue por el cable, como siempre. El ave solo está ahí, de espectadora.\n\nCon un solo cable, el circuito queda incompleto. Para que la corriente circule, necesita dos puntos con voltajes distintos.\n\nY aquí viene el giro. Si el ave estira las alas y toca un segundo cable, o algo conectado a tierra, se convierte en el puente entre los dos puntos. Ahí sí se electrocuta.\n\nPor eso las empresas eléctricas separan mucho los cables. Las más expuestas son las aves grandes, como águilas y gavilanes, por su envergadura. El peligro aparece cuando la separación entre partes con voltaje es menor que la apertura de sus alas.\n\nMuchos accidentes pasan en postes de líneas de distribución, justo cuando el ave aterriza o despega. Ahí las partes con voltaje quedaron muy cerca, a veces sin aislante. Y si se posan muchas aves juntas, pueden hacer balancear la línea hasta que los cables se toquen.\n\nPor eso se separan más las fases, se cubren las partes expuestas y se ponen protectores de percha.\n\nLos linieros que trabajan a mano limpia sobre líneas energizadas usan el mismo principio. Primero igualan su potencial con una varita de unión.\n\nAsí que el pájaro no es inmune. Solo se sienta donde nada lo conecta con una diferencia. Un cable, un voltaje, ningún camino.",
+ "generator": "brainrot.script.write_story(provider=claude-code, BRAINROT_CLAUDE_MODEL unset = CLI default model, brainrot_level=30, factual, reference_context from reference.json)",
+ "words": 338,
+ "sources": [
+  "https://www.sciencefocus.com/science/why-dont-birds-get-electrocuted-while-perching-on-power-lines/",
+  "https://www.scienceabc.com/nature/dont-birds-sitting-overhead-wires-get-electrocuted.html",
+  "https://fws.gov/story/avoidance-and-minimization-measures-power-lines",
+  "https://law.resource.org/pub/us/cfr/ibr/002/aplic.raptor.1996.pdf",
+  "https://www.physicsforums.com/threads/why-dont-birds-get-electocuted-when-they-are-on-power-lines.157744/"
+ ]
+}

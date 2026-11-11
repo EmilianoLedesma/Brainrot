@@ -1,0 +1,2002 @@
+{
+ "duration": 134.82,
+ "voice": "es-MX-JorgeNeural",
+ "rate": "+0%",
+ "provider": "claude-code",
+ "director": 4,
+ "subject": "bird",
+ "subject_model": {
+  "id": "bird",
+  "why": "La historia trata del pajarito sobre el cable: aterriza, mira, agarra el cable con los pies, se sacude sin que pase nada y observa el peligro que corre el águila, así que está presente y animado en cada estación."
+ },
+ "model_env": null,
+ "scenes": [
+  {
+   "start": 0.0,
+   "end": 3.56,
+   "text": "Por qué las aves no se electrocutan en cables",
+   "notes": [],
+   "index": 0,
+   "model": {
+    "focus": "line",
+    "nature": "context",
+    "shot": {
+     "dist": "wide",
+     "angle": "front",
+     "height": "low",
+     "move": "hold"
+    },
+    "show": "El campo entero con la línea; el pajarito aterriza en el cable mientras se resalta el cable.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Por qué",
+      "term": "",
+      "target": "bird",
+      "action": "land"
+     },
+     {
+      "kind": "highlight",
+      "cue": "cables",
+      "term": "",
+      "target": "line",
+      "action": ""
+     }
+    ],
+    "why": "Apertura: el ave se posa en el cable desde las primeras palabras."
+   },
+   "focus": "line",
+   "nature": "context",
+   "shot": {
+    "dist": "wide",
+    "angle": "front",
+    "height": "low",
+    "move": "hold"
+   },
+   "dist": "wide",
+   "show": "El campo entero con la línea; el pajarito aterriza en el cable mientras se resalta el cable.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Por qué",
+     "at": 0.1,
+     "target": "bird",
+     "action": "land"
+    },
+    {
+     "kind": "highlight",
+     "cue": "cables",
+     "at": 2.02,
+     "target": "line"
+    }
+   ]
+  },
+  {
+   "start": 3.56,
+   "end": 9.16,
+   "text": "Un cable puede llevar treinta y cinco mil voltios y el pájaro encima ni se despeina Cómo",
+   "notes": [],
+   "index": 1,
+   "model": {
+    "focus": "line",
+    "nature": "context",
+    "shot": {
+     "dist": "wide",
+     "angle": "front",
+     "height": "low",
+     "move": "hold"
+    },
+    "show": "Pulsos recorren el cable vivo; el pájaro mira alrededor y luego se sacude sin que le pase nada.",
+    "events": [
+     {
+      "kind": "action",
+      "cue": "treinta y cinco",
+      "term": "",
+      "target": "line",
+      "action": "power_on"
+     },
+     {
+      "kind": "subject",
+      "cue": "cinco mil",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "subject",
+      "cue": "se despeina",
+      "term": "",
+      "target": "bird",
+      "action": "fluff"
+     }
+    ],
+    "why": "Se ve que el cable está vivo y que el ave ni se inmuta."
+   },
+   "focus": "line",
+   "nature": "context",
+   "shot": {
+    "dist": "wide",
+    "angle": "front",
+    "height": "low",
+    "move": "hold"
+   },
+   "dist": "wide",
+   "show": "Pulsos recorren el cable vivo; el pájaro mira alrededor y luego se sacude sin que le pase nada.",
+   "events": [
+    {
+     "kind": "action",
+     "cue": "treinta y cinco",
+     "at": 4.66,
+     "target": "line",
+     "action": "power_on"
+    },
+    {
+     "kind": "subject",
+     "cue": "cinco mil",
+     "at": 5.03,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "subject",
+     "cue": "se despeina",
+     "at": 7.52,
+     "target": "bird",
+     "action": "fluff"
+    }
+   ]
+  },
+  {
+   "start": 9.16,
+   "end": 13.18,
+   "text": "Cómo Primero una idea que cambia todo",
+   "notes": [
+    "subject tilt at 9.16s would overlap the previous one on subject (busy until 9.5s); dropped",
+    "beat of 4.0 s needed 1 subject action(s); validator added look_around on 'Primero'"
+   ],
+   "index": 2,
+   "model": {
+    "focus": "difference",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "left",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "El pájaro inclina la cabeza con la pregunta y dos cables toman color violeta y verde azulado.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Cómo",
+      "term": "",
+      "target": "bird",
+      "action": "tilt"
+     },
+     {
+      "kind": "action",
+      "cue": "una idea",
+      "term": "",
+      "target": "difference",
+      "action": "show_levels"
+     }
+    ],
+    "why": "Introduce la idea clave: dos niveles de voltaje distintos."
+   },
+   "focus": "difference",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "El pájaro inclina la cabeza con la pregunta y dos cables toman color violeta y verde azulado.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Primero",
+     "at": 10.07,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "una idea",
+     "at": 10.85,
+     "target": "difference",
+     "action": "show_levels"
+    }
+   ]
+  },
+  {
+   "start": 13.18,
+   "end": 16.34,
+   "text": "Lo que hace daño no es el voltaje solo",
+   "notes": [],
+   "index": 3,
+   "model": {
+    "focus": "difference",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "left",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "El pájaro mira los dos cables coloreados y aparece el término voltaje.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Lo que hace",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "voltaje",
+      "term": "voltaje",
+      "target": "",
+      "action": ""
+     }
+    ],
+    "why": "El voltaje solo no es lo que daña."
+   },
+   "focus": "difference",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "El pájaro mira los dos cables coloreados y aparece el término voltaje.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Lo que hace",
+     "at": 13.18,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "voltaje",
+     "at": 14.6,
+     "target": "difference",
+     "term": "VOLTAJE"
+    }
+   ]
+  },
+  {
+   "start": 16.34,
+   "end": 22.67,
+   "text": "Es la diferencia de voltaje Esa diferencia es lo que empuja la corriente a través de un cuerpo",
+   "notes": [
+    "term 'diferencia' repeated or within 3 s of another; dropped"
+   ],
+   "index": 4,
+   "model": {
+    "focus": "difference",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "left",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "Aparece diferencia; los pulsos son empujados del cable violeta al verde azulado por el hueco mientras el pájaro mira y ladea la cabeza.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Es la",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "la diferencia",
+      "term": "diferencia",
+      "target": "",
+      "action": ""
+     },
+     {
+      "kind": "action",
+      "cue": "empuja",
+      "term": "",
+      "target": "difference",
+      "action": "push"
+     },
+     {
+      "kind": "subject",
+      "cue": "a través",
+      "term": "",
+      "target": "bird",
+      "action": "tilt"
+     }
+    ],
+    "why": "La diferencia es lo que empuja la corriente a través de un cuerpo."
+   },
+   "focus": "difference",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "Aparece diferencia; los pulsos son empujados del cable violeta al verde azulado por el hueco mientras el pájaro mira y ladea la cabeza.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Es la",
+     "at": 16.34,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "empuja",
+     "at": 20.02,
+     "target": "difference",
+     "action": "push"
+    },
+    {
+     "kind": "subject",
+     "cue": "a través",
+     "at": 21.06,
+     "target": "bird",
+     "action": "tilt"
+    }
+   ]
+  },
+  {
+   "start": 22.67,
+   "end": 27.67,
+   "text": "Ahora mira al pájaro Tiene los dos pies en el mismo cable",
+   "notes": [],
+   "index": 5,
+   "model": {
+    "focus": "feet",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "right",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "El pájaro mira, agarra el cable con los dos pies y se encienden dos anillos del mismo color en sus pies.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Ahora mira",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "subject",
+      "cue": "dos pies",
+      "term": "",
+      "target": "bird",
+      "action": "grip"
+     },
+     {
+      "kind": "action",
+      "cue": "mismo cable",
+      "term": "",
+      "target": "feet",
+      "action": "equal"
+     }
+    ],
+    "why": "Los dos pies en el mismo cable: mismo voltaje."
+   },
+   "focus": "feet",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "El pájaro mira, agarra el cable con los dos pies y se encienden dos anillos del mismo color en sus pies.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Ahora mira",
+     "at": 22.67,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "subject",
+     "cue": "dos pies",
+     "at": 25.26,
+     "target": "bird",
+     "action": "grip"
+    },
+    {
+     "kind": "action",
+     "cue": "mismo cable",
+     "at": 26.03,
+     "target": "feet",
+     "action": "equal"
+    }
+   ]
+  },
+  {
+   "start": 27.67,
+   "end": 30.38,
+   "text": "Los dos están al mismo voltaje",
+   "notes": [],
+   "index": 6,
+   "model": {
+    "focus": "feet",
+    "nature": "cutaway",
+    "shot": {
+     "dist": "close",
+     "angle": "right",
+     "height": "mid",
+     "move": "push_in"
+    },
+    "show": "La cámara se acerca a los pies y los dos anillos siguen del mismo color.",
+    "events": [
+     {
+      "kind": "highlight",
+      "cue": "Los dos",
+      "term": "",
+      "target": "feet",
+      "action": ""
+     }
+    ],
+    "why": "Detalle de los pies al mismo voltaje."
+   },
+   "focus": "feet",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "right",
+    "height": "mid",
+    "move": "push_in"
+   },
+   "dist": "close",
+   "show": "La cámara se acerca a los pies y los dos anillos siguen del mismo color.",
+   "events": [
+    {
+     "kind": "highlight",
+     "cue": "Los dos",
+     "at": 27.67,
+     "target": "feet"
+    }
+   ]
+  },
+  {
+   "start": 30.38,
+   "end": 35.96,
+   "text": "Entre un pie y el otro no hay diferencia así que nada empuja la corriente a pasar por él Hay",
+   "notes": [],
+   "index": 7,
+   "model": {
+    "focus": "feet",
+    "nature": "cutaway",
+    "shot": {
+     "dist": "close",
+     "angle": "right",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "Los pulsos corren por el cable bajo los pies y ninguno entra al ave, que se sacude tranquila.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Entre un",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "action",
+      "cue": "no hay",
+      "term": "",
+      "target": "feet",
+      "action": "no_push"
+     },
+     {
+      "kind": "subject",
+      "cue": "nada empuja",
+      "term": "",
+      "target": "bird",
+      "action": "fluff"
+     }
+    ],
+    "why": "Sin diferencia entre los pies, nada empuja la corriente al cuerpo."
+   },
+   "focus": "feet",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "close",
+   "show": "Los pulsos corren por el cable bajo los pies y ninguno entra al ave, que se sacude tranquila.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Entre un",
+     "at": 30.38,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "no hay",
+     "at": 31.73,
+     "target": "feet",
+     "action": "no_push"
+    },
+    {
+     "kind": "subject",
+     "cue": "nada empuja",
+     "at": 33.33,
+     "target": "bird",
+     "action": "fluff"
+    }
+   ]
+  },
+  {
+   "start": 35.96,
+   "end": 40.47,
+   "text": "Hay otro detalle Sus patas están muy juntas",
+   "notes": [],
+   "index": 8,
+   "model": {
+    "focus": "feet",
+    "nature": "cutaway",
+    "shot": {
+     "dist": "close",
+     "angle": "right",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "El pájaro ladea la cabeza y dos anillos pequeños se encienden muy cerca uno del otro.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "otro detalle",
+      "term": "",
+      "target": "bird",
+      "action": "tilt"
+     },
+     {
+      "kind": "action",
+      "cue": "patas",
+      "term": "",
+      "target": "feet",
+      "action": "equal"
+     }
+    ],
+    "why": "Las patas están muy juntas."
+   },
+   "focus": "feet",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "close",
+   "show": "El pájaro ladea la cabeza y dos anillos pequeños se encienden muy cerca uno del otro.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "otro detalle",
+     "at": 36.22,
+     "target": "bird",
+     "action": "tilt"
+    },
+    {
+     "kind": "action",
+     "cue": "patas",
+     "at": 38.15,
+     "target": "feet",
+     "action": "equal"
+    }
+   ]
+  },
+  {
+   "start": 40.47,
+   "end": 44.31,
+   "text": "Entre ellas el cable casi no pierde voltaje Y",
+   "notes": [],
+   "index": 9,
+   "model": {
+    "focus": "path",
+    "nature": "cutaway",
+    "shot": {
+     "dist": "close",
+     "angle": "front",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "Los pulsos fluyen por el tramo corto de cable entre las patas, sin pérdida visible.",
+    "events": [
+     {
+      "kind": "action",
+      "cue": "Entre ellas",
+      "term": "",
+      "target": "path",
+      "action": "bypass"
+     },
+     {
+      "kind": "subject",
+      "cue": "casi no",
+      "term": "",
+      "target": "bird",
+      "action": "tilt"
+     }
+    ],
+    "why": "Entre las patas el cable casi no pierde voltaje."
+   },
+   "focus": "path",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "close",
+   "show": "Los pulsos fluyen por el tramo corto de cable entre las patas, sin pérdida visible.",
+   "events": [
+    {
+     "kind": "action",
+     "cue": "Entre ellas",
+     "at": 40.47,
+     "target": "path",
+     "action": "bypass"
+    },
+    {
+     "kind": "subject",
+     "cue": "casi no",
+     "at": 41.98,
+     "target": "bird",
+     "action": "tilt"
+    }
+   ]
+  },
+  {
+   "start": 44.31,
+   "end": 49.37,
+   "text": "Y el cuerpo del ave opone mucha más resistencia que ese pedacito de metal",
+   "notes": [],
+   "index": 10,
+   "model": {
+    "focus": "path",
+    "nature": "cutaway",
+    "shot": {
+     "dist": "close",
+     "angle": "front",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "Se dibujan lado a lado un camino corto y grueso (cable) y uno largo y fino (cuerpo), con el término resistencia.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "cuerpo del",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "action",
+      "cue": "mucha más",
+      "term": "",
+      "target": "path",
+      "action": "compare"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "resistencia",
+      "term": "resistencia",
+      "target": "",
+      "action": ""
+     }
+    ],
+    "why": "El cuerpo opone mucha más resistencia que el metal."
+   },
+   "focus": "path",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "close",
+   "show": "Se dibujan lado a lado un camino corto y grueso (cable) y uno largo y fino (cuerpo), con el término resistencia.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "cuerpo del",
+     "at": 44.59,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "mucha más",
+     "at": 45.67,
+     "target": "path",
+     "action": "compare"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "resistencia",
+     "at": 46.3,
+     "target": "path",
+     "term": "RESISTENCIA"
+    }
+   ]
+  },
+  {
+   "start": 49.37,
+   "end": 53.12,
+   "text": "Así que la electricidad sigue por el cable como siempre",
+   "notes": [],
+   "index": 11,
+   "model": {
+    "focus": "path",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "front",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "Los pulsos siguen por el cable pasando junto a las patas mientras el pájaro mira.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Así que",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "action",
+      "cue": "sigue por",
+      "term": "",
+      "target": "path",
+      "action": "bypass"
+     }
+    ],
+    "why": "La corriente sigue por el cable como siempre."
+   },
+   "focus": "path",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "Los pulsos siguen por el cable pasando junto a las patas mientras el pájaro mira.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Así que",
+     "at": 49.37,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "sigue por",
+     "at": 50.63,
+     "target": "path",
+     "action": "bypass"
+    }
+   ]
+  },
+  {
+   "start": 53.12,
+   "end": 55.93,
+   "text": "El ave solo está ahí de espectadora",
+   "notes": [],
+   "index": 12,
+   "model": {
+    "focus": "path",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "front",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "El pájaro se sacude relajado mientras los pulsos pasan de largo.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "solo está",
+      "term": "",
+      "target": "bird",
+      "action": "fluff"
+     }
+    ],
+    "why": "El ave es solo espectadora."
+   },
+   "focus": "path",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "El pájaro se sacude relajado mientras los pulsos pasan de largo.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "solo está",
+     "at": 53.53,
+     "target": "bird",
+     "action": "fluff"
+    }
+   ]
+  },
+  {
+   "start": 55.93,
+   "end": 59.67,
+   "text": "Con un solo cable el circuito queda incompleto",
+   "notes": [],
+   "index": 13,
+   "model": {
+    "focus": "circuit",
+    "nature": "cutaway",
+    "shot": {
+     "dist": "medium",
+     "angle": "left",
+     "height": "high",
+     "move": "hold"
+    },
+    "show": "Un lazo con un hueco; los pulsos se detienen en el hueco. El pájaro ladea la cabeza.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "solo cable",
+      "term": "",
+      "target": "bird",
+      "action": "tilt"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "circuito",
+      "term": "circuito",
+      "target": "",
+      "action": ""
+     },
+     {
+      "kind": "action",
+      "cue": "queda incompleto",
+      "term": "",
+      "target": "circuit",
+      "action": "open"
+     }
+    ],
+    "why": "Con un solo cable el circuito queda abierto."
+   },
+   "focus": "circuit",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "high",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "Un lazo con un hueco; los pulsos se detienen en el hueco. El pájaro ladea la cabeza.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "solo cable",
+     "at": 56.27,
+     "target": "bird",
+     "action": "tilt"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "circuito",
+     "at": 57.36,
+     "target": "circuit",
+     "term": "CIRCUITO"
+    },
+    {
+     "kind": "action",
+     "cue": "queda incompleto",
+     "at": 57.88,
+     "target": "circuit",
+     "action": "open"
+    }
+   ]
+  },
+  {
+   "start": 59.67,
+   "end": 64.62,
+   "text": "Para que la corriente circule necesita dos puntos con voltajes distintos",
+   "notes": [],
+   "index": 14,
+   "model": {
+    "focus": "circuit",
+    "nature": "cutaway",
+    "shot": {
+     "dist": "close",
+     "angle": "left",
+     "height": "high",
+     "move": "hold"
+    },
+    "show": "Un segundo contacto cierra el lazo y los pulsos empiezan a circular; el pájaro mira.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Para que",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "action",
+      "cue": "dos puntos",
+      "term": "",
+      "target": "circuit",
+      "action": "close"
+     }
+    ],
+    "why": "Para circular se necesitan dos puntos con voltajes distintos."
+   },
+   "focus": "circuit",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "left",
+    "height": "high",
+    "move": "hold"
+   },
+   "dist": "close",
+   "show": "Un segundo contacto cierra el lazo y los pulsos empiezan a circular; el pájaro mira.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Para que",
+     "at": 59.67,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "dos puntos",
+     "at": 62.05,
+     "target": "circuit",
+     "action": "close"
+    }
+   ]
+  },
+  {
+   "start": 64.62,
+   "end": 69.84,
+   "text": "Y aquí viene el giro Si el ave estira las alas y toca un segundo cable",
+   "notes": [],
+   "index": 15,
+   "model": {
+    "focus": "bridge",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "right",
+     "height": "low",
+     "move": "hold"
+    },
+    "show": "Un ave grande llega y se posa en el cable superior mientras el pajarito ladea la cabeza.",
+    "events": [
+     {
+      "kind": "action",
+      "cue": "aquí viene",
+      "term": "",
+      "target": "bridge",
+      "action": "eagle_in"
+     },
+     {
+      "kind": "subject",
+      "cue": "el giro",
+      "term": "",
+      "target": "bird",
+      "action": "tilt"
+     }
+    ],
+    "why": "El giro: entra el águila, el ave en riesgo."
+   },
+   "focus": "bridge",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "low",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "Un ave grande llega y se posa en el cable superior mientras el pajarito ladea la cabeza.",
+   "events": [
+    {
+     "kind": "action",
+     "cue": "aquí viene",
+     "at": 64.8,
+     "target": "bridge",
+     "action": "eagle_in"
+    },
+    {
+     "kind": "subject",
+     "cue": "el giro",
+     "at": 65.36,
+     "target": "bird",
+     "action": "tilt"
+    }
+   ]
+  },
+  {
+   "start": 69.84,
+   "end": 74.83,
+   "text": "o algo conectado a tierra se convierte en el puente entre los dos puntos",
+   "notes": [],
+   "index": 16,
+   "model": {
+    "focus": "bridge",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "right",
+     "height": "low",
+     "move": "hold"
+    },
+    "show": "El águila extiende las alas hacia el segundo cable mientras el pajarito observa.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "o algo",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "action",
+      "cue": "convierte en",
+      "term": "",
+      "target": "bridge",
+      "action": "eagle_reach"
+     }
+    ],
+    "why": "El ave grande se convierte en puente entre dos puntos."
+   },
+   "focus": "bridge",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "low",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "El águila extiende las alas hacia el segundo cable mientras el pajarito observa.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "o algo",
+     "at": 69.84,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "convierte en",
+     "at": 71.62,
+     "target": "bridge",
+     "action": "eagle_reach"
+    }
+   ]
+  },
+  {
+   "start": 74.83,
+   "end": 80.71,
+   "text": "Ahí sí se electrocuta Por eso las empresas eléctricas separan mucho los cables",
+   "notes": [],
+   "index": 17,
+   "model": {
+    "focus": "bridge",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "right",
+     "height": "low",
+     "move": "hold"
+    },
+    "show": "Un destello salta donde el ala toca el segundo cable y el águila sale despedida.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Ahí sí",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "action",
+      "cue": "electrocuta",
+      "term": "",
+      "target": "bridge",
+      "action": "flash"
+     },
+     {
+      "kind": "subject",
+      "cue": "empresas eléctricas",
+      "term": "",
+      "target": "bird",
+      "action": "tilt"
+     }
+    ],
+    "why": "Con el puente sí hay descarga."
+   },
+   "focus": "bridge",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "low",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "Un destello salta donde el ala toca el segundo cable y el águila sale despedida.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Ahí sí",
+     "at": 74.83,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "electrocuta",
+     "at": 75.48,
+     "target": "bridge",
+     "action": "flash"
+    },
+    {
+     "kind": "subject",
+     "cue": "empresas eléctricas",
+     "at": 77.27,
+     "target": "bird",
+     "action": "tilt"
+    }
+   ]
+  },
+  {
+   "start": 80.71,
+   "end": 86.48,
+   "text": "Las más expuestas son las aves grandes como águilas y gavilanes por su envergadura",
+   "notes": [],
+   "index": 18,
+   "model": {
+    "focus": "spacing",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "front",
+     "height": "high",
+     "move": "hold"
+    },
+    "show": "Un corchete mide la envergadura del águila entre los dos cables.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Las más",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "action",
+      "cue": "águilas",
+      "term": "",
+      "target": "spacing",
+      "action": "measure"
+     },
+     {
+      "kind": "subject",
+      "cue": "gavilanes",
+      "term": "",
+      "target": "bird",
+      "action": "tilt"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "envergadura",
+      "term": "envergadura",
+      "target": "",
+      "action": ""
+     }
+    ],
+    "why": "Las aves grandes están más expuestas por su envergadura."
+   },
+   "focus": "spacing",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "front",
+    "height": "high",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "Un corchete mide la envergadura del águila entre los dos cables.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Las más",
+     "at": 80.71,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "águilas",
+     "at": 83.31,
+     "target": "spacing",
+     "action": "measure"
+    },
+    {
+     "kind": "subject",
+     "cue": "gavilanes",
+     "at": 83.78,
+     "target": "bird",
+     "action": "tilt"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "envergadura",
+     "at": 84.94,
+     "target": "spacing",
+     "term": "ENVERGADURA"
+    }
+   ]
+  },
+  {
+   "start": 86.48,
+   "end": 92.41,
+   "text": "El peligro aparece cuando la separación entre partes con voltaje es menor que la apertura de sus alas",
+   "notes": [],
+   "index": 19,
+   "model": {
+    "focus": "spacing",
+    "nature": "cutaway",
+    "shot": {
+     "dist": "close",
+     "angle": "front",
+     "height": "high",
+     "move": "push_in"
+    },
+    "show": "Los cables se separan hasta que el corchete ya no alcanza ambos.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "El peligro",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "action",
+      "cue": "separación",
+      "term": "",
+      "target": "spacing",
+      "action": "wires_apart"
+     },
+     {
+      "kind": "subject",
+      "cue": "es menor",
+      "term": "",
+      "target": "bird",
+      "action": "grip"
+     }
+    ],
+    "why": "El peligro depende de la separación frente a las alas."
+   },
+   "focus": "spacing",
+   "nature": "cutaway",
+   "shot": {
+    "dist": "close",
+    "angle": "front",
+    "height": "high",
+    "move": "push_in"
+   },
+   "dist": "close",
+   "show": "Los cables se separan hasta que el corchete ya no alcanza ambos.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "El peligro",
+     "at": 86.48,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "separación",
+     "at": 87.91,
+     "target": "spacing",
+     "action": "wires_apart"
+    },
+    {
+     "kind": "subject",
+     "cue": "es menor",
+     "at": 89.86,
+     "target": "bird",
+     "action": "grip"
+    }
+   ]
+  },
+  {
+   "start": 92.41,
+   "end": 95.93,
+   "text": "Muchos accidentes pasan en postes de líneas de distribución",
+   "notes": [],
+   "index": 20,
+   "model": {
+    "focus": "pole",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "left",
+     "height": "low",
+     "move": "hold"
+    },
+    "show": "El poste de distribución se resalta mientras el pájaro mira.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Muchos accidentes",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "highlight",
+      "cue": "postes",
+      "term": "",
+      "target": "pole",
+      "action": ""
+     }
+    ],
+    "why": "Los accidentes ocurren en postes."
+   },
+   "focus": "pole",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "low",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "El poste de distribución se resalta mientras el pájaro mira.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Muchos accidentes",
+     "at": 92.41,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "highlight",
+     "cue": "postes",
+     "at": 93.93,
+     "target": "pole"
+    }
+   ]
+  },
+  {
+   "start": 95.93,
+   "end": 98.97,
+   "text": "justo cuando el ave aterriza o despega",
+   "notes": [],
+   "index": 21,
+   "model": {
+    "focus": "pole",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "left",
+     "height": "low",
+     "move": "hold"
+    },
+    "show": "El pájaro vuela hacia el poste y aterriza.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "aterriza",
+      "term": "",
+      "target": "bird",
+      "action": "land"
+     }
+    ],
+    "why": "El momento crítico es el aterrizaje."
+   },
+   "focus": "pole",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "low",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "El pájaro vuela hacia el poste y aterriza.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "aterriza",
+     "at": 96.89,
+     "target": "bird",
+     "action": "land"
+    }
+   ]
+  },
+  {
+   "start": 98.97,
+   "end": 103.97,
+   "text": "Ahí las partes con voltaje quedaron muy cerca a veces sin aislante",
+   "notes": [],
+   "index": 22,
+   "model": {
+    "focus": "pole",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "left",
+     "height": "low",
+     "move": "hold"
+    },
+    "show": "Un ave grande aterriza en la cruceta con los cables muy juntos y se marca aislante.",
+    "events": [
+     {
+      "kind": "action",
+      "cue": "Ahí las",
+      "term": "",
+      "target": "pole",
+      "action": "land_pole"
+     },
+     {
+      "kind": "subject",
+      "cue": "muy cerca",
+      "term": "",
+      "target": "bird",
+      "action": "tilt"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "aislante",
+      "term": "aislante",
+      "target": "",
+      "action": ""
+     }
+    ],
+    "why": "Las partes con voltaje quedan muy cerca."
+   },
+   "focus": "pole",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "low",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "Un ave grande aterriza en la cruceta con los cables muy juntos y se marca aislante.",
+   "events": [
+    {
+     "kind": "action",
+     "cue": "Ahí las",
+     "at": 98.97,
+     "target": "pole",
+     "action": "land_pole"
+    },
+    {
+     "kind": "subject",
+     "cue": "muy cerca",
+     "at": 100.98,
+     "target": "bird",
+     "action": "tilt"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "aislante",
+     "at": 102.51,
+     "target": "fixes",
+     "term": "AISLANTE"
+    }
+   ]
+  },
+  {
+   "start": 103.97,
+   "end": 109.78,
+   "text": "Y si se posan muchas aves juntas pueden hacer balancear la línea hasta que los cables se toquen",
+   "notes": [],
+   "index": 23,
+   "model": {
+    "focus": "pole",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "left",
+     "height": "low",
+     "move": "hold"
+    },
+    "show": "Llegan varias aves; la línea se hunde y se balancea hasta que los cables se tocan.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "se posan",
+      "term": "",
+      "target": "bird",
+      "action": "land"
+     },
+     {
+      "kind": "action",
+      "cue": "muchas aves",
+      "term": "",
+      "target": "pole",
+      "action": "flock"
+     },
+     {
+      "kind": "subject",
+      "cue": "hasta que",
+      "term": "",
+      "target": "bird",
+      "action": "grip"
+     }
+    ],
+    "why": "Muchas aves balancean la línea."
+   },
+   "focus": "pole",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "left",
+    "height": "low",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "Llegan varias aves; la línea se hunde y se balancea hasta que los cables se tocan.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "se posan",
+     "at": 104.25,
+     "target": "bird",
+     "action": "land"
+    },
+    {
+     "kind": "action",
+     "cue": "muchas aves",
+     "at": 104.76,
+     "target": "pole",
+     "action": "flock"
+    },
+    {
+     "kind": "subject",
+     "cue": "hasta que",
+     "at": 107.78,
+     "target": "bird",
+     "action": "grip"
+    }
+   ]
+  },
+  {
+   "start": 109.78,
+   "end": 115.69,
+   "text": "Por eso se separan más las fases se cubren las partes expuestas y se ponen protectores de percha",
+   "notes": [],
+   "index": 24,
+   "model": {
+    "focus": "fixes",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "right",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "La cruceta se alarga y luego se alza un protector de percha, con el término percha.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Por eso",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "action",
+      "cue": "separan más",
+      "term": "",
+      "target": "fixes",
+      "action": "space_arm"
+     },
+     {
+      "kind": "subject",
+      "cue": "partes",
+      "term": "",
+      "target": "bird",
+      "action": "fluff"
+     },
+     {
+      "kind": "action",
+      "cue": "protectores",
+      "term": "",
+      "target": "fixes",
+      "action": "perch_guard"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "percha",
+      "term": "percha",
+      "target": "",
+      "action": ""
+     }
+    ],
+    "why": "Las soluciones: más separación y protectores."
+   },
+   "focus": "fixes",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "La cruceta se alarga y luego se alza un protector de percha, con el término percha.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Por eso",
+     "at": 109.78,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "separan más",
+     "at": 110.31,
+     "target": "fixes",
+     "action": "space_arm"
+    },
+    {
+     "kind": "subject",
+     "cue": "partes",
+     "at": 112.47,
+     "target": "bird",
+     "action": "fluff"
+    },
+    {
+     "kind": "action",
+     "cue": "protectores",
+     "at": 114.01,
+     "target": "fixes",
+     "action": "perch_guard"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "percha",
+     "at": 114.75,
+     "target": "fixes",
+     "term": "PERCHA"
+    }
+   ]
+  },
+  {
+   "start": 115.69,
+   "end": 121.56,
+   "text": "Los linieros que trabajan a mano limpia sobre líneas energizadas usan el mismo principio",
+   "notes": [],
+   "index": 25,
+   "model": {
+    "focus": "line",
+    "nature": "context",
+    "shot": {
+     "dist": "wide",
+     "angle": "front",
+     "height": "low",
+     "move": "hold"
+    },
+    "show": "La línea energizada con pulsos mientras el pájaro mira y ladea la cabeza.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Los linieros",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "action",
+      "cue": "líneas energizadas",
+      "term": "",
+      "target": "line",
+      "action": "power_on"
+     },
+     {
+      "kind": "subject",
+      "cue": "mismo principio",
+      "term": "",
+      "target": "bird",
+      "action": "tilt"
+     }
+    ],
+    "why": "Presenta las líneas energizadas donde trabajan los linieros."
+   },
+   "focus": "line",
+   "nature": "context",
+   "shot": {
+    "dist": "wide",
+    "angle": "front",
+    "height": "low",
+    "move": "hold"
+   },
+   "dist": "wide",
+   "show": "La línea energizada con pulsos mientras el pájaro mira y ladea la cabeza.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Los linieros",
+     "at": 115.69,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "líneas energizadas",
+     "at": 118.06,
+     "target": "line",
+     "action": "power_on"
+    },
+    {
+     "kind": "subject",
+     "cue": "mismo principio",
+     "at": 119.68,
+     "target": "bird",
+     "action": "tilt"
+    }
+   ]
+  },
+  {
+   "start": 121.56,
+   "end": 127.68,
+   "text": "Primero igualan su potencial con una varita de unión Así que el pájaro no es inmune",
+   "notes": [],
+   "index": 26,
+   "model": {
+    "focus": "lineman",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "front",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "El liniero toca el cable con la varita y toma su color; el pájaro mira y ladea la cabeza.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Primero igualan",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "action",
+      "cue": "igualan su",
+      "term": "",
+      "target": "lineman",
+      "action": "bond"
+     },
+     {
+      "kind": "term_callout",
+      "cue": "potencial",
+      "term": "potencial",
+      "target": "",
+      "action": ""
+     },
+     {
+      "kind": "subject",
+      "cue": "unión",
+      "term": "",
+      "target": "bird",
+      "action": "tilt"
+     }
+    ],
+    "why": "El liniero iguala su potencial como el ave."
+   },
+   "focus": "lineman",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "front",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "El liniero toca el cable con la varita y toma su color; el pájaro mira y ladea la cabeza.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Primero igualan",
+     "at": 121.56,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "action",
+     "cue": "igualan su",
+     "at": 121.93,
+     "target": "lineman",
+     "action": "bond"
+    },
+    {
+     "kind": "term_callout",
+     "cue": "potencial",
+     "at": 122.46,
+     "target": "difference",
+     "term": "POTENCIAL"
+    },
+    {
+     "kind": "subject",
+     "cue": "unión",
+     "at": 123.97,
+     "target": "bird",
+     "action": "tilt"
+    }
+   ]
+  },
+  {
+   "start": 127.68,
+   "end": 131.62,
+   "text": "Solo se sienta donde nada lo conecta con una diferencia",
+   "notes": [],
+   "index": 27,
+   "model": {
+    "focus": "feet",
+    "nature": "exhibit",
+    "shot": {
+     "dist": "medium",
+     "angle": "right",
+     "height": "mid",
+     "move": "hold"
+    },
+    "show": "El pájaro se sacude y los pulsos corren bajo sus pies sin entrar en él.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Solo se",
+      "term": "",
+      "target": "bird",
+      "action": "fluff"
+     },
+     {
+      "kind": "action",
+      "cue": "nada lo",
+      "term": "",
+      "target": "feet",
+      "action": "no_push"
+     }
+    ],
+    "why": "Se sienta donde nada lo conecta con una diferencia."
+   },
+   "focus": "feet",
+   "nature": "exhibit",
+   "shot": {
+    "dist": "medium",
+    "angle": "right",
+    "height": "mid",
+    "move": "hold"
+   },
+   "dist": "medium",
+   "show": "El pájaro se sacude y los pulsos corren bajo sus pies sin entrar en él.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Solo se",
+     "at": 127.68,
+     "target": "bird",
+     "action": "fluff"
+    },
+    {
+     "kind": "action",
+     "cue": "nada lo",
+     "at": 128.82,
+     "target": "feet",
+     "action": "no_push"
+    }
+   ]
+  },
+  {
+   "start": 131.62,
+   "end": 134.82,
+   "text": "Un cable un voltaje ningún camino",
+   "notes": [],
+   "index": 28,
+   "model": {
+    "focus": "line",
+    "nature": "context",
+    "shot": {
+     "dist": "wide",
+     "angle": "front",
+     "height": "low",
+     "move": "pull_out"
+    },
+    "show": "La cámara se aleja hasta el campo entero con el pájaro tranquilo en el cable.",
+    "events": [
+     {
+      "kind": "subject",
+      "cue": "Un cable",
+      "term": "",
+      "target": "bird",
+      "action": "look_around"
+     },
+     {
+      "kind": "highlight",
+      "cue": "un voltaje",
+      "term": "",
+      "target": "line",
+      "action": ""
+     }
+    ],
+    "why": "Cierre: un cable, un voltaje, ningún camino."
+   },
+   "focus": "line",
+   "nature": "context",
+   "shot": {
+    "dist": "wide",
+    "angle": "front",
+    "height": "low",
+    "move": "pull_out"
+   },
+   "dist": "wide",
+   "show": "La cámara se aleja hasta el campo entero con el pájaro tranquilo en el cable.",
+   "events": [
+    {
+     "kind": "subject",
+     "cue": "Un cable",
+     "at": 131.62,
+     "target": "bird",
+     "action": "look_around"
+    },
+    {
+     "kind": "highlight",
+     "cue": "un voltaje",
+     "at": 132.47,
+     "target": "line"
+    }
+   ]
+  }
+ ]
+}

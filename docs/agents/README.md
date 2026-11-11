@@ -26,6 +26,8 @@ brainrot/skills/                 guidance explicitly loaded during generation
   brainrot-storytelling/SKILL.md
   youtube-shorts-publishing/SKILL.md
   motion-graphics/SKILL.md
+  research/SKILL.md
+  world-direction/SKILL.md
 ```
 
 Start with the latest user request, inspect branch/status, then read the handoff.

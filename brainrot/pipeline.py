@@ -4,13 +4,17 @@ A topic or a Reddit post becomes a script, the script becomes narration, and the
 narration becomes one or more rendered chapters sitting in Supabase Storage.
 """
 
+import logging
 import math
 import re
 from typing import Callable
 
-from . import db, motion, render, scheduler, script, tts, media
+from . import db, investigate, motion, render, scheduler, script, tts, media
+from .world import director as world_director, render as world_render
 from .application.stages import stage
 from .domain.jobs import PermanentError
+
+log = logging.getLogger(__name__)
 
 # Normal generated scripts stay whole. Balance unusually long saved stories so
 # a final short fragment does not become a separate video. TTS checks real time.
@@ -66,10 +70,10 @@ def _story_for(job_id: str, write: Callable[[], script.Story], fields: dict) -> 
         return db.client().table("stories").insert(row).execute().data[0]
 
 
-def produce(job_id: str, write: Callable[[], script.Story], motion_graphics: bool = False, **story_fields) -> str:
+def produce(job_id: str, write: Callable[[], script.Story], motion_graphics: bool = False, world: bool = False, **story_fields) -> str:
     """Render every chapter of the job's story and record it. Returns the story id.
 
-    motion_graphics swaps the looping background for the Remotion motion edit.
+    motion_graphics swaps the looping background for the Remotion motion edit; world swaps it for one directed, continuous 3D scene (docs/world-mode.md).
 
     Safe to re-run: chapters an earlier attempt finished are left alone, and only
     the missing or unfinished ones are rendered.
@@ -112,14 +116,21 @@ def produce(job_id: str, write: Callable[[], script.Story], motion_graphics: boo
             chapter_id = chapter["id"]
             db.client().table("story_chapters").update({"status": "rendering"}).eq("id", chapter_id).execute()
 
-        if background is None and not motion_graphics:
+        if background is None and not (motion_graphics or world):
             with stage("background"):
                 background = pick_background(story_id)
         scope = f"chapter:{index}"
         with stage("tts", scope):
             audio, words = tts.narrate(text, title=story.get("title") or story.get("topic") or "The story")
+        title = story.get("title") or story.get("topic") or "The story"
+        if world:
+            with stage("direct", scope):
+                plan = world_director.direct(story.get("topic") or title, text, words, world_render.seconds(audio))
         with stage("render", scope):
-            video = motion.render_video(audio, words) if motion_graphics else render.render(background, audio, words)
+            if world:
+                video = world_render.render_video(audio, words, title, text, plan)
+            else:
+                video = motion.render_video(audio, words) if motion_graphics else render.render(background, audio, words)
         with stage("upload", scope):
             if media.local():
                 db.upload_job_media(job_id, "story_chapters", chapter_id, f"stories/{story_id}/{index:02d}.srt",
@@ -145,5 +156,13 @@ def run_brainrot(job: dict) -> str:
     options = {"brainrot_level": level} if level is not None else {}
     if job["params"].get("reference_context"):
         options["reference_context"] = job["params"]["reference_context"]
-    return produce(job["id"], lambda: script.write_story(topic, **options),
-                   motion_graphics=bool(job["params"].get("motion_graphics")), topic=topic)
+    web = bool(job["params"].get("web_research"))
+
+    def write() -> script.Story:
+        if web:  # inside the script stage: a retry reuses the saved story, so a job never researches twice
+            found = investigate.run(topic)
+            log.info("research: %s", investigate.summary(found))
+            options["reference_context"] = "\n\n".join(filter(None, [options.get("reference_context"), investigate.context(found)]))
+        return script.write_story(topic, **options)
+
+    return produce(job["id"], write, motion_graphics=bool(job["params"].get("motion_graphics")), world=bool(job["params"].get("world")), topic=topic)

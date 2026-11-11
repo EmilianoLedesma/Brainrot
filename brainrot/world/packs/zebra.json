@@ -1,0 +1,199 @@
+{
+ "id": "zebra",
+ "title": "Animals and nature (savanna stages)",
+ "summary": "Explainers about animals and living things: why an animal looks or behaves the way it does, with experiments on animals, hides, flies, predators or herds.",
+ "world": "a savanna (grass, acacias, rocks, a waterhole, a herd of zebras) and, in front of it, one round grassy stage per idea",
+ "hero": "savanna",
+ "stations": [
+  "savanna",
+  "coat",
+  "predators",
+  "heat",
+  "hair",
+  "landing",
+  "coats",
+  "cows"
+ ],
+ "station_notes": {
+  "savanna": "the herd and the waterhole, the hero; always context",
+  "coat": "one or two zebras to show the stripe pattern",
+  "predators": "a lion, a hyena and zebras at a distance",
+  "heat": "three barrels with hides and thermometers",
+  "hair": "a magnified patch of skin with hair and a fly's mouthpart",
+  "landing": "a horse and a zebra with flies, to show how flies land",
+  "coats": "three horses with black, white and striped coats",
+  "cows": "cows, one painted with stripes"
+ },
+ "nouns": {
+  "cebra": "savanna",
+  "cebras": "savanna",
+  "huella": "coat",
+  "patrón": "coat",
+  "rayas": "coat",
+  "leones": "predators",
+  "hienas": "predators",
+  "depredadores": "predators",
+  "camuflaje": "predators",
+  "calor": "heat",
+  "térmico": "heat",
+  "barriles": "heat",
+  "pieles": "heat",
+  "pelo": "hair",
+  "boca": "hair",
+  "moscas": "hair",
+  "tsetsé": "hair",
+  "tábanos": "landing",
+  "establo": "landing",
+  "caballos": "landing",
+  "aterrizar": "landing",
+  "posaban": "landing",
+  "aterrizaje": "landing",
+  "sonda": "landing",
+  "cobertores": "coats",
+  "cabeza": "coats",
+  "negros": "coats",
+  "blancos": "coats",
+  "vacas": "cows",
+  "pintaron": "cows",
+  "pintura": "cows",
+  "pintadas": "cows"
+ },
+ "glossary": [
+  "huella",
+  "camuflaje",
+  "depredadores",
+  "calor",
+  "tábanos",
+  "caballos",
+  "cobertores",
+  "vacas",
+  "pintura",
+  "pelo"
+ ],
+ "force_stems": [
+  "choc",
+  "lanz",
+  "frena",
+  "posa",
+  "aterriz",
+  "acerc",
+  "llega",
+  "pint",
+  "cubri",
+  "esconde",
+  "vuela"
+ ],
+ "actions": {
+  "savanna": {
+   "fly_strike": [
+    150,
+    "a fly dives at a zebra, hits its stripes and bounces away"
+   ],
+   "herd_move": [
+    200,
+    "the herd walks on toward the waterhole"
+   ]
+  },
+  "coat": {
+   "pair_in": [
+    120,
+    "a second zebra walks in beside the first; its stripe pattern is different"
+   ],
+   "pattern_trace": [
+    110,
+    "the stripes of the first zebra light up one after another, like a fingerprint"
+   ]
+  },
+  "predators": {
+   "lion_stalk": [
+    220,
+    "a lion creeps through the grass toward the zebras"
+   ],
+   "haze": [
+    100,
+    "a haze rises between the lion and the zebras: from afar the stripes are not seen"
+   ]
+  },
+  "heat": {
+   "sun_up": [
+    130,
+    "the sun rises over three barrels dressed in horse, zebra and cow hide"
+   ],
+   "temps_read": [
+    120,
+    "three thermometers rise to the same level"
+   ]
+  },
+  "hair": {
+   "fly_land": [
+    120,
+    "a fly lands on the skin"
+   ],
+   "bite": [
+    120,
+    "its mouthpart is longer than the hair and reaches the skin"
+   ]
+  },
+  "landing": {
+   "approach": [
+    140,
+    "two flies fly toward a horse and a zebra at about the same speed"
+   ],
+   "horse_land": [
+    130,
+    "the fly slows down, lands on the horse and probes"
+   ],
+   "zebra_bump": [
+    120,
+    "the other fly does not slow down, bumps into the zebra and leaves"
+   ],
+   "ring": [
+    100,
+    "a ring about two metres wide appears around the zebra: only inside it do the stripes work"
+   ]
+  },
+  "coats": {
+   "coats_on": [
+    120,
+    "three horses are dressed in black, white and striped coats"
+   ],
+   "flies_test": [
+    160,
+    "flies land on the black and white coats but veer away from the striped one"
+   ],
+   "head_test": [
+    110,
+    "flies land on the bare head of the striped horse"
+   ]
+  },
+  "cows": {
+   "paint": [
+    140,
+    "a brush paints black-and-white stripes on a cow"
+   ],
+   "swarm": [
+    170,
+    "flies gather: about half as many on the striped cow as on the plain one"
+   ],
+   "fade": [
+    130,
+    "the paint fades after some days"
+   ]
+  }
+ },
+ "subject": null,
+ "cutaway_stations": [
+  "hair",
+  "landing",
+  "coat"
+ ],
+ "min_cutaways": 3,
+ "opening": {
+  "station_action": "fly_strike"
+ },
+ "max_arrows": 2,
+ "hold_cap": 7.0,
+ "beat_limit": 6.5,
+ "max_move_share": 0.3,
+ "term_help": "huella, camuflaje, depredadores, calor, tábanos, caballos, cobertores, vacas, pintura, pelo (copied from the narration; only terms that appear)"
+}

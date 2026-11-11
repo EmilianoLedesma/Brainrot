@@ -47,7 +47,7 @@ def test_unknown_pipeline_is_a_clear_permanent_error():
 def test_each_pipeline_applies_the_persisted_provider_on_every_attempt(monkeypatch, kind, module, handler):
     selected = []
     monkeypatch.setenv("BRAINROT_LLM_PROVIDER", "claude-code")
-    monkeypatch.setattr(llm, "_local", lambda provider, *args: selected.append(provider) or script.Story(title="T", script="S"))
+    monkeypatch.setattr(llm, "_local", lambda provider, *args, **kwargs: selected.append(provider) or script.Story(title="T", script="S"))
 
     def run(job):
         script.write_story("topic")

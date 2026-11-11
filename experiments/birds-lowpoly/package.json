@@ -1,0 +1,29 @@
+{
+  "name": "brainrot-birds-lowpoly",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "studio": "remotion studio index.tsx --port=5198",
+    "still": "remotion still index.tsx Birds ../../out/birds-lowpoly/still.png --frame=900 --gl=angle",
+    "render": "remotion render index.tsx Birds ../../out/birds-lowpoly/final.mp4 --concurrency=2 --crf=18 --gl=angle",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@react-three/fiber": "9.8.2",
+    "@remotion/cli": "4.0.538",
+    "@remotion/motion-blur": "4.0.538",
+    "@remotion/noise": "4.0.538",
+    "@remotion/paths": "4.0.538",
+    "@remotion/three": "4.0.538",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "remotion": "4.0.538",
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@types/three": "0.187.0",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,26 @@
+{
+ "topic": "¿Por qué las aves se pueden parar en los cables sin electrocutarse?",
+ "researched": "2026-11-11",
+ "method": "WebSearch (3 queries), then pages read through the web-fetch agent: BBC Science Focus (full Q&A), ScienceABC (model-extracted rendering of the page), and the US Fish & Wildlife Service page 'Avoidance and Minimization Measures: Power Lines' (full). APLIC guidance, the physics forum threads and vendor pages came only from search summaries and are marked so. Facts are paraphrased; 'note' says how solid each one is.",
+ "sources": [
+  {"id": "sciencefocus", "title": "Why don't birds get electrocuted while perching on power lines? (BBC Science Focus, Robert Matthews)", "url": "https://www.sciencefocus.com/science/why-dont-birds-get-electrocuted-while-perching-on-power-lines/", "read": "full page; one number only (35,000 volts as an example)"},
+  {"id": "scienceabc", "title": "Why Don't Birds Sitting On Overhead Wires Get Electrocuted? (ScienceABC, Ishan Daftardar)", "url": "https://www.scienceabc.com/nature/dont-birds-sitting-overhead-wires-get-electrocuted.html", "read": "model-extracted rendering, not verbatim; the fetch agent flagged loose physics (path of least resistance) and some unsourced claims"},
+  {"id": "fws", "title": "Avoidance and Minimization Measures: Power Lines (US Fish & Wildlife Service)", "url": "https://fws.gov/story/avoidance-and-minimization-measures-power-lines", "read": "full page; no wingspan or spacing figures"},
+  {"id": "aplic", "title": "Suggested Practices for Avian Protection on Power Lines (APLIC), 1996 and 2006 editions", "url": "https://law.resource.org/pub/us/cfr/ibr/002/aplic.raptor.1996.pdf", "read": "NOT read; search summaries only"},
+  {"id": "forum", "title": "Physics Forums threads on birds on powerlines", "url": "https://www.physicsforums.com/threads/why-dont-birds-get-electocuted-when-they-are-on-power-lines.157744/", "read": "NOT read; search summary only; forum, secondary"}
+ ],
+ "facts": [
+  {"text": "Un ave que se para en un solo cable tiene los dos pies en el mismo cable, al mismo voltaje. No hay diferencia de voltaje entre un pie y el otro.", "sources": ["sciencefocus", "scienceabc"]},
+  {"text": "Lo que hace daño no es el voltaje por sí solo, sino la diferencia de voltaje: eso es lo que empuja la corriente a través de un cuerpo. Un cable a, por ejemplo, 35,000 voltios no daña a un ave que está sola sobre él.", "sources": ["sciencefocus"], "note": "35,000 volts is the article's example, not a measurement"},
+  {"text": "La corriente solo circula si hay una diferencia de voltaje entre dos puntos. Con un solo cable, el circuito queda incompleto y la corriente no pasa por el ave.", "sources": ["scienceabc"], "note": "the same article also uses the loose phrase 'path of least resistance'"},
+  {"text": "Los pies del ave están muy juntos, así que entre ellos casi no hay caída de voltaje en el cable, y el cuerpo del ave opone mucha más resistencia que ese pedacito de cable; la corriente sigue por el cable, no por el ave.", "sources": ["forum"], "note": "forum search summary; secondary and less authoritative"},
+  {"text": "Si el ave estira las alas y toca un segundo cable con otro voltaje, o algo conectado a tierra, se convierte en un camino para la corriente entre los dos puntos y se electrocuta.", "sources": ["sciencefocus", "fws", "scienceabc"]},
+  {"text": "Las empresas eléctricas separan mucho los cables para evitar que un ave toque dos a la vez.", "sources": ["sciencefocus"]},
+  {"text": "Las aves grandes, como águilas y gavilanes (buteos), son las que más riesgo corren por su envergadura. El riesgo aparece donde la separación horizontal entre partes con voltaje es menor que la envergadura del ave, o la separación vertical es menor que la distancia de su cabeza a sus patas.", "sources": ["aplic", "scienceabc"], "note": "APLIC text not read; search summary"},
+  {"text": "Las electrocuciones ocurren sobre todo en postes de líneas de distribución, cuando el ave aterriza o despega. La causa principal es que los postes se construyeron con poca separación entre las partes con voltaje, muchas veces sin aislante.", "sources": ["fws"]},
+  {"text": "Cuando muchas aves se posan juntas en una línea, pueden hacerla balancearse hasta que los cables se toquen.", "sources": ["fws"]},
+  {"text": "Para protegerlas se separa más a las fases entre sí y de las partes conectadas a tierra, se cubren con aislante las partes expuestas y se colocan protectores de percha.", "sources": ["fws", "aplic"], "note": "perch guards come from search summaries and vendor sources; one case study found triangular perch discouragers could push birds closer to the conductors"},
+  {"text": "Enterrar los cables reduce los choques de aves contra las líneas. Según el Servicio de Pesca y Vida Silvestre de EE. UU. hay unos 7.1 millones de millas de líneas aéreas en el país y esa infraestructura mata millones de aves al año, contando choques y electrocuciones.", "sources": ["fws"]},
+  {"text": "Los linieros que trabajan a mano limpia sobre líneas energizadas primero igualan su potencial con una varita de unión; es el mismo principio.", "sources": ["scienceabc"], "note": "single source, brief and unexplained"}
+ ]
+}

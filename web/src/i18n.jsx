@@ -242,6 +242,8 @@ export const COPY = {
       steps: ["Pipeline", "Input", "Review"],
       model: { label: "Model", hint: "Uses this integration’s configured model and your local sign-in.", workerDefault: "Worker default" },
       motion: { label: "Motion graphics edit", hint: "Off: the main flow narrates over a background clip. On: same script and narration, animated with keyword punches and transitions instead of a clip.", on: "Motion graphics", off: "Main flow (background clip)" },
+      world: { label: "Continuous 3D world (experimental)", hint: "One directed 3D scene without cuts, with its own camera, subject and actions locked to the narration. Only for topics with a scene pack (for example animals and electricity); it takes much longer and needs a signed-in Claude or Chat GPT.", on: "Continuous 3D world" },
+      research: { label: "Research the web first", hint: "Searches and reads sources before writing, so the script rests on checked facts. Slower; needs a signed-in Claude or Chat GPT.", on: "web research" },
       brainrot: {
         label: "Brainrot level", low: "Grounded", high: "Max brainrot",
         levels: [
@@ -305,7 +307,7 @@ export const COPY = {
         noPublications: "Publications appear when a clip or chapter is ready.",
         stale: "Showing the last update; connection interrupted.",
         names: { script: "Script", chaptering: "Chapters", background: "Background", tts: "Narration",
-          render: "Render", upload: "Save media", schedule: "Schedule", download: "Source download",
+          direct: "Scene direction", render: "Render", upload: "Save media", schedule: "Schedule", download: "Source download",
           transcribe: "Transcript", selection: "Clip selection" },
       },
       jobsLabel: "Jobs",
@@ -555,6 +557,8 @@ export const COPY = {
       steps: ["Pipeline", "Entrada", "Revisión"],
       model: { label: "Modelo", hint: "Usa el modelo configurado en esta integración y tu sesión local.", workerDefault: "Predeterminado del worker" },
       motion: { label: "Edición con motion graphics", hint: "Apagado: el flujo principal narra sobre un clip de fondo. Encendido: mismo guion y narración, animados con palabras clave y transiciones en vez de un clip.", on: "Motion graphics", off: "Flujo principal (clip de fondo)" },
+      world: { label: "Mundo 3D continuo (experimental)", hint: "Una escena 3D dirigida y sin cortes, con su propia cámara, sujeto y acciones atadas a la narración. Solo para temas con un pack de escena (por ejemplo animales y electricidad); tarda mucho más y necesita Claude o Chat GPT con sesión iniciada.", on: "Mundo 3D continuo" },
+      research: { label: "Investigar en la web primero", hint: "Busca y lee fuentes antes de escribir, para que el guion se apoye en hechos comprobados. Más lento; necesita Claude o Chat GPT con sesión iniciada.", on: "investigación web" },
       brainrot: {
         label: "Nivel de brainrot", low: "Tranquilo", high: "Brainrot máximo",
         levels: [
@@ -618,7 +622,7 @@ export const COPY = {
         noPublications: "Las publicaciones aparecen cuando un clip o capítulo está listo.",
         stale: "Se muestra la última actualización; conexión interrumpida.",
         names: { script: "Guion", chaptering: "Capítulos", background: "Fondo", tts: "Narración",
-          render: "Render", upload: "Guardar media", schedule: "Programar", download: "Descargar origen",
+          direct: "Dirección de escena", render: "Render", upload: "Guardar media", schedule: "Programar", download: "Descargar origen",
           transcribe: "Transcripción", selection: "Selección de clips" },
       },
       jobsLabel: "Jobs",

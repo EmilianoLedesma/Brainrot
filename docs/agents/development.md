@@ -19,7 +19,9 @@ migrations before starting the matching worker. Setup does not apply SQL.
 selects 3.14. `requirements/runtime.lock` and `requirements/dev.lock` are hashed pip
 exports, used by the traditional requirements entrypoints. Update all exports
 when intentionally changing dependencies. Use `npm ci` with the frontend lock and, for the motion-graphics edit, `npm ci --prefix motion`
-(`scripts/bootstrap.py` runs both).
+(`scripts/bootstrap.py` runs both; the same install covers the continuous 3D world edit). The world edit has no check that spends
+model calls: `tests/test_world.py` covers the director rules, script and pipeline wiring offline, and a still render of a pack needs only
+`node node_modules/@remotion/cli/remotion-cli.js still index.tsx World out.png --props=<props.json> --frame=300 --gl=angle` from `motion/`.
 
 ## Validate the affected boundary
 

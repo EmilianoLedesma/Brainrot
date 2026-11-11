@@ -117,6 +117,8 @@ function NewJob({ onQueued, initialDraft }) {
   const [provider, setProvider] = useState("codex");
   const [brainrotLevel, setBrainrotLevel] = useState(DEFAULT_BRAINROT_LEVEL);
   const [motionGraphics, setMotionGraphics] = useState(false);
+  const [world, setWorld] = useState(false);
+  const [webResearch, setWebResearch] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [queued, setQueued] = useState(null);
@@ -159,7 +161,7 @@ function NewJob({ onQueued, initialDraft }) {
         body: JSON.stringify({ kind, [field.key]: value.trim(), llm_provider: provider,
           youtube_publishing: { mode: youtubeMode, privacy_status: youtubePrivacy, made_for_kids: youtubeKids, contains_synthetic_media: youtubeSynthetic },
           ...(reference && kind === "brainrot" ? { reference_entity: reference.id } : {}),
-          ...(kind === "brainrot" ? { brainrot_level: brainrotLevel, motion_graphics: motionGraphics } : {}) }),
+          ...(kind === "brainrot" ? { brainrot_level: brainrotLevel, motion_graphics: motionGraphics, world, web_research: webResearch } : {}) }),
       });
       setQueued(id);
       setStep(4);
@@ -255,8 +257,12 @@ function NewJob({ onQueued, initialDraft }) {
             </label>
             {kind === "brainrot" && <BrainrotSlider value={brainrotLevel} onChange={setBrainrotLevel} />}
             {kind === "brainrot" && <>
-              <label className="checkbox-field"><input type="checkbox" checked={motionGraphics} onChange={(event) => setMotionGraphics(event.target.checked)} />{t.motion.label}</label>
+              <label className="checkbox-field"><input type="checkbox" checked={motionGraphics} onChange={(event) => { setMotionGraphics(event.target.checked); if (event.target.checked) setWorld(false); }} />{t.motion.label}</label>
               <small className="muted">{t.motion.hint}</small>
+              <label className="checkbox-field"><input type="checkbox" checked={world} onChange={(event) => { setWorld(event.target.checked); if (event.target.checked) setMotionGraphics(false); }} />{t.world.label}</label>
+              <small className="muted">{t.world.hint}</small>
+              <label className="checkbox-field"><input type="checkbox" checked={webResearch} onChange={(event) => setWebResearch(event.target.checked)} />{t.research.label}</label>
+              <small className="muted">{t.research.hint}</small>
             </>}
             <fieldset className="job-youtube">
               <legend>{yt.jobPublishing}</legend>
@@ -312,7 +318,7 @@ function NewJob({ onQueued, initialDraft }) {
               </div>}
               {kind === "brainrot" && <div>
                 <dt className="label">{t.motion.label}</dt>
-                <dd>{motionGraphics ? t.motion.on : t.motion.off}</dd>
+                <dd>{world ? t.world.on : motionGraphics ? t.motion.on : t.motion.off}{webResearch && <> · {t.research.on}</>}</dd>
               </div>}
               <div><dt className="label">{yt.jobPublishing}</dt><dd>{youtubeMode === "auto" ? yt.jobAuto : youtubeMode === "review" ? yt.jobReview : yt.jobOff}
                 {youtubeMode !== "off" && <> · {yt[youtubePrivacy]}</>}

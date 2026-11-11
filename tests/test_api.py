@@ -166,3 +166,13 @@ def test_motion_graphics_is_stored_only_when_chosen(http, fake_db):
 
 def test_repurpose_does_not_accept_motion_graphics(http):
     assert http.post("/jobs", json={"kind": "repurpose", "youtube_url": "https://youtu.be/example", "motion_graphics": True}).status_code == 422
+
+
+def test_world_and_research_are_stored_only_when_chosen_and_never_with_motion(http, fake_db):
+    from brainrot import db
+    plain = http.post("/jobs", json={"kind": "brainrot", "topic": "zebras"})
+    chosen = http.post("/jobs", json={"kind": "brainrot", "topic": "zebras", "world": True, "web_research": True})
+    params = db.get_job(chosen.json()["id"])["params"]
+    assert "world" not in db.get_job(plain.json()["id"])["params"] and params["world"] is True and params["web_research"] is True
+    assert http.post("/jobs", json={"kind": "brainrot", "topic": "zebras", "world": True, "motion_graphics": True}).status_code == 422
+    assert http.post("/jobs", json={"kind": "repurpose", "youtube_url": "https://youtu.be/example", "world": True}).status_code == 422
