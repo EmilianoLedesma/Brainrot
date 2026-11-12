@@ -48,6 +48,9 @@ app.add_middleware(
     allow_origins=ALLOWED_ORIGINS,
     allow_methods=["GET", "HEAD", "POST", "DELETE"],
     allow_headers=["*"],
+    # Chromium browsers preflight localhost -> 127.0.0.1 with a private-network
+    # request; the origin allowlist above still decides who gets through.
+    allow_private_network=True,
 )
 
 

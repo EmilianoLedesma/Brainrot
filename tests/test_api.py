@@ -106,6 +106,14 @@ def test_operational_endpoints_reject_unset_or_wrong_keys(monkeypatch, path):
     assert TestClient(api.app).get(path, headers={"X-API-Key": "anything"}).status_code == 401
 
 
+def test_private_network_preflight_allowed_only_for_dashboard_origins():
+    headers = {"Access-Control-Request-Method": "GET", "Access-Control-Request-Headers": "x-api-key",
+               "Access-Control-Request-Private-Network": "true"}
+    allowed = TestClient(api.app).options("/youtube/status", headers={**headers, "Origin": api.ALLOWED_ORIGINS[0]})
+    assert allowed.status_code == 200
+    assert TestClient(api.app).options("/youtube/status", headers={**headers, "Origin": "https://evil.example"}).status_code == 400
+
+
 @pytest.mark.parametrize("fn", ["list_job_executions", "job_execution"])
 def test_job_inspection_rpc_is_server_only(pg, fn):
     for role in ("anon", "authenticated"):
