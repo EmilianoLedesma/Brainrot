@@ -1,0 +1,29 @@
+{
+ "scenes": [
+  {"id": "title", "anchors": {}},
+  {"id": "email", "anchors": {"email": "email", "hour": "hour", "win": "win"}},
+  {"id": "rescue", "anchors": {"lazy": "laziness", "rescue": "rescue", "mission": "mission"}},
+  {"id": "alarm", "anchors": {"boring": "boring", "scary": "scary", "confusing": "confusing", "threat": "threat", "relief": "fastest", "phone": "phone", "snack": "snack", "kitchen": "kitchen", "researchers": "researchers", "mood": "mood"}},
+  {"id": "bias", "anchors": {"trap": "trap", "now": "overvalues", "bias": "bias", "fuzzy": "fuzzy", "real": "real", "npc": "npc", "dumps": "dumps"}},
+  {"id": "wiring", "anchors": {"wiring": "wiring", "larger": "larger", "alarm": "alarm", "weaker": "weaker", "corr": "correlation", "fits": "fits"}},
+  {"id": "dread", "anchors": {"dread": "dread", "hurt": "hurt", "begin": "begin", "quiets": "quiets", "boss": "boss", "side": "side"}},
+  {"id": "step", "anchors": {"small": "small", "open": "open", "write": "write", "five": "five", "stop": "stop"}},
+  {"id": "forgive", "anchors": {"forgive": "forgive", "study": "study", "guilt": "guilt", "mood": "mood", "escape": "escape", "cut": "cut", "fuel": "fuel"}},
+  {"id": "dodging", "anchors": {"never": "never", "dodging": "dodging"}},
+  {"id": "close", "anchors": {"name": "name", "step": "step", "mountain": "mountain", "laundry": "laundry"}}
+ ],
+ "sfx": [
+  {"scene": "email", "anchor": "win", "kind": "hit"},
+  {"scene": "rescue", "anchor": "rescue", "kind": "hit"},
+  {"scene": "alarm", "anchor": "boring", "kind": "tick"}, {"scene": "alarm", "anchor": "scary", "kind": "tick"}, {"scene": "alarm", "anchor": "confusing", "kind": "tick"},
+  {"scene": "alarm", "anchor": "phone", "kind": "tick"}, {"scene": "alarm", "anchor": "snack", "kind": "tick"}, {"scene": "alarm", "anchor": "kitchen", "kind": "tick"},
+  {"scene": "alarm", "anchor": "mood", "kind": "hit"},
+  {"scene": "bias", "anchor": "npc", "kind": "tick"}, {"scene": "bias", "anchor": "dumps", "kind": "hit"},
+  {"scene": "wiring", "anchor": "larger", "kind": "riser"}, {"scene": "wiring", "anchor": "corr", "kind": "hit"},
+  {"scene": "dread", "anchor": "dread", "kind": "riser"}, {"scene": "dread", "anchor": "begin", "kind": "hit"},
+  {"scene": "step", "anchor": "open", "kind": "tick"}, {"scene": "step", "anchor": "write", "kind": "tick"}, {"scene": "step", "anchor": "five", "kind": "tick"},
+  {"scene": "forgive", "anchor": "forgive", "kind": "hit"}, {"scene": "forgive", "anchor": "cut", "kind": "hit"},
+  {"scene": "dodging", "anchor": "dodging", "kind": "hit"},
+  {"scene": "close", "anchor": "laundry", "kind": "hit"}
+ ]
+}

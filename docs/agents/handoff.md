@@ -1,5 +1,14 @@
 # Handoff — 2026-11-11
 
+## Reconciliation on the first computer — 2026-11-11
+
+Several computers are used one at a time. This one was 22 commits behind `origin/master`; `git pull --ff-only` (tracked edits stashed and popped, no conflicts) brought it level. `origin/master` is the source of truth; the local edits below are additive.
+
+- CORS: `allow_private_network=True` in `brainrot/api.py` (Chromium preflights localhost → 127.0.0.1 as a private-network request); `tests/test_api.py` checks that a dashboard origin is allowed and another origin is rejected. The new test passes; the full suite was not rerun.
+- Procrastination experiment (below, 2026-10-27) is committed now, including a narrated full-length version.
+- Stack started with `BRAINROT_ALLOW_MISSING_MEDIA=1` for that run only (six `stories/*` files exist only on the other computer). The worker took the host reservation.
+- YouTube is configured (`YOUTUBE_CLIENT_ID/SECRET` present) but not connected on this Supabase project: `platform_credentials` has no `youtube` row, so `/youtube/status` returns `connected: false`. Fix: Accounts → Connect YouTube (interactive Google sign-in). Nothing was connected or published.
+
 ## World director redesign, first slice — 2026-11-11
 
 The director no longer needs hand-built packs. After the script exists and before narration, a new `design` stage asks the strong-tier model to design the world as data; the director and a generic renderer work from it.
@@ -304,6 +313,31 @@ unchanged: without the flag the worker still refuses to start. With it, the full
 stack was started on 5173/8001 and the worker took the host reservation; all four
 existing jobs are done, so no queued work depends on the missing files. Retrying or
 re-rendering those four jobs needs the media import first. Not committed.
+
+## Procrastination sample from the recipe — 2026-10-27
+
+User asked for a sample video for "Why Does Your Brain Make You Procrastinate?" using the
+silent vector recipe, without wiring it into the runtime and without publishing. The matching
+saved story is "Your Brain Is Cooked, Not Lazy" (published earlier as "Procrastination Isn't
+Laziness, It's Dodging a Feeling"). Added `experiments/remotion-explainer/procrastination/`
+(`Procrastination.tsx`, `script.json`, `index.tsx`), reusing `coffee-sci/kit.tsx` and `sfx.py`.
+Twenty seconds, four pastel phases: hook, alarm (triggers then quick reliefs), dread chart,
+answer card. Hero is a task-mountain that draws on, shrinks, morphs into a small pile once the
+chart cursor passes "start", and returns with a check. Facts come only from the saved script
+(researcher names, present bias, 2018 imaging study as a correlation, self-forgiveness study);
+the chart and bars are captioned as illustrative. No model call, upload, job or database write.
+
+Validation: `tsc` clean for the new files (two older errors remain for ignored generated assets
+in `index.tsx`); 12 stills and a contact sheet from the final MP4 inspected; decode clean.
+Output (ignored): `out/procrastination/procrastination-sample.mp4`, 1080×1920, 30 fps, 20 s,
+7.4 MB, H.264/AAC, −17.6 LUFS, sample peak near 0 dBFS (not re-limited). Nobody has watched full
+playback or listened to the sound bed. Runtime integration steps unchanged.
+
+Narrated version (started after the above, unfinished): `ProcrastinationFull.tsx` (composition `ProcrastinationFull`),
+`story.json` (spoken title "Why Does Your Brain Make You Procrastinate?", Guy voice), `scenes.json` (11 scenes, word anchors, sfx cues),
+`prepare.py` (narrates once with `brainrot.tts`, aligns anchors to measured word times, writes `timeline.json`; no model, database or upload call;
+needs ignored `out/procrastination/words.json`, regenerated on first run) and `public/procrastination/narration.mp3`. `tsc` is clean for these files.
+Only review stills exist (`out/procrastination/full*/`); no final narrated MP4 was rendered, and nothing was watched or listened to.
 
 ## Silent vector motion-graphics recipe and two PoCs — 2026-10-27
 

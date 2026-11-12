@@ -1,0 +1,36 @@
+{
+ "title": "Why does your brain make you procrastinate?",
+ "story": "Your Brain Is Cooked, Not Lazy (saved story 6e7b6bf0, published as Procrastination Isn't Laziness, It's Dodging a Feeling)",
+ "duration": 20,
+ "phases": {"hook":[0,4.4],"alarm":[4.4,9.6],"dread":[9.6,15],"card":[15,20]},
+ "texts": [
+  {"at":0.3,"until":4.2,"text":"WHY DOES YOUR BRAIN","size":74,"color":"ink","y":290,"font":"sans"},
+  {"at":1.1,"until":4.2,"text":"PROCRASTINATE?","size":108,"color":"coral","y":1500,"font":"sans","wave":10},
+  {"at":4.8,"until":9.4,"text":"01 / the alarm","size":34,"color":"coral","y":250,"font":"mono"},
+  {"at":8.3,"until":9.4,"text":"MOOD, NOT TIME","size":64,"color":"green","y":1590,"font":"sans"},
+  {"at":9.9,"until":14.8,"text":"02 / the dread","size":34,"color":"coral","y":250,"font":"mono"},
+  {"at":10.6,"until":12.6,"text":"DREAD PEAKS BEFORE YOU START","size":50,"color":"ink","y":1580,"font":"sans"},
+  {"at":13.0,"until":14.8,"text":"THEN THE ALARM OFTEN QUIETS","size":50,"color":"green","y":1580,"font":"sans"},
+  {"at":15.4,"until":20,"text":"03 / the way out","size":34,"color":"coral","y":250,"font":"mono"}
+ ],
+ "cam": [
+  {"at":0,"zoom":1,"cy":960},{"at":2.8,"zoom":1.08,"cy":950},{"at":4.4,"zoom":1,"cy":960},
+  {"at":9.6,"zoom":1.03,"cy":975},{"at":12.6,"zoom":1.06,"cy":990},{"at":15,"zoom":1,"cy":960},{"at":20,"zoom":1.04,"cy":985}
+ ],
+ "dial": {"at":10.4,"until":14.9,"label":"dread","unit":"/100","x":540,"y":1370,"max":100,"decimals":0},
+ "sfx": [
+  {"at":0.3,"kind":"tick"},{"at":1.1,"kind":"hit"},{"at":1.9,"kind":"tick"},{"at":2.5,"kind":"tick"},{"at":4.2,"kind":"whoosh"},
+  {"at":4.9,"kind":"tick"},{"at":5.3,"kind":"tick"},{"at":5.7,"kind":"tick"},{"at":6.9,"kind":"whoosh"},
+  {"at":7.3,"kind":"tick"},{"at":7.6,"kind":"tick"},{"at":7.9,"kind":"tick"},{"at":8.3,"kind":"hit"},
+  {"at":9.4,"kind":"whoosh"},{"at":10.3,"kind":"tick"},{"at":11.0,"kind":"tick"},{"at":11.6,"kind":"tick"},{"at":12.1,"kind":"riser"},
+  {"at":12.9,"kind":"hit"},{"at":13.6,"kind":"tick"},{"at":14.2,"kind":"tick"},
+  {"at":14.8,"kind":"whoosh"},{"at":15.4,"kind":"hit"},{"at":16.6,"kind":"tick"},{"at":17.2,"kind":"tick"},{"at":17.5,"kind":"hit"}
+ ],
+ "sources": [
+  {"supports":"Tim Pychyl and Fuschia Sirois describe procrastination as a problem of managing mood, not managing time (saved Brainrot script, researcher attribution only)."},
+  {"supports":"Present bias: relief in seconds feels more real than a reward next week (saved script, general account)."},
+  {"supports":"2018 German brain-imaging study: chronic procrastinators tended to have a larger amygdala and weaker links to a region that turns feelings into action. A correlation, not a diagnosis (saved script wording)."},
+  {"supports":"Dread is often worse than the task and starting often quiets the alarm (saved script; stated as 'often', not a measured result). The chart is schematic and labelled illustrative."},
+  {"supports":"One study found students who forgave themselves for procrastinating before a first exam procrastinated less before the next (saved script wording)."}
+ ]
+}
