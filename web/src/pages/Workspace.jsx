@@ -114,7 +114,7 @@ function NewJob({ onQueued, initialDraft }) {
   const [kind, setKind] = useState(initialDraft ? "brainrot" : null);
   const [value, setValue] = useState(initialDraft?.label || "");
   const [reference, setReference] = useState(initialDraft?.id ? initialDraft : null);
-  const [provider, setProvider] = useState("codex");
+  const [provider, setProvider] = useState("claude-code");
   const [brainrotLevel, setBrainrotLevel] = useState(DEFAULT_BRAINROT_LEVEL);
   const [motionGraphics, setMotionGraphics] = useState(false);
   const [world, setWorld] = useState(false);

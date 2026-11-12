@@ -6,7 +6,8 @@
   export/import with one active local-media worker host.
 - **Provider choice:** show Claude and Chat GPT, store `claude-code` and `codex`.
   Each computer authenticates its own CLI. No automatic provider or paid API
-  fallback. Use Codex for live checks under the current user preference.
+  fallback. Use Claude for live checks while the Chat GPT subscription is inactive;
+  the Codex provider code and settings stay supported.
 - **Premise intent:** ordinary factual topics stay accurate. Explicit absurd
   fiction develops inside its premise rather than reflexively debunking it.
   Brainrot intensity changes delivery and slang; it does not turn facts into

@@ -8,7 +8,7 @@ export default function Ideas({ onReference }) {
   const { lang } = useLang(); const t = INTEGRATIONS_COPY[lang];
   const [topics, setTopics] = useState([]); const [busy, setBusy] = useState(false); const [error, setError] = useState("");
   const seen = useRef([]);
-  const [provider, setProvider] = useState("codex");
+  const [provider, setProvider] = useState("claude-code");
   async function load(chosen = provider) {
     setBusy(true); setError("");
     try {

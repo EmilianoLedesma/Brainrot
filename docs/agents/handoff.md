@@ -6,6 +6,7 @@ Several computers are used one at a time. This one was 22 commits behind `origin
 
 - CORS: `allow_private_network=True` in `brainrot/api.py` (Chromium preflights localhost → 127.0.0.1 as a private-network request); `tests/test_api.py` checks that a dashboard origin is allowed and another origin is rejected. The new test passes; the full suite was not rerun.
 - Procrastination experiment (below, 2026-10-27) is committed now, including a narrated full-length version.
+- Provider default: New job and Video ideas now start on Claude (`claude-code`) because the Chat GPT subscription is inactive (Ideas failed with a 502 on the old `codex` default). Chat GPT stays selectable and all Codex code and settings stay; `tests/browser/check_workspace.py` expects the new default and passes against simulated responses; `decisions.md` no longer says to use Codex for live checks. Direct `ideas.suggest` call with Claude returned five topics.
 - Stack started with `BRAINROT_ALLOW_MISSING_MEDIA=1` for that run only (six `stories/*` files exist only on the other computer). The worker took the host reservation.
 - YouTube is configured (`YOUTUBE_CLIENT_ID/SECRET` present) but not connected on this Supabase project: `platform_credentials` has no `youtube` row, so `/youtube/status` returns `connected: false`. Fix: Accounts → Connect YouTube (interactive Google sign-in). Nothing was connected or published.
 

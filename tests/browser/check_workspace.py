@@ -103,8 +103,10 @@ def main():
         page.get_by_role("button", name="Workspace", exact=True).first.click()
         page.locator(".choice").filter(has_text="From a topic").click()
         model = page.get_by_role("combobox", name="Model", exact=True)
-        expect(model).to_have_value("codex")
+        expect(model).to_have_value("claude-code")
         model.focus()
+        model.press("ArrowDown")
+        expect(model).to_have_value("codex")
         model.press("ArrowUp")
         expect(model).to_have_value("claude-code")
         model.press("ArrowDown")
@@ -157,12 +159,12 @@ def main():
         page.locator(".choice").filter(has_text="From a YouTube link").click()
         page.get_by_label("Source URL", exact=True).fill("https://youtube.com/watch?v=example")
         assert page.get_by_role("slider").count() == 0, "repurposing does not rewrite the source script"
-        expect(page.get_by_role("combobox", name="Model", exact=True)).to_have_value("codex")
+        expect(page.get_by_role("combobox", name="Model", exact=True)).to_have_value("claude-code")
         page.get_by_role("button", name="Review →", exact=True).click()
-        expect(page.locator(".review").get_by_text("Chat GPT", exact=True)).to_be_visible()
+        expect(page.locator(".review").get_by_text("Claude", exact=True)).to_be_visible()
         page.get_by_role("button", name="Queue it", exact=True).click()
         expect(page.get_by_role("heading", name="Live queue", exact=True)).to_be_visible()
-        assert submitted[1] == {"kind": "repurpose", "youtube_url": "https://youtube.com/watch?v=example", "llm_provider": "codex",
+        assert submitted[1] == {"kind": "repurpose", "youtube_url": "https://youtube.com/watch?v=example", "llm_provider": "claude-code",
                                 "youtube_publishing": {"mode": "review", "privacy_status": "private", "made_for_kids": False, "contains_synthetic_media": False}}
         expect(page.get_by_role("row").filter(has_text="The octopus escape")).to_be_visible()
         running_row = page.get_by_role("row").filter(has_text="The octopus escape")
