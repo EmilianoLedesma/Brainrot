@@ -19,3 +19,7 @@ experiments/hyperframes-pressure-cooker/shots/
 experiments/hyperframes-pressure-cooker/video/.hyperframes/
 experiments/hyperframes-pressure-cooker/video/AGENTS.md
 experiments/hyperframes-pressure-cooker/video/CLAUDE.md
+# Asset probe: the scene the model wrote last is scratch (the run copies it to out/asset-probe/)
+motion/probe/designed.tsx
+# Reference videos by third parties: kept on the author's computer only
+Examples/
