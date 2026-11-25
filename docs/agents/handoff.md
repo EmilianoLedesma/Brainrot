@@ -1,4 +1,16 @@
-# Handoff — 2026-11-11
+# Handoff — 2026-11-25
+
+## Asset probe: the model authors each video's 3D assets — 2026-11-25
+
+Branch `asset-probe` (pull request, not `master`; the user asked for a PR for this work). Everything is an experiment run by hand; nothing in the pipeline, API or web changed. Full write-up, results and next tests: [asset-probe](../asset-probe.md).
+
+- **What is being tested:** whether the strong-tier model, through the user's signed-in Claude CLI, can write the 3D assets of any topic against a restricted kit (so no fixed library), with automatic camera framing, and fix them after looking at its own stills and a time strip of the clip. Diagnosis that led here: the generic renderer's vocabulary and fixed framing, not the director or Claude Code, capped quality.
+- **Added:** `scripts/asset_probe.py` (design, static check, render, review with `Read` on `sheet.png` and `time.png`, patch-style fix, `--resume`, `--stub`), `motion/probe/` (`kit.tsx`, `index.tsx` harness, `examples/puente.tsx`, `examples/olla.tsx`), `docs/asset-probe/` (results of four topics, a hand-made prototype sheet), `.gitignore` entries for `motion/probe/designed.tsx` and `Examples/`.
+- **Ran:** four real model runs on the user's Windows computer (inuit goggles, octopus camouflage twice with different prompt states, cash machine) and stub runs of the script, the kit and the harness in a cloud container (Chrome, Remotion, no model). Wall time per topic 4 to 15 minutes; the cash machine's fix round timed out at 900 s and was replaced by patch-style fixes (tested only with a unit-style check of the patch logic and the stub flow, not yet with the real model).
+- **NOT run:** any run of the patch-style fix with the real model, `pytest`, `npm run check --prefix motion` (the probe is outside its `tsconfig` include), unit tests for `asset_probe.py`, any pipeline job, audio, a director over these assets, a Sonnet-versus-Opus comparison, repeats of the same topic. Each topic ran once and the prompt changed between runs, so the comparison is directional.
+- **Next:** two more topics (one with people, one without), repeat one for variance, record each run here; then decide the security approach for model-written code (sandbox or declarative scene) before any pipeline integration. `docs/world-mode.md` and `spec.py` say model-written code is never executed; the probe is a deliberate local exception.
+- **Reference videos:** the user's `Examples/` folder (14 third-party Shorts, about 165 MB) is not committed: the repository is public, the clips are other creators' work, and the folder is git-ignored. The traits taken from them are in the asset-probe doc.
+- **Open item found on the way:** `BRAINROT_LLM_PROVIDER=''` (set but empty) in `.env` makes `llm.generate` raise "must be claude-code, codex or anthropic" because only an unset variable falls back to the default. The probe passes the provider explicitly; the main flow still has the issue.
 
 ## Reconciliation on the first computer — 2026-11-11
 

@@ -1,0 +1,27 @@
+{
+ "topic": "Gafas de nieve inuit",
+ "calls": [
+  {
+   "kind": "design",
+   "seconds": 104,
+   "notes": "How the goggles read as Inuit bone snow goggles: (1) a flat, curved strip of bone that follows the face, built from 7 two-tone bone segments on a 0.5 arc; (2) two thin horizontal eye slits, each a dark notch inside a soot-blackened oval; (3) a nose notch at the bottom and a sinew strap tied through two side holes, made with a skin-coloured notch, Torus holes and a Tube around the back of the head.\nThe person stands 3.4 tall and the goggles are 0.6 wide on the face at real size; they are their own 'goggles' group so the camera can frame them close up.\nA soft glow sits in front of the goggles and is blocked by the bone, while two thin glowing beams pass through the slits; this shows the slits narrowing the light without arrows.\nThe palette is mostly icy blues with bone-cream and caribou-brown accents, on a pale blue-white floor.\nThe wide shot reads as a place: an 8-wide igloo behind on the left, a low sun behind on the right, a horizon of ice ridges and snowdrifts, and a strip of glinting snow in front of the hero.\nThe 'carving' group is set 5 units to the right: a half-carved pair of goggles on a hide-covered snow block, with an ulu knife and an antler blank, to show that the goggles were carved by hand.\nMoving elements: the person and the goggles bob together in sync, the harpoon and the ulu sway, the sun's rays spin, the snow sparkles twinkle in a loop, steam rises from the igloo, bone shavings fly off, and the slit beams appear at t=0.3, so every shot has something moving.\nThe shots go from wide (all) to medium (person) to extreme close-up (goggles) to high-angle (snow glare) to medium (carving) and back to a close-up of the goggles from the other side, changing az and el every time."
+  },
+  {
+   "kind": "fix",
+   "notes": "Recognition: (1) the goggles are one curved band of bone, carried by a single Lathe arc with a darker brow-ridge Lathe on top; (2) each eye has one thin dark horizontal slit, carried by one SLIT RBox that follows the curve; (3) a sinew strap goes through drilled end holes, carried by the hide Tube and two dark Balls. I removed the beige segment blocks, extra slots, soot tabs and the nose tab, so the goggles now read as one carved piece with just four tiny engraved dots. I removed the translucent glare box in front of the face, so nothing covers the goggles in shots 3 and 6. Instead, a fan of glowing sun rays sways behind the head in the person group. A small spinning glint on the goggle edge keeps the close-ups moving. Shot 1 now uses az .1 and el .2: a more frontal view shows less of the scene's depth, so the person and igloo look bigger. This only works if the 'all' camera ignores the new backdrop. I added an unnamed backdrop group: a curved sky wall with radius 30, plus far peaks and snow mounds. It should fill the frame past every edge without counting toward the 'all' bounding box, but this depends on the framing code only measuring named groups, which I couldn't check. If it does measure the backdrop, the shot 1 camera will pull back and frame the backdrop instead of the person and igloo. In that case, give the backdrop a name or move it into the ridges group. I removed the big grey glare mat. The snow_glare group is now centred between the person and the table: a soft light cone, a glowing ring and wider sparkles that reach both. Shot 4 should frame them together near the centre. In the carving group, the goggles are 3x bigger and tilted face-up on a wider hide board and snow block, so the slit is clearly visible. The ulu moved to the right side of the board with the raw antler behind it. Shot 5 is raised to el .5 to look down on the slit. Shot 6 now uses az -.22 and el .26 so the head is centred, and it is still a different angle from shot 3 (az .15, el .1). Sizes and positions of the person, igloo, table, sun and ridges are unchanged, except that the snow_glare group moved to [2.5,0,1.2]. Motion: the person and goggles bob, the spear sways, igloo smoke and snow sparkles loop, the sun and the rays behind the head turn, the ulu sways and bone shavings fall."
+  }
+ ],
+ "rounds": [],
+ "review": {
+  "verdict": "fix",
+  "problems": [
+   "Shot 1: The igloo, person and work table are tiny and crowded into the lower-left, and the edge of the sky backdrop shows. Move the camera closer so the person and igloo fill the frame, and extend the backdrop past the frame.",
+   "Shots 2, 3 and 6: The goggles look like a strip of beige blocks with several slots, so they don't read as one carved bone piece. Make each goggle a single curved ivory/bone piece with one thin dark horizontal slit per eye, and remove the extra white tabs.",
+   "Shot 4: The grey mat in the foreground takes most of the frame, while the person and the goggles on the table are small and pushed to the edges. Remove or shrink the mat and frame the person and table larger near the centre.",
+   "Shot 5: The half-carved goggles on the board are a tiny jumble that the ulu knife covers up. Make the goggles 3x bigger and lay them flat with the slit clearly visible, and move the ulu to the side.",
+   "Shot 6: The figure is cut off by the right edge of the frame, and a translucent glare plane over the face hides the goggles. Centre the head, and move the glare effect off the goggles or replace it with clear sun rays behind the figure."
+  ]
+ },
+ "seconds": 266,
+ "model_calls": 2
+}

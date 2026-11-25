@@ -2,6 +2,7 @@
 
 Status: first slice implemented 2026-11-11 (items 1 to 6 below, see the handoff for what ran and what did not); quality of model-designed worlds and the Opus comparison are still open.
 Read [world mode](world-mode.md) first; it describes what exists today.
+Update 2026-11-25: an alternative to the generic renderer (the model writes per-topic assets against a restricted kit) is being tested by hand in [asset probe](asset-probe.md); it is not wired in.
 
 ## How to continue (start here)
 

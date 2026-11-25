@@ -1,0 +1,27 @@
+{
+ "topic": "Inteligencia y camuflaje del pulpo",
+ "calls": [
+  {
+   "kind": "design",
+   "seconds": 72,
+   "notes": "Recognition features: (1) the tall bulbous bag-shaped mantle tilted back above a small head, carried by the Lathe mantle and the head Ball; (2) eight arms that taper, curl at the tips and show pale suckers, carried by the Arm Tubes, curled tip Tubes and SUCK balls, with a dark web Lathe joining them; (3) side-set eyes with horizontal slit pupils and bumps above them, carried by the separate 'eye' group (eyeball, slit RBox, eyelid, cone papilla). The hero sits on a flat seafloor rock in the centre so it reads as a compact upright shape in the 9:16 frame. Camouflage appears in the octopus itself, with no arrows: rock-coloured papillae pop up for the texture change, and a translucent rock-coloured layer covers the mantle around the middle of the clip for the colour change. Chromatophores are shown in a round magnified-skin disc on a stand to the right, where each small pigment dot pops into a large red, yellow or brown sac inside a ring of radial muscle strands, which is the mechanism the narration names. The colours stay in one coral and orange family with sand, rock and sea-green accents on a warm sand floor. Reef rocks, branching corals and shells sit 5-9 units behind the hero so the wide shot reads as a seafloor rather than a pile of props. Motion: the octopus breathes (bob), the arm tips and eyelids sway, the papillae, camouflage layer and chromatophores pop, the seaweed sways, fish swim across in a loop and bubbles rise. The shots go from the wide view to a medium shot of the octopus, a close-up of the eye, the skin disc, a high angle on the octopus and a low reef shot, changing az and el every time. I changed only SHOTS to fix framing and never resized objects for the camera. The wrapper around the arm tips has a needless `p0={undefined as any}` prop; it does nothing and can be deleted."
+  },
+  {
+   "kind": "fix",
+   "notes": "Recognisable features: (1) a big round mantle rising directly above the eyes, carried by the single BODY Lathe in the nested 'head' group; (2) two bulging eyes on the sides with horizontal slit pupils, horn-like bumps and moving eyelids, carried by Eyes; (3) eight thick curling arms with pale suckers joined by webbing at the base, carried by Arm×8 and the web Lathe. Shot 2: the separate head ball and the floating camouflage sphere are gone, so the mantle is one smooth body that starts right above the eyes. Shot 2: the eight arms are spread evenly in a full circle and reach out to about 3.5, and each tip sways from its own base instead of from the middle of the octopus, so the arms no longer bunch on one side. Shot 3: the old 'eye' group only held the eyes, so it is replaced by a 'head' group nested inside 'octopus' that holds the mantle, eyes, siphon and spots, and the camera now frames the whole head (az .3, el .1). Shot 5 fix (the blending shot is now shot 4, az .55 el .42): at t=0.5 a rock grey-tan layer appears over the mantle, siphon, spots, webbing, eye bulges, eyelids, horns, all eight arms and their curled tips. Shot 5 fix: bumps and cones appear on the mantle and along every arm at the same moment, so the skin texture changes along with the colour. Shot 1: the camera is lower and more frontal (az .15, el .2), and the fish now swim ±4.5 instead of ±9 with bubbles stopping at y 7.5, so the whole-scene box is smaller and the camera starts closer; nothing in the scene was moved or shrunk, and because the shot must show the whole scene the reef width still keeps it fairly wide. Shot 6: now focuses on the octopus instead of the reef (az -.45, el .2), so the octopus fills the frame after it has blended in. Shots 4 and 5 are swapped so the blending happens right at the start of shot 4 and the octopus is shown both before (shots 2–3) and after (shots 4 and 6), with the chromatophore close-up in between. The 'eye' group is removed and nothing else changed (palette, reef, seaweed, fish, chromatophore disc and its popping colour sacs)."
+  }
+ ],
+ "rounds": [],
+ "review": {
+  "verdict": "fix",
+  "problems": [
+   "Shot 1: octopus and chromatophore disc are tiny in a sea of empty sand — move camera much closer so the octopus fills ~60% of the frame with the disc beside it.",
+   "Shot 6: same issue — octopus and disc are small specks in the centre; bring the camera closer so the octopus is the dominant subject.",
+   "Shot 3: octopus close-up crops off the top of the mantle and the tentacle tips — pull the camera back/lower so the whole head and eyes fit inside the frame.",
+   "Shot 5: camouflage only fades the mantle to sand colour while the face, eyes and tentacles stay bright red against the grey rock — recolour the whole body (tentacles included) to the rock's grey-tan and add bumpy texture so the colour/texture change reads.",
+   "Shot 2: octopus mantle sits detached behind/beside the head like a separate ball — move it to attach directly above the eyes, and spread the tentacles so they don't bunch at the left edge."
+  ]
+ },
+ "seconds": 238,
+ "model_calls": 2
+}
